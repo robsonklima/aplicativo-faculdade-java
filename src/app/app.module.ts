@@ -6,7 +6,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from "@angular/http";
-import { AgmCoreModule} from 'angular2-google-maps/core';
+//import { AgmCoreModule} from 'angular2-google-maps/core';
 import { MyApp } from './app.component';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -19,10 +19,8 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 import { HomePage } from '../pages/home/home';
-import { ChamadosMapaPage } from "../pages/chamados-mapa/chamados-mapa";
 import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
-import { ChamadoMapaPage } from '../pages/chamado-mapa/chamado-mapa';
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { EquipamentosHistoricoPage } from '../pages/equipamentos-historico/equipamentos-historico';
@@ -50,12 +48,10 @@ import { LowercasePipe } from '../pipes/lowercase';
     LoginPage,
     SenhaAlteracaoPage,
     HomePage,
-    ChamadosMapaPage,
     ChamadosPage,
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    ChamadoMapaPage,
     EquipamentosHistoricoPage,
     EquipamentoHistoricoPage,
     PecasPage,
@@ -78,9 +74,9 @@ import { LowercasePipe } from '../pipes/lowercase';
       autoFocusAssist: false
     }),
     IonicStorageModule.forRoot(),
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAaNHr89Vf3e-4SbWeAZPqWI1wMeJu5CY4'
-    })
+    // AgmCoreModule.forRoot({
+    //   apiKey: 'AIzaSyAaNHr89Vf3e-4SbWeAZPqWI1wMeJu5CY4'
+    // })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -88,12 +84,10 @@ import { LowercasePipe } from '../pipes/lowercase';
     LoginPage,
     SenhaAlteracaoPage,
     HomePage,
-    ChamadosMapaPage,
     ChamadosPage,
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    ChamadoMapaPage,
     EquipamentosHistoricoPage,
     EquipamentoHistoricoPage,
     PecasPage

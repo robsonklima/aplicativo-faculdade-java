@@ -3,8 +3,6 @@ import { LoadingController, ModalController, NavController,
   AlertController, Events } from 'ionic-angular';
 
 import { ChamadoPage } from "../chamado/chamado";
-import { ChamadosMapaPage } from "../chamados-mapa/chamados-mapa";
-import { ChamadoMapaPage } from '../chamado-mapa/chamado-mapa';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
@@ -64,18 +62,6 @@ export class ChamadosPage {
 
   public telaChamado(chamado: Chamado) {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
-  }
-
-  public telaChamadosMapa(chamados: Chamado[]) {
-    this.navCtrl.push(ChamadosMapaPage, { chamados: chamados });
-  }
-
-  public telaChamadoMapa(chamado: Chamado) {
-    const modal = this.modalCtrl.create(ChamadoMapaPage, { chamado: chamado });
-    modal.present();
-    modal.onDidDismiss(() => {
-      this.verificarGps();
-    });
   }
 
   private carregarChamadosStorage(): Promise<any> {
