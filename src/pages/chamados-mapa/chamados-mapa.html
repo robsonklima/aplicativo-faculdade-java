@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Mapa de Chamados
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <sebm-google-map 
+    *ngIf="chamados?.length > 0"
+    [latitude]="lat"
+    [longitude]="lng"
+    [zoom]="zoom"
+    [disableDefaultUI]="false"
+    [zoomControl]="false">
+  
+    <sebm-google-map-marker 
+        *ngFor="let m of markers; let i = index"
+        [latitude]="m.lat"
+        [longitude]="m.lng"
+        [label]="m.label"
+        [iconUrl]="m.iconUrl">
+        
+      <sebm-google-map-info-window>
+        <strong>{{ m.title }}</strong>
+        <p>{{ m.subtitle }}</p>
+      </sebm-google-map-info-window>
+    </sebm-google-map-marker>
+
+    <sebm-google-map-circle [latitude]="lat" [longitude]="lng" 
+        [radius]="1400"
+        [fillColor]="'silver'"
+        [circleDraggable]="false"
+        [editable]="false">
+    </sebm-google-map-circle>
+  </sebm-google-map>
+
+  <ion-card 
+    padding 
+    text-center 
+    *ngIf="chamados?.length == 0">
+    <ion-card-content>
+      <p>Nenhum chamado encontrado</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

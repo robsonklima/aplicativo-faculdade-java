@@ -12,6 +12,7 @@
       <button 
         ion-button 
         icon-only 
+        [disabled]="true"
         (click)="telaChamadosMapa(chamados)">
         <ion-icon name="globe"></ion-icon>
       </button>
@@ -122,8 +123,11 @@
             icon-only
             clear 
             small
-            [disabled]="chamado.dataHoraFechamento"
+            [disabled]="true"
             (click)="telaChamadoMapa(chamado)">
+
+            <!-- [disabled]="chamado.dataHoraFechamento" -->
+
             <ion-icon name="pin" class="pin"></ion-icon>
           </button>
         </ion-col>
