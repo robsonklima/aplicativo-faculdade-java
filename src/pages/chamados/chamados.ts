@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, ModalController, NavController, 
-  AlertController, Events } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
 
 import { ChamadoPage } from "../chamado/chamado";
 
@@ -22,7 +21,6 @@ export class ChamadosPage {
   task: any;
 
   constructor(
-    private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private events: Events,
@@ -118,12 +116,6 @@ export class ChamadosPage {
 
     confirmacao.present();
   }
-
-  private verificarGps(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      
-    });
-  }  
 
   public filtrarChamados(ev: any) {
     this.carregarChamadosStorage().then(() => {

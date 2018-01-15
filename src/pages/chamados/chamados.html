@@ -44,7 +44,7 @@
         color="light" 
         class="inherit">
           {{ chamado.dataHoraAgendamento ? 'Agend' : 'Aberto' }}
-          {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) | date:'dd/MM HH:mm' }}
+          {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) }}
       </ion-badge>
     </ion-item>
     
