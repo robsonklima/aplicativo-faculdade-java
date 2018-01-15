@@ -1,1 +1,1 @@
-App Técnicos
+App Técnicos: Ionic 3 Application
