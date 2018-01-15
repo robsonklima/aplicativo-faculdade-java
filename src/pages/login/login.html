@@ -1,0 +1,51 @@
+<ion-content>
+  <div text-center>
+    <img class="logo" src="./assets/images/logo_sat.png"/>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="login(f)">
+    <ion-list class="inputs">
+      <ion-item>
+        <ion-input 
+          type="text" 
+          name="codUsuario" 
+          placeholder="Usuário" 
+          ngModel 
+          required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input 
+          type="password" 
+          name="senha" 
+          placeholder="Senha" 
+          ngModel 
+          required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button 
+        color="primary"
+        ion-button 
+        block 
+        icon-start
+        [disabled]="!f.valid">
+        <ion-icon name='log-in' is-active="false"></ion-icon>
+        Entrar
+      </button>
+    </div>
+  </form>
+  <ion-list>
+    <button 
+      ion-button 
+      block clear 
+      small 
+      outline 
+      (click)="recuperarSenha()">
+      Esqueci minha senha
+    </button>
+
+    <p class="app-info">{{ nomeApp }} {{ versaoApp }}</p>
+  </ion-list>
+</ion-content>

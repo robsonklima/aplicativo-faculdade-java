@@ -1,0 +1,634 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        (click)="telaEquipamentosHistorico(chamado)">
+        <ion-icon name="clipboard"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>{{ chamado?.codOs }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>{{ tituloSlide }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content 
+  class="chamado-content-page outer-content">
+  <ion-slides 
+    pager 
+    (ionSlideDidChange)="alterarSlide()">
+    <ion-slide>
+      <ion-list>
+        <ion-item
+          class="first-item">
+          Cliente
+          <ion-note item-end>
+            {{ chamado?.cliente?.nomeCliente || 'Não Informado' 
+              | lowercase | capitalize }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Agência
+          <ion-note item-end>
+            {{ chamado?.localAtendimento?.numAgencia || '--' }} /
+            {{ chamado?.localAtendimento?.dcPosto || '--' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Local
+          <ion-note item-end>
+            {{ chamado?.localAtendimento?.nomeLocalAtendimento 
+              || 'Não Informado' | ellipsis: 28 }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          OS Cliente
+          <ion-note item-end>
+            {{ chamado?.numOsCliente || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Solicitante
+          <ion-note item-end>
+            {{ chamado?.nomeSolicitante || 'Não Informado'  | ellipsis: 28 }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Modelo
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.equipamento?.codEEquip
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Nro Contrato
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.contrato?.nroContrato
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Nome Contrato
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.contrato?.nomeContrato
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Código Pai
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.contrato?.codPai
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Série
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.numSerie
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Data Abertura
+          <ion-note item-end>
+            {{ chamado?.dataHoraAberturaOS 
+              | date:"dd/MM/yyyy HH:mm" }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item 
+          *ngIf="chamado?.dataHoraSolicitacaoOS 
+            && chamado?.dataHoraAberturaOS != chamado?.dataHoraSolicitacaoOS">
+          Data Solicitação
+          <ion-note item-end>
+            {{ chamado?.dataHoraSolicitacaoOS 
+              | date:"dd/MM/yyyy HH:mm" }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item 
+          *ngIf="chamado?.dataFimSLA">
+          Fim SLA
+          <ion-note item-end>
+            {{ chamado?.dataFimSLA 
+              | date:"dd/MM/yyyy HH:mm" }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item 
+          *ngIf="chamado?.dataHoraAgendamento">
+          Agendado
+          <ion-note item-end>
+            {{ chamado?.dataHoraAgendamento 
+              | date:"dd/MM/yyyy HH:mm" }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Status
+          <ion-note item-end>
+            {{ chamado?.statusServico?.nomeStatusServico 
+              || 'Não Informado' | lowercase | capitalize }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Intervenção
+          <ion-note item-end>
+            {{ chamado?.tipoIntervencao?.nomeTipoIntervencao
+              || 'Não Informado' | lowercase | capitalize }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Reincidências
+          <ion-note item-end>
+            {{ chamado?.numReincidencias || 'Nenhuma' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item-divider 
+          text-left 
+          color="light">
+          Defeito
+        </ion-item-divider>
+
+        <ion-item text-wrap>
+          <span class="text-wrap-content">
+            {{ chamado?.defeitoRelatado || 'Não Informado' 
+              | lowercase | capitalize }}</span>
+        </ion-item>
+
+        <ion-item-divider 
+          text-left 
+          color="light">
+          Observação
+        </ion-item-divider>
+
+        <ion-item 
+          text-wrap>
+          <span class="text-wrap-content">
+            {{ chamado?.observacao || 'Não Informado' 
+              | lowercase | capitalize }}</span>
+        </ion-item>
+
+        <ion-item-divider 
+          text-left 
+          color="light">
+          Marcação Especial
+        </ion-item-divider>
+
+        <ion-item 
+          text-wrap>
+          <span class="text-wrap-content">
+            {{ chamado?.descMotivoMarcaEspecial || 'Não Informado' 
+              | lowercase | capitalize }}</span>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <div padding
+          *ngIf="!this.chamado?.checkin?.localizacao?.latitude 
+            && !this.chamado?.checkin?.localizacao?.longitude">
+          <button 
+            color="secondary"
+            ion-button 
+            block 
+            (click)="efetuarCheckin()">
+            {{ (!this.chamado?.checkin?.localizacao?.latitude 
+              && !this.chamado?.checkin?.localizacao?.longitude) 
+              ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
+          </button>
+        </div>
+
+        <div 
+          class="first-divider"
+          *ngIf="this.chamado?.checkin?.localizacao?.latitude 
+            && this.chamado?.checkin?.localizacao?.longitude">
+          <ion-item>
+            Checkin
+            <ion-note item-end>
+              Efetuado
+            </ion-note>
+          </ion-item>
+          <ion-item>
+            Data e Horário
+            <ion-note item-end>
+              {{ chamado?.checkin?.dataHoraCadastro }}
+            </ion-note>
+          </ion-item>
+        </div>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
+        <ion-list>
+          <ion-item>
+            <ion-label stacked>Número da RAT</ion-label>
+            <ion-input 
+              type="number" 
+              placeholder="Número da RAT" 
+              name="numRat" 
+              [ngModel]="chamado?.rats[0]?.numRat" 
+              required></ion-input>
+          </ion-item>
+
+          <ion-row>
+            <ion-col 
+              col-12
+              text-left
+              class="no-padding padding-left">
+              <ion-label
+                stacked
+                class="label-title"
+                left-align>Marcações de Ponto</ion-label>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col 
+              class="no-padding">
+              <ion-item>
+                <ion-label 
+                  stacked
+                  class="label-title">Chegada</ion-label>
+                <ion-label
+                  class="label-content">
+                  {{ (usuarioPonto?.registros[0] | date:'HH:mm') || '--:--' }}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col 
+              class="no-padding">
+              <ion-item>
+                <ion-label 
+                  stacked
+                  class="label-title">Início</ion-label>
+                <ion-label
+                  class="label-content">
+                  {{ (usuarioPonto?.registros[1] | date:'HH:mm') || '--:--' }}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col
+              class="no-padding">
+              <ion-item>
+                <ion-label 
+                  stacked 
+                  class="label-title">Fim</ion-label>
+                <ion-label
+                  class="label-content">
+                  {{ (usuarioPonto?.registros[2] | date:'HH:mm') || '--:--' }}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col 
+              class="no-padding">
+              <ion-item>
+                <ion-label 
+                  stacked
+                  class="label-title">Saída</ion-label>
+                <ion-label
+                  class="label-content">
+                  {{ (usuarioPonto?.registros[3] | date:'HH:mm') || '--:--' }}</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col 
+              col-12
+              text-left
+              class="no-padding padding-left">
+              <ion-label
+                stacked
+                class="label-title"
+                left-align>Horários do Atendimento</ion-label>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col class="no-padding">
+              <ion-item>
+                <ion-label stacked>Data</ion-label>
+                <ion-datetime 
+                  displayFormat="DD/MM"
+                  pickerFormat="DD MMM"
+                  placeholder="01 Jan 2017"
+                  name="dataInicio"
+                  cancelText="Cancelar"
+                  doneText="Selecionar"
+                  [ngModel]="chamado?.rats[0]?.dataInicio || dataAtual"
+                  required></ion-datetime>
+              </ion-item>
+            </ion-col>
+            <ion-col class="no-padding">
+              <ion-item>
+                <ion-label stacked>Hora Início</ion-label>
+                <ion-datetime 
+                  displayFormat="HH:mm"
+                  pickerFormat="HH:mm"
+                  placeholder="08:00" 
+                  name="horaInicio"
+                  cancelText="Cancelar"
+                  doneText="Selecionar"
+                  [ngModel]="chamado?.rats[0]?.horaInicio"
+                  required></ion-datetime>
+              </ion-item>
+            </ion-col>
+            <ion-col class="no-padding">
+              <ion-item>
+                <ion-label stacked>Hora Solução</ion-label>
+                <ion-datetime 
+                  displayFormat="HH:mm"
+                  pickerFormat="HH:mm"
+                  placeholder="09:00"
+                  name="horaSolucao" 
+                  cancelText="Cancelar"
+                  doneText="Selecionar"
+                  [ngModel]="chamado?.rats[0]?.horaSolucao"
+                  required></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-item>
+            <ion-label stacked>Acompanhante</ion-label>
+            <ion-input 
+              type="text" 
+              placeholder="Nome do Acompanhante" 
+              name="nomeAcompanhante" 
+              [ngModel]="chamado?.rats[0]?.nomeAcompanhante"
+              required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Solução</ion-label>
+            <ion-input 
+              placeholder="Descreva o serviço realizado" 
+              name="obsRAT" 
+              [ngModel]="chamado?.rats[0]?.obsRAT"
+              required></ion-input>
+          </ion-item>
+
+          <div padding>
+            <button 
+              color="secondary"
+              ion-button 
+              block 
+              [disabled]="!f.valid">
+              Prosseguir
+            </button>
+          </div>
+        </ion-list>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <div padding>
+          <button 
+            color="secondary"
+            ion-button 
+            block 
+            (click)="telaRatDetalhe()"
+            [disabled]="chamado?.rats?.length == 0">
+            Adicionar Detalhe
+          </button>
+        </div>
+  
+        <ion-item-divider 
+          color="light">
+          Detalhes Adicionados
+        </ion-item-divider>
+
+        <ion-item
+          *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
+          <ion-label>
+            {{ ratDetalhe?.causa?.codECausa }} - {{ ratDetalhe?.causa?.nomeCausa }}
+          </ion-label>
+
+          <button
+            class="pecas-button"
+            ion-button
+            clear
+            item-end
+            (click)="telaRatDetalhePeca(chamado, i)">
+            Peças ({{ chamado.rats[0].ratDetalhes[i].pecas.length }})
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerRatDetalhe(ratDetalhe, i)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="chamado?.rats[0]?.ratDetalhes?.length == 0">
+          <p text-center>Nenhum detalhe adicionado</p>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <div
+          padding
+          *ngIf="!this.chamado?.checkout?.localizacao?.latitude 
+            && !this.chamado?.checkout?.localizacao?.longitude">
+          <button 
+            color="secondary"
+            ion-button 
+            block 
+            (click)="efetuarCheckout()" 
+            >
+            {{ (!this.chamado?.checkout?.localizacao?.latitude 
+              && !this.chamado?.checkout?.localizacao?.longitude) 
+              ? 'Efetuar Checkout' : 'Checkout Efetuado' }}
+          </button>
+        </div>
+
+        <div 
+          class="first-divider"
+          *ngIf="this.chamado?.checkout?.localizacao?.latitude 
+            && this.chamado?.checkout?.localizacao?.longitude">
+          <ion-item>
+            Checkout
+            <ion-note item-end>
+              Efetuado
+            </ion-note>
+          </ion-item>
+          <ion-item>
+            Data e Horário
+            <ion-note item-end>
+              {{ chamado?.checkout?.dataHoraCadastro }}
+            </ion-note>
+          </ion-item>
+        </div>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-item-divider 
+        class="first-divider text-left"
+        color="light">RAT</ion-item-divider>
+
+        <ion-item>
+          Número da RAT
+          <ion-note item-end>
+            {{ chamado?.rats[0]?.numRat }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Checkin
+          <ion-note item-end>
+            {{ chamado?.checkin?.dataHoraCadastro }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Checkout
+          <ion-note item-end>
+            {{ chamado?.checkout?.dataHoraCadastro }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Início do Atendimento
+          <ion-note item-end>
+            {{ chamado?.rats[0]?.dataInicio | date:'dd/MM' }}
+            {{ chamado?.rats[0]?.horaInicio }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Solução do Atendimento
+          <ion-note item-end>
+            {{ chamado?.rats[0]?.dataInicio | date:'dd/MM' }}
+            {{ chamado?.rats[0]?.horaSolucao }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Acompanhante
+          <ion-note item-end>
+            {{ chamado?.rats[0]?.nomeAcompanhante }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item-divider 
+          color="light"
+          class="text-left">Solução </ion-item-divider>
+
+        <ion-item text-wrap>
+          <span class="inf-bas">
+            {{ chamado?.rats[0]?.obsRAT | lowercase | capitalize }}</span>
+        </ion-item>
+
+        <div *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
+          <ion-item-divider 
+            color="light"
+            class="text-left">
+            Detalhe 
+            <ion-badge 
+              item-end
+              class="badge"
+              color="light">{{ i + 1 }}/{{ chamado?.rats[0]?.ratDetalhes?.length }}</ion-badge>
+          </ion-item-divider>
+
+          <ion-item>
+            Tipo da Causa
+            <ion-note item-end>
+              {{ ratDetalhe?.tipoCausa?.nomeTipoCausa 
+                | lowercase | capitalize | ellipsis: 20 }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Tipo de Serviço
+            <ion-note item-end>
+              {{ ratDetalhe?.tipoServico?.nomeTipoServico 
+                | lowercase | capitalize | ellipsis: 20 }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Causa
+            <ion-note item-end>
+              {{ ratDetalhe?.causa?.codECausa }}
+              - {{ ratDetalhe?.causa?.nomeCausa | lowercase | capitalize | ellipsis: 20}}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Defeito
+            <ion-note item-end>
+              {{ ratDetalhe?.defeito?.codEDefeito }}
+              - {{ ratDetalhe?.defeito?.nomeDefeito | lowercase | capitalize | ellipsis: 20}}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Ação
+            <ion-note item-end>
+              {{ ratDetalhe?.acao?.codEAcao }}
+              - {{ ratDetalhe?.acao?.nomeAcao | lowercase | capitalize | ellipsis: 20}}
+            </ion-note>
+          </ion-item>
+
+          <div *ngFor="let peca of ratDetalhe?.pecas; let i = index">
+            <ion-item-divider 
+              color="light"
+              class="text-left">
+              Peça 
+              <ion-badge 
+                item-end
+                class="badge"
+                color="light">{{ i + 1 }}/{{ ratDetalhe?.pecas?.length }}</ion-badge>
+            </ion-item-divider>
+
+            <ion-item>
+              Peça
+              <ion-note item-end>
+                {{ peca?.nomePeca | lowercase | capitalize | ellipsis: 20 }}
+              </ion-note>
+            </ion-item>
+
+            <ion-item>
+              Qtd
+              <ion-note item-end>
+                {{ peca.qtd }}
+              </ion-note>
+            </ion-item>
+          </div>
+        </div>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <div padding>
+          <button 
+            color="secondary"
+            ion-button 
+            block 
+            (click)="fecharChamado()">
+            Fechar o Chamado
+          </button>
+        </div>
+      </ion-list>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

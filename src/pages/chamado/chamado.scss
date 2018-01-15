@@ -1,0 +1,119 @@
+chamado-page {
+    .chamado-content-page {
+        ion-slides {
+            margin-top: 0px;
+            height: 100%; width:100%;
+            overflow:auto;
+        }
+
+        .toolbar-background {
+            background: #fff;
+            border-color: transparent;
+        }
+
+        .slide-zoom {
+            height: 100%;
+        }
+
+        .slide-title {
+            margin-top: 2.8rem;
+        }
+
+        .slide-image {
+            max-height: 50%;
+            max-width: 60%;
+            margin: 18px 0;
+        }
+
+        b {
+            font-weight: 500;
+        }
+
+        p {
+            padding: 0 40px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #60646B;
+
+            b {
+                color: #000000;
+            }
+        }
+
+        .swiper-slide {
+            overflow-y: scroll;
+            display: block;
+        }
+
+        .swiper-pagination-bullet {
+            display: none;
+        }
+
+        .texto-esquerda {
+            font-size: 12pt;
+            margin-right: 6px;
+            color: black;
+        }
+
+        .texto-direita, .text-wrap-content {
+            color: #BBBBBB;
+            font-size: 12pt;
+        }
+
+        .checkin-button, .fechamento-button, 
+        .adicionar-acao-button, .adicionar-acao-label,
+        .adicionar-rat-button {
+            margin-left: 14px !important;
+            padding: 19px !important;
+        }
+
+        ion-icon {
+            font-size: 22px;
+        }
+
+        .pecas-button {
+            padding-top: 1px;
+            font-size: 10pt;
+        }
+
+        .first-divider, .first-item {
+            padding-top: 6px !important;
+        }
+
+        .no-padding {
+            padding: 0px !important;
+        }
+
+        .padding-left {
+            padding-left: 16px !important;
+        }
+
+        .form {
+            margin-top: 8px;
+        }
+
+        .label-title, .label-content {
+            color: #9C9C9C;
+        }
+
+        .inf-bas-esq {
+            font-size: 12pt;
+            margin-right: 2px;
+        }
+
+        .inf-bas {
+            color: #BBBBBB;
+            font-size: 12pt;
+            text-align: justify;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .badge {
+            font-weight: inherit;
+        }
+    }
+}
+

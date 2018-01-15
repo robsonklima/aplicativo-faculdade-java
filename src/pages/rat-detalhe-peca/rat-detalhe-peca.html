@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Rat: {{ chamado?.rats[0]?.numRat }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        (click)="fecharModal()"
+        [disabled]="(chamado.rats[0].ratDetalhes[ratDetalheIndex].pecas.length == 0 
+          && (chamado.rats[0].ratDetalhes[ratDetalheIndex].acao.codAcao == 19 
+          || chamado.rats[0].ratDetalhes[ratDetalheIndex].acao.codAcao == 26))">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+    
+    <ion-title>Inserindo Peças</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-divider
+    text-left 
+    color="light"
+    class="input-divider">
+    <ion-searchbar 
+      (ionInput)="filtrarPecas($event)" 
+      placeholder="Pesquisa por código/nome"
+      [(ngModel)]="inputPesquisar"></ion-searchbar></ion-item-divider>
+
+  <ion-item
+    *ngFor="let peca of pecas; let i = index"
+    (click)="adicionarPeca(peca)">
+    <ion-avatar item-start>
+      <img src="./assets/images/sem_foto.png">
+    </ion-avatar>
+    <h2>{{ peca.codMagnus }}</h2>
+    <p>{{ peca.nomePeca }}</p>
+    <ion-icon 
+      name="add-circle" 
+      color="secondary"
+      item-end></ion-icon>
+  </ion-item>
+
+  <ion-item 
+    *ngFor="let peca of chamado.rats[0].ratDetalhes[ratDetalheIndex].pecas; let i = index">
+    <ion-label>{{ peca.codMagnus }} - {{ peca.nomePeca }}</ion-label>
+    <ion-select 
+      [(ngModel)]="peca.qtd" 
+      (ionChange)="alterarQtdPeca(peca.qtd, i)"
+      cancelText="Cancelar" okText="Salvar"
+      [selectOptions]="{ title: peca.codMagnus, subTitle: 'Selecione a quantidade', mode: 'md' }">
+      <ion-option value="1">1</ion-option>
+      <ion-option value="2">2</ion-option>
+      <ion-option value="3">3</ion-option>
+      <ion-option value="4">4</ion-option>
+      <ion-option value="5">5</ion-option>
+      <ion-option value="6">6</ion-option>
+      <ion-option value="7">7</ion-option>
+      <ion-option value="8">8</ion-option>
+      <ion-option value="9">9</ion-option>
+      <ion-option value="10">10</ion-option>
+      <ion-option value="11">11</ion-option>
+      <ion-option value="12">12</ion-option>
+    </ion-select>
+    <button ion-button clear item-end (click)="removerPeca(peca)"><ion-icon name="trash"></ion-icon></button>
+  </ion-item>
+
+  <div *ngIf="chamado.rats[0].ratDetalhes[ratDetalheIndex].pecas.length == 0">
+    <p text-center class="message">Nenhuma peça adicionada</p>
+  </div>
+
+  <ion-spinner 
+    name="dots" 
+    color="primary"
+    *ngIf="spinner">
+  </ion-spinner>
+</ion-content>

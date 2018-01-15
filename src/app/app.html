@@ -1,1 +1,38 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="nav">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item 
+        class="first-item"
+        *ngIf="dadosGlobais?.usuario?.nome">
+        <ion-icon color="silver-light" name="contact" item-start></ion-icon>
+        <span class="user-name">{{ dadosGlobais?.usuario?.nome }}</span>
+      </ion-item>
+      <ion-item 
+        class="first-item"
+        *ngIf="dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil">
+        <ion-icon color="silver-light" name="briefcase" item-start></ion-icon>
+        <span class="user-name">{{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil }}</span>
+      </ion-item>
+      <ion-item
+        *ngIf="dadosGlobais?.versaoApp">
+        <ion-icon color="silver-light" name="phone-portrait" item-start></ion-icon>
+        <span class="user-name">Versão {{ dadosGlobais?.versaoApp }}</span>
+      </ion-item>
+      <ion-item (click)="telaSenhaAlteracao()">
+        <ion-icon color="primary" name="lock" item-start></ion-icon>
+        Alterar Senha
+      </ion-item>
+      <ion-item (click)="sair()">
+        <ion-icon color="primary" name="exit" item-start></ion-icon>
+        Sair
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #nav></ion-nav>

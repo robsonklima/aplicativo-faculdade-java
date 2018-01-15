@@ -1,0 +1,62 @@
+chamados-page {
+    .cod-os {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    ion-card {
+        background-color: #f4f4f4;
+    }
+  
+    ion-searchbar {
+        margin-bottom: -8px !important;
+    }
+
+    .ion-card-bg-gray {
+        background-color: gray;
+    }
+
+    .botoes {
+        margin-top: -16px;
+    }
+
+    .inherit {
+        font-weight: inherit;
+    }
+
+    .font-red {
+        color: #f53d3d;
+    }
+
+    .font-blue {
+        color: #488aff;
+    }
+
+    .font-white {
+        color: white;
+    }
+
+    .font-silver-light-hard {
+        color: #BBBBBB;
+    }
+
+    .sla {
+        opacity: 0.65;
+    }
+
+    ion-badge {
+        margin-top: 4px !important;
+    }
+
+    ion-col {
+        // border: 1px solid red !important;
+    }
+
+    .pin, .open, .checkmark, .done-all, .create {
+        font-size: 21px !important;
+    }
+
+    .data-hora-leitura {
+        opacity: 0.9 !important;
+    }
+}

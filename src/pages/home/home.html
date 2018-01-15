@@ -1,14 +1,83 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar no-border-bottom>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    
+
+    <ion-title>App Técnicos</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content>
+  <ion-list>
+    <button
+      class="first-item"
+      ion-item 
+      [disabled]="true">  
+      <ion-icon 
+        color="primary" 
+        name="clock" 
+        item-start></ion-icon>
+      Ponto
+    </button>
+
+    <button 
+      ion-item
+      (click)="telaChamados()"
+      >
+      <ion-icon 
+        color="primary" 
+        name="clipboard" 
+        item-start></ion-icon>
+      Chamados
+      <ion-badge 
+        item-end
+        *ngIf="chamados?.length" 
+        [ngClass]="{ 'bd-red': chamados?.length > 0 }">
+        {{ chamados?.length }}
+      </ion-badge>
+    </button>
+
+    <button 
+      ion-item
+      (click)="telaPecas()">
+      <ion-icon 
+        color="primary" 
+        name="build" 
+        item-start></ion-icon>
+      Peças
+    </button>
+
+    <button 
+      ion-item 
+      [disabled]="true">
+      <ion-icon 
+        color="primary" 
+        name="checkbox" 
+        item-start></ion-icon>
+        Checklist
+    </button>
+
+    <button 
+      ion-item 
+      [disabled]="true">
+      <ion-icon 
+        color="primary" 
+        name="mail" 
+        item-start></ion-icon>
+      Mensagens
+    </button>
+
+    <button 
+      ion-item 
+      [disabled]="true">
+      <ion-icon 
+        color="primary" 
+        name="pie" 
+        item-start></ion-icon>
+      Indicadores
+    </button>
+  </ion-list>
 </ion-content>

@@ -1,0 +1,153 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        [disabled]="chamados?.length == 0"
+        (click)="limparChamadosDispositivo()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      
+      <button 
+        ion-button 
+        icon-only 
+        (click)="telaChamadosMapa(chamados)">
+        <ion-icon name="globe"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>
+      Chamados ({{ chamados?.length }})
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="cards-bg">
+  <ion-refresher (ionRefresh)="pushAtualizarChamados($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-searchbar 
+    (ionInput)="filtrarChamados($event)" 
+    placeholder="Pesquisar"></ion-searchbar>
+
+  <ion-card 
+    *ngFor="let chamado of chamados; let i = index"
+    [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
+    <ion-item
+      [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
+      <h2 class="cod-os">{{ chamado.codOs }}</h2>
+      
+      <ion-badge  
+        item-end 
+        color="light" 
+        class="inherit">
+          {{ chamado.dataHoraAgendamento ? 'Agend' : 'Aberto' }}
+          {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) | date:'dd/MM HH:mm' }}
+      </ion-badge>
+    </ion-item>
+    
+    <ion-card-content>
+      <p>
+        {{ chamado.cliente.nomeCliente | lowercase | capitalize }}, 
+        {{ chamado.localAtendimento.nomeLocalAtendimento }},
+        <span class="font-silver-light-hard">
+          {{ chamado.equipamentoContrato.equipamento.codEEquip }}
+        </span>
+      </p>
+      <p>
+        {{ chamado.localAtendimento.endereco | lowercase | capitalize }}
+      </p>
+      <p
+        *ngIf="chamado.dataFimSLA"
+        class="font-red sla">
+        SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
+      </p>
+    </ion-card-content>
+
+    <ion-grid 
+      tappable 
+      class="botoes">
+      <ion-row>
+        <ion-col col-2>
+          <button
+            class="data-hora-leitura"
+            ion-button 
+            icon-only 
+            small
+            clear
+            [disabled]="true"
+            color="subtle">
+             <ion-icon *ngIf="!chamado.dataHoraOSMobileLida" name="checkmark" class="checkmark"></ion-icon>
+             <ion-icon *ngIf="chamado.dataHoraOSMobileLida" name="done-all" class="done-all" color="secondary"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button 
+            ion-button 
+            icon-left 
+            small
+            clear 
+            [disabled]="true"
+            color="subtle">
+            <div>&nbsp;&nbsp;{{ chamado.statusServico.abreviacao }}</div>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button 
+            ion-button 
+            icon-left 
+            small
+            clear 
+            [disabled]="true"
+            color="subtle">
+            <div>{{ chamado.tipoIntervencao.abrevTipoIntervencao }}</div>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button 
+            ion-button 
+            icon-left 
+            small
+            clear 
+            [disabled]="true"
+            color="subtle">
+            <div>R.{{ chamado.numReincidencias }}</div>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button 
+            ion-button 
+            icon-only
+            clear 
+            small
+            [disabled]="chamado.dataHoraFechamento"
+            (click)="telaChamadoMapa(chamado)">
+            <ion-icon name="pin" class="pin"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button
+            ion-button 
+            icon-only
+            clear
+            small
+            (click)="telaChamado(chamado)"
+            [disabled]="chamado.dataHoraFechamento">
+            <ion-icon *ngIf="chamado.checkin.localizacao.latitude 
+              || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
+            <ion-icon *ngIf="!chamado.checkin.localizacao.latitude 
+              && !chamado.checkout.localizacao.latitude" name="md-open" class="open"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card padding text-center *ngIf="chamados?.length == 0">
+    <ion-card-content>
+      <p>Nenhum chamado encontrado</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
