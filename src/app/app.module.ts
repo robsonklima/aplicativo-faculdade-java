@@ -6,7 +6,6 @@ import { IonicStorageModule } from '@ionic/storage'
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from "@angular/http";
-//import { AgmCoreModule} from 'angular2-google-maps/core';
 import { MyApp } from './app.component';
 
 import { Geolocation } from '@ionic-native/geolocation';
