@@ -19,7 +19,6 @@ import { TipoServicoService } from "../../services/tipo-servico";
 })
 export class PecasPage {
   dadosGlobais: DadosGlobais;
-  inputPesquisar: string;
   pecas: Peca[] = [];
   spinner: boolean;
 

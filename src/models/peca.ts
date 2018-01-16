@@ -3,4 +3,5 @@ export class Peca {
     codMagnus: string;
     nomePeca: string;
     qtd?: number;
+    imagemUrl?: string;
 }

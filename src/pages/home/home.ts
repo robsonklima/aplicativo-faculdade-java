@@ -69,17 +69,16 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       resolve(
         this.chamadoService.buscarChamadosStorage()
-          .then(
-            (chamados: Chamado[]) => {
-              this.chamados = chamados.filter((c) => {
-                return (!c.dataHoraFechamento);
-              }).filter((c) => {
-                return (!c.dataHoraOSMobileLida);
-              });
+          .then((chamados: Chamado[]) => {
+            this.chamados = chamados.filter((c) => {
+              return (!c.dataHoraFechamento);
+            }).filter((c) => {
+              return (!c.dataHoraOSMobileLida);
+            });
 
-              this.badge.set(this.chamados.length);
-            })  
-            .catch(err => {})
+            this.badge.set(this.chamados.length);
+          })  
+          .catch(err => {})
       );
     });
   }
