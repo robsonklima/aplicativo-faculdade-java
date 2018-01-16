@@ -160,17 +160,13 @@ export class RatDetalhePage {
       acao: acao,
       pecas: pecas
     };
+    
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
 
-    this.exibirToast('Detalhe atualizado com sucesso')
-      .then(() => {
-        this.configurarSlide(this.slides.getActiveIndex());
-        this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-
-        if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
-          this.apresentarCampoProtocoloStn();
-        }
-      })
-      .catch();
+    if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
+      this.apresentarCampoProtocoloStn();
+    }
   }
 
   public salvarRatDetalheNoChamadoESair() {
