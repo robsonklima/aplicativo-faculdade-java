@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavParams, ToastController, ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 
 import { Peca } from "../../models/peca";
 
@@ -12,8 +12,6 @@ export class PecaPage {
 
   constructor(
     private viewCtrl: ViewController,
-    private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
     private navParams: NavParams,
   ) {
     this.peca = this.navParams.get('peca');

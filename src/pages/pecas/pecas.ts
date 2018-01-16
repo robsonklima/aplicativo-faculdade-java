@@ -3,7 +3,6 @@ import { LoadingController, ModalController } from 'ionic-angular';
 
 import { PecaPage } from '../peca/peca';
 
-import { Chamado } from "../../models/chamado";
 import { Peca } from "../../models/peca";
 import { DadosGlobais } from '../../models/dados-globais';
 
