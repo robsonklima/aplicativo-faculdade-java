@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, ModalController, AlertController, Events } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
 
 import { ChamadoPage } from "../chamado/chamado";
-import { ChamadosMapaPage } from "../chamados-mapa/chamados-mapa";
-import { ChamadoMapaPage } from '../chamado-mapa/chamado-mapa';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
@@ -23,7 +21,6 @@ export class ChamadosPage {
   task: any;
 
   constructor(
-    private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private events: Events,
@@ -63,15 +60,6 @@ export class ChamadosPage {
 
   public telaChamado(chamado: Chamado) {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
-  }
-
-  public telaChamadosMapa(chamados: Chamado[]) {
-    this.navCtrl.push(ChamadosMapaPage, { chamados: chamados });
-  }
-
-  public telaChamadoMapa(chamado: Chamado) {
-    const modal = this.modalCtrl.create(ChamadoMapaPage, { chamado: chamado });
-    modal.present();
   }
 
   private carregarChamadosStorage(): Promise<any> {

@@ -21,8 +21,6 @@ import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 import { HomePage } from '../pages/home/home';
 import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
-// import { ChamadoMapaPage } from '../pages/chamado-mapa/chamado-mapa';
-// import { ChamadosMapaPage } from '../pages/chamados-mapa/chamados-mapa';
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { EquipamentosHistoricoPage } from '../pages/equipamentos-historico/equipamentos-historico';
@@ -51,9 +49,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     SenhaAlteracaoPage,
     HomePage,
     ChamadosPage,
-    // ChamadosMapaPage,
     ChamadoPage,
-    // ChamadoMapaPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     EquipamentosHistoricoPage,
@@ -78,9 +74,6 @@ import { LowercasePipe } from '../pipes/lowercase';
       autoFocusAssist: false
     }),
     IonicStorageModule.forRoot()
-    // AgmCoreModule.forRoot({
-    //   apiKey: 'AIzaSyAaNHr89Vf3e-4SbWeAZPqWI1wMeJu5CY4'
-    // })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -89,9 +82,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     SenhaAlteracaoPage,
     HomePage,
     ChamadosPage,
-    // ChamadosMapaPage,
     ChamadoPage,
-    // ChamadoMapaPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     EquipamentosHistoricoPage,
