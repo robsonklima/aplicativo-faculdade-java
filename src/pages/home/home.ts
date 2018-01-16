@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavController, Events } from 'ionic-angular';
 
+import { Badge } from '@ionic-native/badge';
+
 import { LoginPage } from '../login/login';
 import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
@@ -34,6 +36,7 @@ export class HomePage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private events: Events,
+    private badge: Badge,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService,
@@ -67,12 +70,14 @@ export class HomePage {
       resolve(
         this.chamadoService.buscarChamadosStorage()
           .then(
-            (chamados: Chamado[]) => { 
+            (chamados: Chamado[]) => {
               this.chamados = chamados.filter((c) => {
                 return (!c.dataHoraFechamento);
               }).filter((c) => {
                 return (!c.dataHoraOSMobileLida);
-              });;
+              });
+
+              this.badge.set(this.chamados.length);
             })  
             .catch(err => {})
       );

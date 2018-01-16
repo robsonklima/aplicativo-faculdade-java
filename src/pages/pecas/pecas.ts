@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController } from 'ionic-angular';
+import { LoadingController, ModalController } from 'ionic-angular';
+
+import { PecaPage } from '../peca/peca';
 
 import { Chamado } from "../../models/chamado";
 import { Peca } from "../../models/peca";
@@ -18,15 +20,13 @@ import { TipoServicoService } from "../../services/tipo-servico";
 })
 export class PecasPage {
   dadosGlobais: DadosGlobais;
-  chamado: Chamado;
-  ratDetalheIndex: number;
   inputPesquisar: string;
   pecas: Peca[] = [];
   spinner: boolean;
 
   constructor(
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
     private pecaService: PecaService,
     private dadosGlobaisService: DadosGlobaisService,
     private acaoService: AcaoService,
@@ -37,6 +37,12 @@ export class PecasPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais();
+  }
+
+  public telaPeca(peca: Peca) {
+    const modal = this.modalCtrl.create(PecaPage, { peca: peca });
+    modal.present();
+    modal.onDidDismiss(() => {});
   }
 
   private carregarPecasStorage(): Promise<any> {
@@ -93,16 +99,6 @@ export class PecasPage {
           }, err => { loading.dismiss() });
         }, err => { loading.dismiss() });
       }, err => { loading.dismiss() });
-  }
-
-  public exibirDetalhesPeca(peca: Peca) {
-    let alert = this.alertCtrl.create({
-      title: peca.codMagnus,
-      message: peca.nomePeca,
-      buttons: ['OK']
-    });
-
-    alert.present();
   }
 
   private carregarDadosGlobais() {

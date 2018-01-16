@@ -39,6 +39,7 @@ export class MyApp {
     private events: Events,
     private backgroundMode: BackgroundMode,
     private localNotification: PhonegapLocalNotification,
+    
     private dadosGlobaisService: DadosGlobaisService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,

@@ -14,6 +14,7 @@ import { Network } from '@ionic-native/network';
 import { AppVersion } from '@ionic-native/app-version';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
+import { Badge } from '@ionic-native/badge';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -23,6 +24,8 @@ import { ChamadoPage } from "../pages/chamado/chamado";
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { EquipamentosHistoricoPage } from '../pages/equipamentos-historico/equipamentos-historico';
+import { PecasPage } from '../pages/pecas/pecas';
+import { PecaPage } from '../pages/peca/peca';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -35,7 +38,6 @@ import { PecaService } from "../services/peca";
 import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
 import { EquipamentoHistoricoPage } from '../pages/equipamento-historico/equipamento-historico';
-import { PecasPage } from '../pages/pecas/pecas';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -54,6 +56,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     EquipamentosHistoricoPage,
     EquipamentoHistoricoPage,
     PecasPage,
+    PecaPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -86,7 +89,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     RatDetalhePecaPage,
     EquipamentosHistoricoPage,
     EquipamentoHistoricoPage,
-    PecasPage
+    PecasPage,
+    PecaPage
   ],
   providers: [
     StatusBar,
@@ -96,6 +100,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     Geolocation,
     BackgroundMode,
     PhonegapLocalNotification,
+    Badge,
     Network,
     AppVersion,
     DadosGlobaisService,
