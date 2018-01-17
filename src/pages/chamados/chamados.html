@@ -52,14 +52,14 @@
     
     <ion-card-content>
       <p>
-        {{ chamado.cliente.nomeCliente | lowercase | capitalize }}, 
-        {{ chamado.localAtendimento.nomeLocalAtendimento }},
+        {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
+        {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }},
         <span class="font-silver-light-hard">
-          {{ chamado.equipamentoContrato.equipamento.codEEquip }}
+          {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
         </span>
       </p>
       <p>
-        {{ chamado.localAtendimento.endereco | lowercase | capitalize }}
+        {{ chamado.localAtendimento.endereco.toUpperCase() }}
       </p>
       <p
         *ngIf="chamado.dataFimSLA"

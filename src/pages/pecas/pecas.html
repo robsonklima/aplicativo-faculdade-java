@@ -33,7 +33,7 @@
         title="Imagem">
     </ion-avatar>
     <h2>{{ peca?.codMagnus }}</h2>
-    <p>{{ peca?.nomePeca }}</p>
+    <p>{{ peca?.nomePeca.toUpperCase() }}</p>
   </ion-item>
 
   <div *ngIf="pecas?.length == 0">
