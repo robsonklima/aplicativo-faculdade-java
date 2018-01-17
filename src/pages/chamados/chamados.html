@@ -59,7 +59,9 @@
         </span>
       </p>
       <p>
-        {{ chamado.localAtendimento.endereco.toUpperCase() }}
+        <span class="font-silver-light-hard">
+          {{ chamado.localAtendimento.endereco.toUpperCase() }}
+        </span>
       </p>
       <p
         *ngIf="chamado.dataFimSLA"
