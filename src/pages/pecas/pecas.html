@@ -28,14 +28,15 @@
     (click)="telaPeca(peca)">
     <ion-avatar item-start>
       <img 
-        src="http://sat.perto.com.br/prjSATWEB/archive/upload_peca_imagem/{{ peca.codMagnus }}.jpg" 
-        onError="this.src='./assets/imgs/sem_foto.png';">
+        src="http://sat.perto.com.br/prjSATWEB/archive/upload_peca_imagem/{{ peca?.codMagnus }}.jpg" 
+        onError="this.src='./assets/imgs/sem_foto.png';"
+        title="Imagem">
     </ion-avatar>
-    <h2>{{ peca.codMagnus }}</h2>
-    <p>{{ peca.nomePeca }}</p>
+    <h2>{{ peca?.codMagnus }}</h2>
+    <p>{{ peca?.nomePeca }}</p>
   </ion-item>
 
-  <div *ngIf="pecas.length == 0">
+  <div *ngIf="pecas?.length == 0">
     <p text-center class="message">Nenhuma peça encontrada</p>
   </div>
 

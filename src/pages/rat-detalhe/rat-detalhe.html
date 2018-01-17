@@ -188,52 +188,51 @@
         <ion-searchbar 
           (ionInput)="filtrarPecas($event)" 
           placeholder="Pesquisa por código/nome"
-          [(ngModel)]="inputPesquisar"></ion-searchbar></ion-item-divider>
-
-      <ion-item
-        *ngFor="let peca of pecas; let i = index"
-        (click)="adicionarPeca(peca)">
-        <ion-avatar item-start>
-          <img src="./assets/imgs/sem_foto.png">
-        </ion-avatar>
-        <h2>{{ peca.codMagnus }}</h2>
-        <p>{{ peca.nomePeca }}</p>
-        <ion-icon 
-          name="add-circle" 
-          color="secondary"
-          item-end></ion-icon>
-      </ion-item>
+          [(ngModel)]="inputPesquisar">
+        </ion-searchbar>
+      </ion-item-divider>
 
       <ion-item 
-        *ngFor="let peca of ratDetalhe?.pecas; let i = index">
-        <ion-label class="peca-label">{{ peca.codMagnus }} - {{ peca.nomePeca }}</ion-label>
-        <ion-select 
-          [(ngModel)]="peca.qtd" 
-          cancelText="Cancelar" okText="Salvar"
-          (ionChange)="alterarQtdPeca(peca.qtd, i)"
-          interface="action-sheet"
-          [selectOptions]="{ title: peca.codMagnus, subTitle: 'Selecione a quantidade', mode: 'md' }">
-          <ion-option value="1">1</ion-option>
-          <ion-option value="2">2</ion-option>
-          <ion-option value="3">3</ion-option>
-          <ion-option value="4">4</ion-option>
-          <ion-option value="5">5</ion-option>
-          <ion-option value="6">6</ion-option>
-          <ion-option value="7">7</ion-option>
-          <ion-option value="8">8</ion-option>
-          <ion-option value="9">9</ion-option>
-          <ion-option value="10">10</ion-option>
-          <ion-option value="11">11</ion-option>
-          <ion-option value="12">12</ion-option>
-        </ion-select>
-        <button ion-button clear item-end (click)="removerPeca(peca)"><ion-icon name="trash"></ion-icon></button>
+        *ngFor="let peca of pecas; let i = index" 
+        (click)="adicionarPeca(peca)">
+        <ion-avatar item-start>
+          <img 
+            src="http://sat.perto.com.br/prjSATWEB/archive/upload_peca_imagem/{{ peca?.codMagnus }}.jpg" 
+            onError="this.src='./assets/imgs/sem_foto.png';"
+            title="Imagem">
+        </ion-avatar>
+        <h2>{{ peca?.codMagnus }}</h2>
+        <p>{{ peca?.nomePeca }}</p>
       </ion-item>
 
-      <div 
-        *ngIf="ratDetalhe?.pecas?.length == 0">
-        <p 
-          text-center 
-          class="message">Nenhuma peça adicionada</p>
+      <div *ngIf="pecas?.length == 0">
+        <ion-item 
+          *ngFor="let peca of ratDetalhe?.pecas; let i = index">
+          <ion-label class="peca-label">{{ peca.codMagnus }} - {{ peca.nomePeca }}</ion-label>
+          <ion-select 
+            [(ngModel)]="peca.qtd" 
+            (ionChange)="alterarQtdPeca(peca.qtd, i)"
+            cancelText="Cancelar" okText="Salvar"
+            [selectOptions]="{ title: peca.codMagnus, subTitle: 'Selecione a quantidade', mode: 'md' }">
+            <ion-option value="1">1</ion-option>
+            <ion-option value="2">2</ion-option>
+            <ion-option value="3">3</ion-option>
+            <ion-option value="4">4</ion-option>
+            <ion-option value="5">5</ion-option>
+            <ion-option value="6">6</ion-option>
+            <ion-option value="7">7</ion-option>
+            <ion-option value="8">8</ion-option>
+            <ion-option value="9">9</ion-option>
+            <ion-option value="10">10</ion-option>
+            <ion-option value="11">11</ion-option>
+            <ion-option value="12">12</ion-option>
+          </ion-select>
+          <button ion-button clear item-end (click)="removerPeca(peca)"><ion-icon name="trash"></ion-icon></button>
+        </ion-item>
+      </div>
+
+      <div *ngIf="ratDetalhe?.pecas?.length == 0 && pecas?.length == 0">
+        <p text-center class="message">Nenhuma peça adicionada</p>
       </div>
 
       <ion-spinner 
