@@ -187,8 +187,7 @@ export class MyApp {
       this.chamadoService.fecharChamadoApi(c)
         .subscribe(res => {
           if (res.indexOf('00 - ') !== -1)
-            this.exibirNotificacao('Chamado ' + c.codOs + ' sincronizado', 
-              res.replace('00 - ', ''))
+            this.exibirNotificacao('Chamado ' + c.codOs + ' sincronizado', res.replace('00 - ', ''))
               .then(() => {
                 this.chamadoService.apagarChamadoStorage(c)
                   .then(() => {})
@@ -197,7 +196,7 @@ export class MyApp {
               .catch();
           },
           err => {
-            this.exibirNotificacao('Erro na Sincronização', 'Chamado ' + c.codOs + ' não pode ser sincronizado');
+            this.exibirNotificacao('Erro na Sincronização', 'Chamado ' + c.codOs + ' não foi sincronizado');
           });
     });
 
