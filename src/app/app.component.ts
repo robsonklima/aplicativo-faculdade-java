@@ -169,7 +169,7 @@ export class MyApp {
         this.chamadoService.apagarChamadoStorage(cs)
           .then(() => {
             this.exibirNotificacao('Chamado ' + cs.codOs, 'Chamado ' + cs.codOs 
-              + ' removido pela filial');
+              + ' removido da sua listagem');
           })
           .catch();
       } else {
