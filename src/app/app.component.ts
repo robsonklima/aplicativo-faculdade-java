@@ -176,7 +176,7 @@ export class MyApp {
       });
       
       // Chamados removidos
-      if (!chamadoEncontrado) {
+      if (!chamadoEncontrado && chamadosApi.length > 0) {
         this.chamadoService.apagarChamadoStorage(cs)
           .then(() => {
             if (this.backgroundMode.isActive()) {
