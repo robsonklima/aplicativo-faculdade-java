@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavParams, Platform } from "ionic-angular";
 import { NgForm } from '@angular/forms';
-import {
-  Slides, AlertController, LoadingController, ToastController,
-  ModalController, NavController, Events
-} from 'ionic-angular';
+import { Slides, AlertController, LoadingController, ToastController,
+  ModalController, NavController, Events } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
@@ -315,8 +313,8 @@ export class ChamadoPage {
               .then(() => {
                 this.navCtrl.pop()
                   .then(() => {
-                    this.exibirToastComConfirmacao(`Chamado fechado no seu smartphone 
-                      Aguarde a sincronização com o servidor`)
+                    this.exibirToast(`Chamado fechado no seu smartphone, 
+                      aguarde a sincronização com o servidor`)
                       .then(() => {
                         this.events.publish('sincronizacao:solicitada');
                       })
@@ -470,18 +468,6 @@ export class ChamadoPage {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
         message: mensagem, duration: 3000, position: 'bottom'
-      });
-
-      resolve(toast.present());
-    });
-  }
-
-  private exibirToastComConfirmacao(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem,
-        showCloseButton: true,
-        closeButtonText: 'Ok'
       });
 
       resolve(toast.present());

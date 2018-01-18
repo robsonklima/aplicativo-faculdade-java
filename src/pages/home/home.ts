@@ -65,21 +65,21 @@ export class HomePage {
     this.navCtrl.push(PecasPage);
   }
 
-  public carregarChamadosStorage(): Promise<any> {
+  public carregarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      resolve(
-        this.chamadoService.buscarChamadosStorage()
-          .then((chamados: Chamado[]) => {
-            this.chamados = chamados.filter((c) => {
-              return (!c.dataHoraFechamento);
-            }).filter((c) => {
-              return (!c.dataHoraOSMobileLida);
-            });
+      this.chamadoService.buscarChamadosStorage()
+        .then((chamados: Chamado[]) => {
+          this.chamados = chamados.filter((c) => {
+            return (!c.dataHoraFechamento);
+          }).filter((c) => {
+            return (!c.dataHoraOSMobileLida);
+          });
 
-            this.badge.set(this.chamados.length);
-          })  
-          .catch(err => {})
-      );
+          this.badge.set(this.chamados.length);
+
+          resolve(chamados);
+        })  
+        .catch(err => {})
     });
   }
 

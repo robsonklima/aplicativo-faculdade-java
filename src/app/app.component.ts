@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events } from 'ionic-angular';
+import { Platform, ToastController, NavController, MenuController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
+import { NativeAudio } from '@ionic-native/native-audio';
+import { Vibration } from '@ionic-native/vibration';
 
 import { Config } from "../config/config";
 
@@ -35,11 +37,13 @@ export class MyApp {
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
+    private toastCtrl: ToastController,
     private appVersion: AppVersion,
     private events: Events,
     private backgroundMode: BackgroundMode,
     private localNotification: PhonegapLocalNotification,
-    
+    private nativeAudio: NativeAudio,
+    private vibration: Vibration,
     private dadosGlobaisService: DadosGlobaisService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
@@ -139,11 +143,17 @@ export class MyApp {
         return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) 
       }).length) {
         chamados.push(ca);
-        this.exibirNotificacao('Chamado ' + ca.codOs, 'Novo chamado recebido: ' + ca.codOs);
+
+        if (this.backgroundMode.isActive()) {
+          this.dispararSinalSonoroComVibracao();
+          this.exibirNotificacao(ca.codOs.toString(), 'Chamado recebido');
+        } else {
+          this.exibirToastComConfirmacao('Chamado recebido: ' + ca.codOs);
+        }
       }
     });
 
-    // Chamados atualizados ou removidos
+    // Chamados atualizados
     chamadosStorage.forEach((cs) => {
       let found: boolean = false;
 
@@ -165,11 +175,16 @@ export class MyApp {
         }
       });
       
+      // Chamados removidos
       if (!found && chamadosApi.length > 0) {
         this.chamadoService.apagarChamadoStorage(cs)
           .then(() => {
-            this.exibirNotificacao('Chamado ' + cs.codOs, 'Chamado ' + cs.codOs 
-              + ' removido da sua listagem');
+            if (this.backgroundMode.isActive()) {
+              this.dispararSinalSonoroComVibracao();
+              this.exibirNotificacao(cs.codOs.toString(), 'Chamado removido');
+            } else {
+              this.exibirToastComConfirmacao('Chamado removido: ' + cs.codOs);
+            }
           })
           .catch();
       } else {
@@ -187,16 +202,21 @@ export class MyApp {
       this.chamadoService.fecharChamadoApi(c)
         .subscribe(res => {
           if (res.indexOf('00 - ') !== -1)
-            this.exibirNotificacao('Chamado ' + c.codOs + ' sincronizado', res.replace('00 - ', ''))
-              .then(() => {
-                this.chamadoService.apagarChamadoStorage(c)
-                  .then(() => {})
-                  .catch(() => {});
-              })
-              .catch();
+            if (this.backgroundMode.isActive()) {
+              this.exibirNotificacao(c.codOs.toString(), res.replace('00 - ', ''));
+            } else {
+              this.exibirToastComConfirmacao(res.replace('00 - ', ''));
+            }
+
+            this.chamadoService.apagarChamadoStorage(c);
           },
           err => {
-            this.exibirNotificacao('Erro na Sincronização', 'Chamado ' + c.codOs + ' não foi sincronizado');
+            if (this.backgroundMode.isActive()) {
+              this.dispararSinalSonoroComVibracao();
+              this.exibirNotificacao(c.codOs.toString(), 'Não foi possível sincronizar');
+            } else {
+              this.exibirToastComConfirmacao('Chamado não sincronizado: ' + c.codOs);
+            }
           });
     });
 
@@ -209,6 +229,20 @@ export class MyApp {
     this.menuCtrl.close().then(() => {
       this.nav.push(SenhaAlteracaoPage);  
     })
+  }
+
+  private dispararSinalSonoroComVibracao() {
+    this.nativeAudio.preloadSimple('audioPop', 'assets/sounds/hangouts.ogg').then(() => {
+      this.nativeAudio.play('audioPop').then(() => {
+        setTimeout(() => {
+          this.nativeAudio.stop('audioPop').then(() => {
+            this.nativeAudio.unload('audioPop').then(() => {
+              this.vibration.vibrate(1500);
+            }, err => {});
+          }, err => {}); 
+        }, 1000);
+      }, err => {});
+    }, err => {});
   }
 
   private exibirNotificacao(titulo:string, mensagem: string): Promise<any> {
@@ -229,6 +263,18 @@ export class MyApp {
           })
           .catch()
       );
+    });
+  }
+
+  private exibirToastComConfirmacao(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem,
+        showCloseButton: true,
+        closeButtonText: 'Ok'
+      });
+
+      resolve(toast.present());
     });
   }
 

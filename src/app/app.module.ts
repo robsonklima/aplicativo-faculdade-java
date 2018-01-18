@@ -15,6 +15,8 @@ import { AppVersion } from '@ionic-native/app-version';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { Badge } from '@ionic-native/badge';
+import { NativeAudio } from '@ionic-native/native-audio';
+import { Vibration } from '@ionic-native/vibration';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -101,6 +103,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     BackgroundMode,
     PhonegapLocalNotification,
     Badge,
+    NativeAudio,
+    Vibration,
     Network,
     AppVersion,
     DadosGlobaisService,
