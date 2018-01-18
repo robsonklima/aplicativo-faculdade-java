@@ -16,7 +16,7 @@
         class="first-item"
         *ngIf="dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil">
         <ion-icon color="silver-light" name="briefcase" item-start></ion-icon>
-        <span class="user-name">{{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil }}</span>
+        <span class="user-name">{{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil | lowercase | capitalize }}</span>
       </ion-item>
       <ion-item
         *ngIf="dadosGlobais?.versaoApp">

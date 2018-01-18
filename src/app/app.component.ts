@@ -155,11 +155,11 @@ export class MyApp {
 
     // Chamados atualizados
     chamadosStorage.forEach((cs) => {
-      let found: boolean = false;
+      let chamadoEncontrado: boolean = false;
 
       chamadosApi.forEach((ca) => {
         if (cs.codOs == ca.codOs) {
-          found = true;
+          chamadoEncontrado = true;
 
           if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
             Object.keys(ca).forEach((atributo) => {
@@ -176,7 +176,7 @@ export class MyApp {
       });
       
       // Chamados removidos
-      if (!found && chamadosApi.length > 0) {
+      if (!chamadoEncontrado) {
         this.chamadoService.apagarChamadoStorage(cs)
           .then(() => {
             if (this.backgroundMode.isActive()) {
