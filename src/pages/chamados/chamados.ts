@@ -68,13 +68,9 @@ export class ChamadosPage {
         this.chamadoService.buscarChamadosStorage()
           .then(
             (chamados: Chamado[]) => { 
-              this.chamados = chamados
-                .sort(function(a, b) { 
-                  return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));  
-                })
-                // .filter((c) => {
-                //   return (!c.dataHoraFechamento);
-                // });
+              this.chamados = chamados.sort(function(a, b) { 
+                return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));  
+              });
             })  
             .catch(err => {})
       );

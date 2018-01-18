@@ -202,23 +202,41 @@
     <ion-slide>
       <ion-list>
         <div padding
-          *ngIf="!this.chamado?.checkin?.localizacao?.latitude 
-            && !this.chamado?.checkin?.localizacao?.longitude">
+          *ngIf="(!chamado?.checkin?.localizacao?.latitude 
+            && !chamado?.checkin?.localizacao?.longitude) && !chamado?.indBloqueioReincidencia">
           <button 
             color="secondary"
             ion-button 
             block 
             (click)="efetuarCheckin()">
-            {{ (!this.chamado?.checkin?.localizacao?.latitude 
-              && !this.chamado?.checkin?.localizacao?.longitude) 
+            {{ (!chamado?.checkin?.localizacao?.latitude 
+              && !chamado?.checkin?.localizacao?.longitude) 
               ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
           </button>
         </div>
 
+        <ion-card text-left
+          *ngIf="chamado?.indBloqueioReincidencia">
+          <ion-card-header color="danger">
+            <ion-icon
+              *ngIf="chamado.indBloqueioReincidencia"
+              name="lock" 
+              class="title-icon"
+              color="danger"
+              item-start>
+            </ion-icon>
+            Chamado Bloqueado
+          </ion-card-header>
+          <ion-card-content>
+            Este chamado foi bloqueado pela filial. Entre em contato com o 
+            <b ion-text color="primary">STN</b> para obter instruções.
+          </ion-card-content>
+        </ion-card>
+
         <div 
           class="first-divider"
-          *ngIf="this.chamado?.checkin?.localizacao?.latitude 
-            && this.chamado?.checkin?.localizacao?.longitude">
+          *ngIf="chamado?.checkin?.localizacao?.latitude 
+            && chamado?.checkin?.localizacao?.longitude">
           <ion-item>
             Checkin
             <ion-note item-end>
@@ -445,24 +463,24 @@
       <ion-list>
         <div
           padding
-          *ngIf="!this.chamado?.checkout?.localizacao?.latitude 
-            && !this.chamado?.checkout?.localizacao?.longitude">
+          *ngIf="!chamado?.checkout?.localizacao?.latitude 
+            && !chamado?.checkout?.localizacao?.longitude">
           <button 
             color="secondary"
             ion-button 
             block 
             (click)="efetuarCheckout()" 
             >
-            {{ (!this.chamado?.checkout?.localizacao?.latitude 
-              && !this.chamado?.checkout?.localizacao?.longitude) 
+            {{ (!chamado?.checkout?.localizacao?.latitude 
+              && !chamado?.checkout?.localizacao?.longitude) 
               ? 'Efetuar Checkout' : 'Checkout Efetuado' }}
           </button>
         </div>
 
         <div 
           class="first-divider"
-          *ngIf="this.chamado?.checkout?.localizacao?.latitude 
-            && this.chamado?.checkout?.localizacao?.longitude">
+          *ngIf="chamado?.checkout?.localizacao?.latitude 
+            && chamado?.checkout?.localizacao?.longitude">
           <ion-item>
             Checkout
             <ion-note item-end>

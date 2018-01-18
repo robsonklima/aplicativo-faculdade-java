@@ -30,4 +30,5 @@ export class Chamado {
 	dataHoraOSMobileLida: string;
 	codUsuarioMarcaEspecial: string;
 	descMotivoMarcaEspecial: string;
+	indBloqueioReincidencia: number;
 }

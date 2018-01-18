@@ -1,5 +1,7 @@
 chamado-page {
     .chamado-content-page {
+        overflow-y: hidden;
+
         ion-slides {
             margin-top: 0px;
             height: 100%; width:100%;
@@ -23,6 +25,12 @@ chamado-page {
             max-height: 50%;
             max-width: 60%;
             margin: 18px 0;
+        }
+
+        .title-icon {
+            padding-top: 2px;
+            margin-right: 4px !important;
+            font-size: 15pt;
         }
 
         b {
