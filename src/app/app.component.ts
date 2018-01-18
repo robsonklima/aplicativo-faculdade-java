@@ -32,6 +32,7 @@ export class MyApp {
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
+  ultimaAtualizacao: Date = new Date();;
 
   constructor(
     platform: Platform,
@@ -108,7 +109,27 @@ export class MyApp {
     }, Config.INT_SINC_CHAMADOS_MILISEG);
   }
 
+  private verificarSeJaFazUmMinutoDesdeUltimaAtualizacao(): boolean {
+    if(!this.ultimaAtualizacao) {
+      return false;
+    }
+    
+    var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
+
+    if (Math.abs(Math.round(diferenca)) > 60) {
+      return true;
+    }
+
+    return false;
+  }
+
   private sincronizarChamados() {
+    if (!this.verificarSeJaFazUmMinutoDesdeUltimaAtualizacao()) {
+      return
+    } 
+
+    this.ultimaAtualizacao = new Date();
+
     this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico)
       .subscribe((chamadosApi) => {
           this.chamadoService.buscarChamadosStorage()

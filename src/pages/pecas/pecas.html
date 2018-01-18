@@ -26,12 +26,12 @@
   <ion-item 
     *ngFor="let peca of pecas; let i = index" 
     (click)="telaPeca(peca)">
-    <!-- <ion-avatar item-start>
+    <ion-avatar item-start>
       <img 
         src="http://sat.perto.com.br/prjSATWEB/archive/upload_peca_imagem/{{ peca?.codMagnus }}.jpg" 
         onError="this.src='./assets/imgs/sem_foto.png';"
         title="Imagem">
-    </ion-avatar> -->
+    </ion-avatar>
     <h2>{{ peca?.codMagnus }}</h2>
     <p>{{ peca?.nomePeca.toUpperCase() }}</p>
   </ion-item>

@@ -53,7 +53,6 @@ export class ChamadoPage {
     private checkinCheckoutService: CheckinCheckoutService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado)
   }
 
   ionViewWillEnter() {
