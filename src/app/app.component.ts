@@ -125,6 +125,7 @@ export class MyApp {
 
   private sincronizarChamados() {
     if (!this.verificarSeJaFazUmMinutoDesdeUltimaAtualizacao()) {
+      this.events.publish('sincronizacao:efetuada');
       return
     } 
 
