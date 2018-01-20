@@ -58,16 +58,16 @@
     </ion-item>
     
     <ion-card-content>
-      <p>
-        {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
-        {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }},
-        <span class="font-silver-light-hard">
-          {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
-        </span>
+      <p class="nome-cliente-local">
+        <b>
+          {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
+          {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }}
+        </b>
       </p>
-      <p>
+      <p class="endereco">
         <span class="font-silver-light-hard">
-          {{ chamado.localAtendimento.endereco.toUpperCase() }}
+          {{ chamado.localAtendimento.endereco.toUpperCase() }}, 
+          {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
         </span>
       </p>
       <p
