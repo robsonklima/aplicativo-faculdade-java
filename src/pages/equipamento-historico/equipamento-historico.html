@@ -76,7 +76,7 @@
     <ion-item text-wrap>
       <span class="inf-bas">
         {{ chamado?.defeitoRelatado | lowercase | capitalize }}<br />
-        {{ chamado?.observacao | lowercase | capitalize }}</span>
+        <span *ngIf="chamado?.observacao">Obs: </span>{{ chamado?.observacao | lowercase | capitalize }}</span>
     </ion-item>
     
     <div *ngFor="let rat of chamado.rats; let i = index">
@@ -98,7 +98,7 @@
       </ion-item>
 
       <ion-item>
-        Solução
+        Data Solução
         <ion-note item-end>
           {{ rat.dataHoraSolucao | date:'dd/MM/yyyy HH:mm' }}
         </ion-note>
@@ -114,7 +114,7 @@
 
       <ion-item text-wrap>
         <span class="inf-bas">
-          {{ rat.obsRat | lowercase | capitalize }}</span>
+          Relato: {{ rat.obsRat | lowercase | capitalize }}</span>
       </ion-item>
 
       <div *ngFor="let ratDetalhe of rat.ratDetalhes; let i = index">
