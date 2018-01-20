@@ -97,6 +97,12 @@ export class MyApp {
     });
   }
 
+  public telaSenhaAlteracao() {
+    this.menuCtrl.close().then(() => {
+      this.nav.push(SenhaAlteracaoPage);  
+    })
+  }
+
   private iniciarSincronizacao() {
     if (this.task) {
       clearInterval(this.task);
@@ -107,20 +113,6 @@ export class MyApp {
     this.task = setInterval(() => {
       this.sincronizarChamados();
     }, Config.INT_SINC_CHAMADOS_MILISEG);
-  }
-
-  private verificarSeJaFazUmMinutoDesdeUltimaAtualizacao(): boolean {
-    if(!this.ultimaAtualizacao) {
-      return false;
-    }
-    
-    var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
-
-    if (Math.abs(Math.round(diferenca)) > 60) {
-      return true;
-    }
-
-    return false;
   }
 
   private sincronizarChamados() {
@@ -247,10 +239,13 @@ export class MyApp {
     });
   }
 
-  public telaSenhaAlteracao() {
-    this.menuCtrl.close().then(() => {
-      this.nav.push(SenhaAlteracaoPage);  
-    })
+  private verificarSeJaFazUmMinutoDesdeUltimaAtualizacao(): boolean {
+    if(!this.ultimaAtualizacao)
+      return false;
+    
+    var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
+
+    return (Math.abs(Math.round(diferenca)) > Config.INT_MIN_SINC_CHAMADOS_SEG);
   }
 
   private dispararSinalSonoroComVibracao() {
