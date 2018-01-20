@@ -29,10 +29,10 @@ export class MyApp {
   loginPage = LoginPage;
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
+  ultimaAtualizacao: Date = new Date();
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
-  ultimaAtualizacao: Date = new Date();;
 
   constructor(
     platform: Platform,
@@ -295,12 +295,8 @@ export class MyApp {
   }
 
   public sair() {
-    this.dadosGlobaisService.apagarDadosGlobaisStorage()
-      .then(() => {
+    this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
         this.nav.setRoot(this.loginPage);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }).catch((err) => { console.log(err) });
   }
 }
