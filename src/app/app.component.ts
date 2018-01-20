@@ -240,8 +240,7 @@ export class MyApp {
   }
 
   private verificarSeJaFazUmMinutoDesdeUltimaAtualizacao(): boolean {
-    if(!this.ultimaAtualizacao)
-      return false;
+    if(!this.ultimaAtualizacao) return false;
     
     var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
 

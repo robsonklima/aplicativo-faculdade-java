@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
 
+import { Config } from "../../config/config";
+
 import { ChamadoPage } from "../chamado/chamado";
 
 import { DadosGlobais } from '../../models/dados-globais';
@@ -51,11 +53,10 @@ export class ChamadosPage {
   }
 
   public pushAtualizarChamados(refresher) {
-    this.events.publish('sincronizacao:solicitada');
-
     setTimeout(() => {
       refresher.complete();
-    }, 3000);
+      this.events.publish('sincronizacao:solicitada');
+    }, Config.INT_LOADING_CHAMADOS_MILISEG);
   }
 
   public telaChamado(chamado: Chamado) {
