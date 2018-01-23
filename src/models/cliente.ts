@@ -1,5 +1,5 @@
 export class Cliente {
     codCliente: number;
-    siglaCliente: string;
+    numBanco: string;
     nomeCliente: string;
 }

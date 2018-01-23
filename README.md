@@ -1,5 +1,8 @@
 App Técnicos
 
+0.0.26
+- Incluída informação numBanco ao cliente na tela de detalhes do chamado;
+
 0.0.25 - 22/01/2018
 -  Inclusão do tempo de intervalo mínimo de sincronizações no arquivo de configurações do aplicativo;
 -  Inclusão do tempo de intervalo de PUSH REFRESH da página de chamados no arquivo de configurações do aplicativo (6 segundos);

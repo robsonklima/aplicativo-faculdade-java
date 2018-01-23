@@ -26,8 +26,8 @@
           class="first-item">
           Cliente
           <ion-note item-end>
-            {{ chamado?.cliente?.nomeCliente || 'Não Informado' 
-              | lowercase | capitalize }}
+            {{ chamado?.cliente?.numBanco }}
+            - {{ chamado?.cliente?.nomeCliente }}
           </ion-note>
         </ion-item>
 
