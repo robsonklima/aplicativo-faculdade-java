@@ -407,7 +407,9 @@ export class ChamadoPage {
       case 1:
         this.tituloSlide = (i + 1) + ". " + "Checkin";
         this.slides.lockSwipeToPrev(false);
-        if (!this.chamado.checkin.localizacao.latitude || !this.chamado.checkin.localizacao.longitude)
+        if (!this.chamado.checkin.localizacao.latitude 
+          || !this.chamado.checkin.localizacao.longitude 
+          || this.chamado.indBloqueioReincidencia)
           this.slides.lockSwipeToNext(true);
           else
             this.slides.lockSwipeToNext(false);
@@ -432,7 +434,8 @@ export class ChamadoPage {
       case 4:
         this.tituloSlide = (i + 1) + ". " + "Checkout";
         this.slides.lockSwipeToPrev(false);
-        if (!this.chamado.checkout.localizacao.latitude || !this.chamado.checkout.localizacao.longitude)
+        if (!this.chamado.checkout.localizacao.latitude 
+          || !this.chamado.checkout.localizacao.longitude)
           this.slides.lockSwipeToNext(true);
           else
             this.slides.lockSwipeToNext(false);

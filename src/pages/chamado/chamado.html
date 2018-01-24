@@ -201,21 +201,8 @@
 
     <ion-slide>
       <ion-list>
-        <div padding
-          *ngIf="(!chamado?.checkin?.localizacao?.latitude 
-            && !chamado?.checkin?.localizacao?.longitude) && !chamado?.indBloqueioReincidencia">
-          <button 
-            color="secondary"
-            ion-button 
-            block 
-            (click)="efetuarCheckin()">
-            {{ (!chamado?.checkin?.localizacao?.latitude 
-              && !chamado?.checkin?.localizacao?.longitude) 
-              ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
-          </button>
-        </div>
-
         <ion-card text-left
+          class="card-chamado-bloqueado"
           *ngIf="chamado?.indBloqueioReincidencia">
           <ion-card-header color="danger">
             <ion-icon
@@ -233,6 +220,20 @@
             e liberação do chamado.
           </ion-card-content>
         </ion-card>
+
+        <div padding
+          *ngIf="(!chamado?.checkin?.localizacao?.latitude 
+            && !chamado?.checkin?.localizacao?.longitude)">
+          <button 
+            color="secondary"
+            ion-button 
+            block 
+            (click)="efetuarCheckin()">
+            {{ (!chamado?.checkin?.localizacao?.latitude 
+              && !chamado?.checkin?.localizacao?.longitude) 
+              ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
+          </button>
+        </div>
 
         <div 
           class="first-divider"
