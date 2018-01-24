@@ -46,8 +46,6 @@ export class ChamadosPage {
   }
 
   ionViewWillEnter() { 
-    
-
     this.carregarChamadosStorage();
     
     this.dadosGlobaisService.buscarDadosGlobaisStorage()
@@ -62,6 +60,10 @@ export class ChamadosPage {
       .catch((err) => {});
   }
 
+  public telaChamado(chamado: Chamado) {
+    this.navCtrl.push(ChamadoPage, { chamado: chamado });
+  }
+
   public pushAtualizarChamados(refresher) {
     setTimeout(() => {
       refresher.complete();
@@ -69,20 +71,16 @@ export class ChamadosPage {
     }, Config.INT_LOADING_CHAMADOS_MILISEG);
   }
 
-  public telaChamado(chamado: Chamado) {
-    this.navCtrl.push(ChamadoPage, { chamado: chamado });
-  }
-
-  public abrirMapaNavegador (chamado: Chamado) {
+  public abrirMapaNavegador(chamado: Chamado) {
     this.platform.ready().then(() => {
       this.geolocation.getCurrentPosition(Config.POS_CONFIG)
         .then((localizacao) => {
-          console.log(localizacao);
+          let latA = localizacao.coords.latitude;
+          let lngA = localizacao.coords.longitude;
+          let latB = chamado.localAtendimento.localizacao.latitude;
+          let lngB = chamado.localAtendimento.localizacao.longitude;
 
-          this.inAppBrowser.create('https://www.google.com.br/maps/dir/' 
-            + localizacao.coords.latitude + ',+' + localizacao.coords.longitude 
-            + '/' + chamado.localAtendimento.localizacao.latitude + ',+' 
-            + chamado.localAtendimento.localizacao.longitude);
+          this.inAppBrowser.create(`https://www.google.com.br/maps/dir/${latA},+${latB}/${lngA},+${lngB}`);
         })
         .catch((err) => {
           this.exibirToast("Não foi possível obter sua localização");
@@ -90,7 +88,6 @@ export class ChamadosPage {
     })
     .catch(() => {});
   }
-  
 
   private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
