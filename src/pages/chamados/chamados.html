@@ -146,9 +146,8 @@
             icon-only
             clear 
             small
-            [disabled]="true"
-            (click)="telaChamadoMapa(chamado)">
-            <!-- [disabled]="chamado.dataHoraFechamento" -->
+            [disabled]="chamado.dataHoraFechamento"
+            (click)="abrirMapaNavegador(chamado)">
             <ion-icon name="pin" class="pin"></ion-icon>
           </button>
         </ion-col>

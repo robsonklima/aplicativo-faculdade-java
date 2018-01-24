@@ -8,15 +8,16 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from "@angular/http";
 import { MyApp } from './app.component';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic'
 import { Network } from '@ionic-native/network';
 import { AppVersion } from '@ionic-native/app-version';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
-import { Badge } from '@ionic-native/badge';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
+import { Badge } from '@ionic-native/badge';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -107,6 +108,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     Vibration,
     Network,
     AppVersion,
+    InAppBrowser,
     DadosGlobaisService,
     ChamadoService,
     GeolocationService,

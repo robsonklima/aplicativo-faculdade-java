@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
+import { Platform, LoadingController, NavController, AlertController, 
+  ToastController, Events } from 'ionic-angular';
+
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { Config } from "../../config/config";
 
@@ -25,7 +29,11 @@ export class ChamadosPage {
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
+    private toastCtrl: ToastController,
     private events: Events,
+    private platform: Platform,
+    private geolocation: Geolocation,
+    private inAppBrowser: InAppBrowser,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
     private loadingCtrl: LoadingController
@@ -38,6 +46,8 @@ export class ChamadosPage {
   }
 
   ionViewWillEnter() { 
+    
+
     this.carregarChamadosStorage();
     
     this.dadosGlobaisService.buscarDadosGlobaisStorage()
@@ -63,13 +73,32 @@ export class ChamadosPage {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
   }
 
+  public abrirMapaNavegador (chamado: Chamado) {
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition(Config.POS_CONFIG)
+        .then((localizacao) => {
+          console.log(localizacao);
+
+          this.inAppBrowser.create('https://www.google.com.br/maps/dir/' 
+            + localizacao.coords.latitude + ',+' + localizacao.coords.longitude 
+            + '/' + chamado.localAtendimento.localizacao.latitude + ',+' 
+            + chamado.localAtendimento.localizacao.longitude);
+        })
+        .catch((err) => {
+          this.exibirToast("Não foi possível obter sua localização");
+        });
+    })
+    .catch(() => {});
+  }
+  
+
   private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
       resolve(
         this.chamadoService.buscarChamadosStorage()
           .then(
             (chamados: Chamado[]) => { 
-              this.chamados = chamados.sort(function(a, b) { 
+              this.chamados = chamados.sort(function(a, b) {
                 return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));  
               });
             })  
@@ -124,6 +153,16 @@ export class ChamadosPage {
             .indexOf(val.toLowerCase()) > -1);
         })
       }
+    });
+  }
+
+  private exibirToast(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem, duration: 3000, position: 'bottom'
+      });
+
+      resolve(toast.present());
     });
   }
 
