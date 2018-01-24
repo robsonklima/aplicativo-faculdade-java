@@ -5,6 +5,7 @@ App Técnicos
 - Permissão de checkin mesmo em chamados bloqueados;
 - Reformulação dos mapas, passando a exibir a rota entre o dispositivo e o local;
 - Diminuição de 20 para 10 segundos o intervalo mínimo de sincronizações;
+- Remoção do ícone globo na listagem de chamados;
 
 0.0.25 - 22/01/2018
 -  Inclusão do tempo de intervalo mínimo de sincronizações no arquivo de configurações do aplicativo;
