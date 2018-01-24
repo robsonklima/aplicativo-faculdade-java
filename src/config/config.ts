@@ -6,7 +6,7 @@ export class Config {
    public static BACKGROUND_MODE_CONFIG = { title:  'SAT Sincronização', text: 'Executando', silent: true }
    public static INT_SINC_BD_LOCAL_DIAS = 7;
    public static INT_SINC_CHAMADOS_MILISEG = (5 * 60000);
-   public static INT_MIN_SINC_CHAMADOS_SEG = 20.0;
+   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
    public static INT_LOADING_CHAMADOS_MILISEG = 6000;
 
    //public static API_URL = 'http://localhost:60687/api/';
