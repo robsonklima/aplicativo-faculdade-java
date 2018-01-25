@@ -1,5 +1,8 @@
 App Técnicos: https://goo.gl/u7VZ3Q
 
+0.0.27
+- Diminuição de 10 para 6 segundos o intervalo mínimo de sincronizações;
+
 0.0.26
 - Possibilidade de checkin para chamados bloqueados;
 - Reformulação dos mapas, passando a exibir a rota entre o dispositivo e o local;
