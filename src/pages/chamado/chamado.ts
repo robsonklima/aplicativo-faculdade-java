@@ -110,53 +110,52 @@ export class ChamadoPage {
             }
             
             const loader = this.loadingCtrl.create({
-              content: 'Obtendo sua localização...'
+              content: 'Obtendo sua localização...',
+              enableBackdropDismiss: true,
+              dismissOnPageChange: true
             });
             loader.present();
 
             this.platform.ready().then(() => {
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG)
-                .then((location) => {
-                  loader.dismiss().then(() => {
-                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                      this.configurarSlide(this.slides.getActiveIndex());
-                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                    })
-                    .catch();
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                loader.dismiss().then(() => {
+                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   })
                   .catch();
                 })
-                .catch((err) => {
-                  loader.dismiss()
-                    .then(() => {
-                      this.checkinCheckoutService.buscarCheckinApi(this.chamado.codOs)
-                        .subscribe(checkin => {
-                          if (checkin) {
-                            if (checkin.localizacao.latitude && checkin.localizacao.longitude) {
-                              this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                              this.chamado.checkin.localizacao.latitude = checkin.localizacao.latitude;
-                              this.chamado.checkin.localizacao.longitude = checkin.localizacao.longitude;
-                              this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                                this.configurarSlide(this.slides.getActiveIndex());
-                                this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                              })
-                              .catch();
-                            } else {
-                              this.exibirToast('Checkin manual ou sinal de GPS não encontrado');
-                            }
-                          } else {
-                            this.exibirToast('Checkin manual ou sinal de GPS não encontrado');
-                          }
-                        },
-                        err => {
-                          this.exibirToast('Checkin manual ou sinal de GPS não encontrado');
-                        });
-                    })
-                    .catch();
-                 });
+                .catch();
+              })
+              .catch((err) => {
+                loader.dismiss().then(() => {
+                  this.checkinCheckoutService.buscarCheckinApi(this.chamado.codOs).subscribe(checkin => {
+                    if (checkin) {
+                      if (checkin.localizacao.latitude && checkin.localizacao.longitude) {
+                        this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                        this.chamado.checkin.localizacao.latitude = checkin.localizacao.latitude;
+                        this.chamado.checkin.localizacao.longitude = checkin.localizacao.longitude;
+                        this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                          this.configurarSlide(this.slides.getActiveIndex());
+                          this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                        })
+                        .catch();
+                      } else {
+                        this.exibirToast('Não foi possível efetuar o checkin');
+                      }
+                    } else {
+                      this.exibirToast('Não foi possível efetuar o checkin');
+                    }
+                  },
+                  err => {
+                    this.exibirToast('Não foi possível efetuar o checkin');
+                  });
+                })
+                .catch();
+              });
             })
             .catch(() => {});
           }
@@ -181,53 +180,52 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             const loader = this.loadingCtrl.create({
-              content: 'Obtendo sua localização...'
+              content: 'Obtendo sua localização...',
+              enableBackdropDismiss: true,
+              dismissOnPageChange: true
             });
             loader.present();
 
             this.platform.ready().then(() => {
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG)
-                .then((location) => {
-                  loader.dismiss().then(() => {
-                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                      this.configurarSlide(this.slides.getActiveIndex());
-                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                    })
-                    .catch();
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                loader.dismiss().then(() => {
+                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   })
                   .catch();
                 })
-                .catch((err) => {
-                  loader.dismiss()
-                    .then(() => {
-                      this.checkinCheckoutService.buscarCheckoutApi(this.chamado.codOs)
-                        .subscribe(checkout => {
-                          if (checkout) {
-                            if (checkout.localizacao.latitude && checkout.localizacao.longitude) {
-                              this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                              this.chamado.checkout.localizacao.latitude = checkout.localizacao.latitude;
-                              this.chamado.checkout.localizacao.longitude = checkout.localizacao.longitude;
-                              this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                                this.configurarSlide(this.slides.getActiveIndex());
-                                this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                              })
-                              .catch();
-                            } else {
-                              this.exibirToast('Checkout manual ou sinal de GPS não encontrado');
-                            }
-                          } else {
-                            this.exibirToast('Checkout manual ou sinal de GPS não encontrado');
-                          }
-                        },
-                        err => {
-                          this.exibirToast('Checkout manual ou sinal de GPS não encontrado');
-                        });
-                    })
-                    .catch();
-                 });
+                .catch();
+              })
+              .catch((err) => {
+                loader.dismiss().then(() => {
+                  this.checkinCheckoutService.buscarCheckoutApi(this.chamado.codOs).subscribe(checkout => {
+                    if (checkout) {
+                      if (checkout.localizacao.latitude && checkout.localizacao.longitude) {
+                        this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                        this.chamado.checkout.localizacao.latitude = checkout.localizacao.latitude;
+                        this.chamado.checkout.localizacao.longitude = checkout.localizacao.longitude;
+                        this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                          this.configurarSlide(this.slides.getActiveIndex());
+                          this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                        })
+                        .catch();
+                      } else {
+                        this.exibirToast('Não foi possível efetuar o checkout');
+                      }
+                    } else {
+                      this.exibirToast('Não foi possível efetuar o checkout');
+                    }
+                  },
+                  err => {
+                    this.exibirToast('Não foi possível efetuar o checkout');
+                  });
+                })
+                .catch();
+              });
             })
             .catch(() => {});
           }

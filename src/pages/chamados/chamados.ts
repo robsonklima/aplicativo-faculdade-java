@@ -73,7 +73,9 @@ export class ChamadosPage {
 
   public abrirMapaNavegador(chamado: Chamado) {
     const loader = this.loadingCtrl.create({
-      content: 'Obtendo sua localização...'
+      content: 'Obtendo sua localização...',
+      enableBackdropDismiss: true,
+      dismissOnPageChange: true
     });
     loader.present();
 
