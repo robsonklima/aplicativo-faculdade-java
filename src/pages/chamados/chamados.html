@@ -22,6 +22,7 @@
   </ion-refresher>
 
   <ion-searchbar 
+    *ngIf="chamados?.length"
     (ionInput)="filtrarChamados($event)" 
     placeholder="Pesquisar"></ion-searchbar>
 
@@ -56,6 +57,7 @@
           {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }}
         </b>
       </p>
+
       <p class="endereco">
         <span class="font-silver-light-hard">
           {{ chamado.localAtendimento.endereco.toUpperCase() }}, 
@@ -67,6 +69,16 @@
         class="font-red sla">
         SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
       </p>
+
+      <img 
+        class="mapa-local"
+        src="https://maps.googleapis.com/maps/api/staticmap?center=
+        {{chamado?.localAtendimento?.localizacao?.latitude}},
+        {{chamado?.localAtendimento?.localizacao?.longitude}}
+        &markers=color:red%7Clabel:!%7C
+        {{chamado?.localAtendimento?.localizacao?.latitude}},
+        {{chamado?.localAtendimento?.localizacao?.longitude}}
+        &zoom=14&size=340x120">
     </ion-card-content>
 
     <ion-grid 
@@ -161,9 +173,11 @@
     </ion-grid>
   </ion-card>
 
-  <ion-card padding text-center *ngIf="chamados?.length == 0">
+  <ion-card padding text-center *ngIf="!chamados?.length">
     <ion-card-content>
-      <p>Nenhum chamado encontrado, atualize novamente dentro de alguns instantes</p>
+      <p>
+        Nenhum chamado encontrado. Tente novamente em alguns instantes.
+      </p>
     </ion-card-content>
   </ion-card>
 </ion-content>
