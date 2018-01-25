@@ -128,8 +128,18 @@ chamado-page {
             margin-bottom: 0px !important;
         }
 
-        .card-mapa-subtitulo {
+        ion-card.adv-map p {
+            font-size: 0.7em !important;
             padding-left: 0px !important;
+        }
+
+        ion-card.adv-map-titles {
+            padding-left: 0px !important;
+        }
+
+        .adv-map-icon {
+            margin-left: 2px !important;
+            margin-right: -8px !important;
         }
     }
 }
