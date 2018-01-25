@@ -78,7 +78,7 @@
         &markers=color:red%7Clabel:!%7C
         {{chamado?.localAtendimento?.localizacao?.latitude}},
         {{chamado?.localAtendimento?.localizacao?.longitude}}
-        &zoom=14&size=340x120">
+        &zoom=11&size=340x110">
     </ion-card-content>
 
     <ion-grid 
@@ -176,7 +176,7 @@
   <ion-card padding text-center *ngIf="!chamados?.length">
     <ion-card-content>
       <p>
-        Nenhum chamado encontrado. Tente novamente em alguns instantes.
+        Nenhum chamado encontrado. Tente novamente em alguns minutos.
       </p>
     </ion-card-content>
   </ion-card>
