@@ -222,8 +222,8 @@
         </ion-card>
 
         <div padding
-          *ngIf="(!chamado?.checkin?.localizacao?.latitude 
-            && !chamado?.checkin?.localizacao?.longitude)">
+          *ngIf="!chamado?.checkin?.localizacao?.latitude 
+            && !chamado?.checkin?.localizacao?.longitude">
           <button 
             color="secondary"
             ion-button 
@@ -234,25 +234,26 @@
               ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
           </button>
         </div>
-
-        <div 
-          class="first-divider"
-          *ngIf="chamado?.checkin?.localizacao?.latitude 
-            && chamado?.checkin?.localizacao?.longitude">
-          <ion-item>
-            Checkin
-            <ion-note item-end>
-              Efetuado
-            </ion-note>
-          </ion-item>
-          <ion-item>
-            Data e Horário
-            <ion-note item-end>
-              {{ chamado?.checkin?.dataHoraCadastro }}
-            </ion-note>
-          </ion-item>
-        </div>
       </ion-list>
+
+      <ion-card 
+        *ngIf="chamado?.checkin?.localizacao?.latitude 
+        && chamado?.checkin?.localizacao?.longitude">
+        <img src="https://maps.googleapis.com/maps/api/staticmap?center=
+          {{chamado?.checkin?.localizacao?.latitude}},
+          {{chamado?.checkin?.localizacao?.longitude}}
+          &markers=color:red%7Clabel:!%7C
+          {{chamado?.checkin?.localizacao?.latitude}},
+          {{chamado?.checkin?.localizacao?.longitude}}&zoom=16&size=340x200">
+      
+        <ion-item>
+          <ion-icon name="pin" item-start large></ion-icon>
+          <h2>Checkin Efetuado</h2>
+          <p class="card-mapa-subtitulo">
+            {{ chamado?.checkin?.dataHoraCadastro }}
+          </p>
+        </ion-item>
+      </ion-card>
     </ion-slide>
 
     <ion-slide>
@@ -478,25 +479,26 @@
               ? 'Efetuar Checkout' : 'Checkout Efetuado' }}
           </button>
         </div>
-
-        <div 
-          class="first-divider"
-          *ngIf="chamado?.checkout?.localizacao?.latitude 
-            && chamado?.checkout?.localizacao?.longitude">
-          <ion-item>
-            Checkout
-            <ion-note item-end>
-              Efetuado
-            </ion-note>
-          </ion-item>
-          <ion-item>
-            Data e Horário
-            <ion-note item-end>
-              {{ chamado?.checkout?.dataHoraCadastro }}
-            </ion-note>
-          </ion-item>
-        </div>
       </ion-list>
+
+      <ion-card 
+        *ngIf="chamado?.checkout?.localizacao?.latitude 
+        && chamado?.checkout?.localizacao?.longitude">
+        <img src="https://maps.googleapis.com/maps/api/staticmap?center=
+          {{chamado?.checkout?.localizacao?.latitude}},
+          {{chamado?.checkout?.localizacao?.longitude}}
+          &markers=color:red%7Clabel:!%7C
+          {{chamado?.checkout?.localizacao?.latitude}},
+          {{chamado?.checkout?.localizacao?.longitude}}&zoom=16&size=340x200">
+      
+        <ion-item>
+          <ion-icon name="pin" item-start large></ion-icon>
+          <h2>Checkout Efetuado</h2>
+          <p class="card-mapa-subtitulo">
+            {{ chamado?.checkout?.dataHoraCadastro }}
+          </p>
+        </ion-item>
+      </ion-card>
     </ion-slide>
 
     <ion-slide>

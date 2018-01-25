@@ -80,13 +80,12 @@ export class ChamadosPage {
     this.platform.ready().then(() => {
       this.geolocation.getCurrentPosition(Config.POS_CONFIG)
         .then((localizacao) => {
-          let latA = localizacao.coords.latitude;
-          let lngA = localizacao.coords.longitude;
-          let latB = chamado.localAtendimento.localizacao.latitude;
-          let lngB = chamado.localAtendimento.localizacao.longitude;
-
           loader.dismiss().then(() => {
-            this.inAppBrowser.create(`https://www.google.com.br/maps/dir/${latA},+${latB}/${lngA},+${lngB}`);
+            this.inAppBrowser.create('https://www.google.com.br/maps/dir/' 
+              + localizacao.coords.latitude + ',+' 
+              + localizacao.coords.longitude + '/' 
+              + chamado.localAtendimento.localizacao.latitude + ',+' 
+              + chamado.localAtendimento.localizacao.longitude);
           }).catch();
         })
         .catch((err) => {

@@ -12,6 +12,8 @@ import { Diagnostic } from '@ionic-native/diagnostic'
 import { Network } from '@ionic-native/network';
 import { AppVersion } from '@ionic-native/app-version';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { AppAvailability } from '@ionic-native/app-availability';
+import { Device } from '@ionic-native/device';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { NativeAudio } from '@ionic-native/native-audio';
@@ -109,6 +111,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     Network,
     AppVersion,
     InAppBrowser,
+    AppAvailability,
+    Device,
     DadosGlobaisService,
     ChamadoService,
     GeolocationService,
