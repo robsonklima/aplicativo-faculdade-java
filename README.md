@@ -1,4 +1,4 @@
-App Técnicos
+App Técnicos: https://goo.gl/u7VZ3Q
 
 0.0.26
 - Possibilidade de checkin para chamados bloqueados;
