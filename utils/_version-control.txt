@@ -1,9 +1,9 @@
 
-0.0.27
+0.0.27 - [INSERIR DATA]
 - Diminuição de 10 para 5 segundos o intervalo mínimo de sincronizações;
 - Adição da imagem do mapa na tela do chamado e listagem de chamados;
 
-0.0.26
+0.0.26 - 25/01/2018
 - Possibilidade de checkin para chamados bloqueados;
 - Reformulação dos mapas, passando a exibir a rota entre o dispositivo e o local;
 - Adição da imagem do mapa nas lâminas de checkin e checkout;
@@ -13,9 +13,9 @@
 - Remoção do ícone globo na listagem de chamados;
 
 0.0.25 - 22/01/2018
--  Inclusão do tempo de intervalo mínimo de sincronizações no arquivo de configurações do aplicativo;
--  Inclusão do tempo de intervalo de PUSH REFRESH da página de chamados no arquivo de configurações do aplicativo (6 segundos);
--  Diminuição de 1 minuto para 20 segundos o intervalo mínimo de sincronizações;
+- Inclusão do tempo de intervalo mínimo de sincronizações no arquivo de configurações do aplicativo;
+- Inclusão do tempo de intervalo de PUSH REFRESH da página de chamados no arquivo de configurações do aplicativo (6 segundos);
+- Diminuição de 1 minuto para 20 segundos o intervalo mínimo de sincronizações;
 
 0.0.24 - 19/01/2018        
 - Correção do problema de múltiplos envios do mesmo chamado via integração: correção do problema de concorrência adicionando intervalo mínimo de sincronização de um minuto;
