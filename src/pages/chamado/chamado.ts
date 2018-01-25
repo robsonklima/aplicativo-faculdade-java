@@ -105,7 +105,7 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.exibirToast('Existe checkin em aberto em outro chamado');
+              this.exibirToast('Existe checkin aberto em outro chamado');
               return
             }
             
@@ -117,19 +117,17 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG)
                 .then((location) => {
-                  loader.dismiss()
-                    .then(() => {
-                      this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                      this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                      this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                      this.chamadoService.atualizarChamado(this.chamado)
-                      .then(() => {
-                        this.configurarSlide(this.slides.getActiveIndex());
-                        this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                      })
-                      .catch();
+                  loader.dismiss().then(() => {
+                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                     })
                     .catch();
+                  })
+                  .catch();
                 })
                 .catch((err) => {
                   loader.dismiss()
@@ -141,12 +139,11 @@ export class ChamadoPage {
                               this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                               this.chamado.checkin.localizacao.latitude = checkin.localizacao.latitude;
                               this.chamado.checkin.localizacao.longitude = checkin.localizacao.longitude;
-                              this.chamadoService.atualizarChamado(this.chamado)
-                                .then(() => {
-                                  this.configurarSlide(this.slides.getActiveIndex());
-                                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                                })
-                                .catch();
+                              this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                                this.configurarSlide(this.slides.getActiveIndex());
+                                this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                              })
+                              .catch();
                             } else {
                               this.exibirToast('Checkin manual ou sinal de GPS não encontrado');
                             }
@@ -191,19 +188,17 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG)
                 .then((location) => {
-                  loader.dismiss()
-                    .then(() => {
-                      this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                      this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                      this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                      this.chamadoService.atualizarChamado(this.chamado)
-                      .then(() => {
-                        this.configurarSlide(this.slides.getActiveIndex());
-                        this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                      })
-                      .catch();
+                  loader.dismiss().then(() => {
+                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                     })
                     .catch();
+                  })
+                  .catch();
                 })
                 .catch((err) => {
                   loader.dismiss()
@@ -215,12 +210,11 @@ export class ChamadoPage {
                               this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                               this.chamado.checkout.localizacao.latitude = checkout.localizacao.latitude;
                               this.chamado.checkout.localizacao.longitude = checkout.localizacao.longitude;
-                              this.chamadoService.atualizarChamado(this.chamado)
-                                .then(() => {
-                                  this.configurarSlide(this.slides.getActiveIndex());
-                                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                                })
-                                .catch();
+                              this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                                this.configurarSlide(this.slides.getActiveIndex());
+                                this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                              })
+                              .catch();
                             } else {
                               this.exibirToast('Checkout manual ou sinal de GPS não encontrado');
                             }
