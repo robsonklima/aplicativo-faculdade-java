@@ -20,7 +20,7 @@ import { UsuarioPonto } from '../../models/usuario-ponto';
 
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
-import { EquipamentosHistoricoPage } from '../equipamentos-historico/equipamentos-historico';
+import { ChamadosHistoricoPage } from '../chamados-historico/chamados-historico';
 
 @Component({
   selector: 'chamado-page',
@@ -86,7 +86,7 @@ export class ChamadoPage {
   }
 
   public telaEquipamentosHistorico(chamado: Chamado) {
-    const modal = this.modalCtrl.create(EquipamentosHistoricoPage, { chamado: this.chamado });
+    const modal = this.modalCtrl.create(ChamadosHistoricoPage, { chamado: this.chamado });
     modal.present();
     modal.onDidDismiss(() => {});
   }

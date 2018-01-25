@@ -27,7 +27,7 @@ import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
-import { EquipamentosHistoricoPage } from '../pages/equipamentos-historico/equipamentos-historico';
+import { ChamadosHistoricoPage } from '../pages/chamados-historico/chamados-historico';
 import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
 
@@ -41,7 +41,7 @@ import { CausaService } from "../services/causa";
 import { PecaService } from "../services/peca";
 import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
-import { EquipamentoHistoricoPage } from '../pages/equipamento-historico/equipamento-historico';
+import { ChamadoHistoricoPage } from '../pages/chamado-historico/chamado-historico';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
 
 import { CapitalizePipe } from '../pipes/capitalize';
@@ -58,8 +58,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    EquipamentosHistoricoPage,
-    EquipamentoHistoricoPage,
+    ChamadosHistoricoPage,
+    ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
     CapitalizePipe,
@@ -92,8 +92,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    EquipamentosHistoricoPage,
-    EquipamentoHistoricoPage,
+    ChamadosHistoricoPage,
+    ChamadoHistoricoPage,
     PecasPage,
     PecaPage
   ],
