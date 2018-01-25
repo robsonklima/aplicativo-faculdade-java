@@ -14,4 +14,4 @@ ZIPALIGN
 "I:\ionic-projects\app-tecnicos\_utils\zipalign" -v 4 "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-release-0.0.27.apk"
 
 UTILS
-https://goo.gl/wWCqiS
+https://goo.gl/kCXcYC
