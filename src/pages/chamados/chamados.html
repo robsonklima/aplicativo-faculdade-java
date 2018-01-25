@@ -70,15 +70,16 @@
         SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
       </p>
 
-      <img
-        class="mapa-local"
+      <!-- <img
+        class="mapa-local"  
+        (click)="abrirMapaNavegador(chamado)"
         src="https://maps.googleapis.com/maps/api/staticmap?center=
         {{chamado?.localAtendimento?.localizacao?.latitude}},
         {{chamado?.localAtendimento?.localizacao?.longitude}}
         &markers=color:red%7Clabel:!%7C
         {{chamado?.localAtendimento?.localizacao?.latitude}},
         {{chamado?.localAtendimento?.localizacao?.longitude}}
-        &zoom=9&size=340x110">
+        &zoom=9&size=340x110"> -->
     </ion-card-content>
 
     <ion-grid 

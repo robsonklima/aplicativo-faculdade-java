@@ -3,7 +3,8 @@ App Técnicos
 0.0.26
 - Possibilidade de checkin para chamados bloqueados;
 - Reformulação dos mapas, passando a exibir a rota entre o dispositivo e o local;
-- Adição da imagem do mapa nas lâminas de checkin e checkout na tela do chamado;
+- Adição da imagem do mapa nas lâminas de checkin e checkout;
+- Adição da imagem do mapa na tela do chamado e listagem de chamados (Não disp. usuário);
 - Incluída informação numBanco ao cliente na tela de detalhes do chamado;
 - Diminuição de 20 para 10 segundos o intervalo mínimo de sincronizações;
 - Remoção do ícone globo na listagem de chamados;
