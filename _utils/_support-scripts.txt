@@ -10,8 +10,11 @@ KEYTOOL
 JARSINGER
 "C:\Program Files\Java\jdk1.8.0_101\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-key.keystore" "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" app-tecnicos
 
-ZIPALIGN
+ZIPALIGN [DON'T FORGET TO CHANGE VERSION NUMBER]
 "I:\ionic-projects\app-tecnicos\_utils\zipalign" -v 4 "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-release-0.0.27.apk"
 
 UTILS
 https://goo.gl/kCXcYC
+
+VERSION-CONTROL
+https://goo.gl/suzXWo
