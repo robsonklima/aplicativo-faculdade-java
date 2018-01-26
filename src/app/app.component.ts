@@ -212,26 +212,25 @@ export class MyApp {
   }
 
   private sincronizarChamadosFechados(chamados: Chamado[]): Promise<Chamado[]> {
-    chamados.forEach((c) => {
-      this.chamadoService.fecharChamadoApi(c)
-        .subscribe(res => {
-          if (res.indexOf('00 - ') !== -1)
+    chamados.forEach((chamado) => {
+      this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
+        if (res.indexOf('00 - ') !== -1)
+          this.chamadoService.apagarChamadoStorage(chamado).then(() => {
             if (this.backgroundMode.isActive()) {
-              this.exibirNotificacao(c.codOs.toString(), res.replace('00 - ', ''));
+              this.exibirNotificacao(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
             } else {
-              this.exibirToastComConfirmacao(res.replace('00 - ', ''));
+              this.exibirToastComConfirmacao('Chamado ' + chamado.codOs.toString() + ' sincronizado no servidor');
             }
-
-            this.chamadoService.apagarChamadoStorage(c);
-          },
-          err => {
-            if (this.backgroundMode.isActive()) {
-              this.dispararSinalSonoroComVibracao();
-              this.exibirNotificacao(c.codOs.toString(), 'Não foi possível sincronizar');
-            } else {
-              this.exibirToastComConfirmacao('Chamado não sincronizado: ' + c.codOs);
-            }
-          });
+          }).catch();
+        },
+        err => {
+          if (this.backgroundMode.isActive()) {
+            this.dispararSinalSonoroComVibracao();
+            this.exibirNotificacao(chamado.codOs.toString(), 'Não foi possível sincronizar');
+          } else {
+            this.exibirToastComConfirmacao('Não foi possível sincronizar o chamado ' + chamado.codOs);
+          }
+        });
     });
 
     return new Promise((resolve, reject) => {

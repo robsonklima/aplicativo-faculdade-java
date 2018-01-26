@@ -60,7 +60,7 @@ export class ChamadoPage {
     this.verificarGpsAtivado();
     this.configurarSlide(this.slides.getActiveIndex());
     this.obterDataHoraAtual();
-    this.registrarLeituraOs();
+    this.registrarLeituraOs(); 
   }
 
   public alterarSlide() {

@@ -54,6 +54,7 @@ export class ChamadoService {
           .then(
           (chamados: Chamado[]) => {
             this.chamados = chamados != null ? chamados : [];
+            
             return this.chamados.slice();
           })
           .catch()
@@ -80,7 +81,7 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       for (var i = 0; i < this.chamados.length; i++) {
         if (this.chamados[i].codOs == chamado.codOs)
-          this.chamados.splice(i, 100);
+          this.chamados.splice(i, 1);
       }
 
       this.storage.set('Chamados', this.chamados)

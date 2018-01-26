@@ -1,5 +1,6 @@
 0.0.27 - [INSERIR DATA]
 - Diminuição de 10 para 6 segundos o intervalo mínimo de sincronizações;
+- Correção do bug que muito raramente retirava não somente os chamados fechados da lista, mas os demais também; 
 
 0.0.26 - 25/01/2018
 - Possibilidade de checkin para chamados bloqueados;
