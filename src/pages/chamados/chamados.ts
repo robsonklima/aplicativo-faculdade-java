@@ -65,10 +65,12 @@ export class ChamadosPage {
   }
 
   public pushAtualizarChamados(refresher) {
-    setTimeout(() => {
-      refresher.complete();
-      this.events.publish('sincronizacao:solicitada');
-    }, Config.INT_LOADING_CHAMADOS_MILISEG);
+    if(refresher) {
+      setTimeout(() => {
+        this.events.publish('sincronizacao:solicitada');
+        refresher.complete();
+      }, Config.INT_LOADING_CHAMADOS_MILISEG);
+    }
   }
 
   public abrirMapaNavegador(chamado: Chamado) {
