@@ -105,7 +105,7 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.exibirToast('Existe checkin aberto em outro chamado');
+              this.exibirToast('Você possui checkin aberto em outro chamado');
               return
             }
             
