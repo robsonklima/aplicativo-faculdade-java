@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        (click)="fecharModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>Reportar um Problema</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item text-wrap no-lines class="msg-titulo">
+      <i>
+        Olá {{ dadosGlobais?.usuario?.nome }},
+      </i>
+    </ion-item>
+
+    <ion-item text-wrap no-lines class="msg-rodape">
+      <i>
+        Lamentamos que esteja enfrentando problemas. Estamos 
+        constantemente trabalhando para aperfeiçoar o aplicativo <br /> <hr />
+      
+        Entre em contato através dos canais: <br />
+      
+        Ramal: 944, Telefone: 51 2126 8944 <br />
+        E-mail: equipe.sat@perto.com.br
+      </i>
+    </ion-item>
+  </ion-list>
+</ion-content>

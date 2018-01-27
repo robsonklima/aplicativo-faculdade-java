@@ -23,6 +23,7 @@ import { Badge } from '@ionic-native/badge';
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 import { HomePage } from '../pages/home/home';
+import { HomeMaisOpcoesPage } from '../pages/home-mais-opcoes/home-mais-opcoes';
 import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
@@ -30,7 +31,8 @@ import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { ChamadosHistoricoPage } from '../pages/chamados-historico/chamados-historico';
 import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
-import { ReportarProblemaPage } from '../pages/reportar-problema/reportar-problema';
+import { AjudaPage } from '../pages/ajuda/ajuda';
+import { ProblemaPage } from '../pages/problema/problema';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -44,7 +46,6 @@ import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
 import { ChamadoHistoricoPage } from '../pages/chamado-historico/chamado-historico';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
-import { ProblemaService } from '../services/problema';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -56,6 +57,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     LoginPage,
     SenhaAlteracaoPage,
     HomePage,
+    HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
     RatDetalhePage,
@@ -64,7 +66,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
-    ReportarProblemaPage,
+    AjudaPage,
+    ProblemaPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -91,6 +94,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     LoginPage,
     SenhaAlteracaoPage,
     HomePage,
+    HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
     RatDetalhePage,
@@ -99,7 +103,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
-    ReportarProblemaPage
+    AjudaPage,
+    ProblemaPage
   ],
   providers: [
     StatusBar,
@@ -127,8 +132,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     PecaService,
     EquipamentoContratoService,
     TipoServicoService,
-    CheckinCheckoutService,
-    ProblemaService
+    CheckinCheckoutService
   ]
 })
 export class AppModule {}

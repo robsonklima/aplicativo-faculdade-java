@@ -4,8 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
+    <ion-buttons end>
+      <button ion-button icon-only (click)="abrirPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
     
-
     <ion-title>App Técnicos</ion-title>
   </ion-navbar>
 </ion-header>
@@ -25,8 +29,7 @@
 
     <button 
       ion-item
-      (click)="telaChamados()"
-      >
+      (click)="telaChamados()">
       <ion-icon 
         color="primary" 
         name="clipboard" 

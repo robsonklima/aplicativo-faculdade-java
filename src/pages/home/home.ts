@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, 
+  PopoverController, Events } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
 import { LoginPage } from '../login/login';
 import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
+import { HomeMaisOpcoesPage } from '../home-mais-opcoes/home-mais-opcoes';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
@@ -37,6 +39,7 @@ export class HomePage {
     private alertCtrl: AlertController,
     private events: Events,
     private badge: Badge,
+    private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService,
@@ -63,6 +66,19 @@ export class HomePage {
 
   public telaPecas() {
     this.navCtrl.push(PecasPage);
+  }
+
+  public abrirPopover(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(HomeMaisOpcoesPage);
+
+    popover.present({ev: event});
+
+    popover.onDidDismiss(data => {
+      if (!data)
+        return;
+
+      
+    });
   }
 
   public carregarChamadosStorage(): Promise<Chamado[]> {
