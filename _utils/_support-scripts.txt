@@ -1,5 +1,5 @@
 RUN
-sudo ionic cordova run android
+ionic cordova run android
 
 RELEASE
 ionic cordova build --release android
