@@ -30,6 +30,7 @@ import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { ChamadosHistoricoPage } from '../pages/chamados-historico/chamados-historico';
 import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
+import { ReportarProblemaPage } from '../pages/reportar-problema/reportar-problema';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -43,6 +44,7 @@ import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
 import { ChamadoHistoricoPage } from '../pages/chamado-historico/chamado-historico';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
+import { ProblemaService } from '../services/problema';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -62,6 +64,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
+    ReportarProblemaPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -95,7 +98,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadosHistoricoPage,
     ChamadoHistoricoPage,
     PecasPage,
-    PecaPage
+    PecaPage,
+    ReportarProblemaPage
   ],
   providers: [
     StatusBar,
@@ -123,7 +127,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     PecaService,
     EquipamentoContratoService,
     TipoServicoService,
-    CheckinCheckoutService
+    CheckinCheckoutService,
+    ProblemaService
   ]
 })
 export class AppModule {}

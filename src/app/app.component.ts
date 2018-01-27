@@ -13,6 +13,7 @@ import { Config } from "../config/config";
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
+import { ReportarProblemaPage } from '../pages/reportar-problema/reportar-problema';
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
 import { DadosGlobais } from '../models/dados-globais';
@@ -95,6 +96,12 @@ export class MyApp {
         })
         .catch((err) => {});
     });
+  }
+
+  public telaReportarProblema() {
+    this.menuCtrl.close().then(() => {
+      this.nav.push(ReportarProblemaPage);  
+    })
   }
 
   public telaSenhaAlteracao() {
