@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
-import { ViewController, ModalController, Platform } from 'ionic-angular';
+import { ViewController, ModalController } from 'ionic-angular';
 
 import { AjudaPage } from '../ajuda/ajuda';
 import { ProblemaPage } from '../problema/problema';
-
-import { Config } from "../../config/config";
-
-import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { SobrePage } from '../sobre/sobre';
 
 @Component({
   selector: 'home-mais-opcoes-page',
@@ -15,9 +12,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 export class HomeMaisOpcoesPage {
   constructor(
     private viewCtrl: ViewController,
-    private modalCtrl: ModalController,
-    private platform: Platform,
-    private inAppBrowser: InAppBrowser
+    private modalCtrl: ModalController
   ) {}
 
   public telaAjuda() {
@@ -30,16 +25,18 @@ export class HomeMaisOpcoesPage {
     modal.onDidDismiss(() => {});
   }
 
-  public telaVersoes() {
-    this.platform.ready().then(() => {
-      this.viewCtrl.dismiss().then(() => {
-        this.inAppBrowser.create(Config.URL_CONTROLE_VERSOES);
-      }).catch();
-    }).catch();
-  }
-
   public telaProblema() {
     const modal = this.modalCtrl.create(ProblemaPage);
+
+    this.viewCtrl.dismiss().then(() => {
+      modal.present();
+    }).catch();
+
+    modal.onDidDismiss(() => {});
+  }
+
+  public telaSobre() {
+    const modal = this.modalCtrl.create(SobrePage);
 
     this.viewCtrl.dismiss().then(() => {
       modal.present();

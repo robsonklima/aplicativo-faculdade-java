@@ -33,6 +33,7 @@ import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
 import { AjudaPage } from '../pages/ajuda/ajuda';
 import { ProblemaPage } from '../pages/problema/problema';
+import { SobrePage } from '../pages/sobre/sobre';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -68,6 +69,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     PecaPage,
     AjudaPage,
     ProblemaPage,
+    SobrePage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -104,7 +106,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     PecasPage,
     PecaPage,
     AjudaPage,
-    ProblemaPage
+    ProblemaPage,
+    SobrePage
   ],
   providers: [
     StatusBar,
