@@ -13,24 +13,45 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item text-wrap no-lines class="msg-titulo">
-      <i>
-        Olá {{ dadosGlobais?.usuario?.nome }},
-      </i>
-    </ion-item>
+<ion-content padding>
+  <div class="separator"></div>
 
-    <ion-item text-wrap no-lines class="msg-rodape">
-      <i>
-        Lamentamos que esteja enfrentando problemas. Estamos 
-        constantemente trabalhando para aperfeiçoar o aplicativo <br /> <hr />
-      
-        Entre em contato através dos canais: <br />
-      
-        Ramal: 944, Telefone: 51 2126 8944 <br />
-        E-mail: equipe.sat@perto.com.br
-      </i>
-    </ion-item>
-  </ion-list>
+  <h5>
+    Olá {{ dadosGlobais?.usuario?.nome }}
+  </h5>
+
+  <p>
+    Lamentamos que esteja experimentando problemas durante 
+    o uso do aplicativo. Estamos trabalhando diariamente
+    para aperfeiçoar o nosso algoritmo
+  </p>
+
+  <hr />
+
+  <h5>
+      Entre em contato conosco
+  </h5>
+
+  <p>
+    Sua opinião é muito importante para nos ensinar a
+    elevar a experiência de uso do app. Se possível nos envie 
+    um print do ocorrido
+  </p>
+
+  <p>
+    Abaixo você encontrará os canais diretos de comunicação 
+    com a equipe de desenvolvimento do software:
+  </p>
+
+  Telefone: (51) 2126 8944, Ramal: 944
+  <br />
+  
+  E-mail: equipe.sat@perto.com.br
+
+  <br />
+  <br />
+
+  <a 
+    href="mailto:equipe.sat@perto.com.br?Subject=Relato%20de%20problema%20durante%20o%20uso%20do%20App%20Técnicos%20-%20{{ dadosGlobais?.usuario?.nome }}" 
+    target="_top">Reportar um problema agora mesmo</a>
 </ion-content>

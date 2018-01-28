@@ -1,6 +1,7 @@
 export class Config {
    public static CHAMADO = { TRANSFERIDO: 8, FECHADO: 3 };
    public static ACAO = { PENDENCIA_PECA: { CODACAO: 19 } };
+   public static USUARIO_PERFIL = { ADMINISTRADOR_SISTEMA: 1, TECNICO: 35 };
    public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
    public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 3600, timeout: 20000 };
    public static BACKGROUND_MODE_CONFIG = { title: 'SAT Sincronização', text: 'Executando', silent: true };

@@ -7,7 +7,7 @@ import { Badge } from '@ionic-native/badge';
 import { LoginPage } from '../login/login';
 import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
-import { HomeMaisOpcoesPage } from '../home-mais-opcoes/home-mais-opcoes';
+import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';

@@ -23,7 +23,7 @@ import { Badge } from '@ionic-native/badge';
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 import { HomePage } from '../pages/home/home';
-import { HomeMaisOpcoesPage } from '../pages/home-mais-opcoes/home-mais-opcoes';
+import { HomeMaisOpcoesPage } from '../pages/home/home-mais-opcoes';
 import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
