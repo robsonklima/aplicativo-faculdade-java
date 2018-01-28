@@ -9,6 +9,7 @@ export class Config {
    public static INT_SINC_CHAMADOS_MILISEG = 300000; // 5 minutos
    public static INT_MIN_SINC_CHAMADOS_SEG = 6.0;
    public static INT_LOADING_CHAMADOS_MILISEG = 6500;
+   public static URL_CONTROLE_VERSOES = 'https://goo.gl/XQb4jr';
 
    //public static API_URL = 'http://localhost:60687/api/';
    public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';

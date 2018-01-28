@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { ViewController, ModalController } from 'ionic-angular';
+import { ViewController, ModalController, Platform } from 'ionic-angular';
 
 import { AjudaPage } from '../ajuda/ajuda';
 import { ProblemaPage } from '../problema/problema';
+
+import { Config } from "../../config/config";
+
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @Component({
   selector: 'home-mais-opcoes-page',
@@ -11,7 +15,9 @@ import { ProblemaPage } from '../problema/problema';
 export class HomeMaisOpcoesPage {
   constructor(
     private viewCtrl: ViewController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private platform: Platform,
+    private inAppBrowser: InAppBrowser
   ) {}
 
   public telaAjuda() {
@@ -22,6 +28,14 @@ export class HomeMaisOpcoesPage {
     }).catch();
 
     modal.onDidDismiss(() => {});
+  }
+
+  public telaVersoes() {
+    this.platform.ready().then(() => {
+      this.viewCtrl.dismiss().then(() => {
+        this.inAppBrowser.create(Config.URL_CONTROLE_VERSOES);
+      }).catch();
+    }).catch();
   }
 
   public telaProblema() {
