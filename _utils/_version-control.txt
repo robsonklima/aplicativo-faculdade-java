@@ -1,5 +1,5 @@
 0.0.28 - [DATA]
-- 
+- Alterado campo Relato da solução na tela de preenchimento da RAT para suportar múltiplas linhas;
 
 0.0.27 - 29/01/2018
 - Diminuição de 10 para 6 segundos o intervalo mínimo de sincronizações;

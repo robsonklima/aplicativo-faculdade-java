@@ -405,11 +405,12 @@
 
           <ion-item>
             <ion-label stacked>Solução</ion-label>
-            <ion-input 
+            <ion-textarea 
               placeholder="Descreva o serviço realizado" 
               name="obsRAT" 
               [ngModel]="chamado?.rats[0]?.obsRAT"
-              required></ion-input>
+              required>
+            </ion-textarea>
           </ion-item>
 
           <div padding>
