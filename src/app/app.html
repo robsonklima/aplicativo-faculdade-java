@@ -17,11 +17,6 @@
         <ion-icon color="silver-light" name="briefcase" item-start></ion-icon>
         <span class="user-name">{{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil | lowercase | capitalize }}</span>
       </ion-item>
-      <ion-item
-        *ngIf="dadosGlobais?.versaoApp">
-        <ion-icon color="silver-light" name="phone-portrait" item-start></ion-icon>
-        <span class="user-name">Versão {{ dadosGlobais?.versaoApp }}</span>
-      </ion-item>
       <ion-item (click)="telaSenhaAlteracao()">
         <ion-icon color="primary" name="lock" item-start></ion-icon>
         Senha
