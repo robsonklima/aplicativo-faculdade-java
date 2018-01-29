@@ -125,27 +125,26 @@ export class MyApp {
 
     this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico)
       .subscribe((chamadosApi) => {
-          this.chamadoService.buscarChamadosStorage()
-          .then((chamadosStorage) => {
-            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi)
-              .then((chamadosUnificados) => {
-                this.chamadoService.atualizarChamadosStorage(chamadosUnificados)
-                  .then(() => {
-                    this.sincronizarChamadosFechados(chamadosUnificados.filter((c) => { 
-                      return (c.dataHoraFechamento !== null) })
-                    ).then(() => {
-                      this.events.publish('sincronizacao:efetuada');
-                      console.log('Sincronizacao Efetuada', new Date().toLocaleString('pt-BR'));
-                    })
-                    .catch();
-                  })
-                  .catch();
+        this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
+          this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+            this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+              this.sincronizarChamadosFechados(chamadosUnificados.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
+                this.events.publish('sincronizacao:efetuada');
+                console.log('Sincronizacao Efetuada', new Date().toLocaleString('pt-BR'));
               })
-              .catch();
+              .catch(() => {});
+            })
+            .catch(() => {});
           })
-          .catch();
+          .catch(() => {});
+        })
+        .catch(() => {});
       },
-      err => {});
+      err => {
+        if (!this.backgroundMode.isActive()) {
+          this.exibirToastComConfirmacao('Não foi possível conectar ao servidor');
+        }
+      });
   }
 
   private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
@@ -153,17 +152,10 @@ export class MyApp {
     
     // Chamados adicionados
     chamadosApi.forEach((ca) => {
-      if (!chamadosStorage.filter((cs) => { 
-        return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) 
-      }).length) {
+      if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
         chamados.push(ca);
 
-        if (this.backgroundMode.isActive()) {
-          this.dispararSinalSonoroComVibracao();
-          this.exibirNotificacao(ca.codOs.toString(), 'Chamado recebido');
-        } else {
-          this.exibirToastComConfirmacao('Chamado recebido: ' + ca.codOs);
-        }
+        this.exibirMensagem(ca.codOs.toString(), 'Chamado Recebido');
       }
     });
 
@@ -190,17 +182,8 @@ export class MyApp {
       });
       
       // Chamados removidos
-      if (!chamadoEncontrado && chamadosApi.length > 0) {
-        this.chamadoService.apagarChamadoStorage(cs)
-          .then(() => {
-            if (this.backgroundMode.isActive()) {
-              this.dispararSinalSonoroComVibracao();
-              this.exibirNotificacao(cs.codOs.toString(), 'Chamado removido');
-            } else {
-              this.exibirToastComConfirmacao('Chamado removido: ' + cs.codOs);
-            }
-          })
-          .catch();
+      if (!chamadoEncontrado) {
+        this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
       } else {
         chamados.push(cs);
       }
@@ -258,6 +241,15 @@ export class MyApp {
         }, 1000);
       }, err => {});
     }, err => {});
+  }
+
+  private exibirMensagem(titulo: string, corpo: string) {
+    if (this.backgroundMode.isActive()) {
+      this.dispararSinalSonoroComVibracao();
+      this.exibirNotificacao(titulo, corpo);
+    } else {
+      this.exibirToastComConfirmacao(titulo + ': ' + corpo);
+    }
   }
 
   private exibirNotificacao(titulo:string, mensagem: string): Promise<any> {
