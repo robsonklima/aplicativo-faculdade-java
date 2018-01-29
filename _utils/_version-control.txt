@@ -5,6 +5,7 @@
 - Diminuição de 10 para 6 segundos o intervalo mínimo de sincronizações;
 - Correção do bug que removia chamados não fechados da listagem durante a sincronização; 
 - Inclusão do botão mais opções na tela Home que dá acesso à tela Reportar um Problema;
+- Informação de versão do aplicativo movida para a página sobre;
 
 0.0.26 - 25/01/2018
 - Possibilidade de checkin para chamados bloqueados;
