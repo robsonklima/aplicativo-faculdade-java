@@ -160,34 +160,36 @@ export class MyApp {
     });
 
     // Chamados atualizados
-    chamadosStorage.forEach((cs) => {
-      let chamadoEncontrado: boolean = false;
+    if (chamadosStorage.length > 0) {
+      chamadosStorage.forEach((cs) => {
+        let chamadoEncontrado: boolean = false;
 
-      chamadosApi.forEach((ca) => {
-        if (cs.codOs == ca.codOs) {
-          chamadoEncontrado = true;
+        chamadosApi.forEach((ca) => {
+          if (cs.codOs == ca.codOs) {
+            chamadoEncontrado = true;
 
-          if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
-            Object.keys(ca).forEach((atributo) => {
-              if (atributo !== 'codOs' 
-                  && atributo !== 'checkin' 
-                  && atributo !== 'checkout' 
-                  && atributo !== 'rats'
-                  && !cs.dataHoraFechamento) {
-                cs[atributo] = ca[atributo]; 
-              }
-            });
+            if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
+              Object.keys(ca).forEach((atributo) => {
+                if (atributo !== 'codOs' 
+                    && atributo !== 'checkin' 
+                    && atributo !== 'checkout' 
+                    && atributo !== 'rats'
+                    && !cs.dataHoraFechamento) {
+                  cs[atributo] = ca[atributo]; 
+                }
+              });
+            }
           }
+        });
+        
+        // Chamados removidos
+        if (!chamadoEncontrado) {
+          this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
+        } else {
+          chamados.push(cs);
         }
       });
-      
-      // Chamados removidos
-      if (!chamadoEncontrado) {
-        this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
-      } else {
-        chamados.push(cs);
-      }
-    });
+    }
 
     return new Promise((resolve, reject) => {
       resolve(chamados);
