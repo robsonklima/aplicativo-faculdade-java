@@ -1,4 +1,7 @@
-0.0.27 - [INSERIR DATA]
+0.0.28 - [DATA]
+- 
+
+0.0.27 - 29/01/2018
 - Diminuição de 10 para 6 segundos o intervalo mínimo de sincronizações;
 - Correção do bug que removia chamados não fechados da listagem durante a sincronização; 
 - Inclusão do botão mais opções na tela Home que dá acesso à tela Reportar um Problema;
