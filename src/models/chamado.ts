@@ -27,6 +27,7 @@ export class Chamado {
 	dataHoraAgendamento: Date;
 	dataHoraFechamento: string;
 	dataFimSLA: string;
+	codUsuarioHoraOSMobileLida: string;
 	dataHoraOSMobileLida: string;
 	codUsuarioMarcaEspecial: string;
 	descMotivoMarcaEspecial: string;
