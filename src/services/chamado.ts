@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
 import { Storage } from "@ionic/storage";
-import 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
+import 'rxjs/Rx';
+import 'rxjs/add/operator/retry';
+import 'rxjs/add/operator/timeout';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/map';
 
 import { Config } from './../config/config';
 import { Chamado } from "../models/chamado";
@@ -19,46 +23,53 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
+      .timeout(3000)
+      //.delay(1000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  atualizarChamadosStorage(chamados: Chamado[]): Promise<any> {
-    this.chamados = chamados;
-
-    return new Promise((resolve, reject) => {
-      this.storage.set('Chamados', this.chamados)
-        .then((res) => {
-          resolve(res);
-        })
-        .catch(err => console.log(err));
-    });
-  }
-
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
+      .timeout(3000)
+      //.delay(1000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
+      .timeout(3000)
+      //.delay(1000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   buscarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      resolve(
-        this.storage.get('Chamados')
-          .then(
-          (chamados: Chamado[]) => {
-            this.chamados = chamados != null ? chamados : [];
-            
-            return this.chamados.slice();
-          })
-          .catch()
-        )
+      this.storage.get('Chamados')
+        .then((chamados: Chamado[]) => {
+          this.chamados = chamados != null ? chamados : [];
+          
+          resolve (this.chamados.slice());
+        })
+        .catch(() => {
+          reject();
+        });
+    });
+  }
+
+  atualizarChamadosStorage(chamados: Chamado[]): Promise<boolean> {
+    this.chamados = chamados;
+
+    return new Promise((resolve, reject) => {
+      this.storage.set('Chamados', this.chamados)
+        .then((res) => {
+          resolve(true);
+        })
+        .catch(() => {
+          reject(false);
+        });
     });
   }
 
@@ -77,51 +88,54 @@ export class ChamadoService {
     return checkinEncontrado;
   }
   
-  apagarChamadoStorage(chamado: Chamado): Promise<any> {
-    return new Promise((resolve, reject) => {
-      for (var i = 0; i < this.chamados.length; i++) {
-        if (this.chamados[i].codOs == chamado.codOs)
-          this.chamados.splice(i, 1);
-      }
+  apagarChamadoStorage(chamado: Chamado): Promise<boolean> {
+    this.chamados = this.chamados.filter((c) => {
+      return (c.codOs.toString().indexOf(chamado.codOs.toString()) < 0);
+    });
 
+    return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
-        .then((res) => {
-          resolve(res);
+        .then(() => {
+          resolve(true);
         })
-        .catch(err => console.log(err));
+        .catch(() => {
+          reject(false);
+        });
     });
   }
 
-  apagarChamadosStorage(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      for (var i = 0; i < this.chamados.length; i++) {
-        this.chamados.splice(i, 100);
-      }
+  apagarChamadosStorage(): Promise<boolean> {
+    this.chamados = [];
 
+    return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
-        .then((res) => {
-          resolve(res);
+        .then(() => {
+          resolve(true);
         })
-        .catch(err => console.log(err));
+        .catch(() => {
+          reject(false);
+        });
     });
   }
 
-  atualizarChamado(chamado: Chamado): Promise<any> {
+  atualizarChamado(chamado: Chamado): Promise<boolean> {
+    this.chamados = this.chamados.filter((c) => {
+      return (c.codOs.toString().indexOf(chamado.codOs.toString()) < 0);
+    });
+
     return new Promise((resolve, reject) => {
-      resolve(
-        this.storage.get('Chamados')
-          .then((chamados: Chamado[]) => {
-            chamados.forEach((ch, i) => {
-              if (chamado.codOs == ch.codOs) {
-                this.chamados.splice(i, 1);
-                this.chamados.push(chamado);
-                this.storage.set('Chamados', this.chamados)
-                  .then(() => {})
-                  .catch();
-              }
-            });
-          })
-          .catch())
+      this.storage.get('Chamados').then((chamados: Chamado[]) => {
+        this.chamados.push(chamado);
+
+        this.storage.set('Chamados', this.chamados).then(() => {
+          resolve(true);
+        }).catch(() => {
+          reject(false);
+        });
+      })
+      .catch(() => {
+        reject(false);
+      })
     });
   }
 }

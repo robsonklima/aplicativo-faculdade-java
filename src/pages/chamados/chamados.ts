@@ -9,11 +9,9 @@ import { Config } from "../../config/config";
 
 import { ChamadoPage } from "../chamado/chamado";
 
-import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
 import { Usuario } from "../../models/usuario";
 
-import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from "../../services/chamado";
 
 @Component({
@@ -21,7 +19,6 @@ import { ChamadoService } from "../../services/chamado";
   templateUrl: 'chamados.html'
 })
 export class ChamadosPage {
-  dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   usuario: Usuario;
   task: any;
@@ -34,30 +31,18 @@ export class ChamadosPage {
     private platform: Platform,
     private geolocation: Geolocation,
     private inAppBrowser: InAppBrowser,
-    private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
     private loadingCtrl: LoadingController
-  ) { 
+  ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 200);
+      }, 500);
     });
   }
 
   ionViewWillEnter() { 
     this.carregarChamadosStorage();
-    
-    this.dadosGlobaisService.buscarDadosGlobaisStorage()
-      .then((dados) => {
-        if (dados) {
-          this.dadosGlobais = dados;
-          if (dados.usuario) {
-            this.usuario = dados.usuario;
-          }
-        }
-      })
-      .catch((err) => {});
   }
 
   public telaChamado(chamado: Chamado) {
@@ -65,12 +50,10 @@ export class ChamadosPage {
   }
 
   public pushAtualizarChamados(refresher) {
-    if(refresher) {
-      setTimeout(() => {
-        this.events.publish('sincronizacao:solicitada');
-        refresher.complete();
-      }, Config.INT_LOADING_CHAMADOS_MILISEG);
-    }
+    setTimeout(() => {
+      refresher.complete();
+      this.events.publish('sincronizacao:solicitada');
+    }, Config.INT_LOADING_CHAMADOS_MILISEG);
   }
 
   public abrirMapaNavegador(chamado: Chamado) {
@@ -103,25 +86,24 @@ export class ChamadosPage {
     });
   }
 
-  private carregarChamadosStorage(): Promise<any> {
+  private carregarChamadosStorage(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      resolve(
-        this.chamadoService.buscarChamadosStorage()
-          .then(
-            (chamados: Chamado[]) => { 
-              this.chamados = chamados.sort(function(a, b) {
-                return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));  
-              });
-            })  
-            .catch(err => {})
-      );
+      this.chamadoService.buscarChamadosStorage()
+        .then((chamados: Chamado[]) => { 
+          this.chamados = chamados.sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0)) });
+
+          resolve(true);
+        })  
+        .catch(() => {
+          reject(false);
+        })
     });
   }
 
   public limparChamadosDispositivo() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Tem certeza que deseja deletar os dados salvos no dispositivo?',
+      message: 'Tem certeza que deseja remover os chamados salvos no dispositivo?',
       buttons: [
         {
           text: 'Cancelar',
@@ -131,7 +113,7 @@ export class ChamadosPage {
           text: 'Confirmar',
           handler: () => {
             const loading = this.loadingCtrl.create({ 
-              content: 'Apagando chamados do banco de dados do dispositivo...' 
+              content: 'Removendo chamados do banco de dados do dispositivo...' 
             });
             loading.present();
         

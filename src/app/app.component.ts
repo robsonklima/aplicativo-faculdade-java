@@ -87,7 +87,7 @@ export class MyApp {
                 
                 this.iniciarSincronizacao();
               } else {
-                this.nav.setRoot(this.loginPage);  
+                this.nav.setRoot(this.loginPage);
               }
             } else {
               this.nav.setRoot(this.loginPage);
@@ -116,7 +116,7 @@ export class MyApp {
   }
 
   private sincronizarChamados() {
-    if (!this.verificarSeJaFazUmMinutoDesdeUltimaAtualizacao()) {
+    if (!this.verificarIntervaloMinimoSincronizacao()) {
       this.events.publish('sincronizacao:efetuada');
       return
     } 
@@ -142,7 +142,7 @@ export class MyApp {
       },
       err => {
         if (!this.backgroundMode.isActive()) {
-          this.exibirToastComConfirmacao('Não foi possível conectar ao servidor');
+          this.exibirToast('Não foi possível conectar ao servidor');
         }
       });
   }
@@ -196,34 +196,31 @@ export class MyApp {
     });
   }
 
-  private sincronizarChamadosFechados(chamados: Chamado[]): Promise<Chamado[]> {
-    chamados.forEach((chamado) => {
-      this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
-        if (res.indexOf('00 - ') !== -1)
-          this.chamadoService.apagarChamadoStorage(chamado).then(() => {
-            if (this.backgroundMode.isActive()) {
-              this.exibirNotificacao(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
-            } else {
-              this.exibirToastComConfirmacao('Chamado ' + chamado.codOs.toString() + ' sincronizado no servidor');
+  private sincronizarChamadosFechados(chamados: Chamado[]): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      chamados.forEach((chamado) => {
+        this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
+          if (res) {
+            if (res.indexOf('00 - ') !== -1) {
+              this.chamadoService.apagarChamadoStorage(chamado).then(() => {
+                this.exibirMensagem(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
+              }).catch(() => {
+                reject();
+              });
             }
-          }).catch();
+          }
         },
         err => {
-          if (this.backgroundMode.isActive()) {
-            this.dispararSinalSonoroComVibracao();
-            this.exibirNotificacao(chamado.codOs.toString(), 'Não foi possível sincronizar');
-          } else {
-            this.exibirToastComConfirmacao('Não foi possível sincronizar o chamado ' + chamado.codOs);
-          }
+          this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
+          reject();
         });
-    });
+      });
 
-    return new Promise((resolve, reject) => {
-      resolve(chamados);
+      resolve(true);
     });
   }
 
-  private verificarSeJaFazUmMinutoDesdeUltimaAtualizacao(): boolean {
+  private verificarIntervaloMinimoSincronizacao(): boolean {
     if(!this.ultimaAtualizacao) return false;
     
     var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
@@ -250,8 +247,30 @@ export class MyApp {
       this.dispararSinalSonoroComVibracao();
       this.exibirNotificacao(titulo, corpo);
     } else {
-      this.exibirToastComConfirmacao(titulo + ': ' + corpo);
+      this.exibirToast(titulo + ' - ' + corpo);
     }
+  }
+
+  private exibirToast(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem, duration: 3000, position: 'bottom'
+      });
+
+      resolve(toast.present());
+    });
+  }
+
+  private exibirToastComConfirmacao(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem,
+        showCloseButton: true,
+        closeButtonText: 'Ok'
+      });
+
+      resolve(toast.present());
+    });
   }
 
   private exibirNotificacao(titulo:string, mensagem: string): Promise<any> {
@@ -275,21 +294,9 @@ export class MyApp {
     });
   }
 
-  private exibirToastComConfirmacao(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem,
-        showCloseButton: true,
-        closeButtonText: 'Ok'
-      });
-
-      resolve(toast.present());
-    });
-  }
-
   public sair() {
     this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
         this.nav.setRoot(this.loginPage);
-      }).catch((err) => { console.log(err) });
+      }).catch((err) => {});
   }
 }

@@ -37,13 +37,10 @@ export class PecaService {
   }
 
   buscarPecasStorage() {
-    return this.storage.get('Pecas')
-      .then(
-      (pecas: Peca[]) => {
-        this.pecas = pecas != null ? pecas : [];
-        return this.pecas.slice();
-      })
-      .catch();
+    return this.storage.get('Pecas').then((pecas: Peca[]) => {
+      this.pecas = pecas != null ? pecas : [];
+      return this.pecas.slice();
+    }).catch();
   }
 
   pecaEstaNoStorage(codPeca: number): boolean {
@@ -68,13 +65,15 @@ export class PecaService {
         .then((res) => {
           resolve(res);
         })
-        .catch();
+        .catch(() => {
+          reject();
+        });
     });
   }
 
   carregarPecas(): Promise<Peca[]> {
     return new Promise((resolve, reject) => {
-      resolve(this.pecas.slice())
+      resolve(this.pecas.slice());
     });
   }
 
