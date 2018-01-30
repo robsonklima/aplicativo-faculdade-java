@@ -56,7 +56,6 @@ export class HomePage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais();
-    this.carregarChamadosStorage();
     this.carregarSenhaExpirada();
   }
 
@@ -102,11 +101,19 @@ export class HomePage {
   private carregarDadosGlobais() {
     this.dadosGlobaisService.buscarDadosGlobaisStorage()
       .then((dados: DadosGlobais) => {
-        if (dados) 
+        if (dados) {
           this.dadosGlobais = dados;
 
-        if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao())
-          this.atualizarBDLocal();
+          if (!this.dadosGlobais.usuario.codTecnico) {
+            return
+          }
+
+          if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
+            this.atualizarBDLocal();
+
+            this.carregarChamadosStorage();
+          }
+        }
       })
       .catch((err) => {});
   }

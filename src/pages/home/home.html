@@ -16,71 +16,83 @@
 
 <ion-content>
   <ion-list>
-    <button
-      class="first-item"
-      ion-item 
-      [disabled]="true">  
-      <ion-icon 
-        color="primary" 
-        name="clock" 
-        item-start></ion-icon>
-      Ponto
-    </button>
+    <div *ngIf="dadosGlobais?.usuario?.codTecnico">
+      <button
+        class="first-item"
+        ion-item 
+        [disabled]="true">  
+        <ion-icon 
+          color="primary" 
+          name="clock" 
+          item-start></ion-icon>
+        Ponto
+      </button>
+  
+      <button 
+        ion-item
+        (click)="telaChamados()">
+        <ion-icon 
+          color="primary" 
+          name="clipboard" 
+          item-start></ion-icon>
+        Chamados
+        <ion-badge 
+          item-end
+          *ngIf="chamados?.length" 
+          [ngClass]="{ 'bd-red': chamados?.length > 0 }">
+          {{ chamados?.length }}
+        </ion-badge>
+      </button>
+  
+      <button 
+        ion-item
+        (click)="telaPecas()">
+        <ion-icon 
+          color="primary" 
+          name="build" 
+          item-start></ion-icon>
+        Peças
+      </button>
+  
+      <button 
+        ion-item 
+        [disabled]="true">
+        <ion-icon 
+          color="primary" 
+          name="checkbox" 
+          item-start></ion-icon>
+          Checklist
+      </button>
+  
+      <button 
+        ion-item 
+        [disabled]="true">
+        <ion-icon 
+          color="primary" 
+          name="mail" 
+          item-start></ion-icon>
+        Mensagens
+      </button>
+  
+      <button 
+        ion-item 
+        [disabled]="true">
+        <ion-icon 
+          color="primary" 
+          name="pie" 
+          item-start></ion-icon>
+        Indicadores
+      </button>
+    </div>
 
-    <button 
-      ion-item
-      (click)="telaChamados()">
-      <ion-icon 
-        color="primary" 
-        name="clipboard" 
-        item-start></ion-icon>
-      Chamados
-      <ion-badge 
-        item-end
-        *ngIf="chamados?.length" 
-        [ngClass]="{ 'bd-red': chamados?.length > 0 }">
-        {{ chamados?.length }}
-      </ion-badge>
-    </button>
-
-    <button 
-      ion-item
-      (click)="telaPecas()">
-      <ion-icon 
-        color="primary" 
-        name="build" 
-        item-start></ion-icon>
-      Peças
-    </button>
-
-    <button 
-      ion-item 
-      [disabled]="true">
-      <ion-icon 
-        color="primary" 
-        name="checkbox" 
-        item-start></ion-icon>
-        Checklist
-    </button>
-
-    <button 
-      ion-item 
-      [disabled]="true">
-      <ion-icon 
-        color="primary" 
-        name="mail" 
-        item-start></ion-icon>
-      Mensagens
-    </button>
-
-    <button 
-      ion-item 
-      [disabled]="true">
-      <ion-icon 
-        color="primary" 
-        name="pie" 
-        item-start></ion-icon>
-      Indicadores
-    </button>
+    <ion-card text-left *ngIf="!dadosGlobais?.usuario?.codTecnico">
+      <ion-card-content>
+        <p>
+          Por enquanto, apenas os menus para o perfil de técnico estão 
+          habilitados. Futuramente, outros perfís de usuários
+          poderão utilizar o aplicativo.
+        </p>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 </ion-content>
