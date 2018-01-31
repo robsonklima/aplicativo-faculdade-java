@@ -3,7 +3,7 @@
 - Corrigido erro esporádico onde o checkin era apagado automaticamente depois de algumas horas;
 - Refactoring nos métodos que utilizavam promises no serviço chamado, adicionando Rejects (anotação técnica);
 - Correção do comportamento do Pull Refresher na tela de listagem de chamados, que às vezes desaparecia antecipadamente;
-- Adição de Toast, exibindo mensagem quando o aplicativo não consegue sincronizar com o servidor;
+- Adição de Toast, que exibe mensagem quando o aplicativo não consegue sincronizar com o servidor;
 
 0.0.28 - 29/01/2018
 - Alterado campo Relato da solução na tela de preenchimento da RAT para suportar múltiplas linhas;
