@@ -134,6 +134,8 @@ export class MyApp {
             console.log('Sync: ApSt. Unificado', new Date().toLocaleString('pt-BR'));
 
             this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+              this.events.publish('sincronizacao:efetuada');
+
               console.log('Sync: Strg. Atualizado', new Date().toLocaleString('pt-BR'));
             })
             .catch(() => {
@@ -155,8 +157,6 @@ export class MyApp {
       .catch(() => {
         console.log('Sync: Fech. Erro', new Date().toLocaleString('pt-BR'));
       });
-
-      this.events.publish('sincronizacao:efetuada');
     })
     .catch(() => {
       console.log('Sync: Strg. Erro ao Carregar', new Date().toLocaleString('pt-BR'));

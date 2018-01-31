@@ -37,7 +37,7 @@ export class ChamadosPage {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 1000);
+      }, 2500);
     });
   }
 
