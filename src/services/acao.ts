@@ -37,15 +37,13 @@ export class AcaoService {
   }
 
   buscarAcoesStorage() {
-    return this.storage.get('Acoes')
-      .then(
-      (acoes: Acao[]) => {
-        this.acoes = acoes != null ? acoes : [];
-        return this.acoes.slice();
-      })
-      .catch(
-      err => console.log(err)
-      );
+    return this.storage.get('Acoes').then((acoes: Acao[]) => {
+      this.acoes = acoes != null ? acoes : [];
+      return this.acoes.slice();
+    })
+    .catch(
+    err => console.log(err)
+    );
   }
 
   acaoEstaNoStorage(codAcao: number): boolean {
@@ -78,26 +76,5 @@ export class AcaoService {
     return new Promise((resolve, reject) => {
       resolve(this.acoes.slice())
     });
-  }
-
-  atualizarCausa(acao: Acao) {
-    this.storage.get('Acoes')
-      .then((acoes: Acao[]) => {
-        acoes.forEach((a, i) => {
-          if (acao.codAcao == a.codAcao) {
-            this.acoes.splice(i, 1);
-            this.acoes.push(acao);
-            this.storage.set('Acoes', this.acoes)
-              .then(
-                () => {}
-              )
-              .catch(
-
-              );
-
-          }
-        });
-      })
-      .catch();
   }
 }

@@ -10,7 +10,6 @@ import { Config } from "../../config/config";
 import { ChamadoPage } from "../chamado/chamado";
 
 import { Chamado } from "../../models/chamado";
-import { Usuario } from "../../models/usuario";
 
 import { ChamadoService } from "../../services/chamado";
 
@@ -20,8 +19,6 @@ import { ChamadoService } from "../../services/chamado";
 })
 export class ChamadosPage {
   chamados: Chamado[];
-  usuario: Usuario;
-  task: any;
 
   constructor(
     private alertCtrl: AlertController,
@@ -37,7 +34,7 @@ export class ChamadosPage {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 2500);
+      }, 3000);
     });
   }
 
@@ -88,15 +85,16 @@ export class ChamadosPage {
 
   private carregarChamadosStorage(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage()
-        .then((chamados: Chamado[]) => { 
-          this.chamados = chamados.sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0)) });
+      this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
+        this.chamados = chamados.sort(function(a, b) { 
+          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
+        });
 
-          resolve(true);
-        })  
-        .catch(() => {
-          reject(false);
-        })
+        resolve(true);
+      })  
+      .catch(() => {
+        reject(false);
+      });
     });
   }
 
@@ -157,9 +155,5 @@ export class ChamadosPage {
 
       resolve(toast.present());
     });
-  }
-
-  ionViewWillLeave() {
-    clearInterval(this.task);
   }
 }

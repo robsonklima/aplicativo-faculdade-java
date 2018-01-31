@@ -23,7 +23,7 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
-      .timeout(10000)
+      .timeout(15000)
       .delay(500)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
@@ -31,7 +31,7 @@ export class ChamadoService {
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
-      .timeout(10000)
+      .timeout(15000)
       .delay(500)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
@@ -49,10 +49,14 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
         this.chamados = chamados != null ? chamados : [];
-        
+
+        console.log('Chamados Storage Carregados', new Date().toLocaleString('pt-BR'));
+
         resolve (this.chamados.slice());
       })
       .catch(() => {
+        console.log('Erro ao Carregar Chamados Storage', new Date().toLocaleString('pt-BR'));
+
         reject();
       });
     });
@@ -64,27 +68,23 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then((res) => {
+          console.log('Chamados Storage Atualizados', new Date().toLocaleString('pt-BR'));
+
           resolve(true);
         })
         .catch(() => {
+          console.log('Erro ao Atualizar Chamados Storage', new Date().toLocaleString('pt-BR'));
+
           reject(false);
         });
     });
   }
 
   verificarExisteCheckinEmOutroChamado(): boolean {
-    let checkinEncontrado: boolean = false;
-
-    this.chamados.forEach(chamado => {
-      if ((chamado.checkin.localizacao.latitude !== null 
-            && chamado.checkin.localizacao.longitude !== null)
-            && (chamado.checkout.localizacao.latitude === null 
-            && chamado.checkout.localizacao.longitude === null)) {
-        checkinEncontrado = true;
-      }
-    });
-
-    return checkinEncontrado;
+    return (this.chamados.filter((c) => {
+      return ((c.checkin.localizacao.latitude || c.checkin.localizacao.longitude) 
+        && !c.dataHoraFechamento);
+    }).length > 0);
   }
   
   apagarChamadoStorage(chamado: Chamado): Promise<boolean> {
@@ -95,9 +95,13 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then(() => {
+          console.log('Chamado Storage Apagado', new Date().toLocaleString('pt-BR'));
+
           resolve(true);
         })
         .catch(() => {
+          console.log('Erro ao Apagar Chamado Storage', new Date().toLocaleString('pt-BR'));
+
           reject(false);
         });
     });
@@ -109,9 +113,13 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then(() => {
+          console.log('Chamados Storage Apagados', new Date().toLocaleString('pt-BR'));
+
           resolve(true);
         })
         .catch(() => {
+          console.log('Erro ao Apagar Chamados Storage', new Date().toLocaleString('pt-BR'));
+
           reject(false);
         });
     });

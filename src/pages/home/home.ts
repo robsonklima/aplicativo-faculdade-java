@@ -83,19 +83,18 @@ export class HomePage {
 
   public carregarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage()
-        .then((chamados: Chamado[]) => {
-          this.chamados = chamados.filter((c) => {
-            return (!c.dataHoraFechamento);
-          }).filter((c) => {
-            return (!c.dataHoraOSMobileLida);
-          });
+      this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => {
+        this.chamados = chamados.filter((c) => {
+          return (!c.dataHoraFechamento);
+        }).filter((c) => {
+          return (!c.dataHoraOSMobileLida);
+        });
 
-          this.badge.set(this.chamados.length);
+        this.badge.set(this.chamados.length);
 
-          resolve(chamados);
-        })  
-        .catch(err => {})
+        resolve(chamados);
+      })  
+      .catch(err => {})
     });
   }
 

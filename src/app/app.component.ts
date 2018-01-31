@@ -56,7 +56,7 @@ export class MyApp {
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
-        this.sincronizarChamados();
+        this.prepararSincronizacao();
       });
 
       this.events.subscribe('sincronizacao:solicitada', () => {
@@ -105,7 +105,7 @@ export class MyApp {
 
   private prepararSincronizacao() {
     if (!this.verificarIntervaloMinimoSincronizacao()) {
-      console.log('Sync: Inte. Rejeitada', new Date().toLocaleString('pt-BR'));
+      console.log('Sincronização Rejeitada', new Date().toLocaleString('pt-BR'));
       return
     } 
 
@@ -122,45 +122,31 @@ export class MyApp {
     this.ultimaAtualizacao = new Date();
 
     this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
-      console.log('Sync: Strg. Carregado', new Date().toLocaleString('pt-BR'));
-
       this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-        console.log('Sync: Fech. Executado', new Date().toLocaleString('pt-BR'));
+        console.log('Chamados Fechados Enviados', new Date().toLocaleString('pt-BR'));
 
         this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
-          console.log('Sync: WApi. Carregado', new Date().toLocaleString('pt-BR'));
+          console.log('Chamados Api Carregados', new Date().toLocaleString('pt-BR'));
           
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-            console.log('Sync: ApSt. Unificado', new Date().toLocaleString('pt-BR'));
-
             this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
               this.events.publish('sincronizacao:efetuada');
-
-              console.log('Sync: Strg. Atualizado', new Date().toLocaleString('pt-BR'));
             })
-            .catch(() => {
-              console.log('Sync: Strg. Erro ao Atualizado', new Date().toLocaleString('pt-BR'));
-            });
+            .catch(() => {});
           })
-          .catch(() => {
-            console.log('Sync: ApSt. Erro ao Unificar', new Date().toLocaleString('pt-BR'));
-          });
-        },
-        err => {
-          if (!this.backgroundMode.isActive()) {
+          .catch(() => {});
+        }, err => {
+          if (!this.backgroundMode.isActive())
             this.exibirToast('Não foi possível conectar ao servidor');
-          }
 
-          console.log('Sync: WApi. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
+          console.log('Chamados Api Erro ao Carregar', new Date().toLocaleString('pt-BR'));
         });
       })
       .catch(() => {
-        console.log('Sync: Fech. Erro', new Date().toLocaleString('pt-BR'));
+        console.log('Chamados Fechados Erro ao Enviar', new Date().toLocaleString('pt-BR'));
       });
     })
-    .catch(() => {
-      console.log('Sync: Strg. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
-    });
+    .catch(() => {});
 
     console.log(' ');
   }
@@ -215,6 +201,7 @@ export class MyApp {
         });
       }
     
+      console.log('Chamados Api/Stg Unificados', new Date().toLocaleString('pt-BR'));
       resolve(chamados);
     });
   }
