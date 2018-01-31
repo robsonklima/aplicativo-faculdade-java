@@ -32,7 +32,7 @@ export class ChamadoService {
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
       .timeout(3000)
-      //.delay(1000)
+      .delay(1000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
@@ -47,15 +47,14 @@ export class ChamadoService {
 
   buscarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      this.storage.get('Chamados')
-        .then((chamados: Chamado[]) => {
-          this.chamados = chamados != null ? chamados : [];
-          
-          resolve (this.chamados.slice());
-        })
-        .catch(() => {
-          reject();
-        });
+      this.storage.get('Chamados').then((chamados: Chamado[]) => {
+        this.chamados = chamados != null ? chamados : [];
+        
+        resolve (this.chamados.slice());
+      })
+      .catch(() => {
+        reject();
+      });
     });
   }
 

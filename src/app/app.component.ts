@@ -104,9 +104,7 @@ export class MyApp {
   }
 
   private iniciarSincronizacao() {
-    if (this.task) {
-      clearInterval(this.task);
-    }
+    clearInterval(this.task);
 
     this.sincronizarChamados();
 
@@ -118,80 +116,106 @@ export class MyApp {
   private sincronizarChamados() {
     if (!this.verificarIntervaloMinimoSincronizacao()) {
       this.events.publish('sincronizacao:efetuada');
+      console.log('Sync: Inte. Rejeitado', new Date().toLocaleString('pt-BR'));
       return
     } 
 
     this.ultimaAtualizacao = new Date();
 
-    this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico)
-      .subscribe((chamadosApi) => {
-        this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
+    this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
+      console.log('Sync: Strg. Carregar', new Date().toLocaleString('pt-BR'));
+
+      this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
+        console.log('Sync: Fech. Ok', new Date().toLocaleString('pt-BR'));
+
+        this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
+          console.log('Sync: WApi. Carregar', new Date().toLocaleString('pt-BR'));
+          
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+            console.log('Sync: ApSt. Unificar', new Date().toLocaleString('pt-BR'));
+
             this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-              this.sincronizarChamadosFechados(chamadosUnificados.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-                this.events.publish('sincronizacao:efetuada');
-                console.log('Sincronizacao Efetuada', new Date().toLocaleString('pt-BR'));
-              })
-              .catch(() => {});
+              console.log('Sync: Strg. Atualizar', new Date().toLocaleString('pt-BR'));
             })
-            .catch(() => {});
+            .catch(() => {
+              console.log('Sync: Strg. Erro ao Atualizar', new Date().toLocaleString('pt-BR'));
+            });
           })
-          .catch(() => {});
-        })
-        .catch(() => {});
-      },
-      err => {
-        if (!this.backgroundMode.isActive()) {
-          this.exibirToast('Não foi possível conectar ao servidor');
-        }
-      });
-  }
-
-  private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
-    let chamados: Chamado[] = [];
-    
-    // Chamados adicionados
-    chamadosApi.forEach((ca) => {
-      if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
-        chamados.push(ca);
-
-        this.exibirMensagem(ca.codOs.toString(), 'Chamado Recebido');
-      }
-    });
-
-    // Chamados atualizados
-    if (chamadosStorage.length > 0) {
-      chamadosStorage.forEach((cs) => {
-        let chamadoEncontrado: boolean = false;
-
-        chamadosApi.forEach((ca) => {
-          if (cs.codOs == ca.codOs) {
-            chamadoEncontrado = true;
-
-            if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
-              Object.keys(ca).forEach((atributo) => {
-                if (atributo !== 'codOs' 
-                    && atributo !== 'checkin' 
-                    && atributo !== 'checkout' 
-                    && atributo !== 'rats'
-                    && !cs.dataHoraFechamento) {
-                  cs[atributo] = ca[atributo]; 
-                }
-              });
-            }
+          .catch(() => {
+            console.log('Sync: ApSt. Erro ao Unificar', new Date().toLocaleString('pt-BR'));
+          });
+        },
+        err => {
+          if (!this.backgroundMode.isActive()) {
+            this.exibirToast('Não foi possível conectar ao servidor').then(() => {
+              console.log('Sync: WApi. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
+            }).catch();
           }
         });
-        
-        // Chamados removidos
-        if (!chamadoEncontrado) {
-          this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
-        } else {
-          chamados.push(cs);
+      })
+      .catch(() => {
+        console.log('Sync: Fech. Não', new Date().toLocaleString('pt-BR'));
+      });
+
+      this.events.publish('sincronizacao:efetuada');
+    })
+    .catch(() => {
+      console.log('Sync: Strg. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
+    });
+
+    console.log(' ');
+  }
+  
+  private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
+    return new Promise((resolve, reject) => {
+      if (chamadosApi.length == 0) {
+        reject();
+        return
+      }
+
+      let chamados: Chamado[] = [];
+      
+      // Chamados adicionados
+      chamadosApi.forEach((ca) => {
+        if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
+          chamados.push(ca);
+
+          this.exibirMensagem(ca.codOs.toString(), 'Chamado Recebido');
         }
       });
-    }
 
-    return new Promise((resolve, reject) => {
+      // Chamados atualizados
+      if (chamadosStorage.length > 0) {
+        chamadosStorage.forEach((cs) => {
+          let chamadoEncontrado: boolean = false;
+
+          chamadosApi.forEach((ca) => {
+            if (cs.codOs == ca.codOs) {
+              chamadoEncontrado = true;
+
+              if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
+                Object.keys(ca).forEach((atributo) => {
+                  if (atributo !== 'codOs' 
+                      && atributo !== 'checkin' 
+                      && atributo !== 'checkout' 
+                      && atributo !== 'rats'
+                      && !cs.dataHoraFechamento) {
+                    cs[atributo] = ca[atributo]; 
+                  }
+                });
+              }
+            }
+          });
+          
+          // Chamados removidos
+          if (!chamadoEncontrado) {
+            this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
+          } else {
+            chamados.push(cs);
+          }
+        });
+      }
+    
       resolve(chamados);
     });
   }
@@ -204,18 +228,20 @@ export class MyApp {
             if (res.indexOf('00 - ') > -1) {
               this.chamadoService.apagarChamadoStorage(chamado).then(() => {
                 this.exibirMensagem(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
+
+                resolve(true);
               }).catch(() => {
-                reject();
+                reject(false);
               });
             } else {
-              reject();
+              reject(false);
               this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
             }
           }
         },
         err => {
           this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
-          reject();
+          reject(false);
         });
       });
 
@@ -261,6 +287,7 @@ export class MyApp {
       });
 
       resolve(toast.present());
+      reject();
     });
   }
 
