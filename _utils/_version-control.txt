@@ -1,6 +1,6 @@
 0.0.30 - 30/01/2018
 - Correção do bug que apresentava o número incorreto da versão na página Sobre;
-- 
+- Ajuste no fluxo de sincronização para remover o chamado da imediatamente após a sincrinização;
 
 0.0.29 - 30/01/2018
 - Aumentado de 6 para 10 segundos o intervalo mínimo de sincronizações;
