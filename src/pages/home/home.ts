@@ -57,6 +57,7 @@ export class HomePage {
   ionViewWillEnter() {
     this.carregarDadosGlobais();
     this.carregarSenhaExpirada();
+    this.carregarChamadosStorage();
   }
 
   public telaChamados() {

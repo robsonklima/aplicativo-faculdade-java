@@ -50,4 +50,18 @@
   <a 
     href="mailto:equipe.sat@perto.com.br?Subject=Relato%20de%20problema%20durante%20o%20uso%20do%20App%20Técnicos%20-%20{{ dadosGlobais?.usuario?.nome }}" 
     target="_top">Informar um problema agora mesmo</a>
+
+  <ion-item>
+      Desenvolvedor
+    <ion-note item-end>
+      Equipe SAT
+    </ion-note>
+  </ion-item>
+
+  <ion-item>
+      Versão do Aplicativo
+    <ion-note item-end>
+      {{ versaoApp || 'Não encontrado' }}
+    </ion-note>
+  </ion-item>
 </ion-content>
