@@ -1,32 +1,26 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
 
-import { DadosGlobais } from '../../models/dados-globais';
-import { DadosGlobaisService } from '../../services/dados-globais';
+import { AppVersion } from '@ionic-native/app-version';
 
 @Component({
   selector: 'sobre-page',
   templateUrl: 'sobre.html'
 })
 export class SobrePage {
-  dadosGlobais: DadosGlobais;
+  versaoApp: string;
 
   constructor(
     private viewCtrl: ViewController,
-    private dadosGlobaisService: DadosGlobaisService
+    private appVersion: AppVersion
   ) { }
 
   ionViewWillEnter() {
-    this.carregarDadosGlobais();
-  }
+    this.appVersion.getVersionNumber().then((versaoApp) => {
+      this.versaoApp = versaoApp;
+    }).catch(() => {
 
-  private carregarDadosGlobais() {
-    this.dadosGlobaisService.buscarDadosGlobaisStorage()
-      .then((dados: DadosGlobais) => {
-        if (dados) 
-          this.dadosGlobais = dados;
-      })
-      .catch((err) => {});
+    });
   }
 
   public fecharModal() {

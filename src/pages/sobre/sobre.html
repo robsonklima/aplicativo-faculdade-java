@@ -14,25 +14,26 @@
   </ion-header>
   
   <ion-content padding>
+    <div text-center>
+      <img class="logo" src="./assets/imgs/logo_sat.png"/>
+    </div>
+  
+    <p text-justify>
+      O <b>App Técnicos</b> é um aplicativo para dispositivos móveis, que contém 
+      suporte multi-plataformas, desenvolvido para automatizar a coleta de informações 
+      dos atendimentos técnicos aos terminais bancários da empresa <b>Perto S.A.</b>, 
+      sendo este utilizado pela Assistência Técnica.
+    </p>
+
     <div class="separator"></div>
-  
-    <h5>
-      Sobre
-    </h5>
 
     <p>
-      O App Técnicos é um aplicativo multi-plataformas, desenvolvido para automatizar
-      o lançamento de chamados da Assistência Técnica da empresa Perto. 
+      <b>Desenvolvedor:</b> Equipe SAT
     </p>
 
-    <p>
-      O app foi desenvolvido pela Equipe SAT. <br />
-      equipe.sat@perto.com.br
-    </p>
-  
     <hr />
 
     <p>
-      Versão do Aplicativo: {{ dadosGlobais?.versaoApp || 'Não encontrado' }}
+      <b>Versão do Aplicativo:</b> {{ versaoApp || 'Não encontrado' }}
     </p>
   </ion-content>

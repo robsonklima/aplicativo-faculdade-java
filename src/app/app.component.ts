@@ -60,40 +60,40 @@ export class MyApp {
       });
 
       this.events.subscribe('sincronizacao:solicitada', () => {
-        this.iniciarSincronizacao();
+        this.prepararSincronizacao();
       });
       
-      this.dadosGlobaisService.buscarDadosGlobaisStorage()
-        .then((dados) => {
-          if (dados) 
-            this.dadosGlobais = dados;
-            if (dados) {
-              if (dados.usuario) {
-                this.usuarioService.salvarCredenciais(dados.usuario);
-                this.appVersion.getVersionNumber()
-                  .then((versaoApp) => {
-                    this.dadosGlobais.versaoApp = versaoApp;
-                  }).catch(() => {});
+      this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
+        if (dados) 
+          this.dadosGlobais = dados;
+          if (dados) {
+            if (dados.usuario) {
+              this.usuarioService.salvarCredenciais(dados.usuario);
+              
+              this.appVersion.getVersionNumber().then((versaoApp) => {
+                this.dadosGlobais.versaoApp = versaoApp;
+              }).catch(() => {});
 
-                this.menuCtrl.enable(true);
-                this.nav.setRoot(this.homePage);
+              this.menuCtrl.enable(true);
+              
+              this.nav.setRoot(this.homePage);
 
-                this.backgroundMode.enable();
-                this.backgroundMode.setDefaults(Config.BACKGROUND_MODE_CONFIG);
-                
-                this.backgroundMode.on("activate")
-                  .subscribe(() => { this.iniciarSincronizacao() }
-                  , err => {});
-                
-                this.iniciarSincronizacao();
-              } else {
-                this.nav.setRoot(this.loginPage);
-              }
+              this.backgroundMode.enable();
+              
+              this.backgroundMode.setDefaults(Config.BACKGROUND_MODE_CONFIG);
+              
+              this.backgroundMode.on("activate").subscribe(() => { 
+                this.prepararSincronizacao(); 
+              }, err => {});
+              
+              this.prepararSincronizacao();
             } else {
               this.nav.setRoot(this.loginPage);
             }
-        })
-        .catch((err) => {});
+          } else {
+            this.nav.setRoot(this.loginPage);
+          }
+      }).catch();
     });
   }
 
@@ -103,7 +103,12 @@ export class MyApp {
     })
   }
 
-  private iniciarSincronizacao() {
+  private prepararSincronizacao() {
+    if (!this.verificarIntervaloMinimoSincronizacao()) {
+      console.log('Sync: Inte. Rejeitada', new Date().toLocaleString('pt-BR'));
+      return
+    } 
+
     clearInterval(this.task);
 
     this.sincronizarChamados();
@@ -114,31 +119,25 @@ export class MyApp {
   }
 
   private sincronizarChamados() {
-    if (!this.verificarIntervaloMinimoSincronizacao()) {
-      this.events.publish('sincronizacao:efetuada');
-      console.log('Sync: Inte. Rejeitado', new Date().toLocaleString('pt-BR'));
-      return
-    } 
-
     this.ultimaAtualizacao = new Date();
 
     this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
-      console.log('Sync: Strg. Carregar', new Date().toLocaleString('pt-BR'));
+      console.log('Sync: Strg. Carregado', new Date().toLocaleString('pt-BR'));
 
       this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-        console.log('Sync: Fech. Ok', new Date().toLocaleString('pt-BR'));
+        console.log('Sync: Fech. Executado', new Date().toLocaleString('pt-BR'));
 
         this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
-          console.log('Sync: WApi. Carregar', new Date().toLocaleString('pt-BR'));
+          console.log('Sync: WApi. Carregado', new Date().toLocaleString('pt-BR'));
           
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-            console.log('Sync: ApSt. Unificar', new Date().toLocaleString('pt-BR'));
+            console.log('Sync: ApSt. Unificado', new Date().toLocaleString('pt-BR'));
 
             this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-              console.log('Sync: Strg. Atualizar', new Date().toLocaleString('pt-BR'));
+              console.log('Sync: Strg. Atualizado', new Date().toLocaleString('pt-BR'));
             })
             .catch(() => {
-              console.log('Sync: Strg. Erro ao Atualizar', new Date().toLocaleString('pt-BR'));
+              console.log('Sync: Strg. Erro ao Atualizado', new Date().toLocaleString('pt-BR'));
             });
           })
           .catch(() => {
@@ -147,14 +146,14 @@ export class MyApp {
         },
         err => {
           if (!this.backgroundMode.isActive()) {
-            this.exibirToast('Não foi possível conectar ao servidor').then(() => {
-              console.log('Sync: WApi. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
-            }).catch();
+            this.exibirToast('Não foi possível conectar ao servidor');
           }
+
+          console.log('Sync: WApi. Erro ao Carregar', new Date().toLocaleString('pt-BR'));
         });
       })
       .catch(() => {
-        console.log('Sync: Fech. Não', new Date().toLocaleString('pt-BR'));
+        console.log('Sync: Fech. Erro', new Date().toLocaleString('pt-BR'));
       });
 
       this.events.publish('sincronizacao:efetuada');
@@ -234,8 +233,9 @@ export class MyApp {
                 reject(false);
               });
             } else {
-              reject(false);
               this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
+
+              reject(false);
             }
           }
         },
