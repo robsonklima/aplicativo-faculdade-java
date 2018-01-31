@@ -201,12 +201,15 @@ export class MyApp {
       chamados.forEach((chamado) => {
         this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
           if (res) {
-            if (res.indexOf('00 - ') !== -1) {
+            if (res.indexOf('00 - ') > -1) {
               this.chamadoService.apagarChamadoStorage(chamado).then(() => {
                 this.exibirMensagem(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
               }).catch(() => {
                 reject();
               });
+            } else {
+              reject();
+              this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
             }
           }
         },
@@ -261,19 +264,7 @@ export class MyApp {
     });
   }
 
-  private exibirToastComConfirmacao(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem,
-        showCloseButton: true,
-        closeButtonText: 'Ok'
-      });
-
-      resolve(toast.present());
-    });
-  }
-
-  private exibirNotificacao(titulo:string, mensagem: string): Promise<any> {
+  private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
     return new Promise((resolve, reject) => {
       resolve(
         this.localNotification.requestPermission()
@@ -283,7 +274,7 @@ export class MyApp {
                 titulo, 
                 {
                   tag: titulo,
-                  body: mensagem,
+                  body: corpo,
                   icon: 'assets/icon/favicon.ico'
                 }
               );

@@ -43,7 +43,8 @@
       <ion-badge  
         item-end 
         color="light" 
-        class="inherit">
+        class="inherit"
+        [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
           {{ chamado.dataHoraAgendamento ? 'Agend' : 'Aberto' }}
           {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) 
             | date: 'dd/MM HH:mm' }}
