@@ -52,7 +52,7 @@ export class HomePage {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 500);
+      }, 800);
     });
   }
 
