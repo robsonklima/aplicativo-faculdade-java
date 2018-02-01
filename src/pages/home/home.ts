@@ -182,20 +182,14 @@ export class HomePage {
         if (versaoAppMaisRecente) {
           this.versaoAppMaisRecente = versaoAppMaisRecente;
 
-          if (versaoApp.toString().indexOf(versaoAppMaisRecente) < 0) {
+          if (this.versaoApp.indexOf(versaoAppMaisRecente) < 0) {
             this.versaoAppAtualizada = false;
+          } else {
+            this.versaoAppAtualizada = true;
           }
-
-          this.exibirAlerta( this.versaoApp + ' - ' + this.versaoAppMaisRecente);
         }
-      }, err => {
-        console.log(err);
-        this.exibirAlerta(err);
-      });
-    }).catch((err) => {
-      console.log(err);
-      this.exibirAlerta(err);
-    });
+      }, err => {});
+    }).catch(() => {});
   }
 
   public abrirAplicativoNaLojaGoogle() {
