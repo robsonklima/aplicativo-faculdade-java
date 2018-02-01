@@ -30,8 +30,6 @@ import { TipoServicoService } from "../../services/tipo-servico";
   templateUrl: 'home.html'
 })
 export class HomePage {
-  versaoApp: string;
-  versaoAppMaisRecente: string;
   versaoAppAtualizada: boolean = true;
   loginPage = LoginPage;
   dadosGlobais: DadosGlobais;
@@ -64,10 +62,13 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.carregarDadosGlobais();
+    this.carregarDadosGlobais().then(() => {
+      this.carregarVersaoApp();
+    }).catch(() => {});
     this.carregarSenhaExpirada();
     this.carregarChamadosStorage();
-    this.carregarVersaoApp();
+
+      
   }
 
   public telaChamados() {
@@ -108,8 +109,9 @@ export class HomePage {
     });
   }
 
-  private carregarDadosGlobais() {
-    this.dadosGlobaisService.buscarDadosGlobaisStorage()
+  private carregarDadosGlobais(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
       .then((dados: DadosGlobais) => {
         if (dados) {
           this.dadosGlobais = dados;
@@ -123,9 +125,16 @@ export class HomePage {
 
             this.carregarChamadosStorage();
           }
+
+          resolve(true);
         }
+
+        reject(false);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        reject(false);
+      });
+    });
   }
 
   private verificarNecessidadeAtualizacao(): boolean {
@@ -176,16 +185,14 @@ export class HomePage {
 
   private carregarVersaoApp() {
     this.appVersion.getVersionNumber().then((versaoApp) => {
-      this.versaoApp = versaoApp;
-
-      this.dadosGlobaisService.buscarUltimaVersaoApp().subscribe(versaoAppMaisRecente => {
+      this.dadosGlobaisService.buscarUltimaVersaoApp({
+        versao: versaoApp, usuario: this.dadosGlobais.usuario
+      }).subscribe(versaoAppMaisRecente => {
         if (versaoAppMaisRecente) {
-          this.versaoAppMaisRecente = versaoAppMaisRecente;
-
-          if (this.versaoApp.indexOf(versaoAppMaisRecente) < 0) {
-            this.versaoAppAtualizada = false;
-          } else {
+          if (versaoApp >= versaoAppMaisRecente) {
             this.versaoAppAtualizada = true;
+          } else {
+            this.versaoAppAtualizada = false;
           }
         }
       }, err => {});

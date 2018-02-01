@@ -6,6 +6,7 @@ import 'rxjs/Rx';
 import { Config } from './../config/config';
 import { Observable } from "rxjs/Observable";
 import { DadosGlobais } from '../models/dados-globais';
+import { VersaoApp } from '../models/versao-app';
 
 @Injectable()
 export class DadosGlobaisService {
@@ -45,8 +46,8 @@ export class DadosGlobaisService {
     });
   }
 
-  buscarUltimaVersaoApp(): Observable<string> {
-    return this.http.get(Config.API_URL + 'SatMobileAppVersao/')
+  buscarUltimaVersaoApp(versaoAppAtual: VersaoApp): Observable<string> {
+    return this.http.post(Config.API_URL + 'SatMobileAppVersao', versaoAppAtual)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
