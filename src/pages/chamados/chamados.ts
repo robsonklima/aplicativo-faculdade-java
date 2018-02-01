@@ -34,7 +34,7 @@ export class ChamadosPage {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 3000);
+      }, 2500);
     });
   }
 
@@ -48,8 +48,9 @@ export class ChamadosPage {
 
   public pushAtualizarChamados(refresher) {
     setTimeout(() => {
-      refresher.complete();
       this.events.publish('sincronizacao:solicitada');
+
+      refresher.complete();
     }, Config.INT_LOADING_CHAMADOS_MILISEG);
   }
 

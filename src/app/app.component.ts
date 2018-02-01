@@ -66,6 +66,7 @@ export class MyApp {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         if (dados) 
           this.dadosGlobais = dados;
+
           if (dados) {
             if (dados.usuario) {
               this.usuarioService.salvarCredenciais(dados.usuario);
@@ -75,11 +76,9 @@ export class MyApp {
               }).catch(() => {});
 
               this.menuCtrl.enable(true);
-              
               this.nav.setRoot(this.homePage);
 
               this.backgroundMode.enable();
-              
               this.backgroundMode.setDefaults(Config.BACKGROUND_MODE_CONFIG);
               
               this.backgroundMode.on("activate").subscribe(() => { 

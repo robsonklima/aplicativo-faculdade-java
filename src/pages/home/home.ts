@@ -50,7 +50,9 @@ export class HomePage {
     private tipoServicoService: TipoServicoService
   ) { 
     this.events.subscribe('sincronizacao:efetuada', () => {
-      this.carregarChamadosStorage();
+      setTimeout(() => {
+        this.carregarChamadosStorage();
+      }, 500);
     });
   }
 
