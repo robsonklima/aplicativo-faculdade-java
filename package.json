@@ -30,6 +30,7 @@
         "@ionic-native/diagnostic": "^4.5.2",
         "@ionic-native/geolocation": "^4.5.2",
         "@ionic-native/in-app-browser": "^4.5.2",
+        "@ionic-native/market": "^4.5.3",
         "@ionic-native/native-audio": "^4.5.2",
         "@ionic-native/network": "^4.5.2",
         "@ionic-native/phonegap-local-notification": "^4.5.2",
@@ -49,6 +50,7 @@
         "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-inappbrowser": "^2.0.1",
         "cordova-plugin-ionic-webview": "^1.1.16",
+        "cordova-plugin-market": "^1.2.0",
         "cordova-plugin-nativeaudio": "^3.0.9",
         "cordova-plugin-network-information": "^2.0.1",
         "cordova-plugin-splashscreen": "^4.0.3",
@@ -92,7 +94,8 @@
             "cordova-plugin-nativeaudio": {},
             "cordova-plugin-vibration": {},
             "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-appavailability": {}
+            "cordova-plugin-appavailability": {},
+            "cordova-plugin-market": {}
         },
         "platforms": [
             "android",

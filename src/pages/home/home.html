@@ -16,6 +16,16 @@
 
 <ion-content>
   <ion-list>
+    <ion-item-divider 
+      color="danger"
+      *ngIf="!versaoAppAtualizada">
+      Aplicativo Desatualizado
+      <button 
+        (click)="abrirAplicativoNaLojaGoogle()" 
+        color="white" ion-button item-end outline>Atualizar
+      </button>
+    </ion-item-divider>
+
     <div *ngIf="dadosGlobais?.usuario?.codTecnico">
       <button
         class="first-item"

@@ -12,6 +12,7 @@ import { Diagnostic } from '@ionic-native/diagnostic'
 import { Network } from '@ionic-native/network';
 import { AppVersion } from '@ionic-native/app-version';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Market } from '@ionic-native/market';
 import { AppAvailability } from '@ionic-native/app-availability';
 import { Device } from '@ionic-native/device';
 import { BackgroundMode } from '@ionic-native/background-mode';
@@ -123,6 +124,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     Network,
     AppVersion,
     InAppBrowser,
+    Market,
     AppAvailability,
     Device,
     DadosGlobaisService,

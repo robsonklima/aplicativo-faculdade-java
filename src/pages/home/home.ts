@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavController, 
   PopoverController, Events } from 'ionic-angular';
 
+import { AppVersion } from '@ionic-native/app-version';
 import { Badge } from '@ionic-native/badge';
+import { Market } from '@ionic-native/market';
 
 import { LoginPage } from '../login/login';
 import { ChamadosPage } from "../chamados/chamados";
@@ -28,6 +30,9 @@ import { TipoServicoService } from "../../services/tipo-servico";
   templateUrl: 'home.html'
 })
 export class HomePage {
+  versaoApp: string;
+  versaoAppMaisRecente: string;
+  versaoAppAtualizada: boolean = true;
   loginPage = LoginPage;
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
@@ -37,8 +42,10 @@ export class HomePage {
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private appVersion: AppVersion,
     private events: Events,
     private badge: Badge,
+    private market: Market,
     private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
@@ -60,6 +67,7 @@ export class HomePage {
     this.carregarDadosGlobais();
     this.carregarSenhaExpirada();
     this.carregarChamadosStorage();
+    this.carregarVersaoApp();
   }
 
   public telaChamados() {
@@ -164,6 +172,34 @@ export class HomePage {
             para continuar utilizando a aplicação.`);
         }
       }, err => {});
+  }
+
+  private carregarVersaoApp() {
+    this.appVersion.getVersionNumber().then((versaoApp) => {
+      this.versaoApp = versaoApp;
+
+      this.dadosGlobaisService.buscarUltimaVersaoApp().subscribe(versaoAppMaisRecente => {
+        if (versaoAppMaisRecente) {
+          this.versaoAppMaisRecente = versaoAppMaisRecente;
+
+          if (versaoApp.toString().indexOf(versaoAppMaisRecente) < 0) {
+            this.versaoAppAtualizada = false;
+          }
+
+          this.exibirAlerta( this.versaoApp + ' - ' + this.versaoAppMaisRecente);
+        }
+      }, err => {
+        console.log(err);
+        this.exibirAlerta(err);
+      });
+    }).catch((err) => {
+      console.log(err);
+      this.exibirAlerta(err);
+    });
+  }
+
+  public abrirAplicativoNaLojaGoogle() {
+    this.market.open(Config.GOOGLE_PLAY_NOME_APP);
   }
 
   private exibirAlerta(msg: string) {

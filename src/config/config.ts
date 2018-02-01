@@ -9,6 +9,8 @@ export class Config {
        FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS: 84
     };
    public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
+   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
+   public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
    public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 3600, timeout: 20000 };
    public static BACKGROUND_MODE_CONFIG = { title: 'SAT Sincronização', text: 'Executando', silent: true };
    public static INT_SINC_BD_LOCAL_DIAS = 7;
