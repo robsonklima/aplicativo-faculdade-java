@@ -1,3 +1,6 @@
+0.0.31 - ??/01/2018
+- 
+
 0.0.30 - 30/01/2018
 - Correção do bug que apresentava o número incorreto da versão na página Sobre;
 - Ajuste no fluxo de sincronização para remover o chamado da imediatamente após a sincrinização;
