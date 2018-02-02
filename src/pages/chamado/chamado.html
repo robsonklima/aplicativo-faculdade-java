@@ -371,6 +371,7 @@
                   name="horaInicio"
                   cancelText="Cancelar"
                   doneText="Selecionar"
+                  [initialValue]="horaAtual"
                   [ngModel]="chamado?.rats[0]?.horaInicio"
                   required>
                 </ion-datetime>
@@ -386,6 +387,7 @@
                   name="horaSolucao" 
                   cancelText="Cancelar"
                   doneText="Selecionar"
+                  [initialValue]="horaAtual"
                   [ngModel]="chamado?.rats[0]?.horaSolucao"
                   required>
                 </ion-datetime>

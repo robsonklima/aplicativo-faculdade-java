@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavParams, Platform } from "ionic-angular";
-import { NgForm } from '@angular/forms';
-import { Slides, AlertController, LoadingController, ToastController,
+import { Slides, AlertController, LoadingController, ToastController, 
   ModalController, NavController, Events } from 'ionic-angular';
-
-import moment from 'moment';
+import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
@@ -24,6 +22,8 @@ import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { ChamadosHistoricoPage } from '../chamados-historico/chamados-historico';
 
+import moment from 'moment';
+
 @Component({
   selector: 'chamado-page',
   templateUrl: 'chamado.html'
@@ -34,9 +34,8 @@ export class ChamadoPage {
   dadosGlobais: DadosGlobais;
   chamado: Chamado;
   usuarioPonto: UsuarioPonto;
-  gpsAtivado: boolean = true;
-  dataAtual: string;
-  horaAtual: string;
+  dataAtual: string = moment().format('YYYY-MM-DD');
+  horaAtual: string = moment().format('HH:mm:ss');
 
   constructor(
     private platform: Platform,
@@ -59,10 +58,10 @@ export class ChamadoPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais();
-    this.verificarGpsAtivado();
     this.configurarSlide(this.slides.getActiveIndex());
-    this.obterDataHoraAtual();
     this.registrarLeituraOs(); 
+
+    console.log(this.horaAtual);
   }
 
   public alterarSlide() {
@@ -287,8 +286,7 @@ export class ChamadoPage {
     this.exibirToast('Rat atualizada com sucesso').then(() => {
       this.configurarSlide(this.slides.getActiveIndex());
       this.slides.slideTo(3, 500);
-    })
-    .catch();
+    }).catch(() => {});
   }
 
   public fecharChamado() {
@@ -373,27 +371,6 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
-  }
-
-  private verificarGpsAtivado() {
-    this.diagnostic.isLocationEnabled()
-      .then(gps => {
-        if (!gps)
-          this.gpsAtivado = false;
-      }).catch((e) => {
-        this.gpsAtivado = false;
-      });
-  }
-
-  private obterDataHoraAtual() {
-    let dataHoraAtual = new Date();
-
-    this.dataAtual = (dataHoraAtual.getFullYear()
-      + '-' + ("0" + (dataHoraAtual.getMonth() + 1)).slice(-2)
-      + '-' + ('0' + dataHoraAtual.getDate()).slice(-2));
-
-    this.horaAtual = (('0' + dataHoraAtual.getHours()).slice(-2) 
-      + ':' + ('0' + dataHoraAtual.getMinutes()).slice(-2));
   }
 
   private configurarSlide(i: number) {
