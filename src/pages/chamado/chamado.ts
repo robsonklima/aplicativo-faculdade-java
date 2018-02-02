@@ -5,7 +5,6 @@ import { Slides, AlertController, LoadingController, ToastController,
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
-import { Diagnostic } from "@ionic-native/diagnostic";
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -39,7 +38,6 @@ export class ChamadoPage {
 
   constructor(
     private platform: Platform,
-    private diagnostic: Diagnostic,
     private geolocation: Geolocation,
     private modalCtrl: ModalController,
     private navParams: NavParams,
