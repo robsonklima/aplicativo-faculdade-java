@@ -28,7 +28,8 @@ export class ChamadoService {
       .timeout(15000)
       .delay(500)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
+      .catch((error: any) => Observable.throw(error.json())
+    );
   }
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {

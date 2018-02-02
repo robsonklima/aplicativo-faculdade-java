@@ -1,4 +1,5 @@
 0.0.34 - ??/02/2018
+- Inclusão do número de série do equipamento na tela de listagem de chamados;
 - 
 
 0.0.33 - 02/02/2018
