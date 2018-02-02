@@ -67,8 +67,6 @@ export class HomePage {
     }).catch(() => {});
     this.carregarSenhaExpirada();
     this.carregarChamadosStorage();
-
-      
   }
 
   public telaChamados() {

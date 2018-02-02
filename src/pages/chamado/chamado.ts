@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { Slides, AlertController, LoadingController, ToastController,
   ModalController, NavController, Events } from 'ionic-angular';
 
+import moment from 'moment';
+
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
 
@@ -252,9 +254,14 @@ export class ChamadoPage {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
     }
-      
-    if (form.value.horaSolucao < form.value.horaInicio) {
-      this.exibirToast('A hora da solução deve ser maior que a hora de início');
+
+    if (moment(form.value.horaSolucao, 'HH:mm').isBefore(moment(form.value.horaInicio, 'HH:mm'))) {
+      this.exibirToast('A solução deve ocorrer após o início');
+      return
+    }
+
+    if (moment().isBefore(moment(form.value.horaSolucao, 'HH:mm'))) {
+      this.exibirToast('A solução não pode ocorrer no futuro');
       return
     }
 
@@ -276,12 +283,12 @@ export class ChamadoPage {
     }
 
     this.chamadoService.atualizarChamado(this.chamado);
-    this.exibirToast('Rat atualizada com sucesso')
-      .then(() => {
-        this.configurarSlide(this.slides.getActiveIndex());
-        this.slides.slideTo(3, 500);
-      })
-      .catch();
+
+    this.exibirToast('Rat atualizada com sucesso').then(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+      this.slides.slideTo(3, 500);
+    })
+    .catch();
   }
 
   public fecharChamado() {
