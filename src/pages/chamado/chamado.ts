@@ -60,8 +60,6 @@ export class ChamadoPage {
     this.carregarDadosGlobais();
     this.configurarSlide(this.slides.getActiveIndex());
     this.registrarLeituraOs(); 
-
-    console.log(this.horaAtual);
   }
 
   public alterarSlide() {
@@ -245,21 +243,23 @@ export class ChamadoPage {
     rat.dataSolucao = form.value.dataInicio;
     rat.horaSolucao = form.value.horaSolucao;
     rat.nomeAcompanhante = form.value.nomeAcompanhante;
+    rat.codUsuarioCad = this.dadosGlobais.usuario.codUsuario;
     rat.obsRAT = form.value.obsRAT;
     rat.ratDetalhes = [];
-    rat.codUsuarioCad = this.dadosGlobais.usuario.codUsuario;
+    
 
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
     }
 
-    if (moment(form.value.horaSolucao, 'HH:mm').isBefore(moment(form.value.horaInicio, 'HH:mm'))) {
+    if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm')
+      .isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
       this.exibirToast('A solução deve ocorrer após o início');
       return
     }
 
-    if (moment().isBefore(moment(form.value.horaSolucao, 'HH:mm'))) {
+    if (moment().isBefore(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm'))) {
       this.exibirToast('A solução não pode ocorrer no futuro');
       return
     }
