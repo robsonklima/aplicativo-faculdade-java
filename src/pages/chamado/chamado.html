@@ -2,8 +2,7 @@
   <ion-navbar>
     <ion-buttons end>
       <button 
-        ion-button 
-        icon-only 
+        ion-button icon-only 
         (click)="telaEquipamentosHistorico(chamado)">
         <ion-icon name="clipboard"></ion-icon>
       </button>
@@ -17,6 +16,7 @@
 </ion-header>
 <ion-content class="chamado-content-page outer-content">
   <ion-slides pager (ionSlideDidChange)="alterarSlide()">
+    <!-- Informações -->
     <ion-slide>
       <ion-list>
         <ion-item
@@ -196,7 +196,9 @@
         </ion-item>
       </ion-list>
     </ion-slide>
+    <!-- Informações -->
 
+    <!-- Checkin -->
     <ion-slide>
       <ion-list>
         <ion-card text-left
@@ -258,7 +260,9 @@
         </ion-item>
       </ion-card>
     </ion-slide>
+    <!-- Checkin -->
 
+    <!-- Informações da RAT -->
     <ion-slide>
       <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
         <ion-list>
@@ -296,6 +300,7 @@
                   {{ (usuarioPonto?.registros[0] | date:'HH:mm') || '--:--' }}</ion-label>
               </ion-item>
             </ion-col>
+
             <ion-col 
               class="no-padding">
               <ion-item>
@@ -307,6 +312,7 @@
                   {{ (usuarioPonto?.registros[1] | date:'HH:mm') || '--:--' }}</ion-label>
               </ion-item>
             </ion-col>
+
             <ion-col
               class="no-padding">
               <ion-item>
@@ -318,6 +324,7 @@
                   {{ (usuarioPonto?.registros[2] | date:'HH:mm') || '--:--' }}</ion-label>
               </ion-item>
             </ion-col>
+            
             <ion-col 
               class="no-padding">
               <ion-item>
@@ -424,7 +431,9 @@
         </ion-list>
       </form>
     </ion-slide>
+    <!-- Informações da RAT -->
 
+    <!-- Detalhes da RAT -->
     <ion-slide>
       <ion-list>
         <div padding>
@@ -469,7 +478,9 @@
         </ion-item>
       </ion-list>
     </ion-slide>
+    <!-- Detalhes da RAT -->
 
+    <!-- Checkout -->
     <ion-slide>
       <ion-list>
         <div
@@ -500,7 +511,7 @@
           &markers=color:red%7Clabel:!%7C
           {{chamado?.checkout?.localizacao?.latitude}},
           {{chamado?.checkout?.localizacao?.longitude}}
-          &zoom=15&size=340x200">
+          &zoom=15&size=340x200" />
       
         <ion-item>
           <ion-icon color="subtle" class="adv-map-icon" 
@@ -513,7 +524,9 @@
         </ion-item>
       </ion-card>
     </ion-slide>
+    <!-- Checkout -->
 
+    <!-- Conferência -->
     <ion-slide>
       <ion-item-divider 
         class="first-divider text-left"
@@ -569,7 +582,7 @@
 
         <ion-item text-wrap>
           <span class="inf-bas">
-            {{ chamado?.rats[0]?.obsRAT | lowercase | capitalize }}</span>
+            {{ chamado?.rats[0]?.obsRAT }}</span>
         </ion-item>
 
         <div *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
@@ -603,7 +616,7 @@
             Causa
             <ion-note item-end>
               {{ ratDetalhe?.causa?.codECausa }}
-              - {{ ratDetalhe?.causa?.nomeCausa | lowercase | capitalize | ellipsis: 20}}
+              - {{ ratDetalhe?.causa?.nomeCausa | lowercase | capitalize | ellipsis: 22 }}
             </ion-note>
           </ion-item>
 
@@ -611,7 +624,7 @@
             Defeito
             <ion-note item-end>
               {{ ratDetalhe?.defeito?.codEDefeito }}
-              - {{ ratDetalhe?.defeito?.nomeDefeito | lowercase | capitalize | ellipsis: 20}}
+              - {{ ratDetalhe?.defeito?.nomeDefeito | lowercase | capitalize | ellipsis: 20 }}
             </ion-note>
           </ion-item>
 
@@ -650,7 +663,9 @@
           </div>
         </div>
     </ion-slide>
+    <!-- Conferência -->
 
+    <!-- Fechamento -->
     <ion-slide>
       <ion-list>
         <div padding>
@@ -664,5 +679,6 @@
         </div>
       </ion-list>
     </ion-slide>
+    <!-- Fechamento -->
   </ion-slides>
 </ion-content>
