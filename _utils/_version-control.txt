@@ -1,5 +1,6 @@
-0.0.33 - ??/02/2018
-- 
+0.0.33 - 02/02/2018
+- Adição de validação de datas na tela chamado, não permitindo lançamento de Rats com solução em data futura;
+- Correção do bug que iniciava os campos de horário início e solução, na tela Chamado, com diferença de duas horas;
 
 0.0.32 - 01/02/2018
 - Logs de versões dos dispositivos;
