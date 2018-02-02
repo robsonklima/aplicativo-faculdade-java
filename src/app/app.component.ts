@@ -22,6 +22,8 @@ import { Chamado } from '../models/chamado';
 import { UsuarioService } from '../services/usuario';
 import { ChamadoService } from "../services/chamado";
 
+import moment from 'moment';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -29,7 +31,9 @@ export class MyApp {
   loginPage = LoginPage;
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
-  ultimaAtualizacao: Date = new Date();
+  dataHoraUltAtualizacao: Date = new Date();
+
+  d2: Date = new Date();
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
@@ -104,7 +108,7 @@ export class MyApp {
 
   private prepararSincronizacao() {
     if (!this.verificarIntervaloMinimoSincronizacao()) {
-      console.log('Sincronização Rejeitada', new Date().toLocaleString('pt-BR'));
+      console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
       return
     } 
 
@@ -118,14 +122,14 @@ export class MyApp {
   }
 
   private sincronizarChamados() {
-    this.ultimaAtualizacao = new Date();
+    this.dataHoraUltAtualizacao = new Date();
 
     this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
       this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-        console.log('Chamados Fechados Enviados', new Date().toLocaleString('pt-BR'));
+        console.log(moment().format('HH:mm:ss'), 'Chamados Fechados Enviados');
 
         this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
-          console.log('Chamados Api Carregados', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Chamados Api Carregados');
           
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
             this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
@@ -138,16 +142,14 @@ export class MyApp {
           if (!this.backgroundMode.isActive())
             this.exibirToast('Não foi possível conectar ao servidor');
 
-          console.log('Chamados Api Erro ao Carregar', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Chamados Api Erro ao Carregar');
         });
       })
       .catch(() => {
-        console.log('Chamados Fechados Erro ao Enviar', new Date().toLocaleString('pt-BR'));
+        console.log(moment().format('HH:mm:ss'), 'Chamados Fechados Erro ao Enviar');
       });
     })
     .catch(() => {});
-
-    console.log(' ');
   }
   
   private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
@@ -200,7 +202,7 @@ export class MyApp {
         });
       }
     
-      console.log('Chamados Api/Stg Unificados', new Date().toLocaleString('pt-BR'));
+      console.log(moment().format('HH:mm:ss'), 'Chamados Api/Stg Unificados');
       resolve(chamados);
     });
   }
@@ -236,11 +238,8 @@ export class MyApp {
   }
 
   private verificarIntervaloMinimoSincronizacao(): boolean {
-    if(!this.ultimaAtualizacao) return false;
-    
-    var diferenca = (new Date().getTime() - this.ultimaAtualizacao.getTime()) / 1000;
-
-    return (Math.abs(Math.round(diferenca)) > Config.INT_MIN_SINC_CHAMADOS_SEG);
+    return (moment.duration(moment(new Date()).diff(moment(this.dataHoraUltAtualizacao))).seconds() 
+      > Config.INT_MIN_SINC_CHAMADOS_SEG && this.dataHoraUltAtualizacao !== null);
   }
 
   private dispararSinalSonoroComVibracao() {

@@ -12,6 +12,8 @@ import 'rxjs/add/operator/map';
 import { Config } from './../config/config';
 import { Chamado } from "../models/chamado";
 
+import moment from 'moment';
+
 @Injectable()
 export class ChamadoService {
   private chamados: Chamado[] = [];
@@ -50,12 +52,12 @@ export class ChamadoService {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
         this.chamados = chamados != null ? chamados : [];
 
-        console.log('Chamados Storage Carregados', new Date().toLocaleString('pt-BR'));
+        console.log(moment().format('HH:mm:ss'), 'Chamados Storage Carregados');
 
         resolve (this.chamados.slice());
       })
       .catch(() => {
-        console.log('Erro ao Carregar Chamados Storage', new Date().toLocaleString('pt-BR'));
+        console.log(moment().format('HH:mm:ss'), 'Erro ao Carregar Chamados Storage');
 
         reject();
       });
@@ -68,12 +70,12 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then((res) => {
-          console.log('Chamados Storage Atualizados', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Chamados Storage Atualizados');
 
           resolve(true);
         })
         .catch(() => {
-          console.log('Erro ao Atualizar Chamados Storage', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Erro ao Atualizar Chamados Storage');
 
           reject(false);
         });
@@ -95,12 +97,12 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then(() => {
-          console.log('Chamado Storage Apagado', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Chamado Storage Apagado');
 
           resolve(true);
         })
         .catch(() => {
-          console.log('Erro ao Apagar Chamado Storage', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Erro ao Apagar Chamado Storage');
 
           reject(false);
         });
@@ -113,12 +115,12 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', this.chamados)
         .then(() => {
-          console.log('Chamados Storage Apagados', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Chamados Storage Apagados');
 
           resolve(true);
         })
         .catch(() => {
-          console.log('Erro ao Apagar Chamados Storage', new Date().toLocaleString('pt-BR'));
+          console.log(moment().format('HH:mm:ss'), 'Erro ao Apagar Chamados Storage');
 
           reject(false);
         });
