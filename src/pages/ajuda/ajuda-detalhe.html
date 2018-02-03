@@ -1,9 +1,18 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ item }}</ion-title>
+    <ion-title>Ajuda</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <p>{{ item }}</p>
+<ion-content>
+  <ion-item text-wrap color="secondary" no-lines
+    class="titulo">
+    <p>{{ topico.titulo }}</p>
+    <h1>{{ topico.enunciado }}</h1>
+  </ion-item>
+
+  <p padding text-justify
+    class="texto">
+    {{ topico.texto }}
+  </p>
 </ion-content>

@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { NavParams} from 'ionic-angular';
 
+import { AjudaTopico } from '../../models/ajuda-topico';
+
 @Component({
   selector: 'ajuda-detalhe-page',
   templateUrl: 'ajuda-detalhe.html'
 })
 export class AjudaDetalhePage {
-  item: any;
+  topico: AjudaTopico;
 
   constructor(
     private navParams: NavParams
   ) {
-    this.item = this.navParams.get('item');
+    this.topico = this.navParams.get('topico');
   }
 }

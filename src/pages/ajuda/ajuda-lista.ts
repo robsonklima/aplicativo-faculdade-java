@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewController, NavController } from 'ionic-angular';
 
+import { AjudaTopico } from '../../models/ajuda-topico';
+
 import { AjudaDetalhePage } from './ajuda-detalhe';
 
 @Component({
@@ -8,18 +10,62 @@ import { AjudaDetalhePage } from './ajuda-detalhe';
   templateUrl: 'ajuda-lista.html'
 })
 export class AjudaListaPage {
-  itens = [
-    'Como fechar um chamado?',
-    'Como consultar o histórico do equipamento?',
-    'Como interpretar a listagem de chamados?',
-    'Como atualizar os dados da RAT?',
-    'Como inserir um detalhe?',
-    'Como inserir uma peça?',
-    'Como acessar a rota no mapa?',
-    'Como consultar a lista de peças?',
-    'Como informar um problema no app?',
-    'Como verificar a versão do app?',
-    'Como confirmar a leitura de um chamado?'
+  topicos: AjudaTopico[] = [
+    {
+      enunciado: 'Como fechar um chamado?',
+      titulo: 'Fechamento de Chamados',
+      texto: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.'
+    },
+    {
+      enunciado: 'Como consultar o histórico do equipamento?',
+      titulo: 'Histórico do Equipamento',
+      texto: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.'
+    },
+    {
+      enunciado: 'Como interpretar a listagem de chamados?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como atualizar os dados da RAT?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como inserir um detalhe?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como inserir uma peça?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como acessar a rota no mapa?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como consultar a lista de peças?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como informar um problema no app?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como verificar a versão do app?',
+      titulo: '',
+      texto: ''
+    },
+    {
+      enunciado: 'Como confirmar a leitura de um chamado?',
+      titulo: '',
+      texto: ''
+    }
   ];
 
   constructor(
@@ -27,8 +73,8 @@ export class AjudaListaPage {
     private navCtrl: NavController
   ) {}
 
-  public telaAjudaDetalhe(item: any) {
-    this.navCtrl.push(AjudaDetalhePage, { item: item });
+  public telaAjudaDetalhe(topico: AjudaTopico) {
+    this.navCtrl.push(AjudaDetalhePage, { topico: topico });
   }
 
   public fecharModal() {
