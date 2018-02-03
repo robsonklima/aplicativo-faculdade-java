@@ -52,7 +52,7 @@ export class ChamadosPage {
 
       setTimeout(() => {
         refresher.complete();
-      }, 3500);
+      }, 7500);
     }, 7500);
   }
 
