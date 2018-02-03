@@ -1,7 +1,5 @@
 0.0.34 - ??/02/2018
 - Inclusão do número de série do equipamento na tela de listagem de chamados;
-- Adicionado botão para reiniciar o preenchimento de um chamado;
-- Removido botão lixeira na listegem de chamados;
 - Corrigido comportamento do loading da página de listagem de chamados;
 - 
 
