@@ -116,7 +116,7 @@ export class ChamadosPage {
   public limparChamadosDispositivo() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Tem certeza que deseja remover os chamados salvos no dispositivo?',
+      message: 'Deseja remover os chamados do dispositivo?',
       buttons: [
         {
           text: 'Cancelar',
