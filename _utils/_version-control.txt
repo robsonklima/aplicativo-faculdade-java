@@ -1,7 +1,8 @@
 0.0.34 - ??/02/2018
 - Inclusão do número de série do equipamento na tela de listagem de chamados;
 - Corrigido comportamento do loading da página de listagem de chamados;
-- 
+- Incluída página de ajuda;
+- Aumentada para 20 a quantidade máxima de uma mesma peça em um detalhe;
 
 0.0.33 - 02/02/2018
 - Adição de validação de datas na tela chamado, não permitindo lançamento de Rats com solução em data futura;
