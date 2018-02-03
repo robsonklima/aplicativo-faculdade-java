@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, ModalController } from 'ionic-angular';
 
-import { AjudaPage } from '../ajuda/ajuda';
+import { AjudaListaPage } from '../ajuda/ajuda-lista';
 import { ProblemaPage } from '../problema/problema';
 import { SobrePage } from '../sobre/sobre';
 
@@ -16,7 +16,7 @@ export class HomeMaisOpcoesPage {
   ) {}
 
   public telaAjuda() {
-    const modal = this.modalCtrl.create(AjudaPage);
+    const modal = this.modalCtrl.create(AjudaListaPage);
 
     this.viewCtrl.dismiss().then(() => {
       modal.present();

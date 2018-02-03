@@ -13,10 +13,10 @@
     </ion-navbar>
   </ion-header>
   
-  <ion-content padding>
-    <div class="separator"></div>
-  
-    <h5>
-      Página em construção
-    </h5>
+  <ion-content>
+    <ion-list>
+      <button ion-item *ngFor="let item of itens" (click)="telaAjudaDetalhe(item)">
+        {{ item }}
+      </button>  
+    </ion-list>
   </ion-content>

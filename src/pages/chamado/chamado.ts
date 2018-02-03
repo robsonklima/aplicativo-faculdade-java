@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform } from "ionic-angular";
-import { Slides, AlertController, LoadingController, ToastController, 
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, 
   ModalController, NavController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 

@@ -32,7 +32,8 @@ import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { ChamadosHistoricoPage } from '../pages/chamados-historico/chamados-historico';
 import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
-import { AjudaPage } from '../pages/ajuda/ajuda';
+import { AjudaListaPage } from '../pages/ajuda/ajuda-lista';
+import { AjudaDetalhePage } from '../pages/ajuda/ajuda-detalhe';
 import { ProblemaPage } from '../pages/problema/problema';
 import { SobrePage } from '../pages/sobre/sobre';
 
@@ -68,7 +69,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
-    AjudaPage,
+    AjudaListaPage,
+    AjudaDetalhePage,
     ProblemaPage,
     SobrePage,
     CapitalizePipe,
@@ -106,7 +108,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     ChamadoHistoricoPage,
     PecasPage,
     PecaPage,
-    AjudaPage,
+    AjudaListaPage,
+    AjudaDetalhePage,
     ProblemaPage,
     SobrePage
   ],
