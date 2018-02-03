@@ -47,18 +47,11 @@ export class ChamadosPage {
   }
 
   public atualizarChamados(refresher) {
-    const loader = this.loadingCtrl.create({
-      content: 'Sincronizando...'
-    });
-    loader.present().then(()=> {
-      refresher.complete();
-    });
-
     setTimeout(() => {
       this.events.publish('sincronizacao:solicitada');
 
       setTimeout(() => {
-        loader.dismiss();        
+        refresher.complete();
       }, 3500);
     }, 7500);
   }
@@ -136,43 +129,6 @@ export class ChamadosPage {
               .catch(() => {
                 loading.dismiss();
               });
-          }
-        }
-      ]
-    });
-
-    confirmacao.present();
-  }
-
-  public limparChamadoDispositivo(chamado: Chamado) {
-    const confirmacao = this.alertCtrl.create({
-      title: 'Recomeçar',
-      message: 'Deseja preencher este chamado novamente?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          handler: () => { }
-        },
-        {
-          text: 'Confirmar',
-          handler: () => {
-            const loading = this.loadingCtrl.create({ 
-              content: 'Aguarde...' 
-            });
-            loading.present();
-        
-            this.chamadoService.apagarChamadoStorage(chamado).then((res) => {
-              setTimeout(() => {
-                this.events.publish('sincronizacao:solicitada');
-
-                setTimeout(() => {
-                  loading.dismiss();
-                }, 3500);
-              }, 7500);
-            })
-            .catch(() => {
-              loading.dismiss();
-            });
           }
         }
       ]
