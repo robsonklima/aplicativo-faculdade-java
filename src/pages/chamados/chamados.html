@@ -1,15 +1,5 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons end>
-      <button 
-        ion-button 
-        icon-only 
-        [disabled]="chamados?.length == 0"
-        (click)="limparChamadosDispositivo()">
-        <ion-icon name="trash"></ion-icon>
-      </button>
-    </ion-buttons>
-
     <ion-title>
       Chamados ({{ chamados?.length }})
     </ion-title>
@@ -108,19 +98,6 @@
             [disabled]="true"
             color="subtle">
             <div>
-              &nbsp;&nbsp;{{ chamado.statusServico.abreviacao }}
-            </div>
-          </button>
-        </ion-col>
-        <ion-col col-2>
-          <button 
-            ion-button 
-            icon-left 
-            small
-            clear 
-            [disabled]="true"
-            color="subtle">
-            <div>
               {{ chamado.tipoIntervencao.abrevTipoIntervencao }}
             </div>
           </button>
@@ -134,6 +111,17 @@
             [disabled]="true"
             color="subtle">
             <div>R.{{ chamado.numReincidencias }}</div>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+          <button 
+            ion-button 
+            icon-only
+            clear 
+            small
+            [disabled]="chamado.dataHoraFechamento"
+            (click)="limparChamadoDispositivo(chamado)">
+            <ion-icon name="refresh" class="refresh"></ion-icon>
           </button>
         </ion-col>
         <ion-col col-2>

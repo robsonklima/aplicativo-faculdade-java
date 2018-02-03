@@ -9,7 +9,7 @@ import { Config } from "../../config/config";
 
 import { ChamadoPage } from "../chamado/chamado";
 
-import { Chamado } from "../../models/chamado";
+import { Chamado } from '../../models/chamado';
 
 import { ChamadoService } from "../../services/chamado";
 
@@ -50,8 +50,10 @@ export class ChamadosPage {
     setTimeout(() => {
       this.events.publish('sincronizacao:solicitada');
 
-      refresher.complete();
-    }, Config.INT_LOADING_CHAMADOS_MILISEG);
+      setTimeout(() => {
+        refresher.complete();
+      }, 3500);
+    }, 7500);
   }
 
   public abrirMapaNavegador(chamado: Chamado) {
@@ -127,6 +129,43 @@ export class ChamadosPage {
               .catch(() => {
                 loading.dismiss();
               });
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
+  public limparChamadoDispositivo(chamado: Chamado) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Deseja recomeçar o preenchimento deste chamado?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            const loading = this.loadingCtrl.create({ 
+              content: 'Aguarde...' 
+            });
+            loading.present();
+        
+            this.chamadoService.apagarChamadoStorage(chamado).then((res) => {
+              setTimeout(() => {
+                this.events.publish('sincronizacao:solicitada');
+
+                setTimeout(() => {
+                  loading.dismiss();
+                }, 3500);
+              }, 7500);
+            })
+            .catch(() => {
+              loading.dismiss();
+            });
           }
         }
       ]

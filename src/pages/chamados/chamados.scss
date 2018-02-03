@@ -59,8 +59,9 @@ chamados-page {
         // border: 1px solid red !important;
     }
 
-    .pin, .open, .checkmark, .done-all, .create {
+    .refresh, .pin, .open, .checkmark, .done-all, .create {
         font-size: 21px !important;
+        padding-left: 12px;
     }
 
     .data-hora-leitura {
