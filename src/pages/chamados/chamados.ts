@@ -47,11 +47,18 @@ export class ChamadosPage {
   }
 
   public atualizarChamados(refresher) {
+    const loader = this.loadingCtrl.create({
+      content: 'Sincronizando...'
+    });
+    loader.present().then(()=> {
+      refresher.complete();
+    });
+
     setTimeout(() => {
       this.events.publish('sincronizacao:solicitada');
 
       setTimeout(() => {
-        refresher.complete();
+        loader.dismiss();        
       }, 3500);
     }, 7500);
   }
