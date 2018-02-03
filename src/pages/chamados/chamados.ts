@@ -46,7 +46,7 @@ export class ChamadosPage {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
   }
 
-  public pushAtualizarChamados(refresher) {
+  public atualizarChamados(refresher) {
     setTimeout(() => {
       this.events.publish('sincronizacao:solicitada');
 
@@ -139,8 +139,8 @@ export class ChamadosPage {
 
   public limparChamadoDispositivo(chamado: Chamado) {
     const confirmacao = this.alertCtrl.create({
-      title: 'Confirmação',
-      message: 'Deseja recomeçar o preenchimento deste chamado?',
+      title: 'Recomeçar',
+      message: 'Deseja preencher este chamado novamente?',
       buttons: [
         {
           text: 'Cancelar',

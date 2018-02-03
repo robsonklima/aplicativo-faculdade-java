@@ -7,7 +7,8 @@
 </ion-header>
 
 <ion-content class="cards-bg">
-  <ion-refresher (ionRefresh)="pushAtualizarChamados($event)">
+  <ion-refresher 
+    (ionRefresh)="atualizarChamados($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -119,7 +120,8 @@
             icon-only
             clear 
             small
-            [disabled]="chamado.dataHoraFechamento"
+            [disabled]="chamado.dataHoraFechamento || (!chamado.checkin.localizacao.latitude 
+              && !chamado.checkout.localizacao.latitude)"
             (click)="limparChamadoDispositivo(chamado)">
             <ion-icon name="refresh" class="refresh"></ion-icon>
           </button>
