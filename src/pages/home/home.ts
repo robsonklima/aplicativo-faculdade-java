@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, 
-  PopoverController, Events } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, PopoverController } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -40,7 +39,6 @@ export class HomePage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private appVersion: AppVersion,
-    private events: Events,
     private market: Market,
     private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
@@ -51,13 +49,7 @@ export class HomePage {
     private causaService: CausaService,
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService
-  ) { 
-    // this.events.subscribe('sincronizacao:efetuada', () => {
-    //   setTimeout(() => {
-    //     this.carregarChamadosStorage();
-    //   }, 800);
-    // });
-  }
+  ) { }
 
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
