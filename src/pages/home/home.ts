@@ -3,7 +3,6 @@ import { AlertController, LoadingController, NavController,
   PopoverController, Events } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
-import { Badge } from '@ionic-native/badge';
 import { Market } from '@ionic-native/market';
 
 import { LoginPage } from '../login/login';
@@ -42,7 +41,6 @@ export class HomePage {
     private alertCtrl: AlertController,
     private appVersion: AppVersion,
     private events: Events,
-    private badge: Badge,
     private market: Market,
     private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
@@ -54,11 +52,11 @@ export class HomePage {
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService
   ) { 
-    this.events.subscribe('sincronizacao:efetuada', () => {
-      setTimeout(() => {
-        this.carregarChamadosStorage();
-      }, 800);
-    });
+    // this.events.subscribe('sincronizacao:efetuada', () => {
+    //   setTimeout(() => {
+    //     this.carregarChamadosStorage();
+    //   }, 800);
+    // });
   }
 
   ionViewWillEnter() {
@@ -98,8 +96,6 @@ export class HomePage {
         }).filter((c) => {
           return (!c.dataHoraOSMobileLida);
         });
-
-        this.badge.set(this.chamados.length);
 
         resolve(chamados);
       })  

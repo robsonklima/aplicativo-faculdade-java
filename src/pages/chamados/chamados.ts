@@ -4,6 +4,7 @@ import { Platform, LoadingController, NavController, AlertController,
 
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Badge } from '@ionic-native/badge';
 
 import { Config } from "../../config/config";
 
@@ -24,8 +25,9 @@ export class ChamadosPage {
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
-    private events: Events,
     private platform: Platform,
+    private events: Events,
+    private badge: Badge,
     private geolocation: Geolocation,
     private inAppBrowser: InAppBrowser,
     private chamadoService: ChamadoService,
@@ -93,12 +95,22 @@ export class ChamadosPage {
           return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
         });
 
-        resolve(true);
+        this.atualizarBadge();
       })  
       .catch(() => {
         reject(false);
       });
     });
+  }
+
+  private atualizarBadge() {
+    this.badge.set(
+      this.chamados.filter((c) => {
+        return (!c.dataHoraFechamento);
+      }).filter((c) => {
+        return (!c.dataHoraOSMobileLida);
+      }).length
+    );
   }
 
   public limparChamadosDispositivo() {
