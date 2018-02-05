@@ -1,4 +1,4 @@
-0.0.34 - ??/02/2018
+0.0.34 - 05/02/2018
 - Inclusão do número de série do equipamento na tela de listagem de chamados;
 - Corrigido comportamento do loading da página de listagem de chamados (15 segundos);
 - Aumentada para 20 a quantidade máxima de uma mesma peça em um detalhe;
