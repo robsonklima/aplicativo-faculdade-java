@@ -19,6 +19,7 @@ import { UsuarioPonto } from '../../models/usuario-ponto';
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { ChamadosHistoricoPage } from '../chamados-historico/chamados-historico';
+import { FotosPage } from '../fotos/fotos';
 
 import moment from 'moment';
 
@@ -79,6 +80,14 @@ export class ChamadoPage {
 
       }
     );
+  }
+
+  public telaFotos(chamado: Chamado) {
+    const modal = this.modalCtrl.create(FotosPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
   }
 
   public telaEquipamentosHistorico(chamado: Chamado) {
@@ -378,11 +387,13 @@ export class ChamadoPage {
     switch (i) {
       case 0:
         this.tituloSlide = (i + 1) + ". " + "Informações";
+
         this.slides.lockSwipeToPrev(true);
         this.slides.lockSwipeToNext(false);
         break;
       case 1:
         this.tituloSlide = (i + 1) + ". " + "Checkin";
+
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkin.localizacao.latitude 
           || !this.chamado.checkin.localizacao.longitude 
@@ -393,37 +404,51 @@ export class ChamadoPage {
         break;
       case 2:
         this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
+
         this.slides.lockSwipeToPrev(false);
         if (this.chamado.rats.length == 0) {
           this.slides.lockSwipeToNext(true);
         }
-        else
+        else {
           this.slides.lockSwipeToNext(false);
+        }
         break;
       case 3:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
+
         this.slides.lockSwipeToPrev(false);
         if (this.chamado.rats[0].ratDetalhes.length == 0)
           this.slides.lockSwipeToNext(true);
-          else
+          else {
             this.slides.lockSwipeToNext(false);
+          }
         break;
       case 4:
-        this.tituloSlide = (i + 1) + ". " + "Checkout";
-        this.slides.lockSwipeToPrev(false);
-        if (!this.chamado.checkout.localizacao.latitude 
-          || !this.chamado.checkout.localizacao.longitude)
-          this.slides.lockSwipeToNext(true);
-          else
-            this.slides.lockSwipeToNext(false);
-        break;
-      case 5:
-        this.tituloSlide = (i + 1) + ". " + "Conferência";
+        this.tituloSlide = (i + 1) + ". " + "Fotos da RAT";
+
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
+      case 5:
+        this.tituloSlide = (i + 1) + ". " + "Checkout";
+
+        this.slides.lockSwipeToPrev(false);
+        if (!this.chamado.checkout.localizacao.latitude || !this.chamado.checkout.localizacao.longitude) {
+          this.slides.lockSwipeToNext(true); 
+        }
+        else {
+          this.slides.lockSwipeToNext(false);
+        }
+        break;
       case 6:
+        this.tituloSlide = (i + 1) + ". " + "Conferência";
+
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
+        break;
+      case 7:
         this.tituloSlide = (i + 1) + ". " + "Fechamento";
+        
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(true);
         break;

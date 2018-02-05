@@ -54,7 +54,6 @@ export class ChamadoService {
         this.chamados = chamados != null ? chamados : [];
 
         console.log(moment().format('HH:mm:ss'), 'Chamados Storage Carregados');
-        console.log(' ');
 
         resolve (this.chamados.slice());
       })

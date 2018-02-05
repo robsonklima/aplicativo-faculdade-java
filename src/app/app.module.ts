@@ -53,6 +53,7 @@ import { CheckinCheckoutService } from '../services/checkin-checkout';
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
 import { LowercasePipe } from '../pipes/lowercase';
+import { FotosPage } from '../pages/fotos/fotos';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     AjudaDetalhePage,
     ProblemaPage,
     SobrePage,
+    FotosPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -111,7 +113,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     AjudaListaPage,
     AjudaDetalhePage,
     ProblemaPage,
-    SobrePage
+    SobrePage,
+    FotosPage
   ],
   providers: [
     StatusBar,
