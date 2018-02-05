@@ -298,25 +298,29 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
-            this.chamado.statusServico.abreviacao = "F";
-            this.chamado.statusServico.nomeStatusServico = "FECHADO";
-            this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+            if (this.chamado.rats[0].ratDetalhes.length > 0) {
+              this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
+              this.chamado.statusServico.abreviacao = "F";
+              this.chamado.statusServico.nomeStatusServico = "FECHADO";
+              this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-            this.chamadoService.atualizarChamado(this.chamado)
-              .then(() => {
-                this.navCtrl.pop()
-                  .then(() => {
-                    this.exibirToast(`Chamado fechado no seu smartphone, 
-                      aguarde a sincronização com o servidor`)
-                      .then(() => {
-                        this.events.publish('sincronizacao:solicitada');
-                      })
-                      .catch();
-                  })
-                  .catch();
-              })
-              .catch();
+              this.chamadoService.atualizarChamado(this.chamado)
+                .then(() => {
+                  this.navCtrl.pop()
+                    .then(() => {
+                      this.exibirToast(`Chamado fechado no seu smartphone, 
+                        aguarde a sincronização com o servidor`)
+                        .then(() => {
+                          this.events.publish('sincronizacao:solicitada');
+                        })
+                        .catch();
+                    })
+                    .catch();
+                })
+                .catch();
+            } else {
+              this.exibirToast('Favor inserir os detalhes da RAT');
+            }
           }
         }
       ]

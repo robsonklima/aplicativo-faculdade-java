@@ -153,25 +153,34 @@ export class RatDetalhePage {
     acao = form.value.acao;
     let pecas: Peca[] = [];
 
-    this.ratDetalhe = {
-      tipoCausa: tipoCausa,
-      tipoServico: tipoServico,
-      defeito: defeito,
-      causa: causa,
-      acao: acao,
-      pecas: pecas
-    };
-    
-    this.configurarSlide(this.slides.getActiveIndex());
-    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-
-    if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
-      this.apresentarCampoProtocoloStn();
+    if (!tipoCausa.codTipoCausa  || !tipoServico.codTipoServico || !defeito.codDefeito || !causa.codCausa || !acao.codAcao ) {
+      this.exibirToast('Erro ao salvar detalhe! Tente novamente')
+      .then(() => {
+        this.fecharModal();
+        return
+      })
+      .catch(() => {});
+    } else {
+      this.ratDetalhe = {
+        tipoCausa: tipoCausa,
+        tipoServico: tipoServico,
+        defeito: defeito,
+        causa: causa,
+        acao: acao,
+        pecas: pecas
+      };
+      
+      this.configurarSlide(this.slides.getActiveIndex());
+      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+  
+      if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
+        this.apresentarCampoProtocoloStn();
+      }
     }
   }
 
   public salvarRatDetalheNoChamadoESair() {
-    this.exibirToast('Detalhe atualizado com sucesso')
+    this.exibirToast('Detalhe adicionado com sucesso')
       .then(() => {
         this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
         this.chamadoService.atualizarChamado(this.chamado);
