@@ -20,6 +20,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 import { Badge } from '@ionic-native/badge';
+import { Camera } from '@ionic-native/camera';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -134,6 +135,7 @@ import { FotosPage } from '../pages/fotos/fotos';
     Market,
     AppAvailability,
     Device,
+    Camera,
     DadosGlobaisService,
     ChamadoService,
     GeolocationService,

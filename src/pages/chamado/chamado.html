@@ -487,7 +487,7 @@
           <button 
             color="secondary"
             ion-button 
-            block 
+            block
             [disabled]="true"
             (click)="telaFotos()">
             Adicionar Foto
@@ -500,7 +500,7 @@
         </ion-item-divider>
 
         <ion-item>
-          <p text-center>Nenhuma foto adicionada</p>
+          <p text-center>{{ chamado?.rats[0]?.fotos.length }} foto(s) adicionada(s)</p>
         </ion-item>
       </ion-list>
     </ion-slide>

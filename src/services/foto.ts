@@ -5,16 +5,18 @@ import 'rxjs/Rx';
 
 import { Config } from './../config/config';
 
+import { Foto } from '../models/foto';
+
 @Injectable()
 export class FotoService {
+  foto: Foto;
+
   constructor(
     private http: Http
   ) { }
   
-  public saveImage(imagemNome: string, imagemStr: string): Observable<any> {
-    let imagem = { imagemNome: imagemNome, imagemStr: imagemStr }
-
-    return this.http.post(Config.API_URL + 'RatImagemUpload', imagem)
+  public cadastrarFoto(foto: Foto): Observable<any> {
+    return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));

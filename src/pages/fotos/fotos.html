@@ -24,9 +24,35 @@
         block
         outline
         color="secondary"
-        type="button">
+        type="button"
+        (click)="tirarFoto()">
         <ion-icon name="camera" class="icon-camera-button"></ion-icon>
         <span class="label-camera-button">Abrir Câmera</span>
       </button>
     </div>
+
+    <ion-item-divider color="light" text-center>
+      Fotos Adicionadas
+    </ion-item-divider>
+
+    <ion-card *ngFor="let foto of chamado?.rats[0]?.fotos; let i = index" (click)="onOpenPlace(place, i)">
+      <img [src]="foto.str">
+      <button
+        ion-button
+        icon-left
+        block
+        outline
+        clear
+        class="remove-button"
+        color="danger"
+        type="button"
+        (click)="removerFoto(i)">
+        <ion-icon name="trash"></ion-icon>
+        <span>Remover Foto</span>
+      </button>
+    </ion-card>
+
+    <ion-item *ngIf="chamado?.rats[0]?.fotos?.length == 0" no-lines>
+        <p text-center>Nenhuma foto adicionada</p>
+      </ion-item>
   </ion-content>

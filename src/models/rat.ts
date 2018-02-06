@@ -1,5 +1,6 @@
 import { Tecnico } from './tecnico';
 import { RatDetalhe } from "./rat-detalhe";
+import { Foto } from './foto';
 
 export class Rat {
 	codRat?: number;
@@ -15,6 +16,7 @@ export class Rat {
 	relatoSolucao: string;
 	obsRAT: string;
 	ratDetalhes: RatDetalhe[];
+	fotos: Foto[];
 	codUsuarioCad: string;
 	horarioInicioIntervalo: string;
 	horarioTerminoIntervalo: string;

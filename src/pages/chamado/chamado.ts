@@ -252,7 +252,7 @@ export class ChamadoPage {
     rat.codUsuarioCad = this.dadosGlobais.usuario.codUsuario;
     rat.obsRAT = form.value.obsRAT;
     rat.ratDetalhes = [];
-    
+    rat.fotos = [];
 
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
