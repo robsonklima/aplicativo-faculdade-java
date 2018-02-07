@@ -52,7 +52,7 @@
       </ion-badge>
     </ion-item>
     
-    <ion-card-content>
+    <ion-card-content [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
       <p class="nome-cliente-local">
         <b>
           {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
@@ -74,7 +74,8 @@
       </p>
     </ion-card-content>
 
-    <ion-grid 
+    <ion-grid
+      [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }" 
       tappable 
       class="botoes">
       <ion-row>

@@ -226,9 +226,13 @@
             && !chamado?.checkin?.localizacao?.longitude">
           <button 
             color="secondary"
-            ion-button 
+            ion-button
+            icon-left
+            block
+            outline
             block 
             (click)="efetuarCheckin()">
+            <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
             {{ (!chamado?.checkin?.localizacao?.latitude 
               && !chamado?.checkin?.localizacao?.longitude) 
               ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
@@ -414,12 +418,13 @@
           </ion-item>
 
           <div padding>
-            <button 
+            <button
               color="secondary"
               ion-button 
-              block 
+              outline
+              block
               [disabled]="!f.valid">
-              Prosseguir
+              Salvar e Prosseguir
             </button>
           </div>
         </ion-list>
@@ -434,7 +439,8 @@
           <button 
             color="secondary"
             ion-button 
-            block 
+            outline
+            block
             (click)="telaRatDetalhe()"
             [disabled]="chamado?.rats?.length == 0">
             Adicionar Detalhe
@@ -482,6 +488,7 @@
             color="secondary"
             ion-button 
             block
+            outline
             [disabled]="false"
             (click)="telaFotos()">
             Adicionar Foto
@@ -510,9 +517,12 @@
           <button 
             color="secondary"
             ion-button 
+            icon-left
+            block
+            outline
             block 
-            (click)="efetuarCheckout()" 
-            >
+            (click)="efetuarCheckout()">
+            <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
             {{ (!chamado?.checkout?.localizacao?.latitude 
               && !chamado?.checkout?.localizacao?.longitude) 
               ? 'Efetuar Checkout' : 'Checkout Efetuado' }}
@@ -692,7 +702,8 @@
           <button 
             color="secondary"
             ion-button 
-            block 
+            block
+            outline
             (click)="fecharChamado()">
             Fechar o Chamado
           </button>
