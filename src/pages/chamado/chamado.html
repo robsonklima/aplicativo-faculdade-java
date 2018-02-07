@@ -229,8 +229,6 @@
             ion-button
             icon-left
             block
-            outline
-            block 
             (click)="efetuarCheckin()">
             <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
             {{ (!chamado?.checkin?.localizacao?.latitude 
@@ -421,7 +419,6 @@
             <button
               color="secondary"
               ion-button 
-              outline
               block
               [disabled]="!f.valid">
               Salvar e Prosseguir
@@ -438,8 +435,7 @@
         <div padding>
           <button 
             color="secondary"
-            ion-button 
-            outline
+            ion-button
             block
             (click)="telaRatDetalhe()"
             [disabled]="chamado?.rats?.length == 0">
@@ -447,8 +443,7 @@
           </button>
         </div>
   
-        <ion-item-divider 
-          color="light">
+        <ion-item-divider color="light">
           Detalhes Adicionados
         </ion-item-divider>
 
@@ -488,7 +483,6 @@
             color="secondary"
             ion-button 
             block
-            outline
             [disabled]="false"
             (click)="telaFotos()">
             Adicionar Foto
@@ -519,8 +513,6 @@
             ion-button 
             icon-left
             block
-            outline
-            block 
             (click)="efetuarCheckout()">
             <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
             {{ (!chamado?.checkout?.localizacao?.latitude 
@@ -703,7 +695,6 @@
             color="secondary"
             ion-button 
             block
-            outline
             (click)="fecharChamado()">
             Fechar o Chamado
           </button>
