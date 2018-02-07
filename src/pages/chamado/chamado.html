@@ -266,17 +266,28 @@
     <ion-slide>
       <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
         <ion-list>
-          <ion-item>
-            <ion-label stacked>Número da RAT</ion-label>
-            <ion-input 
+          <ion-item col-6 class="pos-left">
+            <ion-label stacked>RAT</ion-label>
+            <ion-input
               type="number" 
-              placeholder="Número da RAT" 
+              placeholder="Número" 
               name="numRat" 
               [ngModel]="chamado?.rats[0]?.numRat" 
-              required></ion-input>
+              required>
+            </ion-input>
           </ion-item>
 
-          <ion-row>
+          <ion-item col-6>
+            <ion-label stacked>Acompanhante</ion-label>
+            <ion-input 
+              type="text" 
+              placeholder="Nome" 
+              name="nomeAcompanhante" 
+              [ngModel]="chamado?.rats[0]?.nomeAcompanhante">
+            </ion-input>
+          </ion-item>
+
+          <ion-row class="bg-silver-light">
             <ion-col 
               col-12
               text-left
@@ -284,14 +295,14 @@
               <ion-label
                 stacked
                 class="label-title"
-                left-align>Marcações de Ponto</ion-label>
+                left-align
+                style="margin-bottom: 0px;">Marcações de Ponto</ion-label>
             </ion-col>
           </ion-row>
 
           <ion-row>
-            <ion-col 
-              class="no-padding">
-              <ion-item>
+            <ion-col class="no-padding">
+              <ion-item class="bg-silver-light">
                 <ion-label 
                   stacked
                   class="label-title">Chegada</ion-label>
@@ -301,36 +312,29 @@
               </ion-item>
             </ion-col>
 
-            <ion-col 
-              class="no-padding">
-              <ion-item>
+            <ion-col class="no-padding">
+              <ion-item class="bg-silver-light">
                 <ion-label 
                   stacked
                   class="label-title">Início</ion-label>
-                <ion-label
-                  class="label-content">
+                <ion-label class="label-content">
                   {{ (usuarioPonto?.registros[1] | date:'HH:mm') || '--:--' }}</ion-label>
               </ion-item>
             </ion-col>
 
-            <ion-col
-              class="no-padding">
-              <ion-item>
+            <ion-col class="no-padding">
+              <ion-item class="bg-silver-light">
                 <ion-label 
                   stacked 
                   class="label-title">Fim</ion-label>
-                <ion-label
-                  class="label-content">
+                <ion-label class="label-content">
                   {{ (usuarioPonto?.registros[2] | date:'HH:mm') || '--:--' }}</ion-label>
               </ion-item>
             </ion-col>
             
-            <ion-col 
-              class="no-padding">
-              <ion-item>
-                <ion-label 
-                  stacked
-                  class="label-title">Saída</ion-label>
+            <ion-col class="no-padding">
+              <ion-item class="bg-silver-light">
+                <ion-label stacked class="label-title">Saída</ion-label>
                 <ion-label
                   class="label-content">
                   {{ (usuarioPonto?.registros[3] | date:'HH:mm') || '--:--' }}</ion-label>
@@ -398,16 +402,6 @@
               </ion-item>
             </ion-col>
           </ion-row>
-
-          <ion-item>
-            <ion-label stacked>Acompanhante</ion-label>
-            <ion-input 
-              type="text" 
-              placeholder="Nome do Acompanhante" 
-              name="nomeAcompanhante" 
-              [ngModel]="chamado?.rats[0]?.nomeAcompanhante">
-            </ion-input>
-          </ion-item>
 
           <ion-item>
             <ion-label stacked>Solução</ion-label>
