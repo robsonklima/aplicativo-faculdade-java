@@ -25,7 +25,8 @@
         outline
         color="secondary"
         type="button"
-        (click)="tirarFoto()">
+        (click)="tirarFoto()"
+        [disabled]="chamado?.rats[0].fotos.length == 3">
         <ion-icon name="camera" class="icon-camera-button"></ion-icon>
         <span class="label-camera-button">Abrir Câmera</span>
       </button>

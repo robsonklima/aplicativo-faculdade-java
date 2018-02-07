@@ -29,15 +29,18 @@ export class FotosPage {
   
   public tirarFoto() {
     this.camera.getPicture({
-      quality: 30,
+      quality: 80,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true
+      correctOrientation: true,
+      targetWidth: 720,
+      targetHeight: 480
     }).then(imageData => {
       this.exibirToast("Foto adicionada com sucesso").then(() => {
         this.foto = new Foto();
-        this.foto.nome = this.chamado.codOs.toString();
+        this.foto.nome = this.chamado.codOs.toString() + '_' 
+          + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
         this.foto.str = 'data:image/jpeg;base64,' + imageData;
 
         this.chamado.rats[0].fotos.push(this.foto);
