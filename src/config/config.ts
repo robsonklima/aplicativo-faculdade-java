@@ -12,7 +12,6 @@ export class Config {
    public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
    public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
    public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
-   public static BACKGROUND_MODE_CONFIG = { title: 'SAT Sincronização', text: 'Executando', silent: true };
    public static INT_SINC_BD_LOCAL_DIAS = 7;
    public static INT_SINC_CHAMADOS_MILISEG = 300000; // 5 minutos
    public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;

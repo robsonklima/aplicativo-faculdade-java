@@ -83,7 +83,7 @@ export class MyApp {
               this.nav.setRoot(this.homePage);
 
               this.backgroundMode.enable();
-              this.backgroundMode.setDefaults(Config.BACKGROUND_MODE_CONFIG);
+              this.backgroundMode.setDefaults({ title: 'SAT Sincronização', text: 'Executando', silent: true });
               
               this.backgroundMode.on("activate").subscribe(() => { 
                 this.prepararSincronizacao(); 
