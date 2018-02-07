@@ -7,6 +7,7 @@ import { Chamado } from '../../models/chamado';
 import { Foto } from '../../models/foto';
 
 import { ChamadoService } from '../../services/chamado';
+import { Config } from '../../config/config';
 
 @Component({
   selector: 'fotos-page',
@@ -15,6 +16,7 @@ import { ChamadoService } from '../../services/chamado';
 export class FotosPage {
   chamado: Chamado;
   foto: Foto;
+  qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
 
   constructor(
       private viewCtrl: ViewController,
@@ -37,19 +39,18 @@ export class FotosPage {
       targetWidth: 720,
       targetHeight: 480
     }).then(imageData => {
-      this.exibirToast("Foto adicionada com sucesso").then(() => {
-        this.foto = new Foto();
-        this.foto.nome = this.chamado.codOs.toString() + '_' 
-          + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
-        this.foto.str = 'data:image/jpeg;base64,' + imageData;
+      this.foto = new Foto();
+      this.foto.nome = this.chamado.codOs.toString() + '_' 
+        + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
+      this.foto.str = 'data:image/jpeg;base64,' + imageData;
 
-        this.chamado.rats[0].fotos.push(this.foto);
-        this.chamadoService.atualizarChamado(this.chamado);
+      this.chamado.rats[0].fotos.push(this.foto);
+      this.chamadoService.atualizarChamado(this.chamado);
+      this.camera.cleanup();
 
-        this.camera.cleanup();
-      }).catch(() => {});
+      setTimeout(() => { this.exibirToast("Foto adicionada com sucesso") }, 500);
     }).catch(err => {
-      this.exibirToast(err);
+      setTimeout(() => { this.exibirToast(err) }, 500);
     });
   }
 
