@@ -33,7 +33,6 @@ export class MyApp {
   @ViewChild('nav') nav: NavController;
   dataHoraUltAtualizacao: Date = new Date();
 
-  d2: Date = new Date();
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
@@ -83,8 +82,10 @@ export class MyApp {
               this.nav.setRoot(this.homePage);
 
               this.backgroundMode.enable();
-              this.backgroundMode.setDefaults({ title: 'SAT Sincronização', text: 'Executando', silent: true });
-              
+              this.backgroundMode.setDefaults({ 
+                title: 'SAT Sincronização', text: 'Executando', silent: true 
+              });
+
               this.backgroundMode.on("activate").subscribe(() => { 
                 this.prepararSincronizacao(); 
               }, err => {});
@@ -107,18 +108,23 @@ export class MyApp {
   }
 
   private prepararSincronizacao() {
-    if (!this.verificarIntervaloMinimoSincronizacao()) {
-      console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
-      return
-    } 
-
-    clearInterval(this.task);
-
-    this.sincronizarChamados();
-
-    this.task = setInterval(() => {
-      this.sincronizarChamados();
-    }, Config.INT_SINC_CHAMADOS_MILISEG);
+    if ( this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO
+      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO_DE_CAMPO
+      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO
+      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS ) {
+        if (!this.verificarIntervaloMinimoSincronizacao()) {
+          console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
+          return
+        } 
+    
+        clearInterval(this.task);
+    
+        this.sincronizarChamados();
+    
+        this.task = setInterval(() => {
+          this.sincronizarChamados();
+        }, Config.INT_SINC_CHAMADOS_MILISEG);
+    }
   }
 
   private sincronizarChamados() {

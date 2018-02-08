@@ -94,5 +94,18 @@
         Indicadores
       </button>
     </div>
+
+    <div *ngIf="!dadosGlobais?.usuario?.codTecnico">
+      <button 
+        class="first-item"
+        ion-item 
+        [disabled]="true">
+        <ion-icon 
+          color="primary" 
+          name="pie" 
+          item-start></ion-icon>
+        Indicadores
+      </button>
+    </div>
   </ion-list>
 </ion-content>

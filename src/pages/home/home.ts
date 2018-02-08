@@ -33,6 +33,7 @@ export class HomePage {
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
+  perfilTecnico: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -49,7 +50,7 @@ export class HomePage {
     private causaService: CausaService,
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService
-  ) { }
+  ) {}
 
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
@@ -91,25 +92,27 @@ export class HomePage {
 
         resolve(chamados);
       })  
-      .catch(err => {})
+      .catch(err => {
+        reject();
+      })
     });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.dadosGlobaisService.buscarDadosGlobaisStorage()
-      .then((dados: DadosGlobais) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         if (dados) {
           this.dadosGlobais = dados;
 
-          if (!this.dadosGlobais.usuario.codTecnico) {
-            return
-          }
-
-          if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
-            this.atualizarBDLocal();
-
-            this.carregarChamadosStorage();
+          if ( dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO
+            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO_DE_CAMPO
+            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO
+            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS ) {
+            if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
+              this.atualizarBDLocal();
+  
+              this.carregarChamadosStorage();
+            }
           }
 
           resolve(true);
