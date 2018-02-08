@@ -3,14 +3,14 @@ import { Component } from '@angular/core';
 import { AlertController, LoadingController, 
   NavParams, ViewController, ModalController } from 'ionic-angular';
 
-import { ChamadoHistoricoPage } from '../chamado-historico/chamado-historico';
+import { HistoricoDetalhePage } from '../historico/historico-detalhe';
 import { EquipamentoContratoService } from '../../services/equipamento-contrato';
 
 @Component({
-  selector: 'chamados-historico-page',
-  templateUrl: 'chamados-historico.html'
+  selector: 'historico-lista-page',
+  templateUrl: 'historico-lista.html'
 })
-export class ChamadosHistoricoPage {
+export class HistoricoListaPage {
   chamado: Chamado;
   chamados: Chamado[] = [];
 
@@ -28,7 +28,7 @@ export class ChamadosHistoricoPage {
 
   public telaEquipHistDetalhe(chamado: Chamado) {
     const modal = this.modalCtrl.create(
-      ChamadoHistoricoPage, { chamado: chamado });
+      HistoricoDetalhePage, { chamado: chamado });
     modal.present();
     modal.onDidDismiss(() => {});
   }

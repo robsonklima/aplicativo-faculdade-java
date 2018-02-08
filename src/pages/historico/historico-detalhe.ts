@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 
 @Component({
-  selector: 'chamado-historico-page',
-  templateUrl: 'chamado-historico.html'
+  selector: 'historico-detalhe-page',
+  templateUrl: 'historico-detalhe.html'
 })
-export class ChamadoHistoricoPage {
+export class HistoricoDetalhePage {
   chamado: Chamado;
 
   constructor(

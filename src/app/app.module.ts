@@ -30,7 +30,7 @@ import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamado/chamado";
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
-import { ChamadosHistoricoPage } from '../pages/chamados-historico/chamados-historico';
+import { HistoricoListaPage } from '../pages/historico/historico-lista';
 import { PecasPage } from '../pages/pecas/pecas';
 import { PecaPage } from '../pages/peca/peca';
 import { AjudaListaPage } from '../pages/ajuda/ajuda-lista';
@@ -48,7 +48,7 @@ import { CausaService } from "../services/causa";
 import { PecaService } from "../services/peca";
 import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
-import { ChamadoHistoricoPage } from '../pages/chamado-historico/chamado-historico';
+import { HistoricoDetalhePage } from '../pages/historico/historico-detalhe';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
 import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
@@ -69,8 +69,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    ChamadosHistoricoPage,
-    ChamadoHistoricoPage,
+    HistoricoListaPage,
+    HistoricoDetalhePage,
     PecasPage,
     PecaPage,
     AjudaListaPage,
@@ -109,8 +109,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     ChamadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
-    ChamadosHistoricoPage,
-    ChamadoHistoricoPage,
+    HistoricoListaPage,
+    HistoricoDetalhePage,
     PecasPage,
     PecaPage,
     AjudaListaPage,
