@@ -35,8 +35,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(false);
-    this.obterNomeAplicativo();
-    this.obterVersaoAplicativo();
   }
 
   public login(form: NgForm) {
@@ -126,25 +124,10 @@ export class LoginPage implements OnInit {
   private salvarDadosGlobais() {
     this.dadosGlobais = new DadosGlobais();
     this.dadosGlobais.usuario = this.usuario;
-    this.dadosGlobais.versaoApp = this.versaoApp;
     
     this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
   }
-
-  private obterNomeAplicativo() {
-    this.appVersion.getAppName().then((res) => {
-      this.nomeApp = res;
-    }).catch((err) => {
-      this.nomeApp = 'App Técnicos';
-    });
-  }
-
-  private obterVersaoAplicativo() {
-    this.appVersion.getVersionNumber().then((versaoApp) => {
-      this.versaoApp = versaoApp;
-    }).catch(() => {});
-  }
-
+  
   public exibirToast(message: string): Promise<any> {    
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({

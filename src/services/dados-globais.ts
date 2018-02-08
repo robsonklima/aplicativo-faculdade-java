@@ -25,15 +25,14 @@ export class DadosGlobaisService {
       .catch();
   }
 
-  buscarDadosGlobaisStorage() {
-    return this.storage.get('DadosGlobais')
+  buscarDadosGlobaisStorage(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('DadosGlobais')
       .then((dg: DadosGlobais) => {
         this.dadosGlobais = dg != null ? dg : null;
-        return this.dadosGlobais;
-      })
-      .catch(
-        err => console.log(err)
-      );
+        resolve(this.dadosGlobais);
+      }).catch(err => reject());
+    });
   }
 
   apagarDadosGlobaisStorage(): Promise<any> {

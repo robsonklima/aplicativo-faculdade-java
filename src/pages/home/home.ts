@@ -101,28 +101,21 @@ export class HomePage {
   private carregarDadosGlobais(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
-        if (dados) {
-          this.dadosGlobais = dados;
+        this.dadosGlobais = dados;
 
-          if ( dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO
-            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO_DE_CAMPO
-            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO
-            || dados.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS ) {
-            if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
-              this.atualizarBDLocal();
-  
-              this.carregarChamadosStorage();
-            }
-          }
-
-          resolve(true);
+        if (!this.dadosGlobais.usuario.codTecnico) {
+          reject();
+          return;
+        }
+        
+        if (!this.dadosGlobais.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
+          this.atualizarBDLocal();
+          this.carregarChamadosStorage();
         }
 
-        reject(false);
+        resolve(true);
       })
-      .catch((err) => {
-        reject(false);
-      });
+      .catch((err) => { reject(false) });
     });
   }
 

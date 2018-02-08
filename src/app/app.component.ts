@@ -73,24 +73,18 @@ export class MyApp {
           if (dados) {
             if (dados.usuario) {
               this.usuarioService.salvarCredenciais(dados.usuario);
-              
-              this.appVersion.getVersionNumber().then((versaoApp) => {
-                this.dadosGlobais.versaoApp = versaoApp;
-              }).catch(() => {});
 
-              this.menuCtrl.enable(true);
-              this.nav.setRoot(this.homePage);
-
+              this.backgroundMode.setDefaults({ title: '', text: '', silent: true });
               this.backgroundMode.enable();
-              this.backgroundMode.setDefaults({ 
-                title: 'SAT Sincronização', text: 'Executando', silent: true 
-              });
 
               this.backgroundMode.on("activate").subscribe(() => { 
                 this.prepararSincronizacao(); 
               }, err => {});
               
               this.prepararSincronizacao();
+
+              this.menuCtrl.enable(true);
+              this.nav.setRoot(this.homePage);
             } else {
               this.nav.setRoot(this.loginPage);
             }
@@ -108,23 +102,18 @@ export class MyApp {
   }
 
   private prepararSincronizacao() {
-    if ( this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO
-      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_SUPORTE_TECNICO_DE_CAMPO
-      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO
-      || this.dadosGlobais.usuario.usuarioPerfil.codUsuarioPerfil == Config.USUARIO_PERFIL.FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS ) {
-        if (!this.verificarIntervaloMinimoSincronizacao()) {
-          console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
-          return
-        } 
-    
-        clearInterval(this.task);
-    
-        this.sincronizarChamados();
-    
-        this.task = setInterval(() => {
-          this.sincronizarChamados();
-        }, Config.INT_SINC_CHAMADOS_MILISEG);
+    if (!this.dadosGlobais.usuario.codTecnico) {
+      return
     }
+
+    if (!this.verificarIntervaloMinimoSincronizacao()) {
+      console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
+      return
+    } 
+
+    clearInterval(this.task);
+    this.sincronizarChamados();
+    this.task = setInterval(() => { this.sincronizarChamados() }, Config.INT_SINC_CHAMADOS_MILISEG);
   }
 
   private sincronizarChamados() {
