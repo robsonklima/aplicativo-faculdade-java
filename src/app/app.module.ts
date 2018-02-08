@@ -50,6 +50,7 @@ import { TipoServicoService } from "../services/tipo-servico";
 import { EquipamentoContratoService } from '../services/equipamento-contrato';
 import { ChamadoHistoricoPage } from '../pages/chamado-historico/chamado-historico';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
+import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
 
 import { CapitalizePipe } from '../pipes/capitalize';
@@ -147,7 +148,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     EquipamentoContratoService,
     TipoServicoService,
     CheckinCheckoutService,
-    FotoService
+    FotoService,
+    AjudaTopicoService
   ]
 })
 export class AppModule {}
