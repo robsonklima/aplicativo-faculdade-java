@@ -53,9 +53,7 @@ export class HomePage {
   ) {}
 
   ionViewWillEnter() {
-    this.carregarDadosGlobais().then(() => {
-      this.carregarVersaoApp();
-    }).catch(() => {});
+    this.carregarDadosGlobais().then(() => { this.carregarVersaoApp() });
     this.carregarSenhaExpirada();
     this.carregarChamadosStorage();
   }
