@@ -21,6 +21,20 @@
       <ion-list>
         <ion-item
           class="first-item">
+          Data Abertura
+          <ion-note item-end>
+            {{ chamado?.dataHoraAberturaOS | date: 'dd/MM HH:mm' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          OS Cliente
+          <ion-note item-end>
+            {{ chamado?.numOsCliente || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
           Cliente
           <ion-note item-end>
             {{ chamado?.cliente?.numBanco }}
@@ -29,25 +43,17 @@
         </ion-item>
 
         <ion-item>
-          Agência
+          Num. Agência
           <ion-note item-end>
-            {{ chamado?.localAtendimento?.numAgencia || '--' }} /
-            {{ chamado?.localAtendimento?.dcPosto || '--' }}
+              {{ chamado?.localAtendimento?.numAgencia || '--' }} / {{ chamado?.localAtendimento?.dcPosto || '--' }}
           </ion-note>
         </ion-item>
 
         <ion-item>
-          Local
+          Nome Agência
           <ion-note item-end>
             {{ chamado?.localAtendimento?.nomeLocalAtendimento 
               || 'Não Informado' | ellipsis: 28 }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          OS Cliente
-          <ion-note item-end>
-            {{ chamado?.numOsCliente || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
@@ -62,22 +68,6 @@
           Modelo
           <ion-note item-end>
             {{ chamado?.equipamentoContrato?.equipamento?.codEEquip
-              || 'Não Informado' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Nro Contrato
-          <ion-note item-end>
-            {{ chamado?.equipamentoContrato?.contrato?.nroContrato
-              || 'Não Informado' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Nome Contrato
-          <ion-note item-end>
-            {{ chamado?.equipamentoContrato?.contrato?.nomeContrato
               || 'Não Informado' }}
           </ion-note>
         </ion-item>
@@ -99,9 +89,18 @@
         </ion-item>
 
         <ion-item>
-          Data Abertura
+          Nro. Contrato
           <ion-note item-end>
-            {{ chamado?.dataHoraAberturaOS | date: 'dd/MM HH:mm' }}
+            {{ chamado?.equipamentoContrato?.contrato?.nroContrato
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Nome Contrato
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.contrato?.nomeContrato
+              || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
