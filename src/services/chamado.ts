@@ -91,22 +91,14 @@ export class ChamadoService {
   }
   
   apagarChamadoStorage(chamado: Chamado): Promise<boolean> {
-    this.chamados = this.chamados.filter((c) => {
-      return (c.codOs.toString().indexOf(chamado.codOs.toString()) < 0);
-    });
-
     return new Promise((resolve, reject) => {
+      this.chamados = this.chamados.filter((c) => {
+        return (c.codOs.toString().indexOf(chamado.codOs.toString()) < 0);
+      });
+
       this.storage.set('Chamados', this.chamados)
-        .then(() => {
-          console.log(moment().format('HH:mm:ss'), 'Chamado Storage Apagado');
-
-          resolve(true);
-        })
-        .catch(() => {
-          console.log(moment().format('HH:mm:ss'), 'Erro ao Apagar Chamado Storage');
-
-          reject(false);
-        });
+        .then(() => { resolve(true) })
+        .catch(() => { reject(false) });
     });
   }
 
