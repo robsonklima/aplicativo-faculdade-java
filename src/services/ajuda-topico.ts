@@ -9,8 +9,6 @@ import { AjudaTopico } from '../models/ajuda-topico';
 
 @Injectable()
 export class AjudaTopicoService {
-  private topicos: AjudaTopico[] = [];
-
   constructor(
     private http: Http
   ) { }

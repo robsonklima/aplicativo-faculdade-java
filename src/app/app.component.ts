@@ -3,7 +3,6 @@ import { Platform, ToastController, NavController, MenuController, Events } from
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { AppVersion } from '@ionic-native/app-version';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { NativeAudio } from '@ionic-native/native-audio';
@@ -42,7 +41,6 @@ export class MyApp {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     private toastCtrl: ToastController,
-    private appVersion: AppVersion,
     private events: Events,
     private backgroundMode: BackgroundMode,
     private localNotification: PhonegapLocalNotification,
