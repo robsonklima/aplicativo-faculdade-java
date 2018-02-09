@@ -1,1 +1,1 @@
-App Técnicos
+Aplicativo Faculdade Java
