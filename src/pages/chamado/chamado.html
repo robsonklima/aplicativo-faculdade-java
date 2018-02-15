@@ -283,7 +283,8 @@
             <ion-input 
               type="text" 
               placeholder="Nome" 
-              name="nomeAcompanhante" 
+              name="nomeAcompanhante"
+              [maxlength]="50"
               [ngModel]="chamado?.rats[0]?.nomeAcompanhante">
             </ion-input>
           </ion-item>
@@ -307,9 +308,9 @@
                 <ion-label 
                   stacked
                   class="label-title">Chegada</ion-label>
-                <ion-label
-                  class="label-content">
-                  {{ (usuarioPonto?.registros[0] | date:'HH:mm') || '--:--' }}</ion-label>
+                <ion-label class="label-content">
+                  {{ (usuarioPonto?.registros[0] | date:'HH:mm') || '--:--' }}
+                </ion-label>
               </ion-item>
             </ion-col>
 
@@ -319,7 +320,8 @@
                   stacked
                   class="label-title">Início</ion-label>
                 <ion-label class="label-content">
-                  {{ (usuarioPonto?.registros[1] | date:'HH:mm') || '--:--' }}</ion-label>
+                  {{ (usuarioPonto?.registros[1] | date:'HH:mm') || '--:--' }}
+                </ion-label>
               </ion-item>
             </ion-col>
 
@@ -329,16 +331,17 @@
                   stacked 
                   class="label-title">Fim</ion-label>
                 <ion-label class="label-content">
-                  {{ (usuarioPonto?.registros[2] | date:'HH:mm') || '--:--' }}</ion-label>
+                  {{ (usuarioPonto?.registros[2] | date:'HH:mm') || '--:--' }}
+                </ion-label>
               </ion-item>
             </ion-col>
             
             <ion-col class="no-padding">
               <ion-item class="bg-silver-light">
                 <ion-label stacked class="label-title">Saída</ion-label>
-                <ion-label
-                  class="label-content">
-                  {{ (usuarioPonto?.registros[3] | date:'HH:mm') || '--:--' }}</ion-label>
+                <ion-label class="label-content">
+                  {{ (usuarioPonto?.registros[3] | date:'HH:mm') || '--:--' }}
+                </ion-label>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -351,7 +354,8 @@
               <ion-label
                 stacked
                 class="label-title"
-                left-align>Horários do Atendimento</ion-label>
+                left-align>Horários do Atendimento
+              </ion-label>
             </ion-col>
           </ion-row>
 
