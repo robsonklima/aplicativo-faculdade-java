@@ -188,9 +188,7 @@ export class MyApp {
           
           // Chamados removidos
           if (!chamadoEncontrado) {
-            if (!cs.dataHoraFechamento) {
-              this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
-            }
+            //this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
           } else {
             chamados.push(cs);
           }
