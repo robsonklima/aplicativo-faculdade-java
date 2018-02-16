@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController, MenuController, ToastController, AlertController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
-import { AppVersion } from '@ionic-native/app-version';
-
 import { DadosGlobais } from '../../models/dados-globais';
 import { HomePage } from '../home/home';
 import { Usuario } from '../../models/usuario';
@@ -29,7 +27,6 @@ export class LoginPage implements OnInit {
     private usuarioService: UsuarioService,
     private dadosGlobaisService: DadosGlobaisService,
     private toastCtrl: ToastController,
-    private appVersion: AppVersion,
     private events: Events
   ) {}
 

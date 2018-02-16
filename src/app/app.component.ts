@@ -57,11 +57,11 @@ export class MyApp {
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
-        this.prepararSincronizacao();
+        this.iniciarSincronizacao();
       });
 
       this.events.subscribe('sincronizacao:solicitada', () => {
-        this.prepararSincronizacao();
+        this.iniciarSincronizacao();
       });
       
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
@@ -76,10 +76,10 @@ export class MyApp {
               this.backgroundMode.enable();
 
               this.backgroundMode.on("activate").subscribe(() => { 
-                this.prepararSincronizacao(); 
+                this.iniciarSincronizacao(); 
               }, err => {});
               
-              this.prepararSincronizacao();
+              this.iniciarSincronizacao();
 
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
@@ -99,10 +99,8 @@ export class MyApp {
     })
   }
 
-  private prepararSincronizacao() {
-    if (!this.dadosGlobais.usuario.codTecnico) {
-      return
-    }
+  private iniciarSincronizacao() {
+    if (!this.dadosGlobais.usuario.codTecnico) { return }
 
     if (!this.verificarIntervaloMinimoSincronizacao()) {
       console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
@@ -110,8 +108,12 @@ export class MyApp {
     } 
 
     clearInterval(this.task);
+
+    this.task = setInterval(() => { 
+      this.sincronizarChamados();
+    }, Config.INT_SINC_CHAMADOS_MILISEG);
+
     this.sincronizarChamados();
-    this.task = setInterval(() => { this.sincronizarChamados() }, Config.INT_SINC_CHAMADOS_MILISEG);
   }
 
   private sincronizarChamados() {

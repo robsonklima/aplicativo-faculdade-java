@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ViewController, NavController, LoadingController, ToastController } from 'ionic-angular';
 
 import { AjudaTopico } from '../../models/ajuda-topico';
