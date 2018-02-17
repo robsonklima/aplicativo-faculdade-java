@@ -57,7 +57,7 @@ export class ChamadoPage {
   ionViewWillEnter() {
     this.carregarDadosGlobais();
     this.configurarSlide(this.slides.getActiveIndex());
-    this.registrarLeituraOs(); 
+    this.registrarLeituraOs();
   }
 
   public alterarSlide() {

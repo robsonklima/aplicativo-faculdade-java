@@ -270,11 +270,12 @@
           <ion-item col-6 class="pos-left">
             <ion-label stacked>RAT</ion-label>
             <ion-input
-              type="number" 
-              placeholder="Número" 
+              type="number"
               name="numRat" 
+              [placeholder]="chamado?.indRatEletronica ? 'Núm. Automático' : 'Número'" 
+              [disabled]="chamado?.indRatEletronica"
               [ngModel]="chamado?.rats[0]?.numRat" 
-              required>
+              [required]="!chamado?.indRatEletronica">
             </ion-input>
           </ion-item>
 
