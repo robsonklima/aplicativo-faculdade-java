@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, 
-  ModalController, NavController, Events } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, 
+         ToastController, ModalController, NavController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -243,7 +243,7 @@ export class ChamadoPage {
 
   public salvarRat(form: NgForm) {
     let rat = new Rat();
-    rat.numRat = form.value.numRat;
+    rat.numRat = form.value.numRat || 'AUTOMATICO';
     rat.dataInicio = form.value.dataInicio;
     rat.horaInicio = form.value.horaInicio;
     rat.dataSolucao = form.value.dataInicio;
@@ -253,6 +253,9 @@ export class ChamadoPage {
     rat.obsRAT = form.value.obsRAT;
     rat.ratDetalhes = [];
     rat.fotos = [];
+
+    console.log(rat);
+    
 
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
