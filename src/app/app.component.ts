@@ -127,10 +127,11 @@ export class MyApp {
           console.log(moment().format('HH:mm:ss'), 'Chamados Api Carregados');
           
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-            this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-              this.events.publish('sincronizacao:efetuada');
-            })
-            .catch(() => {});
+            if (chamadosUnificados.length) {
+              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+                this.events.publish('sincronizacao:efetuada');
+              }).catch(() => {});
+            }
           })
           .catch(() => {});
         }, err => {
