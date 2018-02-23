@@ -103,7 +103,6 @@ export class MyApp {
     if (!this.dadosGlobais.usuario.codTecnico) { return }
 
     if (!this.verificarIntervaloMinimoSincronizacao()) {
-      console.log(moment().format('HH:mm:ss'), 'Sincron. Rejeitada', '');
       return
     } 
 
@@ -121,11 +120,7 @@ export class MyApp {
 
     this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
       this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-        console.log(moment().format('HH:mm:ss'), 'Chamados Fechados Enviados');
-
         this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
-          console.log(moment().format('HH:mm:ss'), 'Chamados Api Carregados');
-          
           this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
             if (chamadosUnificados.length) {
               this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
@@ -137,13 +132,9 @@ export class MyApp {
         }, err => {
           if (!this.backgroundMode.isActive())
             this.exibirToast('Não foi possível conectar ao servidor');
-
-          console.log(moment().format('HH:mm:ss'), 'Chamados Api Erro ao Carregar');
         });
       })
-      .catch(() => {
-        console.log(moment().format('HH:mm:ss'), 'Chamados Fechados Erro ao Enviar');
-      });
+      .catch(() => {});
     })
     .catch(() => {});
   }
@@ -198,7 +189,6 @@ export class MyApp {
         });
       }
     
-      console.log(moment().format('HH:mm:ss'), 'Chamados Api/Stg Unificados');
       resolve(chamados);
     });
   }

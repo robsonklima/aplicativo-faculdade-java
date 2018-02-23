@@ -1,7 +1,7 @@
 0.0.35 - ??/02/2018
 - Inserção de Fotos da RAT;
 - Correção tamanho máx. do campo Nome Acompanhante na tela Chamado para 50 caracteres;
-- Agora é informado na tela Chamado quando uma RAT é Eletrônica, tornando o preenchimento do campo Número da RAT não obrigatório;
+- Informação de quando uma RAT é Eletrônica, tornando o preenchimento do campo Número da RAT não obrigatório na tela Chamado;
 - Ajuste de Layout na tela Chamado, adicionado fundo cinza nas informações de Ponto e reposicionado campo Nome Acompanhante para o lado do Número da RAT;
 - Pequeno ajuste na exibição de mensagens de sincroinização;
 - Ajustes de performance;
