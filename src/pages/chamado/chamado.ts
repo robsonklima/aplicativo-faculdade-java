@@ -124,14 +124,23 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                  })
-                  .catch();
+                  //if (this.obterDistanciaRaio(
+                  //  location.coords.latitude, 
+                  //  location.coords.longitude, 
+                  //  this.chamado.localAtendimento.localizacao.latitude, 
+                  //  this.chamado.localAtendimento.localizacao.longitude) > Number(Config.CERCA_ELETRONICA)
+                  //) {
+                  //  this.exibirToast('Você está muito distante do local de atendimento');
+                  //} else {
+                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                    })
+                    .catch();
+                  //}
                 })
                 .catch();
               })
@@ -194,14 +203,24 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                  })
-                  .catch();
+                  if (this.obterDistanciaRaio(
+                    location.coords.latitude, 
+                    location.coords.longitude, 
+                    this.chamado.localAtendimento.localizacao.latitude, 
+                    this.chamado.localAtendimento.localizacao.longitude) > Number(Config.CERCA_ELETRONICA)
+                  ) {
+                    this.exibirToast('Você está muito distante do local de atendimento');
+                  } else {
+                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                    })
+                    .catch();
+                  }
+                  
                 })
                 .catch();
               })
@@ -259,8 +278,17 @@ export class ChamadoPage {
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
     }
 
-    if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm')
-      .isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
+    if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAberturaOS, 'YYYY-MM-DD HH:mm'))) {
+      this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado');
+      return
+    }
+
+    if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
+      this.exibirToast('O período mínimo de atendimento é de 20 minutos');
+      return
+    }
+
+    if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
       this.exibirToast('A solução deve ocorrer após o início');
       return
     }
@@ -467,6 +495,24 @@ export class ChamadoPage {
           this.chamado.dataHoraOSMobileLida = null;
         });
     }
+  }
+
+  private obterDistanciaRaio(latA, lonA, latB, lonB) {
+    var raioTerrestre = 6371;
+    var dLat = this.deg2rad(latB-latA);
+    var dLon = this.deg2rad(lonB-lonA); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(this.deg2rad(latA)) * Math.cos(this.deg2rad(latB)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var distanciaEmKm = raioTerrestre * c;
+
+    return distanciaEmKm;
+  }
+
+  private deg2rad(deg: number) {
+    return deg * (Math.PI/180)
   }
 
   private exibirToast(mensagem: string): Promise<any> {

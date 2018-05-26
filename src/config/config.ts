@@ -16,6 +16,7 @@ export class Config {
    public static INT_SINC_BD_LOCAL_DIAS = 7;
    public static INT_SINC_CHAMADOS_MILISEG = 300000; // 5 minutos
    public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
+   public static CERCA_ELETRONICA = 2.0;
 
    //public static API_URL = 'http://localhost:60687/api/';
    public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
