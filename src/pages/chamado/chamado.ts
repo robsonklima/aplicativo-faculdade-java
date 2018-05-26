@@ -124,14 +124,14 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  //if (this.obterDistanciaRaio(
-                  //  location.coords.latitude, 
-                  //  location.coords.longitude, 
-                  //  this.chamado.localAtendimento.localizacao.latitude, 
-                  //  this.chamado.localAtendimento.localizacao.longitude) > Number(Config.CERCA_ELETRONICA)
-                  //) {
-                  //  this.exibirToast('Você está muito distante do local de atendimento');
-                  //} else {
+                  if (this.obterDistanciaRaio(
+                   location.coords.latitude, 
+                   location.coords.longitude, 
+                   this.chamado.localAtendimento.localizacao.latitude, 
+                   this.chamado.localAtendimento.localizacao.longitude) > Number(Config.CERCA_ELETRONICA)
+                  ) {
+                   this.exibirToast('Você está muito distante do local de atendimento');
+                  } else {
                     this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                     this.chamado.checkin.localizacao.latitude = location.coords.latitude;
                     this.chamado.checkin.localizacao.longitude = location.coords.longitude;
@@ -140,7 +140,7 @@ export class ChamadoPage {
                       this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                     })
                     .catch();
-                  //}
+                  }
                 })
                 .catch();
               })
