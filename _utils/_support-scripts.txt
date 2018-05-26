@@ -7,7 +7,7 @@ ionic cordova build --release android
 KEYTOOL
 "C:\Program Files\Java\jdk1.8.0_101\bin\keytool" -genkey -v -keystore "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-key.keystore" -alias app-tecnicos -keyalg RSA -keysize 2048 -validity 10000
 
-JARSINGER
+JARSINGER (Pass: Android@2017)
 "C:\Program Files\Java\jdk1.8.0_101\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-key.keystore" "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" sat_mobile
 
 ZIPALIGN [DON'T FORGET TO CHANGE VERSION NUMBER]
