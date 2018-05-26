@@ -6,6 +6,7 @@ import { IonicStorageModule } from '@ionic/storage'
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from "@angular/http";
+import { ChartsModule } from 'ng2-charts';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic'
@@ -37,6 +38,9 @@ import { AjudaListaPage } from '../pages/ajuda/ajuda-lista';
 import { AjudaDetalhePage } from '../pages/ajuda/ajuda-detalhe';
 import { ProblemaPage } from '../pages/problema/problema';
 import { SobrePage } from '../pages/sobre/sobre';
+import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
+import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
+import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -78,6 +82,9 @@ import { FotosPage } from '../pages/fotos/fotos';
     ProblemaPage,
     SobrePage,
     FotosPage,
+    IndicadorMenuPage,
+    IndicadorFiliaisPage,
+    IndicadorTecnicoPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -96,7 +103,8 @@ import { FotosPage } from '../pages/fotos/fotos';
       scrollAssist: false, 
       autoFocusAssist: false
     }),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -117,7 +125,10 @@ import { FotosPage } from '../pages/fotos/fotos';
     AjudaDetalhePage,
     ProblemaPage,
     SobrePage,
-    FotosPage
+    FotosPage,
+    IndicadorMenuPage,
+    IndicadorFiliaisPage,
+    IndicadorTecnicoPage
   ],
   providers: [
     StatusBar,

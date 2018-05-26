@@ -8,6 +8,7 @@ import { LoginPage } from '../login/login';
 import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
 import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
+import { IndicadorMenuPage } from '../indicadores/indicador-menu';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
@@ -72,6 +73,11 @@ export class HomePage {
   public telaPecas() {
     this.navCtrl.push(PecasPage);
   }
+
+  public telaIndicadoresMenu() {
+    this.navCtrl.push(IndicadorMenuPage);
+  }
+
 
   public abrirPopover(event: MouseEvent) {
     const popover = this.popoverCtrl.create(HomeMaisOpcoesPage);
