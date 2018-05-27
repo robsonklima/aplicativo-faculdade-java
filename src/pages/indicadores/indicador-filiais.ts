@@ -29,28 +29,30 @@ export class IndicadorFiliaisPage {
 
   private carregarGrfSLAFiliais() {
     this.grfSLAFiliaisLabels = ['FRS', 'FBA', 'FCA,', 'FSC', 'FBU'];
-    this.grfSLAFiliaisValues = [90, 95, 92, 90, 98];
+    this.grfSLAFiliaisValues = [90, 95, 92, 90, 87];
 
     this.grfSLAFiliais = new Chart(this.grfSLAFiliais.nativeElement, {
       type: 'bar',
+      barChartLegend: false,
       data: {
         labels: this.grfSLAFiliaisLabels,
         datasets: [{
           label: 'Percentual',
           data: this.grfSLAFiliaisValues,
           backgroundColor: [
-            'red', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'blue', 'silver'
+            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.2)', 
+            'rgba(255, 0, 0, 0.2)', 'rgba(255, 0, 0, 0.2)'
           ],
           borderWidth: 1
         }]
       },
-      options: { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
     });
   }
 
   private carregarGrfPendenciaFiliais() {
-    this.grfPendenciaFiliaisLabels = ['FRS', 'FSC', 'FBU'];
-    this.grfPendenciaFiliaisValues = [90, 95, 92];
+    this.grfPendenciaFiliaisLabels = ['FRS', 'FSC', 'FBU', 'FAM', 'FMA'];
+    this.grfPendenciaFiliaisValues = [98, 95, 92, 80, 76];
 
     this.grfPendenciaFiliais = new Chart(this.grfPendenciaFiliais.nativeElement, {
       type: 'bar',
@@ -60,21 +62,19 @@ export class IndicadorFiliaisPage {
           label: 'Percentual',
           data: this.grfPendenciaFiliaisValues,
           backgroundColor: [
-            'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'
+            'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 0, 0, 0.2)', 'rgba(255, 0, 0, 0.2)'
           ],
           borderWidth: 1
         }]
       },
-      options: { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
     });
   }
 
   private carregargrfSLAReincidenciaFiliais() {
-    this.grfReincidenciaFiliaisLabels = ['FRS', 'FSC', 'FBU'];
-    this.grfReincidenciaFiliaisValues = [90, 95, 92];
+    this.grfReincidenciaFiliaisLabels = ['FRS', 'FSC', 'FBU', 'FAM', 'FMA'];
+    this.grfReincidenciaFiliaisValues = [98, 95, 92, 80, 76];
 
     this.grfReincidenciaFiliais = new Chart(this.grfReincidenciaFiliais.nativeElement, {
       type: 'bar',
@@ -84,15 +84,13 @@ export class IndicadorFiliaisPage {
           label: 'Percentual',
           data: this.grfReincidenciaFiliaisValues,
           backgroundColor: [
-            'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'
+            'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 0, 0, 0.2)', 'rgba(255, 0, 0, 0.2)'
           ],
           borderWidth: 1
         }]
       },
-      options: { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
     });
   }
 }
