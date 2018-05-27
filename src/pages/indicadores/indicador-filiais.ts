@@ -28,8 +28,8 @@ export class IndicadorFiliaisPage {
   }
 
   private carregarGrfSLAFiliais() {
-    this.grfSLAFiliaisLabels = ['FRS', 'FSC', 'FBU'];
-    this.grfSLAFiliaisValues = [90, 95, 92];
+    this.grfSLAFiliaisLabels = ['FRS', 'FBA', 'FCA,', 'FSC', 'FBU'];
+    this.grfSLAFiliaisValues = [90, 95, 92, 90, 98];
 
     this.grfSLAFiliais = new Chart(this.grfSLAFiliais.nativeElement, {
       type: 'bar',
@@ -39,10 +39,7 @@ export class IndicadorFiliaisPage {
           label: 'Percentual',
           data: this.grfSLAFiliaisValues,
           backgroundColor: [
-            'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'
+            'red', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'blue', 'silver'
           ],
           borderWidth: 1
         }]
