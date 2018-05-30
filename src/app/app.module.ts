@@ -57,6 +57,7 @@ import { HistoricoDetalhePage } from '../pages/historico/historico-detalhe';
 import { CheckinCheckoutService } from '../services/checkin-checkout';
 import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
+import { IndicadorService } from '../services/indicador';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -163,7 +164,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     TipoServicoService,
     CheckinCheckoutService,
     FotoService,
-    AjudaTopicoService
+    AjudaTopicoService,
+    IndicadorService
   ]
 })
 export class AppModule {}
