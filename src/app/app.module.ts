@@ -41,6 +41,7 @@ import { SobrePage } from '../pages/sobre/sobre';
 import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
 import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
+import { IndicadorAcumuladoTecnicoPage } from '../pages/indicadores/indicador-acumulado-tecnico';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -85,6 +86,7 @@ import { FotosPage } from '../pages/fotos/fotos';
     IndicadorMenuPage,
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
+    IndicadorAcumuladoTecnicoPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -128,7 +130,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     FotosPage,
     IndicadorMenuPage,
     IndicadorFiliaisPage,
-    IndicadorTecnicoPage
+    IndicadorTecnicoPage,
+    IndicadorAcumuladoTecnicoPage,
   ],
   providers: [
     StatusBar,
