@@ -14,6 +14,16 @@ export class IndicadorAcumuladoTecnicoPage {
   qtdOSGeral: string;
   qtdOSOutrasIntervencoes: string;
   qtdOSPreventiva: string;
+  desvioMediaAtendimentosDiaMelhorTecnico: string;
+  mediaAtendimentosDiaMelhorTecnico: string;
+  qtdOSCorretivaMelhorTecnico: string;
+  qtdOSGeralMelhorTecnico: string;
+  qtdOSOutrasIntervencoesMelhorTecnico: string;
+  qtdOSPreventivaMelhorTecnico: string;
+  qtdPecasTrocadas: string;
+  percChamadosFechadosPecasTrocadas: string;
+  pecasMaisTrocadas: any[] = [];
+  pecasMaisPendenciadas: any[] = [];
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -36,9 +46,45 @@ export class IndicadorAcumuladoTecnicoPage {
           this.qtdOSOutrasIntervencoes = dados[0].qtdOSOutrasIntervencoes;
           this.mediaAtendimentosDia = dados[0].mediaAtendimentosDia;
           this.desvioMediaAtendimentosDia = dados[0].desvioMediaAtendimentosDia;
+          
+          this.qtdOSGeralMelhorTecnico = dados[0].qtdOSGeralMelhorTecnico;
+          this.qtdOSCorretivaMelhorTecnico = dados[0].qtdOSCorretivaMelhorTecnico;
+          this.qtdOSPreventivaMelhorTecnico = dados[0].qtdOSPreventivaMelhorTecnico;
+          this.qtdOSOutrasIntervencoesMelhorTecnico = dados[0].qtdOSOutrasIntervencoesMelhorTecnico;
+          this.desvioMediaAtendimentosDiaMelhorTecnico = dados[0].desvioMediaAtendimentosDiaMelhorTecnico;
+          this.mediaAtendimentosDiaMelhorTecnico = dados[0].mediaAtendimentosDiaMelhorTecnico;
+
+          this.qtdPecasTrocadas = dados[0].qtdPecasTrocadas;
+          this.percChamadosFechadosPecasTrocadas = dados[0].percChamadosFechadosPecasTrocadas;
         }
 
-        loading.dismiss();
+        this.indicadorService.buscarGrfPecasMaisTrocadasTecnicoApi()
+          .subscribe(dados => {
+            if (dados) {
+              dados.forEach((d, i) => {
+                this.pecasMaisTrocadas.push(d);
+              });
+            }
+
+            this.indicadorService.buscarGrfPecasMaisPendenciadasTecnicoApi()
+              .subscribe(dados => {
+                if (dados) {
+                  dados.forEach((d, i) => {
+                    this.pecasMaisPendenciadas.push(d);
+                  });
+                }
+
+                loading.dismiss();
+              },
+              err => {
+                this.exibirAlerta("Não foi possível as peças mais pendenciadas");
+                loading.dismiss();
+              });
+          },
+          err => {
+            this.exibirAlerta("Não foi possível as peças mais trocadas");
+            loading.dismiss();
+          });
       },
       err => {
         this.exibirAlerta("Não foi possível buscar os dados acumulados");
