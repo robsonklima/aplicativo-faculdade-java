@@ -6,22 +6,34 @@
 
 <ion-content>
   <ion-list>
-    <button
+    <button 
+      ion-item
       class="first-item"
-      (click)="telaIndicadorFiliais()"
-      ion-item>
+      (click)="telaIndicadorFiliais()">
+      <ion-icon 
+        color="primary" 
+        name="analytics" 
+        item-start></ion-icon>
       Indicador das Filiais
     </button>
 
     <button
       ion-item
       (click)="telaIndicadorTecnico()">
+      <ion-icon 
+        color="primary" 
+        name="podium" 
+        item-start></ion-icon>
       Indicador do Técnico
     </button>
 
     <button
       ion-item
       (click)="telaIndicadorAcumuladoTecnico()">
+      <ion-icon 
+        color="primary" 
+        name="ios-analytics" 
+        item-start></ion-icon>
       Acumulado do Técnico
     </button>
   </ion-list>
