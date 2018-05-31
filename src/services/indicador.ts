@@ -29,4 +29,10 @@ export class IndicadorService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
+
+  buscarGrfAcumuladoTecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico')
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
 }

@@ -11,26 +11,26 @@
     </ion-list-header>
 
     <ion-item>
-      Qtd. de OSs Atendidas
-      <ion-badge item-end>46</ion-badge>
+      OS's Atendidas
+      <ion-badge item-end>{{ qtdOSGeral }}</ion-badge>
       <ion-badge item-end color="energized">57</ion-badge>
     </ion-item>
 
     <ion-item>
       Corretivas
-      <ion-badge item-end>12</ion-badge>
+      <ion-badge item-end>{{ qtdOSCorretiva }}</ion-badge>
       <ion-badge item-end color="energized">34</ion-badge>
     </ion-item>
 
     <ion-item>
       Preventivas
-      <ion-badge item-end>15</ion-badge>
+      <ion-badge item-end>{{ qtdOSPreventiva }}</ion-badge>
       <ion-badge item-end color="energized">23</ion-badge>
     </ion-item>
 
     <ion-item>
       Outras
-      <ion-badge item-end>8</ion-badge>
+      <ion-badge item-end>{{ qtdOSOutrasIntervencoes }}</ion-badge>
       <ion-badge item-end color="energized">11</ion-badge>
     </ion-item>
   </ion-list>
@@ -42,18 +42,18 @@
 
     <ion-item>
       Média de Atendimentos por Dia
-      <ion-badge item-end>3</ion-badge>
+      <ion-badge item-end>{{ mediaAtendimentosDia }}</ion-badge>
       <ion-badge item-end color="energized">3,5</ion-badge>
     </ion-item>
 
     <ion-item>
-      Desvio da Média
-      <ion-badge item-end>1</ion-badge>
+      Desvio da Média por Dia
+      <ion-badge item-end>{{ desvioMediaAtendimentosDia }}</ion-badge>
       <ion-badge item-end color="energized">0,5</ion-badge>
     </ion-item>
 
     <ion-item>
-      OSs Fechadas
+      OS's Fechadas
       <p>Trocas de Peças: 10 (43,4%)</p>
       <ion-badge item-end>23</ion-badge>
     </ion-item>
