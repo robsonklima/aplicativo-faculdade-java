@@ -87,8 +87,6 @@ export class HomePage {
     popover.onDidDismiss(data => {
       if (!data)
         return;
-
-      
     });
   }
 
