@@ -32,18 +32,21 @@ export class IndicadorService {
 
   buscarGrfAcumuladoTecnicoApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico')
+      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   buscarGrfPecasMaisTrocadasTecnicoApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfPecasMaisTrocadasTecnico')
+      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   buscarGrfPecasMaisPendenciadasTecnicoApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfPecasMaisPendenciadasTecnico')
+      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

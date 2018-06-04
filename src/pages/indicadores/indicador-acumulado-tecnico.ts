@@ -8,20 +8,20 @@ import { IndicadorService } from '../../services/indicador';
   templateUrl: 'indicador-acumulado-tecnico.html'
 })
 export class IndicadorAcumuladoTecnicoPage {
-  desvioMediaAtendimentosDia: string;
-  mediaAtendimentosDia: string;
-  qtdOSCorretiva: string;
-  qtdOSGeral: string;
-  qtdOSOutrasIntervencoes: string;
-  qtdOSPreventiva: string;
-  desvioMediaAtendimentosDiaMelhorTecnico: string;
-  mediaAtendimentosDiaMelhorTecnico: string;
-  qtdOSCorretivaMelhorTecnico: string;
-  qtdOSGeralMelhorTecnico: string;
-  qtdOSOutrasIntervencoesMelhorTecnico: string;
-  qtdOSPreventivaMelhorTecnico: string;
-  qtdPecasTrocadas: string;
-  percChamadosFechadosPecasTrocadas: string;
+  desvioMediaAtendimentosDia: string = "";
+  mediaAtendimentosDia: string = "";
+  qtdOSCorretiva: string = "";
+  qtdOSGeral: string = "";
+  qtdOSOutrasIntervencoes: string = "";
+  qtdOSPreventiva: string = "";
+  desvioMediaAtendimentosDiaMelhorTecnico: string = "";
+  mediaAtendimentosDiaMelhorTecnico: string = "";
+  qtdOSCorretivaMelhorTecnico: string = "";
+  qtdOSGeralMelhorTecnico: string = "";
+  qtdOSOutrasIntervencoesMelhorTecnico: string = "";
+  qtdOSPreventivaMelhorTecnico: string = "";
+  qtdPecasTrocadas: string = "";
+  percChamadosFechadosPecasTrocadas: string = "";
   pecasMaisTrocadas: any[] = [];
   pecasMaisPendenciadas: any[] = [];
 
@@ -39,7 +39,7 @@ export class IndicadorAcumuladoTecnicoPage {
 
     this.indicadorService.buscarGrfAcumuladoTecnicoApi()
       .subscribe(dados => {
-        if (dados) {
+        if (dados.length > 0) {
           this.qtdOSGeral = dados[0].qtdOSGeral;
           this.qtdOSCorretiva = dados[0].qtdOSCorretiva;
           this.qtdOSPreventiva = dados[0].qtdOSPreventiva;
@@ -77,17 +77,17 @@ export class IndicadorAcumuladoTecnicoPage {
                 loading.dismiss();
               },
               err => {
-                this.exibirAlerta("Não foi possível as peças mais pendenciadas");
+                this.exibirAlerta("Não foi possível carregar as peças mais pendenciadas");
                 loading.dismiss();
               });
           },
           err => {
-            this.exibirAlerta("Não foi possível as peças mais trocadas");
+            this.exibirAlerta("Não foi possível carregar as peças mais trocadas");
             loading.dismiss();
           });
       },
       err => {
-        this.exibirAlerta("Não foi possível buscar os dados acumulados");
+        this.exibirAlerta("Não foi possível carregar os dados acumulados");
         loading.dismiss();
       });
   }
