@@ -10,7 +10,10 @@
       SLA do Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfSLATecnico></canvas>
+      <ion-spinner *ngIf="grfSLATecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfSLATecnico
+        [ngClass]="{ 'display-none': grfSLATecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 
@@ -19,7 +22,10 @@
       SLA do Melhor Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfSLAMelhorTecnico></canvas>
+      <ion-spinner *ngIf="grfSLAMelhorTecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfSLAMelhorTecnico
+        [ngClass]="{ 'display-none': grfSLAMelhorTecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 
@@ -28,7 +34,10 @@
       Pendência do Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfPendenciaTecnico></canvas>
+      <ion-spinner *ngIf="grfPendenciaTecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfPendenciaTecnico
+        [ngClass]="{ 'display-none': grfPendenciaTecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 
@@ -37,7 +46,10 @@
       Pendência do Melhor Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfPendenciaMelhorTecnico></canvas>
+      <ion-spinner *ngIf="grfPendenciaMelhorTecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfPendenciaMelhorTecnico
+        [ngClass]="{ 'display-none': grfPendenciaMelhorTecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 
@@ -46,7 +58,10 @@
       Reincidência do Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfReincidenciaTecnico></canvas>
+      <ion-spinner *ngIf="grfReincidenciaTecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfReincidenciaTecnico
+        [ngClass]="{ 'display-none': grfReincidenciaTecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 
@@ -55,7 +70,10 @@
       Reincidência do Melhor Técnico
     </ion-card-header>
     <ion-card-content>
-      <canvas #grfReincidenciaMelhorTecnico></canvas>
+      <ion-spinner *ngIf="grfReincidenciaMelhorTecnicoValues.length == 0"></ion-spinner>
+      <canvas #grfReincidenciaMelhorTecnico
+        [ngClass]="{ 'display-none': grfReincidenciaMelhorTecnicoValues.length == 0 }">
+      </canvas>
     </ion-card-content>
   </ion-card>
 </ion-content>

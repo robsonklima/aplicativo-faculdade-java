@@ -50,4 +50,18 @@ export class IndicadorService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
+
+  buscarGrfSLATecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfSLATecnico')
+      .timeout(20000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  buscarGrfSLAMelhorTecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfSLAMelhorTecnico')
+      .timeout(20000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
 }

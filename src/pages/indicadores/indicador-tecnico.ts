@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 
+import { IndicadorService } from '../../services/indicador';
+
 @Component({
   selector: 'indicador-tecnico-page',
   templateUrl: 'indicador-tecnico.html'
@@ -8,6 +10,7 @@ import { Chart } from 'chart.js';
 export class IndicadorTecnicoPage {
   grfSLATecnicoLabels: string[] = [];
   grfSLATecnicoValues: number[] = [];
+  grfSLATecnicoColors: string[] = [];
   @ViewChild('grfSLATecnico') grfSLATecnico;
 
   grfSLAMelhorTecnicoLabels: string[] = [];
@@ -30,21 +33,37 @@ export class IndicadorTecnicoPage {
   grfReincidenciaMelhorTecnicoValues: number[] = [];
   @ViewChild('grfReincidenciaMelhorTecnico') grfReincidenciaMelhorTecnico;
 
-  constructor() {}
+  constructor(
+    private indicadorService: IndicadorService
+  ) {}
 
   ionViewDidLoad() {
-    this.carregarGrfSLATecnico();
-    this.carregarGrfSLAMelhorTecnico();
-    this.carregarGrfPendenciaTecnico();
-    this.carregarGrfPendenciaMelhorTecnico();
-    this.carregarGrfReincidenciaTecnico();
-    this.carregarGrfReincidenciaMelhorTecnico();
+    this.indicadorService.buscarGrfSLATecnicoApi()
+      .subscribe(dados => {
+        dados.forEach((d, i) => {
+          this.grfSLATecnicoLabels.push('Fora do Prazo');
+          this.grfSLATecnicoValues.push(Number(d.percForaPrazo));
+          this.grfSLATecnicoColors.push('rgba(255, 0, 0, 0.2)');
+
+          this.grfSLATecnicoLabels.push('No Prazo');
+          this.grfSLATecnicoValues.push(Number(d.percNoPrazo));
+          this.grfSLATecnicoColors.push('rgba(75, 192, 192, 0.2)');
+        });
+        
+        this.carregarGrfSLATecnico();
+      },
+      err => {});
+
+    //this.carregarGrfSLATecnico();
+    
+    //this.carregarGrfSLAMelhorTecnico();
+    //this.carregarGrfPendenciaTecnico();
+    //this.carregarGrfPendenciaMelhorTecnico();
+    //this.carregarGrfReincidenciaTecnico();
+    //this.carregarGrfReincidenciaMelhorTecnico();
   }
 
   private carregarGrfSLATecnico() {
-    this.grfSLATecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfSLATecnicoValues = [9, 91];
-
     this.grfSLATecnico = new Chart(this.grfSLATecnico.nativeElement, {
       type: 'doughnut',
       data: {
@@ -52,12 +71,7 @@ export class IndicadorTecnicoPage {
         datasets: [{
           label: 'Percentual',
           data: this.grfSLATecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
+          backgroundColor: this.grfSLATecnicoColors
         }]
       }
     });
