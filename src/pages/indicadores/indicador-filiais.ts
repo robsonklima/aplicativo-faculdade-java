@@ -51,7 +51,7 @@ export class IndicadorFiliaisPage {
         dados.forEach((d, i) => {
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
-          if (d.percentual > Config.PERC_PEND_ACEITAVEL) {
+          if (d.percentual < Config.PERC_PEND_ACEITAVEL) {
             this.grfPendenciaFiliaisColors.push('rgba(75, 192, 192, 0.2)');
           } else {
             this.grfPendenciaFiliaisColors.push('rgba(255, 0, 0, 0.2)');

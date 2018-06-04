@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, ToastController } from 'ionic-angular';
 
 import { IndicadorService } from '../../services/indicador';
 
@@ -27,7 +27,8 @@ export class IndicadorAcumuladoTecnicoPage {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private navCtrl: NavController,
     private indicadorService: IndicadorService
   ) {}
 
@@ -77,28 +78,33 @@ export class IndicadorAcumuladoTecnicoPage {
                 loading.dismiss();
               },
               err => {
-                this.exibirAlerta("Não foi possível carregar as peças mais pendenciadas");
+                this.exibirToast("Não foi possível carregar as peças mais pendenciadas");
                 loading.dismiss();
               });
           },
           err => {
-            this.exibirAlerta("Não foi possível carregar as peças mais trocadas");
+            this.exibirToast("Não foi possível carregar as peças mais trocadas");
             loading.dismiss();
           });
       },
       err => {
-        this.exibirAlerta("Não foi possível carregar os dados acumulados");
         loading.dismiss();
+
+        this.exibirToast("Não foi possível carregar os dados acumulados")
+          .then(() => {
+            this.navCtrl.pop();
+          })
+          .catch(() => {})
       });
   }
 
-  exibirAlerta(msg: string) {
-    const alerta = this.alertCtrl.create({
-      title: 'Alerta!',
-      subTitle: msg,
-      buttons: ['OK']
-    });
+  public exibirToast(message: string): Promise<any> {    
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: message, duration: 2000, position: 'bottom'
+      });
 
-    alerta.present();
+      resolve(toast.present());
+    });
   }
 }
