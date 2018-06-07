@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { ToastController } from 'ionic-angular';
 
+import { Chart } from 'chart.js';
 import { IndicadorService } from '../../services/indicador';
 
 @Component({
@@ -24,6 +25,7 @@ export class IndicadorTecnicoPage {
   @ViewChild('grfReincidenciaTecnico') grfReincidenciaTecnico;
 
   constructor(
+    private toastCtrl: ToastController,
     private indicadorService: IndicadorService
   ) {}
 
@@ -53,6 +55,7 @@ export class IndicadorTecnicoPage {
         resolve();
       },
       err => {
+        this.exibirToast(err.message);
         reject();
       });
     });
@@ -89,6 +92,7 @@ export class IndicadorTecnicoPage {
         resolve();
       },
       err => {
+        this.exibirToast(err.message);
         reject();
       });
     });
@@ -125,6 +129,7 @@ export class IndicadorTecnicoPage {
         resolve();
       },
       err => {
+        this.exibirToast(err.message);
         reject();
       });
     });
@@ -141,6 +146,16 @@ export class IndicadorTecnicoPage {
           backgroundColor: this.grfReincidenciaTecnicoColors
         }]
       }
+    });
+  }
+
+  public exibirToast(message: string): Promise<any> {    
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: message, duration: 2000, position: 'bottom'
+      });
+
+      resolve(toast.present());
     });
   }
 }
