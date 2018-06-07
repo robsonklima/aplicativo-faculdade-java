@@ -61,7 +61,9 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.carregarDadosGlobais().then(() => { this.carregarVersaoApp() });
+    this.carregarDadosGlobais().then(() => { 
+      this.carregarVersaoApp();
+    });
     this.carregarSenhaExpirada();
     this.carregarChamadosStorage();
   }
@@ -111,7 +113,7 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         this.dadosGlobais = dados;
-
+        
         if (!this.dadosGlobais.usuario.codTecnico) {
           reject();
           return;

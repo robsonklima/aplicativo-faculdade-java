@@ -19,8 +19,7 @@ export class Config {
   public static PERC_SLA_ACEITAVEL = 98;
   public static PERC_REINC_ACEITAVEL = 30;
   public static PERC_PEND_ACEITAVEL = 3;
-  public static CERCA_ELETRONICA = 2.0;
-  public static CERCA_ELETRONICA2 = [
+  public static CERCA_ELETRONICA = [
     { filial: 'FPR', distancia: 2.00 },
     { filial: 'FRS', distancia: 2.55 },
     { filial: 'FDF', distancia: 5.65 },
