@@ -23,9 +23,21 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
+  buscarGrfPendenciaTecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfPendenciaTecnico')
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
   buscarGrfReincidenciaFilialApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfReincidenciaFilial')
       .timeout(60000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  buscarGrfReincidenciaTecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfReincidenciaTecnico')
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

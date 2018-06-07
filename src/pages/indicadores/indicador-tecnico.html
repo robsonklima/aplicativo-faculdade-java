@@ -19,18 +19,6 @@
 
   <ion-card>
     <ion-card-header>
-      SLA do Melhor Técnico
-    </ion-card-header>
-    <ion-card-content>
-      <ion-spinner *ngIf="grfSLAMelhorTecnicoValues.length == 0"></ion-spinner>
-      <canvas #grfSLAMelhorTecnico
-        [ngClass]="{ 'display-none': grfSLAMelhorTecnicoValues.length == 0 }">
-      </canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
       Pendência do Técnico
     </ion-card-header>
     <ion-card-content>
@@ -43,36 +31,12 @@
 
   <ion-card>
     <ion-card-header>
-      Pendência do Melhor Técnico
-    </ion-card-header>
-    <ion-card-content>
-      <ion-spinner *ngIf="grfPendenciaMelhorTecnicoValues.length == 0"></ion-spinner>
-      <canvas #grfPendenciaMelhorTecnico
-        [ngClass]="{ 'display-none': grfPendenciaMelhorTecnicoValues.length == 0 }">
-      </canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
       Reincidência do Técnico
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfReincidenciaTecnicoValues.length == 0"></ion-spinner>
       <canvas #grfReincidenciaTecnico
         [ngClass]="{ 'display-none': grfReincidenciaTecnicoValues.length == 0 }">
-      </canvas>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      Reincidência do Melhor Técnico
-    </ion-card-header>
-    <ion-card-content>
-      <ion-spinner *ngIf="grfReincidenciaMelhorTecnicoValues.length == 0"></ion-spinner>
-      <canvas #grfReincidenciaMelhorTecnico
-        [ngClass]="{ 'display-none': grfReincidenciaMelhorTecnicoValues.length == 0 }">
       </canvas>
     </ion-card-content>
   </ion-card>

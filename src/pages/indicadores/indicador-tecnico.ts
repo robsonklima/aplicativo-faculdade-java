@@ -13,32 +13,32 @@ export class IndicadorTecnicoPage {
   grfSLATecnicoColors: string[] = [];
   @ViewChild('grfSLATecnico') grfSLATecnico;
 
-  grfSLAMelhorTecnicoLabels: string[] = [];
-  grfSLAMelhorTecnicoValues: number[] = [];
-  @ViewChild('grfSLAMelhorTecnico') grfSLAMelhorTecnico;
-
   grfPendenciaTecnicoLabels: string[] = [];
   grfPendenciaTecnicoValues: number[] = [];
+  grfPendenciaTecnicoColors: string[] = [];
   @ViewChild('grfPendenciaTecnico') grfPendenciaTecnico;
-
-  grfPendenciaMelhorTecnicoLabels: string[] = [];
-  grfPendenciaMelhorTecnicoValues: number[] = [];
-  @ViewChild('grfPendenciaMelhorTecnico') grfPendenciaMelhorTecnico;
 
   grfReincidenciaTecnicoLabels: string[] = [];
   grfReincidenciaTecnicoValues: number[] = [];
+  grfReincidenciaTecnicoColors: string[] = [];
   @ViewChild('grfReincidenciaTecnico') grfReincidenciaTecnico;
-
-  grfReincidenciaMelhorTecnicoLabels: string[] = [];
-  grfReincidenciaMelhorTecnicoValues: number[] = [];
-  @ViewChild('grfReincidenciaMelhorTecnico') grfReincidenciaMelhorTecnico;
 
   constructor(
     private indicadorService: IndicadorService
   ) {}
 
   ionViewDidLoad() {
-    this.indicadorService.buscarGrfSLATecnicoApi()
+    this.carregarSLATecnicoApi()
+      .then(() => this.carregarSLATecnicoGrafico())
+      .then(() => this.carregarPendenciaTecnicoApi())
+      .then(() => this.carregarPendenciaTecnicoGrafico())
+      .then(() => this.carregarReincidenciaTecnicoApi())
+      .then(() => this.carregarReincidenciaTecnicoGrafico());
+  }
+
+  private carregarSLATecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfSLATecnicoApi()
       .subscribe(dados => {
         dados.forEach((d, i) => {
           this.grfSLATecnicoLabels.push('Fora do Prazo');
@@ -50,20 +50,15 @@ export class IndicadorTecnicoPage {
           this.grfSLATecnicoColors.push('rgba(75, 192, 192, 0.2)');
         });
         
-        this.carregarGrfSLATecnico();
+        resolve();
       },
-      err => {});
-
-    //this.carregarGrfSLATecnico();
-    
-    //this.carregarGrfSLAMelhorTecnico();
-    //this.carregarGrfPendenciaTecnico();
-    //this.carregarGrfPendenciaMelhorTecnico();
-    //this.carregarGrfReincidenciaTecnico();
-    //this.carregarGrfReincidenciaMelhorTecnico();
+      err => {
+        reject();
+      });
+    });
   }
 
-  private carregarGrfSLATecnico() {
+  private carregarSLATecnicoGrafico() {
     this.grfSLATecnico = new Chart(this.grfSLATecnico.nativeElement, {
       type: 'doughnut',
       data: {
@@ -77,32 +72,29 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarGrfSLAMelhorTecnico() {
-    this.grfSLAMelhorTecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfSLAMelhorTecnicoValues = [1, 99];
+  private carregarPendenciaTecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfPendenciaTecnicoApi()
+      .subscribe(dados => {
+        dados.forEach((d, i) => {
+          this.grfPendenciaTecnicoLabels.push('Fora do Prazo');
+          this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosPendentes.replace(',', '.')));
+          this.grfPendenciaTecnicoColors.push('rgba(255, 0, 0, 0.2)');
 
-    this.grfSLAMelhorTecnico = new Chart(this.grfSLAMelhorTecnico.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: this.grfSLAMelhorTecnicoLabels,
-        datasets: [{
-          label: 'Percentual',
-          data: this.grfSLAMelhorTecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
-        }]
-      }
+          this.grfPendenciaTecnicoLabels.push('No Prazo');
+          this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosNaoPendentes.replace(',', '.')));
+          this.grfPendenciaTecnicoColors.push('rgba(75, 192, 192, 0.2)');
+        });
+
+        resolve();
+      },
+      err => {
+        reject();
+      });
     });
   }
 
-  private carregarGrfPendenciaTecnico() {
-    this.grfPendenciaTecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfPendenciaTecnicoValues = [12, 88];
-
+  private carregarPendenciaTecnicoGrafico() {
     this.grfPendenciaTecnico = new Chart(this.grfPendenciaTecnico.nativeElement, {
       type: 'doughnut',
       data: {
@@ -110,43 +102,35 @@ export class IndicadorTecnicoPage {
         datasets: [{
           label: 'Percentual',
           data: this.grfPendenciaTecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
+          backgroundColor: this.grfPendenciaTecnicoColors
         }]
       }
     });
   }
 
-  private carregarGrfPendenciaMelhorTecnico() {
-    this.grfPendenciaMelhorTecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfPendenciaMelhorTecnicoValues = [22, 78];
+  private carregarReincidenciaTecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfReincidenciaTecnicoApi()
+      .subscribe(dados => {
+        dados.forEach((d, i) => {
+          this.grfReincidenciaTecnicoLabels.push('Fora do Prazo');
+          this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosReincidentes.replace(',', '.')));
+          this.grfReincidenciaTecnicoColors.push('rgba(255, 0, 0, 0.2)');
 
-    this.grfPendenciaMelhorTecnico = new Chart(this.grfPendenciaMelhorTecnico.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: this.grfPendenciaMelhorTecnicoLabels,
-        datasets: [{
-          label: 'Percentual',
-          data: this.grfPendenciaMelhorTecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
-        }]
-      }
+          this.grfReincidenciaTecnicoLabels.push('No Prazo');
+          this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosNaoReincidentes.replace(',', '.')));
+          this.grfReincidenciaTecnicoColors.push('rgba(75, 192, 192, 0.2)');
+        });
+
+        resolve();
+      },
+      err => {
+        reject();
+      });
     });
   }
 
-  private carregarGrfReincidenciaTecnico() {
-    this.grfReincidenciaTecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfReincidenciaTecnicoValues = [32, 68];
-
+  private carregarReincidenciaTecnicoGrafico() {
     this.grfReincidenciaTecnico = new Chart(this.grfReincidenciaTecnico.nativeElement, {
       type: 'doughnut',
       data: {
@@ -154,34 +138,7 @@ export class IndicadorTecnicoPage {
         datasets: [{
           label: 'Percentual',
           data: this.grfReincidenciaTecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
-        }]
-      }
-    });
-  }
-
-  private carregarGrfReincidenciaMelhorTecnico() {
-    this.grfReincidenciaMelhorTecnicoLabels = ['Fora do Prazo', 'No Prazo'];
-    this.grfReincidenciaMelhorTecnicoValues = [32, 68];
-
-    this.grfReincidenciaMelhorTecnico = new Chart(this.grfReincidenciaMelhorTecnico.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: this.grfReincidenciaMelhorTecnicoLabels,
-        datasets: [{
-          label: 'Percentual',
-          data: this.grfReincidenciaMelhorTecnicoValues,
-          backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', 'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(255, 0, 0, 0.8)', 'rgba(75, 192, 192, 0.8)'
-          ]
+          backgroundColor: this.grfReincidenciaTecnicoColors
         }]
       }
     });
