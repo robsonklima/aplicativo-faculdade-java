@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 
+import { DadosGlobais } from '../../models/dados-globais';
 import { IndicadorService } from '../../services/indicador';
+import { DadosGlobaisService } from '../../services/dados-globais';
 
 @Component({
   selector: 'indicador-acumulado-tecnico',
   templateUrl: 'indicador-acumulado-tecnico.html'
 })
 export class IndicadorAcumuladoTecnicoPage {
+  dg: DadosGlobais;
   desvioMediaAtendimentosDia: string = "";
   mediaAtendimentosDia: string = "";
   qtdOSCorretiva: string = "";
@@ -26,19 +29,22 @@ export class IndicadorAcumuladoTecnicoPage {
   pecasMaisPendenciadas: any[] = [];
 
   constructor(
-    private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
-    private indicadorService: IndicadorService
+    private indicadorService: IndicadorService,
+    private dadosGlobaisService: DadosGlobaisService
   ) {}
 
   ionViewWillEnter() {
-    const loading = this.loadingCtrl.create({ 
-      content: 'Aguarde...' 
-    });
-    loading.present();
+    this.carregarDadosGlobais()
+      .then(() => this.carregarGrfAcumuladoTecnicoApi(this.dg.usuario.codTecnico))
+      .then(() => this.carregarGrfPecasMaisTrocadasTecnicoApi())
+      .then(() => this.carregarGrfPecasMaisPendenciadasTecnicoApi());
+  }
 
-    this.indicadorService.buscarGrfAcumuladoTecnicoApi()
+  private carregarGrfAcumuladoTecnicoApi(codTecnico: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfAcumuladoTecnicoApi(codTecnico)
       .subscribe(dados => {
         if (dados.length > 0) {
           this.qtdOSGeral = dados[0].qtdOSGeral;
@@ -59,43 +65,71 @@ export class IndicadorAcumuladoTecnicoPage {
           this.percChamadosFechadosPecasTrocadas = dados[0].percChamadosFechadosPecasTrocadas;
         }
 
-        this.indicadorService.buscarGrfPecasMaisTrocadasTecnicoApi()
-          .subscribe(dados => {
-            if (dados) {
-              dados.forEach((d, i) => {
-                this.pecasMaisTrocadas.push(d);
-              });
-            }
-
-            this.indicadorService.buscarGrfPecasMaisPendenciadasTecnicoApi()
-              .subscribe(dados => {
-                if (dados) {
-                  dados.forEach((d, i) => {
-                    this.pecasMaisPendenciadas.push(d);
-                  });
-                }
-
-                loading.dismiss();
-              },
-              err => {
-                this.exibirToast("Não foi possível carregar as peças mais pendenciadas");
-                loading.dismiss();
-              });
-          },
-          err => {
-            this.exibirToast("Não foi possível carregar as peças mais trocadas");
-            loading.dismiss();
-          });
+        resolve(dados);
       },
       err => {
-        loading.dismiss();
-
-        this.exibirToast("Não foi possível carregar os dados acumulados")
-          .then(() => {
-            this.navCtrl.pop();
-          })
-          .catch(() => {})
+        this.exibirToast("Não foi possível carregar os dados acumulados").then(() => {
+          this.navCtrl.pop();
+          reject(new Error(err.message));
+        }).catch(() => {})
       });
+    });
+  }
+
+  private carregarGrfPecasMaisTrocadasTecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfPecasMaisTrocadasTecnicoApi()
+        .subscribe(dados => {
+          if (dados) {
+            dados.forEach((d, i) => {
+              this.pecasMaisTrocadas.push(d);
+            });
+          }
+
+          resolve(dados);
+        },
+        err => {
+          this.exibirToast("Não foi possível carregar as peças mais trocadas").then(() => {
+            this.navCtrl.pop();
+            reject(new Error(err.message));
+          }).catch(() => {})
+        });      
+    });
+  }
+
+  private carregarGrfPecasMaisPendenciadasTecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfPecasMaisPendenciadasTecnicoApi()
+        .subscribe(dados => {
+          if (dados) {
+            dados.forEach((d, i) => {
+              this.pecasMaisPendenciadas.push(d);
+            });
+          }
+
+          resolve(dados);
+        },
+        err => {
+          this.exibirToast("Não foi possível carregar as peças mais pendenciadas").then(() => {
+            this.navCtrl.pop();
+            reject(new Error(err.message));
+          }).catch(() => {})
+        });      
+    });
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(this.dg);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
   }
 
   public exibirToast(message: string): Promise<any> {    

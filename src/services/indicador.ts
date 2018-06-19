@@ -23,11 +23,7 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfPendenciaTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfPendenciaTecnico')
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
-  }
+  
 
   buscarGrfReincidenciaFilialApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfReincidenciaFilial')
@@ -36,14 +32,8 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfReincidenciaTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfReincidenciaTecnico')
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
-  }
-
-  buscarGrfAcumuladoTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico')
+  buscarGrfAcumuladoTecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico/' + codTecnico)
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
@@ -63,16 +53,28 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfSLATecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfSLATecnico')
+  buscarGrfSLAMelhorTecnicoApi(): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfSLAMelhorTecnico')
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfSLAMelhorTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfSLAMelhorTecnico')
+  buscarGrfSLATecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfSLATecnico/' + codTecnico)
       .timeout(20000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  buscarGrfPendenciaTecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfPendenciaTecnico/' + codTecnico)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  buscarGrfReincidenciaTecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfReincidenciaTecnico/' + codTecnico)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

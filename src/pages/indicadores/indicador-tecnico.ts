@@ -2,13 +2,17 @@ import { Component, ViewChild } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
+import { DadosGlobaisService } from '../../services/dados-globais';
 import { IndicadorService } from '../../services/indicador';
+import { DadosGlobais } from '../../models/dados-globais';
 
 @Component({
   selector: 'indicador-tecnico-page',
   templateUrl: 'indicador-tecnico.html'
 })
 export class IndicadorTecnicoPage {
+  dg: DadosGlobais;
+
   grfSLATecnicoLabels: string[] = [];
   grfSLATecnicoValues: number[] = [];
   grfSLATecnicoColors: string[] = [];
@@ -26,21 +30,23 @@ export class IndicadorTecnicoPage {
 
   constructor(
     private toastCtrl: ToastController,
+    private dadosGlobaisService: DadosGlobaisService,
     private indicadorService: IndicadorService
   ) {}
 
   ionViewDidLoad() {
-    this.carregarSLATecnicoApi()
+    this.carregarDadosGlobais()
+      .then(() => this.carregarSLATecnicoApi(this.dg.usuario.codTecnico))
       .then(() => this.carregarSLATecnicoGrafico())
-      .then(() => this.carregarPendenciaTecnicoApi())
+      .then(() => this.carregarPendenciaTecnicoApi(this.dg.usuario.codTecnico))
       .then(() => this.carregarPendenciaTecnicoGrafico())
-      .then(() => this.carregarReincidenciaTecnicoApi())
+      .then(() => this.carregarReincidenciaTecnicoApi(this.dg.usuario.codTecnico))
       .then(() => this.carregarReincidenciaTecnicoGrafico());
   }
 
-  private carregarSLATecnicoApi(): Promise<any> {
+  private carregarSLATecnicoApi(codTecnico: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfSLATecnicoApi()
+      this.indicadorService.buscarGrfSLATecnicoApi(codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
           this.grfSLATecnicoLabels.push('Fora do Prazo');
@@ -75,9 +81,9 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarPendenciaTecnicoApi(): Promise<any> {
+  private carregarPendenciaTecnicoApi(codTecnico: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfPendenciaTecnicoApi()
+      this.indicadorService.buscarGrfPendenciaTecnicoApi(codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
           this.grfPendenciaTecnicoLabels.push('Fora do Prazo');
@@ -112,9 +118,9 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarReincidenciaTecnicoApi(): Promise<any> {
+  private carregarReincidenciaTecnicoApi(codTecnico: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfReincidenciaTecnicoApi()
+      this.indicadorService.buscarGrfReincidenciaTecnicoApi(codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
           this.grfReincidenciaTecnicoLabels.push('Fora do Prazo');
@@ -146,6 +152,20 @@ export class IndicadorTecnicoPage {
           backgroundColor: this.grfReincidenciaTecnicoColors
         }]
       }
+    });
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(this.dg);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
     });
   }
 
