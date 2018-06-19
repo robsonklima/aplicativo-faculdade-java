@@ -128,24 +128,27 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  if (this.obterDistanciaRaio(
-                   location.coords.latitude, 
-                   location.coords.longitude, 
-                   this.chamado.localAtendimento.localizacao.latitude, 
-                   this.chamado.localAtendimento.localizacao.longitude) > Number(this.distanciaCercaEletronica)
-                  ) {
-                   this.exibirToast('Você está muito distante do local de atendimento');
-                  } else {
-                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                    this.chamadoService.atualizarChamado(this.chamado)
-                      .then(() => {
-                        this.configurarSlide(this.slides.getActiveIndex());
-                        this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                      })
-                      .catch();
+                  if (!this.chamado.indCercaEletronicaLiberada) {
+                    if ((this.obterDistanciaRaio(
+                      location.coords.latitude, 
+                      location.coords.longitude, 
+                      this.chamado.localAtendimento.localizacao.latitude, 
+                      this.chamado.localAtendimento.localizacao.longitude) 
+                      > Number(this.distanciaCercaEletronica))
+                    ) {
+                      this.exibirToast('Você está muito distante do local de atendimento');
+                      return
+                    }
                   }
+
+                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  }).catch();
+                  
                 })
                 .catch();
               })
@@ -209,24 +212,27 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  if (this.obterDistanciaRaio(
-                    location.coords.latitude, 
-                    location.coords.longitude, 
-                    this.chamado.localAtendimento.localizacao.latitude, 
-                    this.chamado.localAtendimento.localizacao.longitude) > Number(this.distanciaCercaEletronica)
-                  ) {
-                    this.exibirToast('Você está muito distante do local de atendimento');
-                  } else {
-                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                      this.configurarSlide(this.slides.getActiveIndex());
-                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                    })
-                    .catch();
+                  if (!this.chamado.indCercaEletronicaLiberada) {
+                    if ((this.obterDistanciaRaio(
+                      location.coords.latitude, 
+                      location.coords.longitude, 
+                      this.chamado.localAtendimento.localizacao.latitude, 
+                      this.chamado.localAtendimento.localizacao.longitude) 
+                      > Number(this.distanciaCercaEletronica))
+                    ) {
+                      this.exibirToast('Você está muito distante do local de atendimento');
+                      return
+                    }
                   }
                   
+                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  })
+                  .catch();
                 })
                 .catch();
               })

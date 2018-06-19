@@ -33,4 +33,5 @@ export class Chamado {
 	descMotivoMarcaEspecial: string;
 	indBloqueioReincidencia: number;
 	indRatEletronica: number;
+	indCercaEletronicaLiberada: number;
 }
