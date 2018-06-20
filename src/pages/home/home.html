@@ -26,6 +26,12 @@
       </button>
     </ion-item-divider>
 
+    <ion-item-divider 
+      color="danger"
+      *ngIf="necessidadeRegistrarIntervalo">
+      Atenção! Não ultrapassar 6h contínuas de trabalho!
+    </ion-item-divider>
+
     <button 
       ion-item
       class="first-item"

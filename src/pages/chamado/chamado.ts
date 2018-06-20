@@ -60,8 +60,8 @@ export class ChamadoPage {
 
     this.carregarDadosGlobais()
       .then((dg) => this.obterDistanciaRaioFilial(dg.usuario.filial.nomeFilial))
-      .then(() => this.registrarLeituraOs())
-      .then(() => this.obterRegistrosPonto());
+      .then(() => this.obterRegistrosPonto())
+      .then(() => this.registrarLeituraOs());
   }
 
   public alterarSlide() {
@@ -398,10 +398,11 @@ export class ChamadoPage {
         this.dadosGlobais.usuario.codUsuario)
         .subscribe(res => {
           this.usuarioPonto = res;
+          
           resolve(this.usuarioPonto);
         },
         err => {
-          reject(new Error(err.message));
+          reject();
         });
     });
   }
@@ -512,6 +513,7 @@ export class ChamadoPage {
         this.chamadoService.registrarLeituraChamadoApi(this.chamado)
           .subscribe((r) => {
             this.chamadoService.atualizarChamado(this.chamado);
+
             resolve();
           },
           err => {
