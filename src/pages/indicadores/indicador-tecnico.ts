@@ -41,7 +41,8 @@ export class IndicadorTecnicoPage {
       .then(() => this.carregarPendenciaTecnicoApi(this.dg.usuario.codTecnico))
       .then(() => this.carregarPendenciaTecnicoGrafico())
       .then(() => this.carregarReincidenciaTecnicoApi(this.dg.usuario.codTecnico))
-      .then(() => this.carregarReincidenciaTecnicoGrafico());
+      .then(() => this.carregarReincidenciaTecnicoGrafico())
+      .catch(() => {});
   }
 
   private carregarSLATecnicoApi(codTecnico: number): Promise<any> {

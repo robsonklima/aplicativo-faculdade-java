@@ -61,7 +61,8 @@ export class ChamadoPage {
     this.carregarDadosGlobais()
       .then((dg) => this.obterDistanciaRaioFilial(dg.usuario.filial.nomeFilial))
       .then(() => this.obterRegistrosPonto())
-      .then(() => this.registrarLeituraOs());
+      .then(() => this.registrarLeituraOs())
+      .catch(() => {});
   }
 
   public alterarSlide() {

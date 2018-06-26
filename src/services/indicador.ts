@@ -23,8 +23,6 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  
-
   buscarGrfReincidenciaFilialApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfReincidenciaFilial')
       .timeout(60000)
@@ -34,7 +32,7 @@ export class IndicadorService {
 
   buscarGrfAcumuladoTecnicoApi(codTecnico: number): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico/' + codTecnico)
-      .timeout(20000)
+      .timeout(30000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

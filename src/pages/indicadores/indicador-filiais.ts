@@ -35,7 +35,8 @@ export class IndicadorFiliaisPage {
       .then(() => this.carregarPendenciaFiliaisApi())
       .then(() => this.carregarPendenciaFiliaisGrafico())
       .then(() => this.carregarReincidenciaFiliaisApi())
-      .then(() => this.carregarReincidenciaFiliaisGrafico());    
+      .then(() => this.carregarReincidenciaFiliaisGrafico())
+      .catch(() => {});   
   }
 
   private carregarSLAFiliaisApi(): Promise<any> {
