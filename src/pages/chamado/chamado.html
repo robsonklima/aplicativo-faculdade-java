@@ -285,6 +285,7 @@
               type="text" 
               placeholder="Nome" 
               name="nomeAcompanhante"
+              (keyup)="removerCaracteresNaoAlfabeticos($event)"
               [maxlength]="50"
               [ngModel]="chamado?.rats[0]?.nomeAcompanhante">
             </ion-input>
@@ -413,7 +414,8 @@
             <ion-label stacked>Solução</ion-label>
             <ion-textarea 
               placeholder="Descreva o serviço realizado" 
-              name="obsRAT" 
+              name="obsRAT"
+              (keyup)="removerCaracteresEspeciais($event)"
               [ngModel]="chamado?.rats[0]?.obsRAT"
               required>
             </ion-textarea>
