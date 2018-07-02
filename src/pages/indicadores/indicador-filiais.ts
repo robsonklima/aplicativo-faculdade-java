@@ -1,15 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
-import { Chart } from 'chart.js';
 
-import { IndicadorService } from '../../services/indicador';
+import { Chart } from 'chart.js';
 import { Config } from '../../config/config';
+
+import { DadosGlobais } from '../../models/dados-globais';
+import { DadosGlobaisService } from '../../services/dados-globais';
+import { IndicadorService } from '../../services/indicador';
 
 @Component({
   selector: 'indicador-filiais-page',
   templateUrl: 'indicador-filiais.html'
 })
 export class IndicadorFiliaisPage {
+  dg: DadosGlobais;
 
   grfSLAFiliaisLabels: string[] = [];
   grfSLAFiliaisValues: number[] = [];
@@ -33,11 +37,13 @@ export class IndicadorFiliaisPage {
   
   constructor(
     private loadingCtrl: LoadingController,
-    private indicadorService: IndicadorService
+    private indicadorService: IndicadorService,
+    private dgService: DadosGlobaisService
   ) {}
 
   ionViewDidLoad() {
     this.exibirFakeLoading()
+      .then(() => this.carregarDadosGlobais())
       .then(() => this.carregarSLAFiliaisApi())
       .then(() => this.carregarSLAFiliaisGrafico())
       .then(() => this.carregarPendenciaFiliaisApi())
@@ -186,7 +192,7 @@ export class IndicadorFiliaisPage {
 
   private carregarDispBBFilialApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfDispBBFilialApi(23)
+      this.indicadorService.buscarGrfDispBBFilialApi(this.dg.usuario.filial.codFilial)
         .subscribe(dados => {
           dados.forEach((d, i) => {
             this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + '-' + d[2].substring(0, 4));
@@ -218,6 +224,20 @@ export class IndicadorFiliaisPage {
         }]
       },
       options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+    });
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dgService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(dados);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
     });
   }
 }
