@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
 import { Chart } from 'chart.js';
 
 import { IndicadorService } from '../../services/indicador';
@@ -31,11 +32,13 @@ export class IndicadorFiliaisPage {
   @ViewChild('grfDispBBFilial') grfDispBBFilial;
   
   constructor(
+    private loadingCtrl: LoadingController,
     private indicadorService: IndicadorService
   ) {}
 
   ionViewDidLoad() {
-    this.carregarSLAFiliaisApi()
+    this.exibirFakeLoading()
+      .then(() => this.carregarSLAFiliaisApi())
       .then(() => this.carregarSLAFiliaisGrafico())
       .then(() => this.carregarPendenciaFiliaisApi())
       .then(() => this.carregarPendenciaFiliaisGrafico())
@@ -46,11 +49,27 @@ export class IndicadorFiliaisPage {
       .catch(() => {});   
   }
 
+  private exibirFakeLoading(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const loading = this.loadingCtrl.create({ 
+        content: 'Aguarde... Isso pode demorar até um minuto...',
+        enableBackdropDismiss: true
+      });
+      loading.present();
+
+      setTimeout(() => { loading.dismiss() }, 30000);
+      
+      resolve();
+    })
+  }
+
   private carregarSLAFiliaisApi(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.indicadorService.buscarGrfSLAFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
+            if (d.percentual == 0) { return; }
+
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
             if (d.percentual > Config.PERC_SLA_ACEITAVEL) {
@@ -59,7 +78,7 @@ export class IndicadorFiliaisPage {
               this.grfSLAFiliaisColors.push('rgba(255, 0, 0, 0.2)');
             }
           });
-
+          
           resolve();
         },
         err => {
@@ -90,6 +109,8 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfPendenciaFilialApi()
       .subscribe(dados => {
         dados.forEach((d, i) => {
+          if (d.percentual == 0) { return; }
+
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
           if (d.percentual < Config.PERC_PEND_ACEITAVEL) {
@@ -128,6 +149,8 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfReincidenciaFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
+            if (d.percentual == 0) { return; }
+
             this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
             this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
             if (d.percentual > Config.PERC_REINC_ACEITAVEL) {
@@ -166,9 +189,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfDispBBFilialApi(23)
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + ' ' + d[2]);
+            this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + '-' + d[2].substring(0, 4));
             this.grfDispBBFilialValues.push(Number(d[1]));
-            this.grfDispBBFilialColors.push('rgba(75, 192, 192, 0.2)');
+
+            if (d[1] > Config.PERC_DISP_ACEITAVEL) {
+              this.grfDispBBFilialColors.push('rgba(75, 192, 192, 0.2)');
+            } else {
+              this.grfDispBBFilialColors.push('rgba(255, 0, 0, 0.2)');
+            }
           });
           
           resolve();
