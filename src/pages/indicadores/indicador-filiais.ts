@@ -24,6 +24,11 @@ export class IndicadorFiliaisPage {
   grfReincidenciaFiliaisValues: number[] = [];
   grfReincidenciaFiliaisColors: string[] = [];
   @ViewChild('grfReincidenciaFiliais') grfReincidenciaFiliais;
+
+  grfDispBBFilialLabels: string[] = [];
+  grfDispBBFilialValues: number[] = [];
+  grfDispBBFilialColors: string[] = [];
+  @ViewChild('grfDispBBFilial') grfDispBBFilial;
   
   constructor(
     private indicadorService: IndicadorService
@@ -36,6 +41,8 @@ export class IndicadorFiliaisPage {
       .then(() => this.carregarPendenciaFiliaisGrafico())
       .then(() => this.carregarReincidenciaFiliaisApi())
       .then(() => this.carregarReincidenciaFiliaisGrafico())
+      .then(() => this.carregarDispBBFilialApi())
+      .then(() => this.carregarDispBBFilialGrafico())
       .catch(() => {});   
   }
 
@@ -147,6 +154,38 @@ export class IndicadorFiliaisPage {
           label: '%',
           data: this.grfReincidenciaFiliaisValues,
           backgroundColor: this.grfReincidenciaFiliaisColors,
+          borderWidth: 1
+        }]
+      },
+      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+    });
+  }
+
+  private carregarDispBBFilialApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfDispBBFilialApi(23)
+        .subscribe(dados => {
+          dados.forEach((d, i) => {
+            this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + ' ' + d[2]);
+            this.grfDispBBFilialValues.push(Number(d[1]));
+            this.grfDispBBFilialColors.push('rgba(75, 192, 192, 0.2)');
+          });
+          
+          resolve();
+        },
+        err => { reject(); });
+    });
+  }
+
+  private carregarDispBBFilialGrafico() {
+    this.grfDispBBFilial = new Chart(this.grfDispBBFilial.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: this.grfDispBBFilialLabels,
+        datasets: [{
+          label: '%',
+          data: this.grfDispBBFilialValues,
+          backgroundColor: this.grfDispBBFilialColors,
           borderWidth: 1
         }]
       },

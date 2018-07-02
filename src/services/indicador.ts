@@ -76,4 +76,10 @@ export class IndicadorService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
+
+  buscarGrfDispBBFilialApi(codFilial: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfSpeedometer/' + codFilial)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
 }

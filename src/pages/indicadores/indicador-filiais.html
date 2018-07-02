@@ -40,4 +40,16 @@
       </canvas>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Disponibilidade BB da Filial
+    </ion-card-header>
+    <ion-card-content>
+      <ion-spinner *ngIf="grfDispBBFilialValues.length == 0"></ion-spinner>
+      <canvas #grfDispBBFilial
+        [ngClass]="{ 'display-none': grfDispBBFilialValues.length == 0 }">
+      </canvas>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
