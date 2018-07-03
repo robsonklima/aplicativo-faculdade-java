@@ -198,7 +198,7 @@ export class IndicadorFiliaisPage {
             this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + '-' + d[2].substring(0, 4));
             this.grfDispBBFilialValues.push(Number(d[1]));
 
-            if (Number(d[1]) > Number(d[3].replace(',', '.'))) {
+            if (Number(d[1]) > Number(d[3])) {
               this.grfDispBBFilialColors.push('rgba(75, 192, 192, 0.2)');
             } else {
               this.grfDispBBFilialColors.push('rgba(255, 0, 0, 0.2)');

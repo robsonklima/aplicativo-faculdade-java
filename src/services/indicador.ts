@@ -25,7 +25,7 @@ export class IndicadorService {
 
   buscarGrfReincidenciaFilialApi(): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfReincidenciaFilial')
-      .timeout(60000)
+      .timeout(30000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
@@ -78,7 +78,7 @@ export class IndicadorService {
   }
 
   buscarGrfDispBBFilialApi(codFilial: number): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfSpeedometer/' + codFilial)
+    return this.http.get(Config.API_URL + 'GrfDispBBFilial/' + codFilial)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
