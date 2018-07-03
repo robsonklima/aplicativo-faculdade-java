@@ -72,10 +72,10 @@ export class IndicadorFiliaisPage {
         .subscribe(dados => {
           dados.forEach((d, i) => {
             if (d.percentual == 0) { return; }
-
+            
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
-            if (d.percentual > Config.PERC_SLA_ACEITAVEL) {
+            if (Number(d.percentual) > Config.PERC_SLA_ACEITAVEL) {
               this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
             } else {
               this.grfSLAFiliaisColors.push(Config.COR_RGB.VERMELHO);
@@ -90,20 +90,35 @@ export class IndicadorFiliaisPage {
 
   private carregarSLAFiliaisGrafico() {
     this.grfSLAFiliais = new Chart(this.grfSLAFiliais.nativeElement, {
-      type: 'bar',
-      barChartLegend: false,
+      type: 'line',
       data: {
         labels: this.grfSLAFiliaisLabels,
         datasets: [
           {
-            label: '%',
+            label: "%",
+            fill: true,
+            lineTension: 0,
+            backgroundColor: Config.COR_RGB.CINZA,
+            borderColor: this.grfSLAFiliaisColors,
+            //borderCapStyle: 'butt',
+            //borderJoinStyle: 'miter',
+            borderDash: [],
+            borderDashOffset: 1.0,
+            pointBorderColor: this.grfSLAFiliaisColors,
+            pointBackgroundColor: this.grfSLAFiliaisColors,
+            pointBorderWidth: 3,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: this.grfSLAFiliaisColors,
+            pointHoverBorderColor: this.grfSLAFiliaisColors,
+            pointHoverBorderWidth: 2,
+            pointRadius: 3,
+            pointHitRadius: 10,
             data: this.grfSLAFiliaisValues,
-            backgroundColor: this.grfSLAFiliaisColors,
-            borderWidth: 1
+            spanGaps: true
           }
         ]
       },
-      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      options: { legend: false, scales: { xAxes: [{ display: false }] } }
     });
   }
 
