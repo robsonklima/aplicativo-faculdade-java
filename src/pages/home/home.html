@@ -32,6 +32,17 @@
       Atenção! Não ultrapassar 6h contínuas de trabalho!
     </ion-item-divider>
 
+    <button
+      class="first-item"
+      ion-item 
+      [disabled]="true">  
+      <ion-icon 
+        color="primary" 
+        name="clock" 
+        item-start></ion-icon>
+      Ponto
+    </button>
+
     <button 
       ion-item
       class="first-item"
@@ -57,6 +68,26 @@
         name="build" 
         item-start></ion-icon>
       Peças
+    </button>
+
+    <button 
+      ion-item 
+      [disabled]="true">
+      <ion-icon 
+        color="primary" 
+        name="checkbox" 
+        item-start></ion-icon>
+        Checklist
+    </button>
+
+    <button 
+      ion-item 
+      [disabled]="true">
+      <ion-icon 
+        color="primary" 
+        name="mail" 
+        item-start></ion-icon>
+      Mensagens
     </button>
 
     <button 
