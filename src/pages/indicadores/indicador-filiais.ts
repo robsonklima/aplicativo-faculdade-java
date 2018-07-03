@@ -74,7 +74,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfSLAFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            if (d.percentual == 0) { return; }
+            if (!d.percentual) { return; }
 
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
@@ -85,11 +85,9 @@ export class IndicadorFiliaisPage {
             }
           });
           
-          resolve();
+          resolve(dados);
         },
-        err => {
-          reject();
-        });
+        err => { reject(); });
     });
   }
 
@@ -115,7 +113,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfPendenciaFilialApi()
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          if (d.percentual == 0) { return; }
+          if (!d.percentual) { return; }
 
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
@@ -126,11 +124,9 @@ export class IndicadorFiliaisPage {
           }
         });
 
-        resolve();
+        resolve(dados);
       },
-      err => {
-        reject();
-      });
+      err => { reject(); });
     });
   }
 
@@ -155,7 +151,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfReincidenciaFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            if (d.percentual == 0) { return; }
+            if (!d.percentual) { return; }
 
             this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
             this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
@@ -166,11 +162,9 @@ export class IndicadorFiliaisPage {
             }
           });
 
-          resolve();
+          resolve(dados);
         },
-        err => {
-          reject();
-        });
+        err => { reject(); });
     });
   }
 
@@ -205,7 +199,7 @@ export class IndicadorFiliaisPage {
             }
           });
           
-          resolve();
+          resolve(dados);
         },
         err => { reject(); });
     });
