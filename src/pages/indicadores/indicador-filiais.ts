@@ -58,12 +58,12 @@ export class IndicadorFiliaisPage {
   private exibirFakeLoading(): Promise<any> {
     return new Promise((resolve, reject) => {
       const loading = this.loadingCtrl.create({ 
-        content: 'Aguarde... Isso pode demorar até um minuto...',
+        content: 'Carregando...',
         enableBackdropDismiss: true
       });
       loading.present();
 
-      setTimeout(() => { loading.dismiss() }, 30000);
+      setTimeout(() => { loading.dismiss() }, 15000);
       
       resolve();
     })
