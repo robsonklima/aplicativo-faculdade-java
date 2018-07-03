@@ -14,7 +14,7 @@ import { IndicadorService } from '../../services/indicador';
 })
 export class IndicadorFiliaisPage {
   dg: DadosGlobais;
-
+  
   grfSLAFiliaisLabels: string[] = [];
   grfSLAFiliaisValues: number[] = [];
   grfSLAFiliaisColors: string[] = [];
@@ -79,9 +79,9 @@ export class IndicadorFiliaisPage {
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
             if (d.percentual > Config.PERC_SLA_ACEITAVEL) {
-              this.grfSLAFiliaisColors.push('rgba(75, 192, 192, 0.2)');
+              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
             } else {
-              this.grfSLAFiliaisColors.push('rgba(255, 0, 0, 0.2)');
+              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERMELHO);
             }
           });
           
@@ -120,9 +120,9 @@ export class IndicadorFiliaisPage {
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
           if (d.percentual < Config.PERC_PEND_ACEITAVEL) {
-            this.grfPendenciaFiliaisColors.push('rgba(75, 192, 192, 0.2)');
+            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERDE);
           } else {
-            this.grfPendenciaFiliaisColors.push('rgba(255, 0, 0, 0.2)');
+            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
           }
         });
 
@@ -159,10 +159,10 @@ export class IndicadorFiliaisPage {
 
             this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
             this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
-            if (d.percentual > Config.PERC_REINC_ACEITAVEL) {
-              this.grfReincidenciaFiliaisColors.push('rgba(75, 192, 192, 0.2)');
+            if (d.percentual < Config.PERC_REINC_ACEITAVEL) {
+              this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERDE);
             } else {
-              this.grfReincidenciaFiliaisColors.push('rgba(255, 0, 0, 0.2)');
+              this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
             }
           });
 
@@ -199,9 +199,9 @@ export class IndicadorFiliaisPage {
             this.grfDispBBFilialValues.push(Number(d[1]));
 
             if (Number(d[1]) > Number(d[3])) {
-              this.grfDispBBFilialColors.push('rgba(75, 192, 192, 0.2)');
+              this.grfDispBBFilialColors.push(Config.COR_RGB.VERDE);
             } else {
-              this.grfDispBBFilialColors.push('rgba(255, 0, 0, 0.2)');
+              this.grfDispBBFilialColors.push(Config.COR_RGB.VERMELHO);
             }
           });
           

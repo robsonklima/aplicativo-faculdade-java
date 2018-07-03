@@ -43,7 +43,8 @@ export class Config {
     { filial: 'FRJ', distancia: 4.44 },
     { filial: 'FAM', distancia: 4.78 }
   ];
-
+  public static COR_RGB = { VERDE: 'rgba(75, 192, 192, 0.2)', VERMELHO: 'rgba(255, 0, 0, 0.2)' };
+  
   //public static API_URL = 'http://localhost:60687/api/';
   public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }
