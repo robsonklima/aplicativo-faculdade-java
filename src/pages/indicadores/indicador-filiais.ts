@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { LoadingController } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
 import { Config } from '../../config/config';
@@ -36,14 +35,12 @@ export class IndicadorFiliaisPage {
   @ViewChild('grfDispBBFilial') grfDispBBFilial;
   
   constructor(
-    private loadingCtrl: LoadingController,
     private indicadorService: IndicadorService,
     private dgService: DadosGlobaisService
   ) {}
 
   ionViewDidLoad() {
-    this.exibirFakeLoading()
-      .then(() => this.carregarDadosGlobais())
+    this.carregarDadosGlobais()
       .then(() => this.carregarSLAFiliaisApi())
       .then(() => this.carregarSLAFiliaisGrafico())
       .then(() => this.carregarPendenciaFiliaisApi())
@@ -67,20 +64,6 @@ export class IndicadorFiliaisPage {
           reject(new Error(err.message))
         });
     });
-  }
-
-  private exibirFakeLoading(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({ 
-        content: 'Carregando...',
-        enableBackdropDismiss: true
-      });
-      loading.present();
-
-      setTimeout(() => { loading.dismiss() }, 15000);
-      
-      resolve();
-    })
   }
 
   private carregarSLAFiliaisApi(): Promise<any> {
