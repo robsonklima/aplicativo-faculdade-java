@@ -55,6 +55,20 @@ export class IndicadorFiliaisPage {
       .catch(() => {});   
   }
 
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dgService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(dados);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
+  }
+
   private exibirFakeLoading(): Promise<any> {
     return new Promise((resolve, reject) => {
       const loading = this.loadingCtrl.create({ 
@@ -74,7 +88,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfSLAFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            if (!d.percentual) { return; }
+            if (d.percentual == 0) { return; }
 
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
@@ -97,12 +111,14 @@ export class IndicadorFiliaisPage {
       barChartLegend: false,
       data: {
         labels: this.grfSLAFiliaisLabels,
-        datasets: [{
-          label: '%',
-          data: this.grfSLAFiliaisValues,
-          backgroundColor: this.grfSLAFiliaisColors,
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: '%',
+            data: this.grfSLAFiliaisValues,
+            backgroundColor: this.grfSLAFiliaisColors,
+            borderWidth: 1
+          }
+        ]
       },
       options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
     });
@@ -113,7 +129,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfPendenciaFilialApi()
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          if (!d.percentual) { return; }
+          if (d.percentual == 0) { return; }
 
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
@@ -151,7 +167,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfReincidenciaFilialApi()
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            if (!d.percentual) { return; }
+            if (d.percentual == 0) { return; }
 
             this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
             this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
@@ -218,20 +234,6 @@ export class IndicadorFiliaisPage {
         }]
       },
       options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
-    });
-  }
-
-  private carregarDadosGlobais(): Promise<DadosGlobais> {
-    return new Promise((resolve, reject) => {
-      this.dgService.buscarDadosGlobaisStorage()
-        .then((dados) => {
-          if (dados)
-            this.dg = dados;
-            resolve(dados);
-        })
-        .catch((err) => {
-          reject(new Error(err.message))
-        });
     });
   }
 }

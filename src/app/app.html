@@ -15,7 +15,10 @@
       <ion-item 
         *ngIf="dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil">
         <ion-icon color="silver-light" name="briefcase" item-start></ion-icon>
-        <span class="user-name">{{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil | lowercase | capitalize }}</span>
+        <span class="user-name">
+          {{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil | lowercase | capitalize }} 
+          {{ dadosGlobais?.usuario?.filial?.nomeFilial }}
+        </span>
       </ion-item>
       <ion-item (click)="telaSenhaAlteracao()">
         <ion-icon color="primary" name="lock" item-start></ion-icon>

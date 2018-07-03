@@ -36,7 +36,7 @@
 
   <ion-card [ngClass]="{ 'display-none': grfDispBBFilialValues.length == 0 }">
     <ion-card-header>
-      Disponibilidade BB da Filial
+      Disponibilidade BB da Filial {{ dg?.usuario?.filial?.nomeFilial }}
     </ion-card-header>
     <ion-card-content>
       <canvas #grfDispBBFilial></canvas>
