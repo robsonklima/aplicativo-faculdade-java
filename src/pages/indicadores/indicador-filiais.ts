@@ -156,6 +156,7 @@ export class IndicadorFiliaisPage {
           label: '%',
           data: this.grfPendenciaFiliaisValues,
           backgroundColor: this.grfPendenciaFiliaisColors,
+          //borderColor: Config.COR_RGB.CINZA,
           borderWidth: 1
         }]
       },
