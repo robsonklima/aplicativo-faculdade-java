@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, ToastController, LoadingController } from 'ionic-angular';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { IndicadorService } from '../../services/indicador';
@@ -30,7 +30,6 @@ export class IndicadorAcumuladoTecnicoPage {
 
   constructor(
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private indicadorService: IndicadorService,
     private dadosGlobaisService: DadosGlobaisService
@@ -38,7 +37,6 @@ export class IndicadorAcumuladoTecnicoPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais()
-      .then(() => this.exibirFakeLoading())
       .then(() => this.carregarGrfAcumuladoTecnicoApi(this.dg.usuario.codTecnico))
       .then(() => this.carregarGrfPecasMaisTrocadasTecnicoApi())
       .then(() => this.carregarGrfPecasMaisPendenciadasTecnicoApi())
@@ -133,19 +131,6 @@ export class IndicadorAcumuladoTecnicoPage {
           reject(new Error(err.message))
         });
     });
-  }
-
-  private exibirFakeLoading(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const loading = this.loadingCtrl.create({ 
-        content: 'Aguarde...' 
-      });
-      loading.present();
-
-      setTimeout(() => { loading.dismiss() }, 15000);
-      
-      resolve();
-    })
   }
 
   public exibirToast(message: string): Promise<any> {    
