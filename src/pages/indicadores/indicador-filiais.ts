@@ -107,12 +107,12 @@ export class IndicadorFiliaisPage {
             pointBorderColor: this.grfSLAFiliaisColors,
             pointBackgroundColor: this.grfSLAFiliaisColors,
             pointBorderWidth: 3,
-            pointHoverRadius: 5,
+            pointHoverRadius: 3,
             pointHoverBackgroundColor: this.grfSLAFiliaisColors,
             pointHoverBorderColor: this.grfSLAFiliaisColors,
             pointHoverBorderWidth: 2,
             pointRadius: 3,
-            pointHitRadius: 10,
+            pointHitRadius: 3,
             data: this.grfSLAFiliaisValues,
             spanGaps: true
           }
