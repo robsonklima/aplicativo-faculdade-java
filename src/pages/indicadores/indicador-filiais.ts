@@ -77,17 +77,27 @@ export class IndicadorFiliaisPage {
         .subscribe(dados => {
           dados.forEach((d, i) => {
             if (d.percentual == 0) { return; }
+
+            let label: string = d.nomeFilial;
+            let value: number = Number(d.percentual);
+            let color: string;
             
-            this.grfSLAFiliaisLabels.push(d.nomeFilial);
-            this.grfSLAFiliaisValues.push(Number(d.percentual));
-            
-            if (Number(d.percentual) > 95) {
-              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
-            } else if (Number(d.percentual) > 90.01 && Number(d.percentual) <= 95) {
-              this.grfSLAFiliaisColors.push(Config.COR_RGB.LARANJA);
+            if (value > 95) {
+              color = Config.COR_RGB.VERDE;
+            } else if (value > 90.01 && value <= 95) {
+              color = Config.COR_RGB.LARANJA;
             } else {
-              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERMELHO);
+              color = Config.COR_RGB.VERMELHO;
             }
+
+            if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+              color = Config.COR_RGB.AZUL;
+              label = "MINHA FILIAL";
+            } 
+
+            this.grfSLAFiliaisLabels.push(label);
+            this.grfSLAFiliaisValues.push(value);
+            this.grfSLAFiliaisColors.push(color);
           });
           
           resolve(dados);
@@ -138,15 +148,26 @@ export class IndicadorFiliaisPage {
         dados.forEach((d, i) => {
           if (d.percentual == 0) { return; }
 
-          this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
-          this.grfPendenciaFiliaisValues.push(Number(d.percentual));
-          if (d.percentual < 3.01) {
-            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERDE);
-          } else if (d.percentual > 3 && d.percentual < 5) {
-            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.LARANJA);
+          let label: string = d.nomeFilial;
+          let value: number = Number(d.percentual);
+          let color: string;
+          
+          if (value <= 3) {
+            color = Config.COR_RGB.VERDE;
+          } else if (value > 3 && value < 5) {
+            color = Config.COR_RGB.LARANJA;
           } else {
-            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
+            color = Config.COR_RGB.VERMELHO;
           }
+
+          if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+            color = Config.COR_RGB.AZUL;
+            label = "MINHA FILIAL";
+          } 
+
+          this.grfPendenciaFiliaisLabels.push(label);
+          this.grfPendenciaFiliaisValues.push(value);
+          this.grfPendenciaFiliaisColors.push(color);
         });
 
         resolve(dados);
@@ -156,19 +177,37 @@ export class IndicadorFiliaisPage {
   }
 
   private carregarPendenciaFiliaisGrafico() {
+    var horizontalBarChartData = {
+			labels: this.grfPendenciaFiliaisLabels,
+			datasets: [{
+				label: '%',
+				backgroundColor: this.grfPendenciaFiliaisColors,
+				borderColor: this.grfPendenciaFiliaisColors,
+				borderWidth: 1,
+				data: this.grfPendenciaFiliaisValues
+			}]
+		};
+
     this.grfPendenciaFiliais = new Chart(this.grfPendenciaFiliais.nativeElement, {
-      type: 'bar',
-      data: {
-        labels: this.grfPendenciaFiliaisLabels,
-        datasets: [{
-          label: '%',
-          data: this.grfPendenciaFiliaisValues,
-          backgroundColor: this.grfPendenciaFiliaisColors,
-          //borderColor: Config.COR_RGB.CINZA,
-          borderWidth: 1
-        }]
-      },
-      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      type: 'horizontalBar',
+      data: horizontalBarChartData,
+      options: {
+        elements: {
+          rectangle: {
+            borderWidth: 2,
+          }
+        },
+        responsive: true, 
+        maintainAspectRatio: false,
+        legend: false,
+        title: {
+          display: false,
+          text: 'Pendência por Filiais'
+        },
+        scales: { 
+          xAxes: [{ ticks: { beginAtZero: false } }]
+        }
+      }
     });
   }
 
@@ -179,13 +218,24 @@ export class IndicadorFiliaisPage {
           dados.forEach((d, i) => {
             if (d.percentual == 0) { return; }
 
-            this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
-            this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
-            if (d.percentual < 35) {
-              this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERDE);
+            let label: string = d.nomeFilial;
+            let value: number = Number(d.percentual);
+            let color: string;
+            
+            if (value < 35) {
+              color = Config.COR_RGB.VERDE;
             } else {
-              this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
+              color = Config.COR_RGB.VERMELHO;
             }
+
+            if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+              color = Config.COR_RGB.AZUL;
+              label = "MINHA FILIAL";
+            } 
+
+            this.grfReincidenciaFiliaisLabels.push(label);
+            this.grfReincidenciaFiliaisValues.push(value);
+            this.grfReincidenciaFiliaisColors.push(color);
           });
 
           resolve(dados);
@@ -195,18 +245,37 @@ export class IndicadorFiliaisPage {
   }
 
   private carregarReincidenciaFiliaisGrafico() {
+    var horizontalBarChartData = {
+			labels: this.grfReincidenciaFiliaisLabels,
+			datasets: [{
+				label: '%',
+				backgroundColor: this.grfReincidenciaFiliaisColors,
+				borderColor: this.grfReincidenciaFiliaisColors,
+				borderWidth: 1,
+				data: this.grfReincidenciaFiliaisValues
+			}]
+		};
+
     this.grfReincidenciaFiliais = new Chart(this.grfReincidenciaFiliais.nativeElement, {
-      type: 'bar',
-      data: {
-        labels: this.grfReincidenciaFiliaisLabels,
-        datasets: [{
-          label: '%',
-          data: this.grfReincidenciaFiliaisValues,
-          backgroundColor: this.grfReincidenciaFiliaisColors,
-          borderWidth: 1
-        }]
-      },
-      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      type: 'horizontalBar',
+      data: horizontalBarChartData,
+      options: {
+        elements: {
+          rectangle: {
+            borderWidth: 2,
+          }
+        },
+        responsive: true, 
+        maintainAspectRatio: false,
+        legend: false,
+        title: {
+          display: false,
+          text: 'Reincidência por Filiais'
+        },
+        scales: { 
+          xAxes: [{ ticks: { beginAtZero: false } }]
+        }
+      }
     });
   }
 

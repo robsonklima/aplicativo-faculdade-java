@@ -24,7 +24,8 @@ export class Config {
     VERDE: 'rgba(75, 192, 192, 0.4)', 
     VERMELHO: 'rgba(255, 0, 0, 0.4)', 
     LARANJA: 'rgba(255, 153, 0, 0.4)',
-    CINZA: 'rgba(196, 199, 206, 0.2)'
+    CINZA: 'rgba(196, 199, 206, 0.2)',
+    AZUL: 'rgba(0,127,255, 0.4)'
   };
   public static CHAMADO = { TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = { PENDENCIA_PECA: { CODACAO: 19 } };

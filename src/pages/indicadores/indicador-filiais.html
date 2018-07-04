@@ -27,7 +27,9 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfPendenciaFiliaisValues.length == 0"></ion-spinner>
-      <canvas #grfPendenciaFiliais
+      <canvas 
+        #grfPendenciaFiliais
+        width="720"
         [ngClass]="{ 'display-none': grfPendenciaFiliaisValues.length == 0 }">
       </canvas>
     </ion-card-content>
@@ -39,7 +41,9 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfReincidenciaFiliaisValues.length == 0"></ion-spinner>
-      <canvas #grfReincidenciaFiliais
+      <canvas 
+        #grfReincidenciaFiliais
+        width="720"
         [ngClass]="{ 'display-none': grfReincidenciaFiliaisValues.length == 0 }">
       </canvas>
     </ion-card-content>
@@ -51,7 +55,8 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfDispBBFilialValues.length == 0"></ion-spinner>
-      <canvas #grfDispBBFilial
+      <canvas 
+        #grfDispBBFilial
         [ngClass]="{ 'display-none': grfDispBBFilialValues.length == 0 }">
       </canvas>
     </ion-card-content>
