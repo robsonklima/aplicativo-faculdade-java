@@ -41,15 +41,20 @@ export class IndicadorFiliaisPage {
 
   ionViewDidLoad() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarSLAFiliaisApi())
-      .then(() => this.carregarSLAFiliaisGrafico())
-      .then(() => this.carregarPendenciaFiliaisApi())
-      .then(() => this.carregarPendenciaFiliaisGrafico())
-      .then(() => this.carregarReincidenciaFiliaisApi())
-      .then(() => this.carregarReincidenciaFiliaisGrafico())
-      .then(() => this.carregarDispBBFilialApi())
-      .then(() => this.carregarDispBBFilialGrafico())
-      .catch(() => {});   
+      .then(() => {
+        this.carregarSLAFiliaisApi()
+          .then(() => this.carregarSLAFiliaisGrafico()).catch(() => {});
+        
+        this.carregarPendenciaFiliaisApi()
+          .then(() => this.carregarPendenciaFiliaisGrafico()).catch(() => {});
+
+        this.carregarReincidenciaFiliaisApi()
+          .then(() => this.carregarReincidenciaFiliaisGrafico()).catch(() => {});
+          
+        this.carregarDispBBFilialApi()
+          .then(() => this.carregarDispBBFilialGrafico()).catch(() => {});
+      })
+      .catch(() => {});
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -99,9 +104,7 @@ export class IndicadorFiliaisPage {
             fill: true,
             lineTension: 0,
             backgroundColor: Config.COR_RGB.CINZA,
-            borderColor: this.grfSLAFiliaisColors,
-            //borderCapStyle: 'butt',
-            //borderJoinStyle: 'miter',
+            borderColor: Config.COR_RGB.CINZA,
             borderDash: [],
             borderDashOffset: 1.0,
             pointBorderColor: this.grfSLAFiliaisColors,

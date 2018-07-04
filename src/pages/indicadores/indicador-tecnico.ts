@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 
+import { Config } from '../../config/config';
 import { Chart } from 'chart.js';
+
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { IndicadorService } from '../../services/indicador';
 import { DadosGlobais } from '../../models/dados-globais';
@@ -36,13 +38,31 @@ export class IndicadorTecnicoPage {
 
   ionViewDidLoad() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarSLATecnicoApi(this.dg.usuario.codTecnico))
-      .then(() => this.carregarSLATecnicoGrafico())
-      .then(() => this.carregarPendenciaTecnicoApi(this.dg.usuario.codTecnico))
-      .then(() => this.carregarPendenciaTecnicoGrafico())
-      .then(() => this.carregarReincidenciaTecnicoApi(this.dg.usuario.codTecnico))
-      .then(() => this.carregarReincidenciaTecnicoGrafico())
+      .then(() => {
+        this.carregarSLATecnicoApi(this.dg.usuario.codTecnico)
+          .then(() => this.carregarSLATecnicoGrafico()).catch(() => {});
+          
+        this.carregarPendenciaTecnicoApi(this.dg.usuario.codTecnico)
+          .then(() => this.carregarPendenciaTecnicoGrafico()).catch(() => {});
+
+        this.carregarReincidenciaTecnicoApi(this.dg.usuario.codTecnico)
+          .then(() => this.carregarReincidenciaTecnicoGrafico()).catch(() => {});
+      })
       .catch(() => {});
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(this.dg);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
   }
 
   private carregarSLATecnicoApi(codTecnico: number): Promise<any> {
@@ -52,19 +72,16 @@ export class IndicadorTecnicoPage {
         dados.forEach((d, i) => {
           this.grfSLATecnicoLabels.push('Fora do Prazo');
           this.grfSLATecnicoValues.push(Number(d.percForaPrazo));
-          this.grfSLATecnicoColors.push('rgba(255, 0, 0, 0.2)');
+          this.grfSLATecnicoColors.push(Config.COR_RGB.VERMELHO);
 
           this.grfSLATecnicoLabels.push('No Prazo');
           this.grfSLATecnicoValues.push(Number(d.percNoPrazo));
-          this.grfSLATecnicoColors.push('rgba(75, 192, 192, 0.2)');
+          this.grfSLATecnicoColors.push(Config.COR_RGB.VERDE);
         });
         
         resolve();
       },
-      err => {
-        this.exibirToast(err.message);
-        reject();
-      });
+      err => { reject(); });
     });
   }
 
@@ -89,19 +106,16 @@ export class IndicadorTecnicoPage {
         dados.forEach((d, i) => {
           this.grfPendenciaTecnicoLabels.push('Fora do Prazo');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosPendentes.replace(',', '.')));
-          this.grfPendenciaTecnicoColors.push('rgba(255, 0, 0, 0.2)');
+          this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
           this.grfPendenciaTecnicoLabels.push('No Prazo');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosNaoPendentes.replace(',', '.')));
-          this.grfPendenciaTecnicoColors.push('rgba(75, 192, 192, 0.2)');
+          this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });
 
         resolve();
       },
-      err => {
-        this.exibirToast(err.message);
-        reject();
-      });
+      err => { reject(); });
     });
   }
 
@@ -126,19 +140,16 @@ export class IndicadorTecnicoPage {
         dados.forEach((d, i) => {
           this.grfReincidenciaTecnicoLabels.push('Fora do Prazo');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosReincidentes.replace(',', '.')));
-          this.grfReincidenciaTecnicoColors.push('rgba(255, 0, 0, 0.2)');
+          this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
           this.grfReincidenciaTecnicoLabels.push('No Prazo');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosNaoReincidentes.replace(',', '.')));
-          this.grfReincidenciaTecnicoColors.push('rgba(75, 192, 192, 0.2)');
+          this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });
 
         resolve();
       },
-      err => {
-        this.exibirToast(err.message);
-        reject();
-      });
+      err => { reject(); });
     });
   }
 
@@ -153,20 +164,6 @@ export class IndicadorTecnicoPage {
           backgroundColor: this.grfReincidenciaTecnicoColors
         }]
       }
-    });
-  }
-
-  private carregarDadosGlobais(): Promise<DadosGlobais> {
-    return new Promise((resolve, reject) => {
-      this.dadosGlobaisService.buscarDadosGlobaisStorage()
-        .then((dados) => {
-          if (dados)
-            this.dg = dados;
-            resolve(this.dg);
-        })
-        .catch((err) => {
-          reject(new Error(err.message))
-        });
     });
   }
 
