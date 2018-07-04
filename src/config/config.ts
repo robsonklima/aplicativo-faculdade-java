@@ -8,7 +8,7 @@ export class Config {
   public static INT_SINC_CHAMADOS_MILISEG = 300000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
   public static PERC_SLA_ACEITAVEL = 98.0;
-  public static PERC_REINC_ACEITAVEL = 30;
+  public static PERC_REINC_ACEITAVEL = 15;
   public static PERC_PEND_ACEITAVEL = 3;
   public static CERCA_ELETRONICA = [
     { filial: 'FPR', distancia: 2.00 }, { filial: 'FRS', distancia: 2.55 },
