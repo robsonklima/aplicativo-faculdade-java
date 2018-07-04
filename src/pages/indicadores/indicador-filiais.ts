@@ -94,34 +94,35 @@ export class IndicadorFiliaisPage {
   }
 
   private carregarSLAFiliaisGrafico() {
+    var horizontalBarChartData = {
+			labels: this.grfSLAFiliaisLabels,
+			datasets: [{
+				label: '%',
+				backgroundColor: this.grfSLAFiliaisColors,
+				borderColor: this.grfSLAFiliaisColors,
+				borderWidth: 1,
+				data: this.grfSLAFiliaisValues
+			}]
+		};
+
     this.grfSLAFiliais = new Chart(this.grfSLAFiliais.nativeElement, {
-      type: 'line',
-      data: {
-        labels: this.grfSLAFiliaisLabels,
-        datasets: [
-          {
-            label: "%",
-            fill: true,
-            lineTension: 0,
-            backgroundColor: Config.COR_RGB.CINZA,
-            borderColor: Config.COR_RGB.CINZA,
-            borderDash: [],
-            borderDashOffset: 1.0,
-            pointBorderColor: this.grfSLAFiliaisColors,
-            pointBackgroundColor: this.grfSLAFiliaisColors,
-            pointBorderWidth: 3,
-            pointHoverRadius: 3,
-            pointHoverBackgroundColor: this.grfSLAFiliaisColors,
-            pointHoverBorderColor: this.grfSLAFiliaisColors,
-            pointHoverBorderWidth: 2,
-            pointRadius: 3,
-            pointHitRadius: 3,
-            data: this.grfSLAFiliaisValues,
-            spanGaps: true
+      type: 'horizontalBar',
+      data: horizontalBarChartData,
+      options: {
+        elements: {
+          rectangle: {
+            borderWidth: 2,
           }
-        ]
-      },
-      options: { legend: false, scales: { xAxes: [{ display: false }] } }
+        },
+        responsive: true, 
+        maintainAspectRatio: false,
+        legend: false,
+        title: {
+          display: false,
+          text: 'SLA por Filiais'
+        },
+        scales: { xAxes: [{ ticks: { beginAtZero: true } }] }
+      }
     });
   }
 

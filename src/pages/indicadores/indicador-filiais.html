@@ -13,7 +13,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfSLAFiliaisValues.length == 0"></ion-spinner>
-      <canvas #grfSLAFiliais
+      <canvas width="640" #grfSLAFiliais
         [ngClass]="{ 'display-none': grfSLAFiliaisValues.length == 0 }">
       </canvas>
     </ion-card-content>
