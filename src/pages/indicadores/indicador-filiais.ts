@@ -80,8 +80,11 @@ export class IndicadorFiliaisPage {
             
             this.grfSLAFiliaisLabels.push(d.nomeFilial);
             this.grfSLAFiliaisValues.push(Number(d.percentual));
-            if (Number(d.percentual) > Config.PERC_SLA_ACEITAVEL) {
+            
+            if (Number(d.percentual) > 95) {
               this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
+            } else if (Number(d.percentual) > 90.01 && Number(d.percentual) <= 95) {
+              this.grfSLAFiliaisColors.push(Config.COR_RGB.LARANJA);
             } else {
               this.grfSLAFiliaisColors.push(Config.COR_RGB.VERMELHO);
             }
@@ -121,7 +124,9 @@ export class IndicadorFiliaisPage {
           display: false,
           text: 'SLA por Filiais'
         },
-        scales: { xAxes: [{ ticks: { beginAtZero: true } }] }
+        scales: { 
+          xAxes: [{ ticks: { beginAtZero: false } }]
+        }
       }
     });
   }
@@ -135,8 +140,10 @@ export class IndicadorFiliaisPage {
 
           this.grfPendenciaFiliaisLabels.push(d.nomeFilial);
           this.grfPendenciaFiliaisValues.push(Number(d.percentual));
-          if (d.percentual < Config.PERC_PEND_ACEITAVEL) {
+          if (d.percentual < 3.01) {
             this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERDE);
+          } else if (d.percentual > 3 && d.percentual < 5) {
+            this.grfPendenciaFiliaisColors.push(Config.COR_RGB.LARANJA);
           } else {
             this.grfPendenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
           }
@@ -174,7 +181,7 @@ export class IndicadorFiliaisPage {
 
             this.grfReincidenciaFiliaisLabels.push(d.nomeFilial);
             this.grfReincidenciaFiliaisValues.push(Number(d.percentual));
-            if (d.percentual < Config.PERC_REINC_ACEITAVEL) {
+            if (d.percentual < 35) {
               this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERDE);
             } else {
               this.grfReincidenciaFiliaisColors.push(Config.COR_RGB.VERMELHO);
