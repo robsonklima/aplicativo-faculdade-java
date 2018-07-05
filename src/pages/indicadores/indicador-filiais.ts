@@ -73,34 +73,43 @@ export class IndicadorFiliaisPage {
 
   private carregarSLAFiliaisApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfSLAFilialApi()
-        .subscribe(dados => {
-          var max = Math.max.apply(Math,dados.map(function(d){return d.percentual;}))
-          
-          this.grfSLAFiliaisLabels.push('MELHOR FILIAL');
-          this.grfSLAFiliaisValues.push(max);
-          this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
+      this.indicadorService.buscarGrfSLAFilialApi().subscribe(dados => {
+        var percentualMax = Math.max.apply(Math, dados.map(function(d){ return d.percentual; }))
+        
+        this.grfSLAFiliaisLabels.push('MELHOR FILIAL');
+        this.grfSLAFiliaisValues.push(percentualMax);
+        this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(percentualMax));
 
-          let sum = 0;
-          dados.forEach((d, i) => {
-            if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-              this.grfSLAFiliaisLabels.push('MINHA FILIAL');
-              this.grfSLAFiliaisValues.push(d.percentual);
-              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
-            }
+        let sum = 0;
+        dados.forEach((d, i) => {
+          if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+            this.grfSLAFiliaisLabels.push('MINHA FILIAL');
+            this.grfSLAFiliaisValues.push(d.percentual);
+            this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(d.percentual));
+          }
 
-            sum += Number(d.percentual);
-          });
+          sum += Number(d.percentual);
+        });
 
-          let avg = sum / dados.length;
-          this.grfSLAFiliaisLabels.push('MÉDIA');
-          this.grfSLAFiliaisValues.push(avg);
-          this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
-          
-          resolve(dados);
-        },
-        err => { reject(); });
+        let avg = sum / dados.length;
+        this.grfSLAFiliaisLabels.push('MÉDIA');
+        this.grfSLAFiliaisValues.push(Number(avg.toFixed(2)));
+        this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(avg));
+        
+        resolve(dados);
+      },
+      err => { reject(); });
     });
+  }
+
+  private carregarCorSLAFiliais(percentual: Number) {
+    if (percentual > 95) {
+      return Config.COR_RGB.VERDE;
+    } else if (percentual > 90.01 && percentual <= 95) {
+      return Config.COR_RGB.LARANJA;
+    } else {
+      return Config.COR_RGB.VERMELHO;
+    }
   }
 
   private carregarSLAFiliaisGrafico() {
@@ -140,37 +149,43 @@ export class IndicadorFiliaisPage {
 
   private carregarPendenciaFiliaisApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfPendenciaFilialApi()
-      .subscribe(dados => {
-        dados.forEach((d, i) => {
-          if (d.percentual == 0) { return; }
-
-          let label: string = d.nomeFilial;
-          let value: number = Number(d.percentual);
-          let color: string;
+      this.indicadorService.buscarGrfPendenciaFilialApi().subscribe(dados => {
+        var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
           
-          if (value <= 3) {
-            color = Config.COR_RGB.VERDE;
-          } else if (value > 3 && value < 5) {
-            color = Config.COR_RGB.LARANJA;
-          } else {
-            color = Config.COR_RGB.VERMELHO;
+        this.grfPendenciaFiliaisLabels.push('MELHOR FILIAL');
+        this.grfPendenciaFiliaisValues.push(percentualMax);
+        this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(percentualMax));
+
+        let sum = 0;
+        dados.forEach((d, i) => {
+          if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+            this.grfPendenciaFiliaisLabels.push('MINHA FILIAL');
+            this.grfPendenciaFiliaisValues.push(d.percentual);
+            this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(d.percentual));
           }
 
-          if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            color = Config.COR_RGB.AZUL;
-            label = "MINHA FILIAL";
-          } 
-
-          this.grfPendenciaFiliaisLabels.push(label);
-          this.grfPendenciaFiliaisValues.push(value);
-          this.grfPendenciaFiliaisColors.push(color);
+          sum += Number(d.percentual);
         });
 
+        let avg = sum / dados.length;
+        this.grfPendenciaFiliaisLabels.push('MÉDIA');
+        this.grfPendenciaFiliaisValues.push(Number(avg.toFixed(2)));
+        this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(avg));
+        
         resolve(dados);
       },
       err => { reject(); });
     });
+  }
+
+  private carregarCorPendenciaFiliais(percentual: Number) {
+    if (percentual <= 3) {
+      return Config.COR_RGB.VERDE;
+    } else if (percentual > 3 && percentual < 5) {
+      return Config.COR_RGB.LARANJA;
+    } else {
+      return Config.COR_RGB.VERMELHO;
+    }
   }
 
   private carregarPendenciaFiliaisGrafico() {
@@ -210,35 +225,41 @@ export class IndicadorFiliaisPage {
 
   private carregarReincidenciaFiliaisApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfReincidenciaFilialApi()
-        .subscribe(dados => {
-          dados.forEach((d, i) => {
-            if (d.percentual == 0) { return; }
+      this.indicadorService.buscarGrfReincidenciaFilialApi().subscribe(dados => {
+        var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
+          
+        this.grfReincidenciaFiliaisLabels.push('MELHOR FILIAL');
+        this.grfReincidenciaFiliaisValues.push(percentualMax);
+        this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(percentualMax));
 
-            let label: string = d.nomeFilial;
-            let value: number = Number(d.percentual);
-            let color: string;
-            
-            if (value < 35) {
-              color = Config.COR_RGB.VERDE;
-            } else {
-              color = Config.COR_RGB.VERMELHO;
-            }
+        let sum = 0;
+        dados.forEach((d, i) => {
+          if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+            this.grfReincidenciaFiliaisLabels.push('MINHA FILIAL');
+            this.grfReincidenciaFiliaisValues.push(d.percentual);
+            this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(d.percentual));
+          }
 
-            if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-              color = Config.COR_RGB.AZUL;
-              label = "MINHA FILIAL";
-            } 
+          sum += Number(d.percentual);
+        });
 
-            this.grfReincidenciaFiliaisLabels.push(label);
-            this.grfReincidenciaFiliaisValues.push(value);
-            this.grfReincidenciaFiliaisColors.push(color);
-          });
-
-          resolve(dados);
-        },
-        err => { reject(); });
+        let avg = sum / dados.length;
+        this.grfReincidenciaFiliaisLabels.push('MÉDIA');
+        this.grfReincidenciaFiliaisValues.push(Number(avg.toFixed(2)));
+        this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(avg));
+        
+        resolve(dados);
+      },
+      err => { reject(); });
     });
+  }
+
+  private carregarCorReincidenciaFiliais(percentual: Number) {
+    if (percentual < 35) {
+      return Config.COR_RGB.VERDE;
+    } else {
+      return Config.COR_RGB.VERMELHO;
+    }
   }
 
   private carregarReincidenciaFiliaisGrafico() {
