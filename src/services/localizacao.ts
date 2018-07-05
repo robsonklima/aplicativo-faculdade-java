@@ -14,9 +14,8 @@ export class LocalizacaoService {
   ) { }
 
   enviarLocalizacaoParaFilialApi(localizacao: Localizacao, codOS: Number): Observable<any> {
-    let loc = { localizacao: localizacao, codOS: codOS };
-
-    return this.http.post(Config.API_URL + 'LocalizacaoEnvio', loc)
+    return this.http.post(Config.API_URL + 'Localizacao/' + codOS, localizacao)
+      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

@@ -120,7 +120,9 @@ export class ChamadoPage {
         .catch();
       })
       .catch((err) => {
-        this.exibirToast('Não foi possível obter sua localização!');
+        loader.dismiss(() => {
+          this.exibirToast('Não foi possível obter sua localização!');
+        });
       });
     })
     .catch(() => {});

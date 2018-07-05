@@ -75,30 +75,27 @@ export class IndicadorFiliaisPage {
     return new Promise((resolve, reject) => {
       this.indicadorService.buscarGrfSLAFilialApi()
         .subscribe(dados => {
-          dados.forEach((d, i) => {
-            if (d.percentual == 0) { return; }
+          var max = Math.max.apply(Math,dados.map(function(d){return d.percentual;}))
+          
+          this.grfSLAFiliaisLabels.push('MELHOR FILIAL');
+          this.grfSLAFiliaisValues.push(max);
+          this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
 
-            let label: string = d.nomeFilial;
-            let value: number = Number(d.percentual);
-            let color: string;
-            
-            if (value > 95) {
-              color = Config.COR_RGB.VERDE;
-            } else if (value > 90.01 && value <= 95) {
-              color = Config.COR_RGB.LARANJA;
-            } else {
-              color = Config.COR_RGB.VERMELHO;
+          let sum = 0;
+          dados.forEach((d, i) => {
+            if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
+              this.grfSLAFiliaisLabels.push('MINHA FILIAL');
+              this.grfSLAFiliaisValues.push(d.percentual);
+              this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
             }
 
-            if (label.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-              color = Config.COR_RGB.AZUL;
-              label = "MINHA FILIAL";
-            } 
-
-            this.grfSLAFiliaisLabels.push(label);
-            this.grfSLAFiliaisValues.push(value);
-            this.grfSLAFiliaisColors.push(color);
+            sum += Number(d.percentual);
           });
+
+          let avg = sum / dados.length;
+          this.grfSLAFiliaisLabels.push('MÉDIA');
+          this.grfSLAFiliaisValues.push(avg);
+          this.grfSLAFiliaisColors.push(Config.COR_RGB.VERDE);
           
           resolve(dados);
         },
