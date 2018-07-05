@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, LoadingController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { IndicadorService } from '../../services/indicador';

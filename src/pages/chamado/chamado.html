@@ -220,9 +220,7 @@
           </ion-card-content>
         </ion-card>
 
-        <div padding
-          *ngIf="!chamado?.checkin?.localizacao?.latitude 
-            && !chamado?.checkin?.localizacao?.longitude">
+        <div padding *ngIf="!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude">
           <button 
             color="secondary"
             ion-button
@@ -230,9 +228,7 @@
             block
             (click)="efetuarCheckin()">
             <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
-            {{ (!chamado?.checkin?.localizacao?.latitude 
-              && !chamado?.checkin?.localizacao?.longitude) 
-              ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
+            {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
           </button>
         </div>
       </ion-list>

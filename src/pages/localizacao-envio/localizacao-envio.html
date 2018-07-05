@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="fecharModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>Minha Localização</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item class="first-item">
+      Latitude
+      <ion-note item-end>
+        {{ localizacao?.latitude }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Longitude
+      <ion-note item-end>
+        {{ localizacao?.longitude }}
+      </ion-note>
+    </ion-item>
+    <button ion-button clear block (click)="enviarLocalizacaoParaFilial()">
+      Enviar Localização para a Filial
+    </button>
+  </ion-list>
+</ion-content>

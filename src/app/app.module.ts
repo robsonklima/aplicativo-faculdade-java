@@ -58,11 +58,13 @@ import { CheckinCheckoutService } from '../services/checkin-checkout';
 import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
+import { LocalizacaoService } from '../services/localizacao';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
 import { LowercasePipe } from '../pipes/lowercase';
 import { FotosPage } from '../pages/fotos/fotos';
+import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 
 @NgModule({
   declarations: [
@@ -88,6 +90,7 @@ import { FotosPage } from '../pages/fotos/fotos';
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
     IndicadorAcumuladoTecnicoPage,
+    LocalizacaoEnvioPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -133,6 +136,7 @@ import { FotosPage } from '../pages/fotos/fotos';
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
     IndicadorAcumuladoTecnicoPage,
+    LocalizacaoEnvioPage,
   ],
   providers: [
     StatusBar,
@@ -165,7 +169,8 @@ import { FotosPage } from '../pages/fotos/fotos';
     CheckinCheckoutService,
     FotoService,
     AjudaTopicoService,
-    IndicadorService
+    IndicadorService,
+    LocalizacaoService
   ]
 })
 export class AppModule {}

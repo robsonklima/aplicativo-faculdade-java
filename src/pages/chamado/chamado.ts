@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavParams, Platform, Slides, AlertController, LoadingController, 
-         ToastController, ModalController, NavController, Events } from 'ionic-angular';
+         ToastController, ModalController, NavController, Events, 
+         ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -20,6 +21,7 @@ import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
+import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 
 import moment from 'moment';
 
@@ -30,7 +32,7 @@ import moment from 'moment';
 export class ChamadoPage {
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
-  dadosGlobais: DadosGlobais;
+  dg: DadosGlobais;
   chamado: Chamado;
   usuarioPonto: UsuarioPonto;
   distanciaCercaEletronica: number = 0;
@@ -41,6 +43,7 @@ export class ChamadoPage {
     private platform: Platform,
     private geolocation: Geolocation,
     private modalCtrl: ModalController,
+    private viewCtrl: ViewController,
     private navParams: NavParams,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
@@ -59,7 +62,7 @@ export class ChamadoPage {
     this.configurarSlide(this.slides.getActiveIndex());
 
     this.carregarDadosGlobais()
-      .then((dg) => this.obterDistanciaRaioFilial(dg.usuario.filial.nomeFilial))
+      .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -101,6 +104,16 @@ export class ChamadoPage {
     modal.onDidDismiss(() => {});
   }
 
+  public telaLocalizacaoEnvio(lat: Number, lng: Number) {
+    const modal = this.modalCtrl.create(LocalizacaoEnvioPage, { lat: lat, lng: lng, chamado: this.chamado });
+
+    this.viewCtrl.dismiss().then(() => {
+      modal.present();
+    }).catch();
+
+    modal.onDidDismiss(() => {});
+  }
+
   public efetuarCheckin() {
     const alerta = this.alertCtrl.create({
       title: 'Confirmar o Checkin?',
@@ -137,7 +150,8 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento');
+                      this.exibirToast('Você está muito distante do local de atendimento')
+                        .then(() => { this.telaLocalizacaoEnvio(location.coords.latitude, location.coords.longitude); });
                       return
                     }
                   }
@@ -221,7 +235,8 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento');
+                      this.exibirToast('Você está muito distante do local de atendimento')
+                        .then(() => { this.telaLocalizacaoEnvio(location.coords.latitude, location.coords.longitude); });
                       return
                     }
                   }
@@ -281,7 +296,7 @@ export class ChamadoPage {
     rat.dataSolucao = form.value.dataInicio;
     rat.horaSolucao = form.value.horaSolucao;
     rat.nomeAcompanhante = form.value.nomeAcompanhante;
-    rat.codUsuarioCad = this.dadosGlobais.usuario.codUsuario;
+    rat.codUsuarioCad = this.dg.usuario.codUsuario;
     rat.obsRAT = form.value.obsRAT;
     rat.ratDetalhes = [];
     rat.fotos = [];
@@ -320,7 +335,7 @@ export class ChamadoPage {
       this.chamado.rats[0].horaSolucao = form.value.horaSolucao;
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
-      this.chamado.rats[0].codUsuarioCad = this.dadosGlobais.usuario.codUsuario;
+      this.chamado.rats[0].codUsuarioCad = this.dg.usuario.codUsuario;
 
       if (this.usuarioPonto) {
         this.chamado.rats[0].horarioInicioIntervalo = this.usuarioPonto.registros[1];
@@ -384,8 +399,8 @@ export class ChamadoPage {
       this.dadosGlobaisService.buscarDadosGlobaisStorage()
         .then((dados) => {
           if (dados)
-            this.dadosGlobais = dados;
-            resolve(this.dadosGlobais);
+            this.dg = dados;
+            resolve(dados);
         })
         .catch((err) => {
           reject(new Error(err.message))
@@ -396,7 +411,7 @@ export class ChamadoPage {
   private obterRegistrosPonto(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.usuarioService.buscarRegistrosPonto(
-        this.dadosGlobais.usuario.codUsuario)
+        this.dg.usuario.codUsuario)
         .subscribe(res => {
           this.usuarioPonto = res;
           
