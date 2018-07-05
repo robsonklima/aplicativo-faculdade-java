@@ -318,6 +318,11 @@ export class ChamadoPage {
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
     }
 
+    if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAgendamento, 'YYYY-MM-DD HH:mm'))) {
+      this.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado');
+      return
+    }
+
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAberturaOS, 'YYYY-MM-DD HH:mm'))) {
       this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado');
       return

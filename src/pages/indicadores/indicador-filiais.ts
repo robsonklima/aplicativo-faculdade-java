@@ -302,7 +302,7 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfDispBBFilialApi(this.dg.usuario.filial.codFilial)
         .subscribe(dados => {
           dados.forEach((d, i) => {
-            this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'D') + '-' + d[2].substring(0, 4));
+            this.grfDispBBFilialLabels.push(d[0].replace('DISP.', 'C') + '-' + d[2].substring(0, 4));
             this.grfDispBBFilialValues.push(Number(d[1]));
 
             if (Number(d[1]) > Number(d[3])) {
