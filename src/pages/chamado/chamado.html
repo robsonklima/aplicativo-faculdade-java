@@ -221,14 +221,12 @@
         </ion-card>
 
         <div padding *ngIf="!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude">
-          <button 
-            color="secondary"
-            ion-button
-            icon-left
-            block
-            (click)="efetuarCheckin()">
-            <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
-            {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Efetuar Checkin' : 'Checkin Efetuado' }}
+          <button (click)="telaLocalizacaoEnvio()" ion-button outline>
+            Minha Localização
+          </button>
+
+          <button color="secondary" ion-button (click)="efetuarCheckin()">
+            {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Checkin' : 'Checkin Efetuado' }}
           </button>
         </div>
       </ion-list>
@@ -505,20 +503,17 @@
     <!-- Checkout -->
     <ion-slide>
       <ion-list>
-        <div
-          padding
-          *ngIf="!chamado?.checkout?.localizacao?.latitude 
-            && !chamado?.checkout?.localizacao?.longitude">
+        <div padding *ngIf="!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude">
+
+          <button 
+            (click)="telaLocalizacaoEnvio()" ion-button outline>
+              Minha Localização
+            </button>
           <button 
             color="secondary"
             ion-button 
-            icon-left
-            block
             (click)="efetuarCheckout()">
-            <ion-icon name="locate" class="icon-checkin-button"></ion-icon>
-            {{ (!chamado?.checkout?.localizacao?.latitude 
-              && !chamado?.checkout?.localizacao?.longitude) 
-              ? 'Efetuar Checkout' : 'Checkout Efetuado' }}
+            {{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Checkout' : 'Checkout Efetuado' }}
           </button>
         </div>
       </ion-list>

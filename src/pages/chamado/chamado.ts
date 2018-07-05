@@ -104,14 +104,26 @@ export class ChamadoPage {
     modal.onDidDismiss(() => {});
   }
 
-  public telaLocalizacaoEnvio(lat: Number, lng: Number) {
-    const modal = this.modalCtrl.create(LocalizacaoEnvioPage, { lat: lat, lng: lng, chamado: this.chamado });
+  public telaLocalizacaoEnvio() {
+    const loader = this.loadingCtrl.create({
+      content: 'Obtendo sua localização...'
+    });
+    loader.present();
 
-    this.viewCtrl.dismiss().then(() => {
-      modal.present();
-    }).catch();
-
-    modal.onDidDismiss(() => {});
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+        loader.dismiss().then(() => {
+          const modal = this.modalCtrl.create(LocalizacaoEnvioPage, { lat: location.coords.latitude, lng: location.coords.longitude, chamado: this.chamado });
+          this.viewCtrl.dismiss().then(() => { modal.present(); }).catch();
+          modal.onDidDismiss(() => {});
+        })
+        .catch();
+      })
+      .catch((err) => {
+        this.exibirToast('Não foi possível obter sua localização!');
+      });
+    })
+    .catch(() => {});
   }
 
   public efetuarCheckin() {
@@ -150,8 +162,7 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento')
-                        .then(() => { this.telaLocalizacaoEnvio(location.coords.latitude, location.coords.longitude); });
+                      this.exibirToast('Você está muito distante do local de atendimento');
                       return
                     }
                   }
@@ -235,8 +246,7 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento')
-                        .then(() => { this.telaLocalizacaoEnvio(location.coords.latitude, location.coords.longitude); });
+                      this.exibirToast('Você está muito distante do local de atendimento');
                       return
                     }
                   }
