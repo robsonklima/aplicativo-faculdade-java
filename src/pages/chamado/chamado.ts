@@ -164,7 +164,7 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento');
+                      this.exibirToast('Você está distante do local de atendimento');
                       return
                     }
                   }
@@ -248,7 +248,7 @@ export class ChamadoPage {
                       this.chamado.localAtendimento.localizacao.longitude) 
                       > Number(this.distanciaCercaEletronica))
                     ) {
-                      this.exibirToast('Você está muito distante do local de atendimento');
+                      this.exibirToast('Você está distante do local de atendimento');
                       return
                     }
                   }
