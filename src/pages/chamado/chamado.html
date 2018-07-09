@@ -406,7 +406,6 @@
             <ion-textarea 
               placeholder="Descreva o serviço realizado" 
               name="obsRAT"
-              (keyup)="removerCaracteresEspeciais($event)"
               [ngModel]="chamado?.rats[0]?.obsRAT"
               required>
             </ion-textarea>

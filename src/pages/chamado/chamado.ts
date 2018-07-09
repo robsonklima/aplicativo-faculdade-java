@@ -113,7 +113,9 @@ export class ChamadoPage {
     this.platform.ready().then(() => {
       this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
         loader.dismiss().then(() => {
-          const modal = this.modalCtrl.create(LocalizacaoEnvioPage, { lat: location.coords.latitude, lng: location.coords.longitude, chamado: this.chamado });
+          const modal = this.modalCtrl.create(
+            LocalizacaoEnvioPage, { lat: location.coords.latitude, lng: location.coords.longitude, chamado: this.chamado }
+          );
           this.viewCtrl.dismiss().then(() => { modal.present(); }).catch();
           modal.onDidDismiss(() => {});
         })
@@ -473,16 +475,6 @@ export class ChamadoPage {
 
     if (!regExp.test(novoTexto)) {
       event.target.value = novoTexto.slice(0, -1);
-    }
-  }
-
-  public removerCaracteresEspeciais(event: any) {
-    let novoTexto = event.target.value;
-
-    let regExp = new RegExp(/[!'-@#$%^&*]/g);
-
-    if (regExp.test(novoTexto)) {
-      event.target.value = event.target.value.replace(regExp, "");
     }
   }
 
