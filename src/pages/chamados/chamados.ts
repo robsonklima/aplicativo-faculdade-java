@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform, LoadingController, NavController, AlertController, 
-  ToastController, Events } from 'ionic-angular';
+  ToastController,  PopoverController, Events } from 'ionic-angular';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -8,9 +8,9 @@ import { Badge } from '@ionic-native/badge';
 
 import { Config } from "../../config/config";
 
-import { ChamadoPage } from "../chamado/chamado";
-
+import { ChamadoPage } from "../chamados/chamado";
 import { Chamado } from '../../models/chamado';
+import { ChamadosMaisOpcoesPage } from './chamados-mais-opcoes';
 
 import { ChamadoService } from "../../services/chamado";
 
@@ -31,7 +31,8 @@ export class ChamadosPage {
     private geolocation: Geolocation,
     private inAppBrowser: InAppBrowser,
     private chamadoService: ChamadoService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private popoverCtrl: PopoverController
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
@@ -159,6 +160,17 @@ export class ChamadosPage {
             .indexOf(val.toLowerCase()) > -1);
         })
       }
+    });
+  }
+
+  public abrirPopover(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(ChamadosMaisOpcoesPage);
+
+    popover.present({ev: event});
+
+    popover.onDidDismiss(data => {
+      if (!data)
+        return;
     });
   }
 

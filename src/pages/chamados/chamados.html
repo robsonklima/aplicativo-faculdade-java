@@ -1,5 +1,9 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar no-border-bottom>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
     <ion-buttons end>
       <button 
         ion-button 
@@ -8,11 +12,13 @@
         (click)="limparChamadosDispositivo()">
         <ion-icon name="trash"></ion-icon>
       </button>
-    </ion-buttons>
 
-    <ion-title>
-      Chamados ({{ chamados?.length }})
-    </ion-title>
+      <button ion-button icon-only (click)="abrirPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+    
+    <ion-title>Chamados ({{ chamados?.length }})</ion-title>
   </ion-navbar>
 </ion-header>
 

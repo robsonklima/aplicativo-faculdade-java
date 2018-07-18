@@ -28,7 +28,8 @@ import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 import { HomePage } from '../pages/home/home';
 import { HomeMaisOpcoesPage } from '../pages/home/home-mais-opcoes';
 import { ChamadosPage } from "../pages/chamados/chamados";
-import { ChamadoPage } from "../pages/chamado/chamado";
+import { ChamadoPage } from "../pages/chamados/chamado";
+import { MeusChamadosPage } from '../pages/chamados/meus-chamados';
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../pages/historico/historico-lista';
@@ -42,6 +43,7 @@ import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
 import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
+import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -75,6 +77,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
+    ChamadosMaisOpcoesPage,
+    MeusChamadosPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     HistoricoListaPage,
@@ -121,6 +125,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
+    ChamadosMaisOpcoesPage,
+    MeusChamadosPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     HistoricoListaPage,
