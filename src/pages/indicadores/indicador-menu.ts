@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { IndicadorFiliaisPage } from '../indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../indicadores/indicador-tecnico';
-import { IndicadorAcumuladoTecnicoPage } from './indicador-acumulado-tecnico';
+import { IndicadorPerformanceTecnicoPage } from './indicador-performance-tecnico';
 
 @Component({
   selector: 'indicador-menu-page',
@@ -23,6 +23,6 @@ export class IndicadorMenuPage {
   }
 
   public telaIndicadorAcumuladoTecnico() {
-    this.navCtrl.push(IndicadorAcumuladoTecnicoPage);
+    this.navCtrl.push(IndicadorPerformanceTecnicoPage);
   }
 }

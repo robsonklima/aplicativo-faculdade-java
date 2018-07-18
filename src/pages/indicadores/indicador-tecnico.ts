@@ -39,13 +39,13 @@ export class IndicadorTecnicoPage {
   ionViewDidLoad() {
     this.carregarDadosGlobais()
       .then(() => {
-        this.carregarSLATecnicoApi(this.dg.usuario.codTecnico)
+        this.carregarSLATecnicoApi()
           .then(() => this.carregarSLATecnicoGrafico()).catch(() => {});
           
-        this.carregarPendenciaTecnicoApi(this.dg.usuario.codTecnico)
+        this.carregarPendenciaTecnicoApi()
           .then(() => this.carregarPendenciaTecnicoGrafico()).catch(() => {});
 
-        this.carregarReincidenciaTecnicoApi(this.dg.usuario.codTecnico)
+        this.carregarReincidenciaTecnicoApi()
           .then(() => this.carregarReincidenciaTecnicoGrafico()).catch(() => {});
       })
       .catch(() => {});
@@ -65,9 +65,9 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarSLATecnicoApi(codTecnico: number): Promise<any> {
+  private carregarSLATecnicoApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfSLATecnicoApi(codTecnico)
+      this.indicadorService.buscarGrfSLATecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
           this.grfSLATecnicoLabels.push('Fora do Prazo');
@@ -99,16 +99,16 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarPendenciaTecnicoApi(codTecnico: number): Promise<any> {
+  private carregarPendenciaTecnicoApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfPendenciaTecnicoApi(codTecnico)
+      this.indicadorService.buscarGrfPendenciaTecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          this.grfPendenciaTecnicoLabels.push('Fora do Prazo');
+          this.grfPendenciaTecnicoLabels.push('Pendente');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosPendentes.replace(',', '.')));
           this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
-          this.grfPendenciaTecnicoLabels.push('No Prazo');
+          this.grfPendenciaTecnicoLabels.push('Não Pendente');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosNaoPendentes.replace(',', '.')));
           this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });
@@ -133,16 +133,16 @@ export class IndicadorTecnicoPage {
     });
   }
 
-  private carregarReincidenciaTecnicoApi(codTecnico: number): Promise<any> {
+  private carregarReincidenciaTecnicoApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfReincidenciaTecnicoApi(codTecnico)
+      this.indicadorService.buscarGrfReincidenciaTecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          this.grfReincidenciaTecnicoLabels.push('Fora do Prazo');
+          this.grfReincidenciaTecnicoLabels.push('Reincidente');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosReincidentes.replace(',', '.')));
           this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
-          this.grfReincidenciaTecnicoLabels.push('No Prazo');
+          this.grfReincidenciaTecnicoLabels.push('Não Reincidente');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosNaoReincidentes.replace(',', '.')));
           this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });

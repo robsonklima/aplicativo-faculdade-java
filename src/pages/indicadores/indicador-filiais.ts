@@ -76,14 +76,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfSLAFilialApi().subscribe(dados => {
         var percentualMax = Math.max.apply(Math, dados.map(function(d){ return d.percentual; }))
         
-        this.grfSLAFiliaisLabels.push('MELHOR FIL');
+        this.grfSLAFiliaisLabels.push('MELHOR');
         this.grfSLAFiliaisValues.push(percentualMax);
         this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfSLAFiliaisLabels.push('MINHA FIL');
+            this.grfSLAFiliaisLabels.push('MINHA');
             this.grfSLAFiliaisValues.push(d.percentual);
             this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(d.percentual));
           }
@@ -152,14 +152,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfPendenciaFilialApi().subscribe(dados => {
         var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
           
-        this.grfPendenciaFiliaisLabels.push('MELHOR FIL');
+        this.grfPendenciaFiliaisLabels.push('MELHOR');
         this.grfPendenciaFiliaisValues.push(percentualMax);
         this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfPendenciaFiliaisLabels.push('MINHA FIL');
+            this.grfPendenciaFiliaisLabels.push('MINHA');
             this.grfPendenciaFiliaisValues.push(d.percentual);
             this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(d.percentual));
           }
@@ -228,14 +228,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfReincidenciaFilialApi().subscribe(dados => {
         var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
           
-        this.grfReincidenciaFiliaisLabels.push('MELHOR FIL');
+        this.grfReincidenciaFiliaisLabels.push('MELHOR');
         this.grfReincidenciaFiliaisValues.push(percentualMax);
         this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfReincidenciaFiliaisLabels.push('MINHA FIL');
+            this.grfReincidenciaFiliaisLabels.push('MINHA');
             this.grfReincidenciaFiliaisValues.push(d.percentual);
             this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(d.percentual));
           }
@@ -330,7 +330,7 @@ export class IndicadorFiliaisPage {
           borderWidth: 1
         }]
       },
-      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }
+      options: { legend: false, scales: { yAxes: [{ ticks: { beginAtZero: false } }] } }
     });
   }
 }

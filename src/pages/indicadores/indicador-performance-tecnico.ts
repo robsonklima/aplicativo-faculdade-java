@@ -6,10 +6,10 @@ import { IndicadorService } from '../../services/indicador';
 import { DadosGlobaisService } from '../../services/dados-globais';
 
 @Component({
-  selector: 'indicador-acumulado-tecnico-page',
-  templateUrl: 'indicador-acumulado-tecnico.html'
+  selector: 'indicador-performance-tecnico-page',
+  templateUrl: 'indicador-performance-tecnico.html'
 })
-export class IndicadorAcumuladoTecnicoPage {
+export class IndicadorPerformanceTecnicoPage {
   dg: DadosGlobais;
   desvioMediaAtendimentosDia: string = "";
   mediaAtendimentosDia: string = "";

@@ -41,7 +41,7 @@ import { SobrePage } from '../pages/sobre/sobre';
 import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
 import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
-import { IndicadorAcumuladoTecnicoPage } from '../pages/indicadores/indicador-acumulado-tecnico';
+import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -89,7 +89,7 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     IndicadorMenuPage,
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
-    IndicadorAcumuladoTecnicoPage,
+    IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
     CapitalizePipe,
     EllipsisPipe,
@@ -135,7 +135,7 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     IndicadorMenuPage,
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
-    IndicadorAcumuladoTecnicoPage,
+    IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
   ],
   providers: [
