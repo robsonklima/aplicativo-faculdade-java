@@ -32,7 +32,6 @@ export class IndicadorService {
 
   buscarGrfAcumuladoTecnicoApi(codTecnico: number): Observable<any> {
     return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico/' + codTecnico)
-      .timeout(30000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

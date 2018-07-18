@@ -76,14 +76,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfSLAFilialApi().subscribe(dados => {
         var percentualMax = Math.max.apply(Math, dados.map(function(d){ return d.percentual; }))
         
-        this.grfSLAFiliaisLabels.push('MELHOR FILIAL');
+        this.grfSLAFiliaisLabels.push('MELHOR FIL');
         this.grfSLAFiliaisValues.push(percentualMax);
         this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfSLAFiliaisLabels.push('MINHA FILIAL');
+            this.grfSLAFiliaisLabels.push('MINHA FIL');
             this.grfSLAFiliaisValues.push(d.percentual);
             this.grfSLAFiliaisColors.push(this.carregarCorSLAFiliais(d.percentual));
           }
@@ -125,7 +125,7 @@ export class IndicadorFiliaisPage {
 		};
 
     this.grfSLAFiliais = new Chart(this.grfSLAFiliais.nativeElement, {
-      type: 'horizontalBar',
+      type: 'bar',
       data: horizontalBarChartData,
       options: {
         elements: {
@@ -152,14 +152,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfPendenciaFilialApi().subscribe(dados => {
         var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
           
-        this.grfPendenciaFiliaisLabels.push('MELHOR FILIAL');
+        this.grfPendenciaFiliaisLabels.push('MELHOR FIL');
         this.grfPendenciaFiliaisValues.push(percentualMax);
         this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfPendenciaFiliaisLabels.push('MINHA FILIAL');
+            this.grfPendenciaFiliaisLabels.push('MINHA FIL');
             this.grfPendenciaFiliaisValues.push(d.percentual);
             this.grfPendenciaFiliaisColors.push(this.carregarCorPendenciaFiliais(d.percentual));
           }
@@ -201,7 +201,7 @@ export class IndicadorFiliaisPage {
 		};
 
     this.grfPendenciaFiliais = new Chart(this.grfPendenciaFiliais.nativeElement, {
-      type: 'horizontalBar',
+      type: 'bar',
       data: horizontalBarChartData,
       options: {
         elements: {
@@ -228,14 +228,14 @@ export class IndicadorFiliaisPage {
       this.indicadorService.buscarGrfReincidenciaFilialApi().subscribe(dados => {
         var percentualMax = Math.min.apply(Math, dados.map(function(d){ return d.percentual; }))
           
-        this.grfReincidenciaFiliaisLabels.push('MELHOR FILIAL');
+        this.grfReincidenciaFiliaisLabels.push('MELHOR FIL');
         this.grfReincidenciaFiliaisValues.push(percentualMax);
         this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(percentualMax));
 
         let sum = 0;
         dados.forEach((d, i) => {
           if (d.nomeFilial.indexOf(this.dg.usuario.filial.nomeFilial) == 0) {
-            this.grfReincidenciaFiliaisLabels.push('MINHA FILIAL');
+            this.grfReincidenciaFiliaisLabels.push('MINHA FIL');
             this.grfReincidenciaFiliaisValues.push(d.percentual);
             this.grfReincidenciaFiliaisColors.push(this.carregarCorReincidenciaFiliais(d.percentual));
           }
@@ -275,7 +275,7 @@ export class IndicadorFiliaisPage {
 		};
 
     this.grfReincidenciaFiliais = new Chart(this.grfReincidenciaFiliais.nativeElement, {
-      type: 'horizontalBar',
+      type: 'bar',
       data: horizontalBarChartData,
       options: {
         elements: {
