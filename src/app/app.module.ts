@@ -29,7 +29,8 @@ import { HomePage } from '../pages/home/home';
 import { HomeMaisOpcoesPage } from '../pages/home/home-mais-opcoes';
 import { ChamadosPage } from "../pages/chamados/chamados";
 import { ChamadoPage } from "../pages/chamados/chamado";
-import { MeusChamadosPage } from '../pages/chamados/meus-chamados';
+import { ChamadosFechadosPage } from '../pages/chamados/chamados-fechados';
+import { ChamadoFechadoPage } from '../pages/chamados/chamado-fechado';
 import { RatDetalhePage } from "../pages/rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../pages/rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../pages/historico/historico-lista';
@@ -78,7 +79,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     ChamadosPage,
     ChamadoPage,
     ChamadosMaisOpcoesPage,
-    MeusChamadosPage,
+    ChamadosFechadosPage,
+    ChamadoFechadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     HistoricoListaPage,
@@ -126,7 +128,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     ChamadosPage,
     ChamadoPage,
     ChamadosMaisOpcoesPage,
-    MeusChamadosPage,
+    ChamadosFechadosPage,
+    ChamadoFechadoPage,
     RatDetalhePage,
     RatDetalhePecaPage,
     HistoricoListaPage,

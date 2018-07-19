@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, ModalController } from 'ionic-angular';
 
-import { MeusChamadosPage } from '../chamados/meus-chamados';
+import { ChamadosFechadosPage } from '../chamados/chamados-fechados';
 
 @Component({
   selector: 'chamados-mais-opcoes-page',
@@ -13,8 +13,8 @@ export class ChamadosMaisOpcoesPage {
     private modalCtrl: ModalController
   ) {}
 
-  public telaMeusChamados() {
-    const modal = this.modalCtrl.create(MeusChamadosPage);
+  public telaChamadosFechados() {
+    const modal = this.modalCtrl.create(ChamadosFechadosPage);
 
     this.viewCtrl.dismiss().then(() => {
       modal.present();

@@ -38,6 +38,13 @@ export class ChamadoService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
+  buscarChamadosFechadosApi(codTecnico: number): Observable<Chamado[]> {
+    return this.http.get(Config.API_URL + 'OsTecnicoFechada/' + codTecnico)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json())
+    );
+  }
+
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
       .timeout(3000)
