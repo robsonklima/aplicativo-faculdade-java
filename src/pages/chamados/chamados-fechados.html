@@ -22,12 +22,15 @@
     <ion-item 
       *ngFor="let chamado of chamados; let i = index"
       (click)="telaChamadoFechado(chamado)">
-      <h2>{{ chamado?.codOs }}</h2>
+      <h2>
+        {{ chamado?.codOs }}
+      </h2>
       <h3>
         {{ chamado?.localAtendimento?.nomeLocalAtendimento }}
       </h3>
       <p>
-        {{ chamado?.rats?.length }} {{ (chamado?.rats?.length > 1) ? 'RATs' : 'RAT' }}
+        {{ chamado?.dataHoraAberturaOS | date: 'dd/MM' }}
+        &#8226; {{ chamado?.rats?.length }} {{ (chamado?.rats?.length > 1) ? 'RATs' : 'RAT' }}
         &#8226; {{ chamado?.tipoIntervencao?.abrevTipoIntervencao }}
         &#8226; {{ chamado?.cliente?.nomeCliente }}
       </p>
