@@ -39,7 +39,7 @@ export class ChamadosFechadosPage {
     });
     loading.present();
 
-    this.chamadosService.buscarChamadosFechadosApi(1244)
+    this.chamadosService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico)
       .subscribe((chamados: Chamado[]) => {
         if (chamados) 
           this.chamados = chamados.sort(function(a, b) { 

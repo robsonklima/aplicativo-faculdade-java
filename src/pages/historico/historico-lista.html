@@ -1,80 +1,39 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="fecharModal()">
-        <ion-icon name="close"></ion-icon>
-      </button>
-    </ion-buttons>
-
-    <ion-title>Série: {{ chamado?.equipamentoContrato?.numSerie || 'Não Informado' }}</ion-title>
-  </ion-navbar>
-  <ion-toolbar>
-    <ion-title>Histórico: {{ chamados?.length }} chamados</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="cards-bg">
-  <ion-item-divider 
-    class="first-divider"
-    color="light">Chamados dos últimos 90 dias</ion-item-divider>
-
-  <ion-card
-    *ngFor="let chamado of chamados; let i = index">
-    <ion-item>
-      <h2 class="cod-os">{{ chamado.codOs }}</h2>
-      <ion-badge  
-        item-end 
-        color="light" 
-        class="inherit">{{ chamados?.length - i }}</ion-badge>
-      <p>{{ chamado.tipoIntervencao.nomeTipoIntervencao }}</p>
-    </ion-item>
-
-    <ion-card-content>
-      <p>{{ chamado.defeitoRelatado | lowercase | capitalize }}</p>
-    </ion-card-content>
-
-    <ion-row>
-      <ion-col>
-        <button 
-          ion-button 
-          clear 
-          small
-          [disabled]="true"
-          color="subtle">
-          <ion-icon name="calendar"></ion-icon>
-          <div>&nbsp; {{ chamado.dataHoraAberturaOS }}</div>
+    <ion-navbar no-border-bottom>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="fecharModal()">
+          <ion-icon name="close"></ion-icon>
         </button>
-      </ion-col>
-      <ion-col>
-        <button 
-          ion-button 
-          icon-left 
-          clear 
-          small
-          [disabled]="true"
-          color="subtle">
-          <ion-icon name="clipboard"></ion-icon>
-          <div>{{ chamado.rats.length }}</div>
-        </button>
-      </ion-col>
-      <ion-col>
-        <button 
-          ion-button 
-          clear
-          small
-          (click)="telaEquipHistDetalhe(chamado)">
-          Detalhe
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-
-  <ion-card 
-    padding 
-    text-center 
-    *ngIf="chamados?.length == 0">
-    <ion-card-content>
-      <p>Este equipamento não possui nenhum atendimento</p>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+      </ion-buttons>
+  
+      <ion-title>Chamados do Equipamento</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <ion-label>Mostrar Últimos</ion-label>
+        <ion-select [(ngModel)]="qtdChamadosAExibir">
+          <ion-option value="20">20 Chamados</ion-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item 
+        *ngFor="let chamado of chamados; let i = index"
+        (click)="telaEquipHistDetalhe(chamado)">
+        <h2>{{ chamado?.codOs }}</h2>
+        <h3>
+          {{ chamado?.localAtendimento?.nomeLocalAtendimento }}
+        </h3>
+        <p>
+          {{ chamado?.rats?.length }} {{ (chamado?.rats?.length > 1) ? 'RATs' : 'RAT' }}
+          &#8226; {{ chamado?.tipoIntervencao?.abrevTipoIntervencao }}
+          &#8226; {{ chamado?.cliente?.nomeCliente }}
+        </p>
+        <ion-note item-end>
+          {{ chamado?.statusServico?.nomeStatusServico }}
+        </ion-note>
+      </ion-item>
+    </ion-list>
+  </ion-content>

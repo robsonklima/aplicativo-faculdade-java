@@ -13,6 +13,7 @@ import { EquipamentoContratoService } from '../../services/equipamento-contrato'
 export class HistoricoListaPage {
   chamado: Chamado;
   chamados: Chamado[] = [];
+  qtdChamadosAExibir: Number = 20;
 
   constructor(
     private viewCtrl: ViewController,

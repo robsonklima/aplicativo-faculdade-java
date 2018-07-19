@@ -1,11 +1,11 @@
 historico-lista-page {
-    ion-list-header {
-        padding-top: 12px !important;
-        margin-bottom: -4px !important;
-    }
+  ion-list {
+    margin-top: 3px !important; 
 
-    .cod-os {
-        font-size: 18px;
-        font-weight: bold;
+    ion-note {
+      font-size: 12px;
+      align-self: flex-start;
+      margin-top: 15px !important;
     }
+  }
 }
