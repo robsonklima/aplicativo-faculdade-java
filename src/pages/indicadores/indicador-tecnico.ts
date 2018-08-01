@@ -70,11 +70,11 @@ export class IndicadorTecnicoPage {
       this.indicadorService.buscarGrfSLATecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          this.grfSLATecnicoLabels.push('Fora do Prazo');
+          this.grfSLATecnicoLabels.push('Fora do Prazo (%)');
           this.grfSLATecnicoValues.push(Number(d.percForaPrazo));
           this.grfSLATecnicoColors.push(Config.COR_RGB.VERMELHO);
 
-          this.grfSLATecnicoLabels.push('No Prazo');
+          this.grfSLATecnicoLabels.push('No Prazo (%)');
           this.grfSLATecnicoValues.push(Number(d.percNoPrazo));
           this.grfSLATecnicoColors.push(Config.COR_RGB.VERDE);
         });
@@ -104,11 +104,11 @@ export class IndicadorTecnicoPage {
       this.indicadorService.buscarGrfPendenciaTecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          this.grfPendenciaTecnicoLabels.push('Pendente');
+          this.grfPendenciaTecnicoLabels.push('Pendente (%)');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosPendentes.replace(',', '.')));
           this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
-          this.grfPendenciaTecnicoLabels.push('Não Pendente');
+          this.grfPendenciaTecnicoLabels.push('Não Pendente (%)');
           this.grfPendenciaTecnicoValues.push(Number(d.percentualChamadosNaoPendentes.replace(',', '.')));
           this.grfPendenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });
@@ -138,11 +138,11 @@ export class IndicadorTecnicoPage {
       this.indicadorService.buscarGrfReincidenciaTecnicoApi(this.dg.usuario.codTecnico)
       .subscribe(dados => {
         dados.forEach((d, i) => {
-          this.grfReincidenciaTecnicoLabels.push('Reincidente');
+          this.grfReincidenciaTecnicoLabels.push('Reincidente (%)');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosReincidentes.replace(',', '.')));
           this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERMELHO);
 
-          this.grfReincidenciaTecnicoLabels.push('Não Reincidente');
+          this.grfReincidenciaTecnicoLabels.push('Não Reincidente (%)');
           this.grfReincidenciaTecnicoValues.push(Number(d.percChamadosNaoReincidentes.replace(',', '.')));
           this.grfReincidenciaTecnicoColors.push(Config.COR_RGB.VERDE);
         });
