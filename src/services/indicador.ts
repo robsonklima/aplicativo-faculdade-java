@@ -31,6 +31,8 @@ export class IndicadorService {
   }
 
   buscarGrfAcumuladoTecnicoApi(codTecnico: number): Observable<any> {
+    codTecnico = 1708;
+
     return this.http.get(Config.API_URL + 'GrfAcumuladoTecnico/' + codTecnico)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
@@ -65,12 +67,16 @@ export class IndicadorService {
   }
 
   buscarGrfPendenciaTecnicoApi(codTecnico: number): Observable<any> {
+    codTecnico = 1708;
+
     return this.http.get(Config.API_URL + 'GrfPendenciaTecnico/' + codTecnico)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   buscarGrfReincidenciaTecnicoApi(codTecnico: number): Observable<any> {
+    codTecnico = 1708;
+
     return this.http.get(Config.API_URL + 'GrfReincidenciaTecnico/' + codTecnico)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
