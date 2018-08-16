@@ -9,6 +9,8 @@ import { Chamado } from '../../models/chamado';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from '../../services/chamado';
 
+import moment from 'moment';
+
 @Component({
   selector: 'chamados-fechados-page',
   templateUrl: 'chamados-fechados.html'
@@ -41,11 +43,13 @@ export class ChamadosFechadosPage {
 
     this.chamadosService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico)
       .subscribe((chamados: Chamado[]) => {
-        if (chamados) 
-          this.chamados = chamados.sort(function(a, b) { 
-            return ((a.codOs > b.codOs) ? -1 : 
-              ((a.codOs < b.codOs) ? 1 : 0));  
-          });
+        this.chamados = chamados.sort(function(a, b) { 
+          return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
+        });
+
+        console.log(this.chamados);
+        
+        
         loading.dismiss()
       },
       err => {
