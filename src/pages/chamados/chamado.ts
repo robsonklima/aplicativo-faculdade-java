@@ -158,6 +158,8 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
+                  //this.exibirAlerta("Lat: " + location.coords.latitude + ", Lng: " + location.coords.longitude + ". Dist.: " + this.obterDistanciaRaio(location.coords.latitude, location.coords.longitude, this.chamado.localAtendimento.localizacao.latitude, this.chamado.localAtendimento.localizacao.longitude) + ".");
+
                   if (!this.chamado.indCercaEletronicaLiberada) {
                     if ((this.obterDistanciaRaio(
                       location.coords.latitude, 
@@ -167,7 +169,7 @@ export class ChamadoPage {
                       > Number(this.distanciaCercaEletronica))
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
-                      return
+                      //return
                     }
                   }
 
@@ -251,7 +253,7 @@ export class ChamadoPage {
                       > Number(this.distanciaCercaEletronica))
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
-                      return
+                      //return
                     }
                   }
                   
@@ -608,5 +610,15 @@ export class ChamadoPage {
 
       resolve(toast.present());
     });
+  }
+
+  exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 }
