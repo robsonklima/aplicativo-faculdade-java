@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, ToastController, LoadingController } from 'ionic-angular';
+import { Chart } from 'chart.js';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { IndicadorService } from '../../services/indicador';
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { Config } from '../../config/config';
 
 @Component({
   selector: 'indicador-performance-tecnico-page',
@@ -28,6 +30,13 @@ export class IndicadorPerformanceTecnicoPage {
   pecasMaisTrocadas: any[] = [];
   pecasMaisPendenciadas: any[] = [];
 
+  grfAtendimentosLabels: string[] = [];
+  grfAtendimentosTecnicoValues: number[] = [];
+  grfAtendimentosTecnicoColors: string[] = [];
+  grfAtendimentosMelhorTecnicoValues: number[] = [];
+  grfAtendimentosMelhorTecnicoColors: string[] = [];
+  @ViewChild('grfAtendimentos') grfAtendimentos;
+
   constructor(
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
@@ -38,7 +47,9 @@ export class IndicadorPerformanceTecnicoPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarGrfAcumuladoTecnicoApi())
+      .then(() => this.carregarGrfAcumuladoTecnicoApi().then(() => {
+        this.carregarAtendimentosGrafico()
+      }))
       .then(() => this.carregarGrfPecasMaisTrocadasTecnicoApi())
       .then(() => this.carregarGrfPecasMaisPendenciadasTecnicoApi())
       .catch(() => {});
@@ -81,6 +92,86 @@ export class IndicadorPerformanceTecnicoPage {
           reject(new Error(err.message));
         }).catch(() => {})
       });
+    });
+  }
+
+  private carregarAtendimentosGrafico() {
+    this.grfAtendimentosLabels.push('OSs Atendidas');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.qtdOSGeral));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.qtdOSGeralMelhorTecnico));
+
+    this.grfAtendimentosLabels.push('Corretivas');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.qtdOSCorretiva.replace(',', '.')));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.qtdOSCorretivaMelhorTecnico.replace(',', '.')));
+
+    this.grfAtendimentosLabels.push('Preventivas');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.qtdOSPreventiva.replace(',', '.')));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.qtdOSPreventivaMelhorTecnico.replace(',', '.')));
+
+    this.grfAtendimentosLabels.push('Outras');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.qtdOSOutrasIntervencoes.replace(',', '.')));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.qtdOSOutrasIntervencoesMelhorTecnico.replace(',', '.')));
+
+    this.grfAtendimentosLabels.push('Média');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.mediaAtendimentosDia.replace(',', '.')));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.mediaAtendimentosDiaMelhorTecnico.replace(',', '.')));
+
+    this.grfAtendimentosLabels.push('Desvio Meta');
+    this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
+    this.grfAtendimentosTecnicoValues.push(Number(this.desvioMediaAtendimentosDia.replace(',', '.')));
+    this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
+    this.grfAtendimentosMelhorTecnicoValues.push(Number(this.desvioMediaAtendimentosDiaMelhorTecnico.replace(',', '.')));
+
+    var horizontalBarChartData = {
+			labels: this.grfAtendimentosLabels,
+			datasets: [
+        {
+          label: 'Meus Dados',
+          backgroundColor: this.grfAtendimentosTecnicoColors,
+				  borderColor: this.grfAtendimentosTecnicoColors,
+          borderWidth: 1,
+          data: this.grfAtendimentosTecnicoValues
+        },
+        {
+          label: 'Melhor Técnico',
+          backgroundColor: this.grfAtendimentosMelhorTecnicoColors,
+				  borderColor: this.grfAtendimentosMelhorTecnicoColors,
+          borderWidth: 1,
+          data: this.grfAtendimentosMelhorTecnicoValues
+        }
+      ]
+		};
+
+    this.grfAtendimentos = new Chart(this.grfAtendimentos.nativeElement, {
+      type: 'horizontalBar',
+      data: horizontalBarChartData,
+      options: {
+        elements: {
+          rectangle: {
+            borderWidth: 2,
+          }
+        },
+        responsive: true, 
+        maintainAspectRatio: false,
+        legend: false,
+        title: {
+          display: false,
+          text: 'Atendimentos'
+        },
+        scales: { 
+          xAxes: [{ ticks: { beginAtZero: false } }]
+        }
+      }
     });
   }
 
