@@ -9,6 +9,7 @@
 
   <ion-spinner *ngIf="grfAtendimentos.length == 0"></ion-spinner>
   <canvas 
+    padding
     #grfAtendimentos
     [ngClass]="{ 'display-none': grfAtendimentos.length == 0 }">
   </canvas>

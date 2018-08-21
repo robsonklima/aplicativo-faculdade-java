@@ -47,9 +47,6 @@ export class ChamadosFechadosPage {
           return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
         });
 
-        console.log(this.chamados);
-        
-        
         loading.dismiss()
       },
       err => {
