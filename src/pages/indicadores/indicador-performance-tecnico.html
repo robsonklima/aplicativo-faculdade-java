@@ -4,18 +4,23 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-item-divider class="first-divider" color="light">Atendimentos</ion-item-divider>
+<ion-content class="cards-bg" text-center>
+  <ion-item-divider color="light" class="first-item">Atendimentos</ion-item-divider>
 
-  <ion-spinner *ngIf="grfAtendimentos.length == 0"></ion-spinner>
-  <canvas 
-    padding
-    #grfAtendimentos
-    [ngClass]="{ 'display-none': grfAtendimentos.length == 0 }">
-  </canvas>
+  <ion-card>
+    <ion-card-content>
+      <ion-spinner *ngIf="grfAtendimentosTecnicoValues.length == 0"></ion-spinner>
+
+      <canvas 
+        #grfAtendimentos
+        >
+      </canvas>
+    </ion-card-content>
+  </ion-card>
+  
     
   <ion-list no-border>
-    <ion-item-divider color="light">OS's Fechadas</ion-item-divider>
+    <ion-item-divider color="light">Chamados Fechados</ion-item-divider>
 
     <ion-item>
       OS's Fechadas
@@ -28,8 +33,8 @@
     </ion-item>
 
     <ion-item>
-      Peças Trocadas (%)
-      <ion-badge item-end>{{ percChamadosFechadosPecasTrocadas }}</ion-badge>
+      OS's com Peças Trocadas
+      <ion-badge item-end>{{ percChamadosFechadosPecasTrocadas }}%</ion-badge>
     </ion-item>
   </ion-list>
 

@@ -39,4 +39,8 @@
       </ion-note>
     </ion-item>
   </ion-list>
+
+  <p padding text-center *ngIf="!chamados?.length">
+    Nenhum chamado encontrado.
+  </p>
 </ion-content>

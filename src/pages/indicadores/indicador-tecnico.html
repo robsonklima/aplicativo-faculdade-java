@@ -11,6 +11,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfSLATecnicoValues.length == 0"></ion-spinner>
+      
       <canvas #grfSLATecnico
         [ngClass]="{ 'display-none': grfSLATecnicoValues.length == 0 }">
       </canvas>
@@ -24,6 +25,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfPendenciaTecnicoValues.length == 0"></ion-spinner>
+
       <canvas #grfPendenciaTecnico
         [ngClass]="{ 'display-none': grfPendenciaTecnicoValues.length == 0 }">
       </canvas>
@@ -37,6 +39,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfReincidenciaTecnicoValues.length == 0"></ion-spinner>
+
       <canvas #grfReincidenciaTecnico
         [ngClass]="{ 'display-none': grfReincidenciaTecnicoValues.length == 0 }">
       </canvas>

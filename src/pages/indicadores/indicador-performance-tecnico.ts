@@ -96,7 +96,7 @@ export class IndicadorPerformanceTecnicoPage {
   }
 
   private carregarAtendimentosGrafico() {
-    this.grfAtendimentosLabels.push('OSs Atendidas');
+    this.grfAtendimentosLabels.push("OS's Atendidas");
     this.grfAtendimentosTecnicoColors.push(Config.COR_RGB.AZUL)
     this.grfAtendimentosTecnicoValues.push(Number(this.qtdOSGeral));
     this.grfAtendimentosMelhorTecnicoColors.push(Config.COR_RGB.LARANJA)
@@ -161,7 +161,7 @@ export class IndicadorPerformanceTecnicoPage {
             borderWidth: 2,
           }
         },
-        responsive: true, 
+        //responsive: true, 
         maintainAspectRatio: false,
         legend: false,
         title: {
@@ -169,7 +169,23 @@ export class IndicadorPerformanceTecnicoPage {
           text: 'Atendimentos'
         },
         scales: { 
-          xAxes: [{ ticks: { beginAtZero: false } }]
+          xAxes: [{ 
+            ticks: { 
+              beginAtZero: false,
+              stepSize : 20
+            },
+            gridLines: {
+              //lineWidth: 0,
+              //color: Config.COR_RGB.CINZA
+            }
+          }],
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              min: 0,
+              stepSize: 1
+            }
+          }]
         }
       }
     });
