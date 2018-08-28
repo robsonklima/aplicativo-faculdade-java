@@ -5,40 +5,51 @@
 </ion-header>
 
 <ion-content class="cards-bg" text-center>
-  <ion-item-divider color="light" class="first-item">Atendimentos</ion-item-divider>
+  <ion-item-divider color="light">Chamados do Último Mês</ion-item-divider>
 
   <ion-card>
+    <ion-card-header>
+      Atendimentos
+    </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfAtendimentosTecnicoValues.length == 0"></ion-spinner>
 
-      <canvas 
-        #grfAtendimentos
-        >
-      </canvas>
+      <canvas #grfAtendimentos></canvas>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+      <ion-card-header>
+        Média de Atendimentos Diários (Meta 4)
+      </ion-card-header>
+      <ion-card-content>
+        <ion-spinner *ngIf="grfMediaTecnicoValues.length == 0"></ion-spinner>
+  
+        <canvas #grfMediaTecnico></canvas>
+      </ion-card-content>
+    </ion-card>
   
   <ion-list no-border>
-    <ion-item-divider color="light">Chamados Fechados</ion-item-divider>
+    <ion-item-divider color="light">Resumo dos Chamados</ion-item-divider>
 
     <ion-item>
-      OS's Fechadas
+      Qtd Atendida
       <ion-badge item-end>{{ qtdOSGeral }}</ion-badge>
     </ion-item>
 
     <ion-item>
-      Qtd Troca de Peças
+      Qtd com Peça Envolvida
       <ion-badge item-end>{{ qtdPecasTrocadas }}</ion-badge>
     </ion-item>
 
     <ion-item>
-      OS's com Peças Trocadas
+      Percentual com Peças Trocadas
       <ion-badge item-end>{{ percChamadosFechadosPecasTrocadas }}%</ion-badge>
     </ion-item>
   </ion-list>
 
   <ion-list no-border>
-    <ion-item-divider color="light">Peças Mais Trocadas</ion-item-divider>
+    <ion-item-divider color="light">Resumo das Peças Trocadas</ion-item-divider>
 
     <ion-spinner *ngIf="pecasMaisTrocadas.length == 0"></ion-spinner>
 
@@ -49,7 +60,7 @@
   </ion-list>
 
   <ion-list no-border>
-    <ion-item-divider color="light">Peças Mais Pendenciadas</ion-item-divider>
+    <ion-item-divider color="light">Resumo das Peças Pendenciadas</ion-item-divider>
 
     <ion-spinner *ngIf="pecasMaisPendenciadas.length == 0"></ion-spinner>
 
