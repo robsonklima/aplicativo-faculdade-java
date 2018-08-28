@@ -15,7 +15,10 @@
       <canvas #grfSLATecnico
         [ngClass]="{ 'display-none': grfSLATecnicoValues.length == 0 }">
       </canvas>
-      <p class="card-footer">Melhor Técnico: 94%</p>
+
+      <p class="card-footer" *ngIf="slaMelhorTecnico">
+        Melhor Técnico: {{ slaMelhorTecnico }}% No Prazo
+      </p>
     </ion-card-content>
   </ion-card>
 
@@ -29,7 +32,9 @@
       <canvas #grfPendenciaTecnico
         [ngClass]="{ 'display-none': grfPendenciaTecnicoValues.length == 0 }">
       </canvas>
-      <p class="card-footer">Melhor Técnico: 91%</p>
+      <p class="card-footer">
+        Melhor Técnico: 100,00% Não Pendentes
+      </p>
     </ion-card-content>
   </ion-card>
 
@@ -43,7 +48,9 @@
       <canvas #grfReincidenciaTecnico
         [ngClass]="{ 'display-none': grfReincidenciaTecnicoValues.length == 0 }">
       </canvas>
-      <p class="card-footer">Melhor Técnico: 96%</p>
+      <p class="card-footer">
+        Melhor Técnico: 100,00% Não Reincidentes
+      </p>
     </ion-card-content>
   </ion-card>
 </ion-content>

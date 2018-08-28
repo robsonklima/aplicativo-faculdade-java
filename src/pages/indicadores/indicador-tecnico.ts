@@ -14,6 +14,7 @@ import { DadosGlobais } from '../../models/dados-globais';
 })
 export class IndicadorTecnicoPage {
   dg: DadosGlobais;
+  slaMelhorTecnico: String; 
 
   grfSLATecnicoLabels: string[] = [];
   grfSLATecnicoValues: number[] = [];
@@ -40,7 +41,9 @@ export class IndicadorTecnicoPage {
     this.carregarDadosGlobais()
       .then(() => {
         this.carregarSLATecnicoApi()
-          .then(() => this.carregarSLATecnicoGrafico()).catch(() => {});
+          .then(() => this.carregarSLATecnicoGrafico()).then(() => {
+            this.carregarSLAMelhorTecnicoApi().catch(() => {});
+          }).catch(() => {});
           
         this.carregarPendenciaTecnicoApi()
           .then(() => this.carregarPendenciaTecnicoGrafico()).catch(() => {});
@@ -96,6 +99,21 @@ export class IndicadorTecnicoPage {
           backgroundColor: this.grfSLATecnicoColors
         }]
       }
+    });
+  }
+
+  private carregarSLAMelhorTecnicoApi(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.indicadorService.buscarGrfSLAMelhorTecnicoApi()
+      .subscribe(dados => {
+        if (dados)
+          console.log(dados[0].percNoPrazo);
+          
+          this.slaMelhorTecnico = dados[0].percNoPrazo;
+        
+        resolve();
+      },
+      err => { reject(); });
     });
   }
 
