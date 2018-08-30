@@ -37,7 +37,8 @@ export class FotosPage {
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true,
       targetWidth: 720,
-      targetHeight: 480
+      targetHeight: 480,
+      allowEdit: true
     }).then(imageData => {
       this.foto = new Foto();
       this.foto.nome = this.chamado.codOs.toString() + '_' 
