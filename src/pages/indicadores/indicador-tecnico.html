@@ -7,7 +7,7 @@
 <ion-content class="cards-bg" text-center>
   <ion-card>
     <ion-card-header>
-      Meu SLA
+      Meu % de SLA
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfSLATecnicoValues.length == 0"></ion-spinner>
@@ -24,7 +24,7 @@
 
   <ion-card>
     <ion-card-header>
-      Minha Pendência
+      Meu % de Pendência
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfPendenciaTecnicoValues.length == 0"></ion-spinner>
@@ -33,14 +33,14 @@
         [ngClass]="{ 'display-none': grfPendenciaTecnicoValues.length == 0 }">
       </canvas>
       <p class="card-footer">
-        Melhor Técnico: 100,00% Não Pendentes
+        Melhor Técnico: 0% Pendentes
       </p>
     </ion-card-content>
   </ion-card>
 
   <ion-card>
     <ion-card-header>
-      Minha Reincidência
+      Meu % de Reincidência
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="grfReincidenciaTecnicoValues.length == 0"></ion-spinner>
@@ -49,7 +49,7 @@
         [ngClass]="{ 'display-none': grfReincidenciaTecnicoValues.length == 0 }">
       </canvas>
       <p class="card-footer">
-        Melhor Técnico: 100,00% Não Reincidentes
+        Melhor Técnico: 0% Reincidentes
       </p>
     </ion-card-content>
   </ion-card>
