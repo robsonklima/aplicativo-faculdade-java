@@ -465,26 +465,33 @@
     </ion-slide>
     <!-- Detalhes da RAT -->
 
-    <!-- Fotos da RAT -->
+    <!-- Imagens da RAT -->
     <ion-slide>
       <ion-list>
         <div padding>
-          <button 
+          <button color="secondary" ion-button icon-left block (click)="telaFotos()">
+            <ion-icon name="image" item-start class="icon-checkin-button"></ion-icon> Adicionar Foto
+          </button>
+
+          <button
             color="secondary"
-            ion-button 
+            ion-button
+            icon-left
             block
-            (click)="telaFotos()">
-            Adicionar Foto
+            color="primary"
+            (click)="telaDocumentos()"
+            class="margin-top">
+            <ion-icon name="document" item-start class="icon-checkin-button"></ion-icon> Adicionar Documento
           </button>
         </div>
   
         <ion-item-divider 
           color="light">
-          Fotos Adicionadas
+          Imagens Adicionadas
         </ion-item-divider>
 
         <ion-item>
-          <p text-center>{{ chamado?.rats[0]?.fotos.length }} foto(s) adicionada(s)</p>
+          <p text-center>{{ chamado?.rats[0]?.fotos.length }} imagem(ns) adicionada(s)</p>
         </ion-item>
       </ion-list>
     </ion-slide>

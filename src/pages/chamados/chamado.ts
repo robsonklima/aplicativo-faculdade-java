@@ -90,8 +90,16 @@ export class ChamadoPage {
     );
   }
 
-  public telaFotos(chamado: Chamado) {
-    const modal = this.modalCtrl.create(FotosPage, { chamado: this.chamado });
+  public telaFotos() {
+    const modal = this.modalCtrl.create(FotosPage, { chamado: this.chamado, modalidade: 'FOTO' });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
+  public telaDocumentos() {
+    const modal = this.modalCtrl.create(FotosPage, { chamado: this.chamado, modalidade: 'DOCUMENTO' });
     modal.present();
     modal.onDidDismiss(() => {
       this.configurarSlide(this.slides.getActiveIndex());
@@ -521,7 +529,7 @@ export class ChamadoPage {
           }
         break;
       case 4:
-        this.tituloSlide = (i + 1) + ". " + "Fotos da RAT";
+        this.tituloSlide = (i + 1) + ". " + "Imagens da RAT";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);

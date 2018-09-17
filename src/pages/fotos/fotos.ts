@@ -15,6 +15,7 @@ import { Config } from '../../config/config';
 })
 export class FotosPage {
   chamado: Chamado;
+  modalidade: string;
   foto: Foto;
   qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
 
@@ -27,6 +28,7 @@ export class FotosPage {
       private chamadoService: ChamadoService
   ) { 
     this.chamado = this.navParams.get('chamado');
+    this.modalidade = this.navParams.get('modalidade');
   }
   
   public tirarFoto() {
@@ -41,10 +43,9 @@ export class FotosPage {
       allowEdit: true
     }).then(imageData => {
       this.foto = new Foto();
-      this.foto.nome = this.chamado.codOs.toString() + '_' 
-        + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
+      this.foto.nome = this.chamado.codOs.toString() + '_' + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
       this.foto.str = 'data:image/jpeg;base64,' + imageData;
-
+      this.foto.modalidade = this.modalidade;
       this.chamado.rats[0].fotos.push(this.foto);
       this.chamadoService.atualizarChamado(this.chamado);
       this.camera.cleanup();

@@ -12,7 +12,7 @@
         </button>
       </ion-buttons>
       
-      <ion-title>5.1 Inserindo Fotos</ion-title>
+      <ion-title>5.1 Inserindo {{ modalidade }}</ion-title>
     </ion-toolbar>
   </ion-header>
   
@@ -32,12 +32,12 @@
       </button>
 
       <ion-item *ngIf="chamado?.rats[0].fotos.length == qtdMaximaFotos" no-lines>
-        <p text-center>Limite de {{ qtdMaximaFotos }} fotos por atendimento atingido</p>
+        <p text-center>Limite de {{ qtdMaximaFotos }} arquivos por atendimento</p>
       </ion-item>
     </div>
 
     <ion-item-divider color="light" text-center>
-      Fotos Adicionadas
+      {{ modalidade }}S Adicionados(as)
     </ion-item-divider>
 
     <ion-card *ngFor="let foto of chamado?.rats[0]?.fotos; let i = index" (click)="onOpenPlace(place, i)">
@@ -53,11 +53,11 @@
         type="button"
         (click)="removerFoto(i)">
         <ion-icon name="trash"></ion-icon>
-        <span>Remover Foto</span>
+        <span>Remover Imagem</span>
       </button>
     </ion-card>
 
     <ion-item *ngIf="chamado?.rats[0]?.fotos?.length == 0" no-lines>
-      <p text-center>Nenhuma foto adicionada</p>
+      <p text-center>Nenhum(a) {{ modalidade }} adicionado(a)</p>
     </ion-item>
   </ion-content>
