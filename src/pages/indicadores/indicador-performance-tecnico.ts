@@ -27,6 +27,8 @@ export class IndicadorPerformanceTecnicoPage {
   qtdOSPreventivaMelhorTecnico: string = "";
   qtdPecasTrocadas: string = "";
   percChamadosFechadosPecasTrocadas: string = "";
+  qtdPecasPendentes: string = "";
+  percChamadosFechadosPecasPendentes: string = "";
   pecasMaisTrocadas: any[] = [];
   pecasMaisPendenciadas: any[] = [];
 
@@ -73,6 +75,9 @@ export class IndicadorPerformanceTecnicoPage {
       this.indicadorService.buscarGrfAcumuladoTecnicoApi(this.dg.usuario.codTecnico)
         .subscribe(dados => {
           if (dados.length > 0) {
+            console.log(dados);
+            
+
             this.qtdOSGeral = dados[0].qtdOSGeral;
             this.qtdOSCorretiva = dados[0].qtdOSCorretiva;
             this.qtdOSPreventiva = dados[0].qtdOSPreventiva;
@@ -89,6 +94,8 @@ export class IndicadorPerformanceTecnicoPage {
 
             this.qtdPecasTrocadas = dados[0].qtdPecasTrocadas;
             this.percChamadosFechadosPecasTrocadas = dados[0].percChamadosFechadosPecasTrocadas;
+            this.qtdOSComPecasPendentes = dados[0].qtdOSComPecasPendentes;
+            this.percChamadosFechadosPecasPendentes = dados[0].percChamadosFechadosPecasPendentes;
           }
 
         loader.dismiss();
