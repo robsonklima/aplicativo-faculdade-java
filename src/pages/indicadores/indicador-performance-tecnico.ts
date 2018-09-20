@@ -94,7 +94,7 @@ export class IndicadorPerformanceTecnicoPage {
 
             this.qtdPecasTrocadas = dados[0].qtdPecasTrocadas;
             this.percChamadosFechadosPecasTrocadas = dados[0].percChamadosFechadosPecasTrocadas;
-            this.qtdOSComPecasPendentes = dados[0].qtdOSComPecasPendentes;
+            this.qtdPecasPendentes = dados[0].qtdOSComPecasPendentes;
             this.percChamadosFechadosPecasPendentes = dados[0].percChamadosFechadosPecasPendentes;
           }
 

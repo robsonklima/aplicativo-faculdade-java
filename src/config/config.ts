@@ -34,6 +34,28 @@ export class Config {
     FILIAL_TECNICO_DE_CAMPO: 35, FILIAL_SUPORTE_TECNICO_DE_CAMPO: 79,
     FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS: 84,
   };
+  public static ORIENTACAO_FOTO = [
+    {
+      MODALIDADE: 'RAT',
+      DESCRICAO: 'Foto da RAT',
+      MENSAGEM: 'A foto da RAT consiste na digitalização do documento de relatório de atendimento. Nesta opção procure recortar a foto para centralizar a imagem no documento.'
+    },
+    {
+      MODALIDADE: 'ETIQUETANUMSERIE',
+      DESCRICAO: 'Etiqueta Nro. Série',
+      MENSAGEM: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    },
+    {
+      MODALIDADE: 'EQUIPAMENTOOPERACIONAL',
+      DESCRICAO: 'Eqp. Operacional',
+      MENSAGEM: 'Labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+    },
+    {
+      MODALIDADE: 'PARTEINTERNA',
+      DESCRICAO: 'Parte Interna',
+      MENSAGEM: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+    },
+  ]
 
   //public static API_URL = 'http://localhost:60687/api/';
   public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';

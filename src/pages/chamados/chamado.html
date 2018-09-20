@@ -467,33 +467,159 @@
 
     <!-- Imagens da RAT -->
     <ion-slide>
-      <ion-list>
-        <div padding>
-          <button color="secondary" ion-button icon-left block (click)="telaFotos()">
-            <ion-icon name="image" item-start class="icon-checkin-button"></ion-icon> Adicionar Foto
+      <ion-item-group>
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('RAT') }}">
+          </ion-avatar>
+          <h2>Foto da RAT</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('RAT')"
+            *ngIf="!verificarExistenciaFoto('RAT')">
+            <ion-icon name="add-circle"></ion-icon>
           </button>
 
-          <button
-            color="secondary"
-            ion-button
-            icon-left
-            block
-            color="primary"
-            (click)="telaDocumentos()"
-            class="margin-top">
-            <ion-icon name="document" item-start class="icon-checkin-button"></ion-icon> Adicionar Documento
+          <button ion-button clear item-end 
+            (click)="removerFoto('RAT')"
+            *ngIf="verificarExistenciaFoto('RAT')">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
           </button>
-        </div>
-  
-        <ion-item-divider 
-          color="light">
-          Imagens Adicionadas
+        </ion-item>
+
+        <ion-item-divider color="light">5.2 Fotos do Equipamento</ion-item-divider>
+
+        <!-- <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('ETIQUETANUMSERIE') }}">
+          </ion-avatar>
+          <h2>Etiqueta Número Série</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('ETIQUETANUMSERIE')" 
+            *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('ETIQUETANUMSERIE')"
+            *ngIf="verificarExistenciaFoto('ETIQUETANUMSERIE')">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
+          </button>
+        </ion-item> -->
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="./assets/imgs/atm-sample.jpg">
+          </ion-avatar>
+          <h2>Equipamento Operacional</h2>
+          <button ion-button clear item-end (click)="removerFoto('ETIQUETANUMSERIE')">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('EQUIPAMENTOOPERACIONAL') }}">
+          </ion-avatar>
+          <h2>Equipamento Operacional</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL')" 
+            *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('EQUIPAMENTOOPERACIONAL')"
+            *ngIf="verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('PARTEINTERNA') }}">
+          </ion-avatar>
+          <h2>Parte Interna</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('PARTEINTERNA')"
+            *ngIf="!verificarExistenciaFoto('PARTEINTERNA')">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('RAT')"
+            *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item-divider color="light">
+          5.3 Laudo Técnico
+          
+          <ion-icon name="logo-whatsapp" class="logo-whatsapp" item-end></ion-icon>          
         </ion-item-divider>
 
         <ion-item>
-          <p text-center>{{ chamado?.rats[0]?.fotos.length }} imagem(ns) adicionada(s)</p>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('TOMADACOMTENSAOACIMA3V') }}">
+          </ion-avatar>
+          <h2>Tomada c/ tensão acima de 3V</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
         </ion-item>
-      </ion-list>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('LEITORADANIFICADAPORVANDALISMO') }}">
+          </ion-avatar>
+          <h2>Leitora danificada p/ vandalismo</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('TOUCHQUEBRADOPORVANDALISMO') }}">
+          </ion-avatar>
+          <h2>Touch quebrado por vandalismo</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item-divider color="light">5.4 Documentos</ion-item-divider>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('TERMOINSTALACAO') }}">
+          </ion-avatar>
+          <h2>Termo de Instalação</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('TERMOACEITE') }}">
+          </ion-avatar>
+          <h2>Termo de Aceite</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('ADICIONAL') }}">
+          </ion-avatar>
+          <h2>Adicional</h2>
+          <button ion-button clear item-end disabled="true">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-item-group>
     </ion-slide>
     <!-- Fotos da RAT -->
 

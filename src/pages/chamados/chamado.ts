@@ -16,6 +16,7 @@ import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
 import { Rat } from "../../models/rat";
 import { UsuarioPonto } from '../../models/usuario-ponto';
+import { Foto } from '../../models/foto';
 
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
@@ -24,6 +25,7 @@ import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 
 import moment from 'moment';
+import { Camera } from '@ionic-native/camera';
 
 @Component({
   selector: 'chamado-page',
@@ -35,6 +37,8 @@ export class ChamadoPage {
   dg: DadosGlobais;
   chamado: Chamado;
   usuarioPonto: UsuarioPonto;
+  foto: Foto;
+  qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
   distanciaCercaEletronica: number = 0;
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
@@ -50,6 +54,7 @@ export class ChamadoPage {
     private toastCtrl: ToastController,
     private navCtrl: NavController,
     private events: Events,
+    private camera: Camera,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService,
@@ -96,6 +101,111 @@ export class ChamadoPage {
     modal.onDidDismiss(() => {
       this.configurarSlide(this.slides.getActiveIndex());
     });
+  }
+
+  public tirarFoto(modalidade: string) {
+    let orientacoes = Config.ORIENTACAO_FOTO.filter((orientacao) => {
+      return (orientacao.MODALIDADE == modalidade);
+    });
+
+    if (orientacoes.length == 0)
+      return;
+
+    const confirmacao = this.alertCtrl.create({
+      title: orientacoes[0].DESCRICAO,
+      message: orientacoes[0].MENSAGEM,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Abrir Câmera',
+          handler: () => {
+            this.camera.getPicture({
+              quality: 100,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              correctOrientation: true,
+              targetWidth: 720,
+              targetHeight: 480,
+              allowEdit: true
+            }).then(imageData => {
+              this.foto = new Foto();
+              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + this.chamado.rats[0].numRat + '_' + modalidade;
+              this.foto.str = 'data:image/jpeg;base64,' + imageData;
+              this.foto.modalidade = modalidade;
+              this.chamado.rats[0].fotos.push(this.foto);
+              this.chamadoService.atualizarChamado(this.chamado);
+              this.camera.cleanup();
+              setTimeout(() => { 
+                this.exibirToast("Foto adicionada com sucesso");
+              }, 500);
+            }).catch(err => {});
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
+  public carregarFoto(modalidade: string): string {
+    if (this.chamado.rats.length > 0) {
+
+      let fotos = this.chamado.rats[0].fotos.filter((foto) => {
+        return (foto.modalidade == modalidade);
+      });
+
+      if (fotos.length > 0) {
+        return fotos[0].str;  
+      }
+    }
+
+    return './assets/imgs/sem_foto.png';
+  }
+
+  public removerFoto(modalidade: string) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Deseja excluir esta foto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Excluir',
+          handler: () => {
+            if (this.chamado.rats.length > 0) {
+              this.chamado.rats[0].fotos = this.chamado.rats[0].fotos.filter((f) => {
+                return (f.modalidade != modalidade);
+              });
+
+              this.chamadoService.atualizarChamado(this.chamado);
+            }
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
+  public verificarExistenciaFoto(modalidade: string): boolean {
+    if (this.chamado.rats.length > 0) {
+
+      let fotos = this.chamado.rats[0].fotos.filter((foto) => {
+        return (foto.modalidade == modalidade);
+      });
+
+      if (fotos.length > 0) {
+        return true;  
+      }
+    }
+
+    return false;
   }
 
   public telaDocumentos() {
@@ -529,7 +639,7 @@ export class ChamadoPage {
           }
         break;
       case 4:
-        this.tituloSlide = (i + 1) + ". " + "Imagens da RAT";
+        this.tituloSlide = (i + 1) + ". " + "Imagens";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
