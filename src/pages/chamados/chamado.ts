@@ -70,7 +70,7 @@ export class ChamadoPage {
       .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
-      .catch(() => {});
+      .catch(() => {});    
   }
 
   public alterarSlide() {
@@ -265,6 +265,8 @@ export class ChamadoPage {
               this.exibirToast('Você possui checkin aberto em outro chamado');
               return
             }
+
+            this.registrarTentativaCheckinCheckout('CHECKIN');
             
             const loader = this.loadingCtrl.create({
               content: 'Obtendo sua localização...',
@@ -340,6 +342,9 @@ export class ChamadoPage {
   }
 
   public efetuarCheckout() {
+    this.chamado.checkin.tentativas.push(moment().format());
+    this.chamadoService.atualizarChamado(this.chamado);
+
     const alerta = this.alertCtrl.create({
       title: 'Confirmar o Checkout?',
       message: `Somente confirme o checkout se você já concluiu o chamado 
@@ -352,6 +357,8 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
+            this.registrarTentativaCheckinCheckout('CHECKOUT');
+
             const loader = this.loadingCtrl.create({
               content: 'Obtendo sua localização...',
               enableBackdropDismiss: true,
@@ -531,6 +538,16 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
+  }
+
+  private registrarTentativaCheckinCheckout(modalidade: string) {
+    if (modalidade.indexOf('CHECKIN') > -1) {
+      this.chamado.checkin.tentativas.push(moment().format());
+    } else {
+      this.chamado.checkout.tentativas.push(moment().format());
+    }
+
+    this.chamadoService.atualizarChamado(this.chamado);
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
