@@ -508,16 +508,6 @@
           </button>
         </ion-item>
 
-        <!-- <ion-item>
-          <ion-avatar item-start>
-            <img src="./assets/imgs/atm-sample.jpg">
-          </ion-avatar>
-          <h2>Etiqueta Nro. Série</h2>
-          <button ion-button clear item-end (click)="removerFoto('ETIQUETANUMSERIE')">
-            <ion-icon name="trash" color="primary" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item> -->
-
         <ion-item>
           <ion-avatar item-start>
             <img src="{{ carregarFoto('EQUIPAMENTOOPERACIONAL') }}">
@@ -551,74 +541,6 @@
             (click)="removerFoto('RAT')"
             *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item-divider color="light">
-          5.3 Laudo Técnico
-          
-          <ion-icon name="share-alt" class="logo-whatsapp" item-end></ion-icon>          
-        </ion-item-divider>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('TOMADACOMTENSAOACIMA3V') }}">
-          </ion-avatar>
-          <h2>Situação 1</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="trash" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('LEITORADANIFICADAPORVANDALISMO') }}">
-          </ion-avatar>
-          <h2>Situação 2</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="trash" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('TOUCHQUEBRADOPORVANDALISMO') }}">
-          </ion-avatar>
-          <h2>Situação 3</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="trash" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item-divider color="light">5.4 Documentos</ion-item-divider>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('TERMOINSTALACAO') }}">
-          </ion-avatar>
-          <h2>Termo de Instalação</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="add-circle"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('TERMOACEITE') }}">
-          </ion-avatar>
-          <h2>Termo de Aceite</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="add-circle"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('ADICIONAL') }}">
-          </ion-avatar>
-          <h2>Adicional</h2>
-          <button ion-button clear item-end disabled="true">
-            <ion-icon name="add-circle"></ion-icon>
           </button>
         </ion-item>
       </ion-item-group>
