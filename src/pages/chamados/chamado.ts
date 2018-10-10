@@ -123,14 +123,15 @@ export class ChamadoPage {
           text: 'Abrir Câmera',
           handler: () => {
             this.camera.getPicture({
-              quality: 100,
+              //quality: 100,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
-              correctOrientation: true,
-              targetWidth: 720,
-              targetHeight: 480,
-              allowEdit: true
+              //correctOrientation: true,
+              //targetWidth: 720,
+              //targetHeight: 480,
+              allowEdit: true,
+              saveToPhotoAlbum: true
             }).then(imageData => {
               this.foto = new Foto();
               this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + this.chamado.rats[0].numRat + '_' + modalidade;
