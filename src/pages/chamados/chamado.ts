@@ -89,9 +89,7 @@ export class ChamadoPage {
     const modal = this.modalCtrl.create(RatDetalhePecaPage, { chamado: this.chamado, i: i });
     modal.present();
     modal.onDidDismiss(
-      () => {
-
-      }
+      () => {}
     );
   }
 
@@ -123,12 +121,12 @@ export class ChamadoPage {
           text: 'Abrir Câmera',
           handler: () => {
             this.camera.getPicture({
-              //quality: 100,
+              quality: 80,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
               //correctOrientation: true,
-              //targetWidth: 720,
+             targetWidth: 720,
               //targetHeight: 480,
               allowEdit: true,
               saveToPhotoAlbum: true

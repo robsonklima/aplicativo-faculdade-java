@@ -81,9 +81,17 @@
         </ion-item>
 
         <ion-item>
-          Série
+          Num Série
           <ion-note item-end>
             {{ chamado?.equipamentoContrato?.numSerie
+              || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Num Série Cliente
+          <ion-note item-end>
+            {{ chamado?.equipamentoContrato?.numSerieCliente
               || 'Não Informado' }}
           </ion-note>
         </ion-item>
