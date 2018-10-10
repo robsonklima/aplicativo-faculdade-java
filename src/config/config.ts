@@ -38,22 +38,26 @@ export class Config {
     {
       MODALIDADE: 'RAT',
       DESCRICAO: 'Foto da RAT',
-      MENSAGEM: 'A foto da RAT consiste na digitalização do documento de relatório de atendimento. Nesta opção procure recortar a foto para centralizar a imagem no documento.'
+      MENSAGEM: `A foto da RAT consiste na digitalização do documento de relatório de atendimento. 
+                 Nesta opção procure recortar a foto para centralizar a imagem no documento.`
     },
     {
       MODALIDADE: 'ETIQUETANUMSERIE',
       DESCRICAO: 'Etiqueta Nro. Série',
-      MENSAGEM: 'Esta foto deve identificar a etiqueta com o número de série do equipamento de forma legível. Utilize o recurso de recorte para centralizar a imagem.'
+      MENSAGEM: `Esta foto deve identificar a etiqueta com o número de série do equipamento de forma legível. 
+                 Utilize o recurso de recorte para centralizar a imagem.`
     },
     {
       MODALIDADE: 'EQUIPAMENTOOPERACIONAL',
       DESCRICAO: 'Eqp. Operacional',
-      MENSAGEM: 'Esta foto deve mostrar o equipamento em funcionamento após o atendimento. Se possível apresentar o periférico que foi realizada a manutenção na imagem.'
+      MENSAGEM: `Esta foto deve mostrar o equipamento em funcionamento após o atendimento. Se possível 
+                 apresentar o periférico que foi realizada a manutenção na imagem.`
     },
     {
       MODALIDADE: 'PARTEINTERNA',
       DESCRICAO: 'Parte Interna',
-      MENSAGEM: 'A foto da parte interna deve mostrar o interior do equipamento. Se possível posicione a câmera de forma vertical ao capturar a imagem.'
+      MENSAGEM: `A foto da parte interna deve mostrar o interior do equipamento. Se possível posicione a 
+                 câmera de forma vertical ao capturar a imagem.`
     },
   ]
 
