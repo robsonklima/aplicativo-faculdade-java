@@ -43,17 +43,17 @@ export class Config {
     {
       MODALIDADE: 'ETIQUETANUMSERIE',
       DESCRICAO: 'Etiqueta Nro. Série',
-      MENSAGEM: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+      MENSAGEM: 'Esta foto deve identificar a etiqueta com o número de série do equipamento de forma legível. Utilize o recurso de recorte para centralizar a imagem.'
     },
     {
       MODALIDADE: 'EQUIPAMENTOOPERACIONAL',
       DESCRICAO: 'Eqp. Operacional',
-      MENSAGEM: 'Labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+      MENSAGEM: 'Esta foto deve mostrar o equipamento em funcionamento após o atendimento. Se possível apresentar o periférico que foi realizada a manutenção na imagem.'
     },
     {
       MODALIDADE: 'PARTEINTERNA',
       DESCRICAO: 'Parte Interna',
-      MENSAGEM: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+      MENSAGEM: 'A foto da parte interna deve mostrar o interior do equipamento. Se possível posicione a câmera de forma vertical ao capturar a imagem.'
     },
   ]
 
