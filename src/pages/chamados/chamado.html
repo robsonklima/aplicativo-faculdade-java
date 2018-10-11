@@ -485,7 +485,8 @@
           <h2>Capturar RAT Física</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('RAT')"
-            *ngIf="!verificarExistenciaFoto('RAT')">
+            *ngIf="!verificarExistenciaFoto('RAT')"
+            [disabled]="chamado?.indRatEletronica">
             <ion-icon name="add-circle"></ion-icon>
           </button>
 
