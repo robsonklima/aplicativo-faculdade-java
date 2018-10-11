@@ -4,6 +4,7 @@ export class Config {
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
   public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
+  public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;
   public static INT_SINC_CHAMADOS_MILISEG = 300000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;

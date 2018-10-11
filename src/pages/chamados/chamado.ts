@@ -70,7 +70,7 @@ export class ChamadoPage {
       .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
-      .catch(() => {});    
+      .catch(() => {});
   }
 
   public alterarSlide() {
@@ -205,6 +205,22 @@ export class ChamadoPage {
     }
 
     return false;
+  }
+
+  public verificarChamadoExtraMaquina(): boolean {
+    let retorno: boolean = false; 
+
+    if (this.chamado.rats.length > 0) {
+      if (this.chamado.rats[0].ratDetalhes.length > 0) {
+        this.chamado.rats[0].ratDetalhes.forEach((d) => {
+          if(Number(d.tipoCausa.codTipoCausa) === Number(Config.TIPO_CAUSA.EXTRA_MAQUINA)) {
+            retorno = true;
+          }
+        });
+      }
+    }
+
+    return retorno;
   }
 
   public telaDocumentos() {
@@ -503,31 +519,32 @@ export class ChamadoPage {
       buttons: [
         {
           text: 'Cancelar',
-          handler: () => { }
+          handler: () => {}
         },
         {
           text: 'Confirmar',
           handler: () => {
             if (this.chamado.rats[0].ratDetalhes.length > 0) {
+              if (this.verificarChamadoExtraMaquina() && this.chamado.rats[0].fotos.length < 1) {
+                this.exibirToast("Chamados EXTRA-MÁQUINA devem possuir fotos. Favor inserir as fotos do atendimento.");
+                return;
+              }
+
               this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
               this.chamado.statusServico.abreviacao = "F";
               this.chamado.statusServico.nomeStatusServico = "FECHADO";
               this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-              this.chamadoService.atualizarChamado(this.chamado)
-                .then(() => {
-                  this.navCtrl.pop()
-                    .then(() => {
-                      this.exibirToast(`Chamado fechado no seu smartphone, 
-                        aguarde a sincronização com o servidor`)
-                        .then(() => {
-                          this.events.publish('sincronizacao:solicitada');
-                        })
-                        .catch();
-                    })
-                    .catch();
-                })
-                .catch();
+              this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                this.navCtrl.pop().then(() => {
+                  this.exibirToast('Chamado fechado no seu smartphone, aguarde a sincronização com o servidor').then(() => {
+                    this.events.publish('sincronizacao:solicitada');
+                  })
+                  .catch();
+                  })
+                  .catch();
+              })
+              .catch();
             } else {
               this.exibirToast('Favor inserir os detalhes da RAT');
             }
