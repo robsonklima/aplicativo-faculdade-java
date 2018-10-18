@@ -22,11 +22,11 @@ export class Config {
     { filial: 'FRJ', distancia: 4.44 }, { filial: 'FAM', distancia: 4.78 }
   ];
   public static COR_RGB = { 
-    CINZA: 'rgba(196, 199, 206, 0.2)',
-    VERDE: 'rgba(75, 192, 192, 0.4)', 
-    VERMELHO: 'rgba(255, 0, 0, 0.4)', 
-    LARANJA: 'rgba(255, 153, 0, 0.4)',
-    AZUL: 'rgba(0,127,255, 0.4)'
+    CINZA: '#9E9E9E',
+    VERDE: '#8BC34A', 
+    VERMELHO: '#D32F2F', 
+    LARANJA: '#FFC107',
+    AZUL: '#00BCD4'
   };
   public static CHAMADO = { TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = { PENDENCIA_PECA: { CODACAO: 19 } };

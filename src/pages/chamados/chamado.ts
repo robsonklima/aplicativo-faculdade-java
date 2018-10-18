@@ -524,30 +524,41 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if (this.chamado.rats[0].ratDetalhes.length > 0) {
-              if (this.verificarChamadoExtraMaquina() && this.chamado.rats[0].fotos.length < 1) {
-                this.exibirToast("Chamados EXTRA-MÁQUINA devem possuir fotos. Favor inserir as fotos do atendimento.");
-                return;
-              }
-
-              this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
-              this.chamado.statusServico.abreviacao = "F";
-              this.chamado.statusServico.nomeStatusServico = "FECHADO";
-              this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
-
-              this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                this.navCtrl.pop().then(() => {
-                  this.exibirToast('Chamado fechado no seu smartphone, aguarde a sincronização com o servidor').then(() => {
-                    this.events.publish('sincronizacao:solicitada');
-                  })
-                  .catch();
-                  })
-                  .catch();
-              })
-              .catch();
-            } else {
+            if (this.chamado.rats[0].ratDetalhes.length == 0) {
               this.exibirToast('Favor inserir os detalhes da RAT');
+              return;
             }
+
+            if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+              this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+              return;
+            } 
+            
+            if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+              this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+              return;
+            }
+
+            // if (this.verificarChamadoExtraMaquina() && this.chamado.rats[0].fotos.length < 1) {
+            //   this.exibirToast("Chamados EXTRA-MÁQUINA devem possuir fotos. Favor inserir as fotos do atendimento");
+            //   return;
+            // }
+
+            this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
+            this.chamado.statusServico.abreviacao = "F";
+            this.chamado.statusServico.nomeStatusServico = "FECHADO";
+            this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.navCtrl.pop().then(() => {
+                this.exibirToast('Chamado fechado no seu smartphone, aguarde a sincronização com o servidor').then(() => {
+                  this.events.publish('sincronizacao:solicitada');
+                })
+                .catch();
+                })
+                .catch();
+            })
+            .catch();
           }
         }
       ]

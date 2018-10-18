@@ -106,11 +106,10 @@ export class IndicadorTecnicoPage {
     return new Promise((resolve, reject) => {
       this.indicadorService.buscarGrfSLAMelhorTecnicoApi()
       .subscribe(dados => {
-        if (dados)
-          console.log(dados[0].percNoPrazo);
-          
+        if (dados) {
           this.slaMelhorTecnico = dados[0].percNoPrazo;
-        
+        }
+          
         resolve();
       },
       err => { reject(); });

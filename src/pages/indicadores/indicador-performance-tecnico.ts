@@ -75,9 +75,6 @@ export class IndicadorPerformanceTecnicoPage {
       this.indicadorService.buscarGrfAcumuladoTecnicoApi(this.dg.usuario.codTecnico)
         .subscribe(dados => {
           if (dados.length > 0) {
-            console.log(dados);
-            
-
             this.qtdOSGeral = dados[0].qtdOSGeral;
             this.qtdOSCorretiva = dados[0].qtdOSCorretiva;
             this.qtdOSPreventiva = dados[0].qtdOSPreventiva;
