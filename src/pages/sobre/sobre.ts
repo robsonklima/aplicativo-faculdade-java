@@ -3,12 +3,15 @@ import { ViewController } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 
+import moment from 'moment';
+
 @Component({
   selector: 'sobre-page',
   templateUrl: 'sobre.html'
 })
 export class SobrePage {
   versaoApp: string;
+  anoAtual: string;
 
   constructor(
     private viewCtrl: ViewController,
@@ -21,6 +24,8 @@ export class SobrePage {
     }).catch(() => {
 
     });
+
+    this.anoAtual = moment().format('YYYY');
   }
 
   public fecharModal() {
