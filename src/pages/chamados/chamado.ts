@@ -457,6 +457,9 @@ export class ChamadoPage {
     rat.ratDetalhes = [];
     rat.fotos = [];
 
+    console.log(this.chamado.rats[0]);
+    
+
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
@@ -493,6 +496,7 @@ export class ChamadoPage {
       this.chamado.rats[0].numRat = form.value.numRat;
       this.chamado.rats[0].dataInicio = form.value.dataInicio;
       this.chamado.rats[0].horaInicio = form.value.horaInicio;
+      this.chamado.rats[0].dataSolucao = form.value.dataInicio;
       this.chamado.rats[0].horaSolucao = form.value.horaSolucao;
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
