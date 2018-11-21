@@ -457,9 +457,6 @@ export class ChamadoPage {
     rat.ratDetalhes = [];
     rat.fotos = [];
 
-    console.log(this.chamado.rats[0]);
-    
-
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];

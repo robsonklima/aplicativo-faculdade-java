@@ -64,7 +64,7 @@ export class LoginPage implements OnInit {
       },
       err => {
         loading.dismiss().then(() => {
-          this.exibirToast('Não foi possível autenticar');
+          this.exibirToast(err);
         });
       });
   }
@@ -105,7 +105,7 @@ export class LoginPage implements OnInit {
                 },
                 err => {
                   loading.dismiss().then(() => {
-                    this.exibirToast('Não foi possível autenticar');
+                    this.exibirToast(err);
                   });
                 });
             } else {

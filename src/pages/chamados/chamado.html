@@ -503,7 +503,7 @@
           <ion-avatar item-start>
             <img src="{{ carregarFoto('ETIQUETANUMSERIE') }}">
           </ion-avatar>
-          <h2>Etiqueta Número Série</h2>
+          <h2>Etiqueta Número de Série</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('ETIQUETANUMSERIE')" 
             *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
@@ -547,7 +547,7 @@
           </button>
 
           <button ion-button clear item-end 
-            (click)="removerFoto('RAT')"
+            (click)="removerFoto('PARTEINTERNA')"
             *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
           </button>

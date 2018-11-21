@@ -171,7 +171,7 @@ export class IndicadorPerformanceTecnicoPage {
         scales: { 
           xAxes: [{ 
             ticks: { 
-              beginAtZero: false,
+              beginAtZero: true,
               stepSize : 20
             },
             gridLines: {
@@ -238,7 +238,7 @@ export class IndicadorPerformanceTecnicoPage {
             borderWidth: 2,
           }
         },
-        //responsive: true, 
+        responsive: true, 
         maintainAspectRatio: true,
         legend: false,
         title: {
@@ -248,8 +248,8 @@ export class IndicadorPerformanceTecnicoPage {
         scales: { 
           xAxes: [{ 
             ticks: { 
-              beginAtZero: false,
-              //stepSize : 20
+              beginAtZero: true,
+              stepSize : 1
             },
             gridLines: {
               //lineWidth: 0,
