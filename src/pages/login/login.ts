@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController, MenuController, ToastController, AlertController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
+import { AppVersion } from '@ionic-native/app-version';
+
 import { DadosGlobais } from '../../models/dados-globais';
 import { HomePage } from '../home/home';
+import { Login } from '../../models/login';
 import { Usuario } from '../../models/usuario';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -27,11 +30,18 @@ export class LoginPage implements OnInit {
     private usuarioService: UsuarioService,
     private dadosGlobaisService: DadosGlobaisService,
     private toastCtrl: ToastController,
-    private events: Events
+    private events: Events,
+    private appVersion: AppVersion
   ) {}
 
   ngOnInit() {
     this.menuCtrl.enable(false);
+
+    this.appVersion.getVersionNumber().then((versaoApp) => {
+      this.versaoApp = versaoApp;
+    }).catch(() => {
+      this.versaoApp = '0.0.38';
+    });
   }
 
   public login(form: NgForm) {
@@ -44,29 +54,31 @@ export class LoginPage implements OnInit {
     usuario.codUsuario = form.value.codUsuario;
     usuario.senha = form.value.senha;
 
-    this.usuarioService.login(usuario)
-      .subscribe((usuario) => {
-        if(usuario) {
-          loading.dismiss().then(() => {
-            this.usuario = usuario;
-            this.salvarDadosGlobais();
-            this.usuarioService.salvarCredenciais(this.usuario);
-            this.events.publish('login:efetuado', this.dadosGlobais);
-            this.menuCtrl.enable(true);
-            this.navCtrl.setRoot(HomePage);
-          });
-        } else {
-          loading.dismiss().then(() => {
-            this.exibirAlerta(`Usuário ou senha inválidos ou você não 
-              possui e-mail da empresa cadastrado`);
-          });
-        }
-      },
-      err => {
+    let login = new Login();
+    login.usuario = usuario;
+    login.versaoAplicativo = this.versaoApp;
+
+    this.usuarioService.login(login).subscribe((login) => {
+      if(login && !login.erro) {
         loading.dismiss().then(() => {
-          this.exibirToast(err);
+          this.usuario = login.usuario;
+          this.salvarDadosGlobais();
+          this.usuarioService.salvarCredenciais(this.usuario);
+          this.events.publish('login:efetuado', this.dadosGlobais);
+          this.menuCtrl.enable(true);
+          this.navCtrl.setRoot(HomePage);
         });
+      } else {
+        loading.dismiss().then(() => {
+          this.exibirAlerta(login.mensagem);
+        });
+      }
+    },
+    err => {
+      loading.dismiss().then(() => {
+        this.exibirToast(err);
       });
+    });
   }
  
   public recuperarSenha() {
