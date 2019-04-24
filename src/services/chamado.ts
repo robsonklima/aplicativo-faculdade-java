@@ -30,6 +30,13 @@ export class ChamadoService {
     );
   }
 
+  buscarChamadoApi(codOS: number): Observable<Chamado> {
+    return this.http.get(Config.API_URL + 'Os/' + codOS)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json())
+    );
+  }
+
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
       .timeout(20000)

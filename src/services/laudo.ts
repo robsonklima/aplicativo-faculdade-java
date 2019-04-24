@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 
 import { Config } from './../config/config';
 import { Observable } from "rxjs/Observable";
+import { Laudo } from '../models/laudo';
 
 @Injectable()
 export class LaudoService {
@@ -11,8 +12,8 @@ export class LaudoService {
     private http: Http
   ) { }
 
-  buscarLaudosControleApi(codTecnico: number): Observable<any[]> {
-    return this.http.get(Config.API_URL + 'LaudoControle/' + codTecnico)
+  buscarLaudosApi(codTecnico: number): Observable<Laudo[]> {
+    return this.http.get(Config.API_URL + 'Laudo/' + codTecnico)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );

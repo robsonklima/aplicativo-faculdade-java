@@ -63,7 +63,7 @@
     <button 
       ion-item
       class="first-item"
-      (click)="telaLaudos()">
+      (click)="telaLaudos(laudos)">
       <ion-icon 
         color="primary" 
         name="attach" 
@@ -71,8 +71,9 @@
       Laudos
       <ion-badge 
         item-end
-        [ngClass]="{ 'bd-red': 1 > 0 }">
-        4
+        *ngIf="laudos?.length > 0"
+        [ngClass]="{ 'bd-red': laudos?.length > 0 }">
+        {{ laudos?.length }}
       </ion-badge>
     </button>
 

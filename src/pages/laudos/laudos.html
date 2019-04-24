@@ -6,12 +6,11 @@
   
   <ion-content>
     <ion-list>
-      <button class="first-item" ion-item>
-        Chamado A
-      </button>
-
-      <button class="first-item" ion-item>
-        Chamado B
+      <button 
+        (click)="telaLaudo(laudo)"
+        *ngFor="let laudo of laudos; let i = index" ion-item>
+        <h2>{{ laudo.codOS }}</h2>
+        <p>{{ laudo.dataHoraCad | date: 'dd/MM HH:mm' }}</p>
       </button>
     </ion-list>
   </ion-content>

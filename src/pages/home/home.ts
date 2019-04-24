@@ -9,10 +9,12 @@ import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
 import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
+import { LaudosPage } from '../laudos/laudos';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
 import { UsuarioPonto } from '../../models/usuario-ponto';
+import { Laudo } from '../../models/laudo';
 
 import { Config } from "../../config/config";
 
@@ -24,9 +26,9 @@ import { DefeitoService } from "../../services/defeito";
 import { CausaService } from "../../services/causa";
 import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
+import { LaudoService } from '../../services/laudo';
 
 import moment from 'moment';
-import { LaudosPage } from '../laudos/laudos';
 
 @Component({
   selector: 'home-page',
@@ -38,6 +40,7 @@ export class HomePage {
   loginPage = LoginPage;
   dg: DadosGlobais;
   chamados: Chamado[];
+  laudos: Laudo[];
   task: any;
   perfilTecnico: boolean;
   usuarioPonto: UsuarioPonto;
@@ -57,7 +60,8 @@ export class HomePage {
     private defeitoService: DefeitoService,
     private causaService: CausaService,
     private pecaService: PecaService,
-    private tipoServicoService: TipoServicoService
+    private tipoServicoService: TipoServicoService,
+    private laudoService: LaudoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
@@ -69,8 +73,8 @@ export class HomePage {
   ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage())
-      .then(() => this.carregarSenhaExpirada())
       .then(() => this.obterRegistrosPonto())
+      .then(() => this.carregarLaudos())
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo())
       .then(() => this.carregarVersaoApp());
   }
@@ -79,8 +83,8 @@ export class HomePage {
     this.navCtrl.push(ChamadosPage);
   }
 
-  public telaLaudos() {
-    this.navCtrl.push(LaudosPage);
+  public telaLaudos(laudos: Laudo[]) {
+    this.navCtrl.push(LaudosPage, { laudos: laudos});
   }
 
   public telaPecas() {
@@ -176,15 +180,13 @@ export class HomePage {
     this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
   }
 
-  private carregarSenhaExpirada(): Promise<any> {
+  private carregarLaudos(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.usuarioService.verificarSenhaExpirada()
-        .subscribe(senhaExpirada => {
-          if (senhaExpirada) {
-            this.exibirAlerta('Sua senha expirou. Altere sua senha para continuar utilizando a aplicação.');
-          }
+      this.laudoService.buscarLaudosApi(this.dg.usuario.codTecnico)
+        .subscribe(laudos => {
+          this.laudos = laudos;
 
-          resolve();
+          resolve(laudos);
         }, err => {});
     });
   }
