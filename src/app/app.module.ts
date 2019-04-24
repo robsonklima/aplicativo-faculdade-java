@@ -44,6 +44,7 @@ import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
 import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
+import { LaudosPage } from '../pages/laudos/laudos';
 import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
 
 import { DadosGlobaisService } from '../services/dados-globais';
@@ -62,6 +63,7 @@ import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
 import { LocalizacaoService } from '../services/localizacao';
+import { LaudoService } from '../services/laudo';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -97,6 +99,7 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
+    LaudosPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -146,6 +149,7 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
+    LaudosPage
   ],
   providers: [
     StatusBar,
@@ -179,7 +183,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     FotoService,
     AjudaTopicoService,
     IndicadorService,
-    LocalizacaoService
+    LocalizacaoService,
+    LaudoService
   ]
 })
 export class AppModule {}

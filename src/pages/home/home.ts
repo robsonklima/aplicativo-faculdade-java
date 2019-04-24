@@ -26,6 +26,7 @@ import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
 
 import moment from 'moment';
+import { LaudosPage } from '../laudos/laudos';
 
 @Component({
   selector: 'home-page',
@@ -76,6 +77,10 @@ export class HomePage {
 
   public telaChamados() {
     this.navCtrl.push(ChamadosPage);
+  }
+
+  public telaLaudos() {
+    this.navCtrl.push(LaudosPage);
   }
 
   public telaPecas() {

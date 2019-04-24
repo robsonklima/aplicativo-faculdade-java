@@ -1,3 +1,6 @@
+0.0.38 - 14/03/2019
+- Bloqueio do uso de versões antigas;
+
 0.0.37 - 22/11/2018
 - Indicadores;
 - Inserção de Fotos da RAT;

@@ -62,6 +62,22 @@
 
     <button 
       ion-item
+      class="first-item"
+      (click)="telaLaudos()">
+      <ion-icon 
+        color="primary" 
+        name="attach" 
+        item-start></ion-icon>
+      Laudos
+      <ion-badge 
+        item-end
+        [ngClass]="{ 'bd-red': 1 > 0 }">
+        4
+      </ion-badge>
+    </button>
+
+    <button 
+      ion-item
       (click)="telaPecas()">
       <ion-icon 
         color="primary" 

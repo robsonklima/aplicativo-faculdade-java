@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
     this.appVersion.getVersionNumber().then((versaoApp) => {
       this.versaoApp = versaoApp;
     }).catch(() => {
-      this.versaoApp = '0.0.38';
+      this.versaoApp = '0.0.37';
     });
   }
 
