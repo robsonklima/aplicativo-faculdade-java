@@ -6,7 +6,6 @@ import { AppVersion } from '@ionic-native/app-version';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { HomePage } from '../home/home';
-import { Login } from '../../models/login';
 import { Usuario } from '../../models/usuario';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -54,31 +53,29 @@ export class LoginPage implements OnInit {
     usuario.codUsuario = form.value.codUsuario;
     usuario.senha = form.value.senha;
 
-    let login = new Login();
-    login.usuario = usuario;
-    login.versaoAplicativo = this.versaoApp;
-
-    this.usuarioService.login(login).subscribe((login) => {
-      if(login && !login.erro) {
+    this.usuarioService.login(usuario)
+      .subscribe((usuario) => {
+        if(usuario) {
+          loading.dismiss().then(() => {
+            this.usuario = usuario;
+            this.salvarDadosGlobais();
+            this.usuarioService.salvarCredenciais(this.usuario);
+            this.events.publish('login:efetuado', this.dadosGlobais);
+            this.menuCtrl.enable(true);
+            this.navCtrl.setRoot(HomePage);
+          });
+        } else {
+          loading.dismiss().then(() => {
+            this.exibirAlerta(`Usuário ou senha inválidos ou você não 
+              possui e-mail da empresa cadastrado`);
+          });
+        }
+      },
+      err => {
         loading.dismiss().then(() => {
-          this.usuario = login.usuario;
-          this.salvarDadosGlobais();
-          this.usuarioService.salvarCredenciais(this.usuario);
-          this.events.publish('login:efetuado', this.dadosGlobais);
-          this.menuCtrl.enable(true);
-          this.navCtrl.setRoot(HomePage);
+          this.exibirToast('Não foi possível autenticar');
         });
-      } else {
-        loading.dismiss().then(() => {
-          this.exibirAlerta(login.mensagem);
-        });
-      }
-    },
-    err => {
-      loading.dismiss().then(() => {
-        this.exibirToast(err);
       });
-    });
   }
  
   public recuperarSenha() {

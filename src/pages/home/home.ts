@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -72,8 +72,8 @@ export class HomePage {
   ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage().catch(() => {}))
-      .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.carregarLaudos().catch(() => {}))
+      .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
       .then(() => this.carregarVersaoApp().catch(() => {}))
       .catch(() => {});

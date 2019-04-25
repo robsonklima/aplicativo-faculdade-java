@@ -6,7 +6,7 @@ import { Config } from './../config/config';
 import { Observable } from "rxjs/Observable";
 import { Usuario } from '../models/usuario';
 import { UsuarioPonto } from '../models/usuario-ponto';
-import { Login } from '../models/login';
+//import { Login } from '../models/login';
 
 @Injectable()
 export class UsuarioService {
@@ -26,8 +26,8 @@ export class UsuarioService {
     this.usuario = usuario;
   }
 
-  public login(login: Login): Observable<Login> {
-    return this.http.post(Config.API_URL + 'Login', login)
+  public login(usuario: Usuario): Observable<Usuario> {
+    return this.http.post(Config.API_URL + 'Login', usuario)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

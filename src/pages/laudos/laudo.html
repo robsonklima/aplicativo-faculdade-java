@@ -40,37 +40,37 @@
           </ion-item>
 
           <ion-item class="first-item">
-            Data Atend.
+            Data
             <ion-note item-end>
-              
+              {{ chamado?.dataHoraSolicitacaoOS | date: 'dd/MM HH:mm' }}
             </ion-note>
           </ion-item>
 
           <ion-item class="first-item">
             Contato
             <ion-note item-end>
-              
+              {{ chamado?.nomeSolicitante }}
             </ion-note>
           </ion-item>
 
           <ion-item class="first-item">
             Protocolo STN
             <ion-note item-end>
-              
+              123456
             </ion-note>
           </ion-item>
 
           <ion-item class="first-item">
             Modelo
             <ion-note item-end>
-              
+              {{ chamado?.equipamentoContrato.equipamento.codEEquip }}
             </ion-note>
           </ion-item>
 
           <ion-item class="first-item">
             Código Pai
             <ion-note item-end>
-              
+              {{ chamado?.equipamentoContrato.contrato.codPai }}
             </ion-note>
           </ion-item>
         </ion-list>
@@ -80,12 +80,13 @@
 
       <ion-slide>
         <ion-list>
-          <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
+          <form #f="ngForm" (ngSubmit)="salvarLaudo(f)" class="form">
             <ion-item col-12 class="first-item">
               <ion-label stacked>Observações</ion-label>
               <ion-textarea 
                 placeholder="Informe o estado da máquina quando a encontrou"
                 name="observacoes"
+                [ngModel]=""
                 required>
               </ion-textarea>
             </ion-item>
@@ -95,6 +96,7 @@
               <ion-textarea 
                 placeholder="Informe todos os testes que foram realizados" 
                 name="testeFuncional"
+                [ngModel]=""
                 required>
               </ion-textarea>
             </ion-item>
@@ -103,7 +105,8 @@
               <ion-label stacked>Eventos de erro</ion-label>
               <ion-textarea 
                 placeholder="Informe os erros" 
-                name="eventosDeErro"
+                name="eventosErro"
+                [ngModel]=""
                 required>
               </ion-textarea>
             </ion-item>
@@ -113,6 +116,7 @@
               <ion-textarea 
                 placeholder="Informe todas as ações que foram realizadas" 
                 name="acoes"
+                [ngModel]=""
                 required>
               </ion-textarea>
             </ion-item>
@@ -122,6 +126,7 @@
               <ion-textarea 
                 placeholder="Informe seu parecer de conclusão" 
                 name="conclusao"
+                [ngModel]=""
                 required>
               </ion-textarea>
             </ion-item>
@@ -140,27 +145,40 @@
       </ion-slide>
 
       <ion-slide>
-        <ion-item>
-          <!--<ion-avatar item-start>
-            <img src="{{ carregarFoto('RAT') }}">
-          </ion-avatar>-->
-          <h2>Foto 1</h2>
-        </ion-item>
+        <ion-list>
+          <ion-item *ngFor="let foto of laudo?.fotos; let i = index">
+            <ion-avatar item-start>
+              <img src="{{ foto.str }}">
+            </ion-avatar>
+            <h2>Foto {{ i+1 }}</h2>
+            <button ion-button clear item-end 
+              (click)="removerFoto(i)">
+              <ion-icon name="trash" color="danger" class="icon-button"></ion-icon>
+            </button>
+          </ion-item>
+        </ion-list>
 
-        <ion-item>
-          <!--<ion-avatar item-start>
-            <img src="{{ carregarFoto('RAT') }}">
-          </ion-avatar>-->
-          <h2>Foto 2</h2>
-        </ion-item>
+        <p class="p-msg" *ngIf="laudo?.fotos?.length == 0">Nenhuma foto adicionada</p>
 
-        <ion-item>
-          <h2>Adicionar Foto</h2>
-          <button ion-button clear item-end 
-            (click)="tirarFoto()">
-            <ion-icon color="secondary" name="add-circle" class="icon-button"></ion-icon>
+        <ion-fab right bottom>
+          <button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
+          <ion-fab-list side="left">
+            <button ion-fab (click)="tirarFoto()" color="primary"><ion-icon  ios="ios-camera" md="md-camera"></ion-icon></button>
+            <button ion-fab (click)="selecionarFotoGaleria()" color="primary"><ion-icon ios="ios-photos" md="md-photos"></ion-icon></button>
+          </ion-fab-list>
+        </ion-fab>
+      </ion-slide>
+
+      <ion-slide>
+        <div padding>
+          <button
+            color="secondary"
+            ion-button 
+            block
+            (click)="enviarLaudo()">
+            Enviar
           </button>
-        </ion-item>
+        </div>
       </ion-slide>
     </ion-slides>
 </ion-content>
