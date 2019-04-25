@@ -1,9 +1,166 @@
 <ion-header>
-    <ion-navbar no-border-bottom>
-      <ion-title>Laudo</ion-title>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content>
-    
-  </ion-content>
+  <ion-navbar no-border-bottom>
+    <ion-title>Laudo: {{ chamado?.codOs }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>{{ tituloSlide }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager (ionSlideDidChange)="alterarSlide()">
+      <ion-slide>
+        <ion-list>
+          <ion-item class="first-item">
+            Cliente
+            <ion-note item-end>
+              {{ chamado?.cliente.numBanco }}-{{ chamado?.cliente.nomeCliente }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Agência
+            <ion-note item-end>
+              {{ chamado?.localAtendimento.numAgencia }}/{{ chamado?.localAtendimento.dcPosto }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Local
+            <ion-note item-end>
+              {{ chamado?.localAtendimento.nomeLocalAtendimento }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            Série
+            <ion-note item-end>
+              {{ chamado?.equipamentoContrato.numSerie }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="first-item">
+            Data Atend.
+            <ion-note item-end>
+              
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="first-item">
+            Contato
+            <ion-note item-end>
+              
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="first-item">
+            Protocolo STN
+            <ion-note item-end>
+              
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="first-item">
+            Modelo
+            <ion-note item-end>
+              
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="first-item">
+            Código Pai
+            <ion-note item-end>
+              
+            </ion-note>
+          </ion-item>
+        </ion-list>
+
+        <p>Deslize a tela para prosseguir</p>
+      </ion-slide>
+
+      <ion-slide>
+        <ion-list>
+          <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
+            <ion-item col-12 class="first-item">
+              <ion-label stacked>Observações</ion-label>
+              <ion-textarea 
+                placeholder="Informe o estado da máquina quando a encontrou"
+                name="observacoes"
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item col-12>
+              <ion-label stacked>Teste Funcional</ion-label>
+              <ion-textarea 
+                placeholder="Informe todos os testes que foram realizados" 
+                name="testeFuncional"
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item col-12>
+              <ion-label stacked>Eventos de erro</ion-label>
+              <ion-textarea 
+                placeholder="Informe os erros" 
+                name="eventosDeErro"
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item col-12>
+              <ion-label stacked>Ações</ion-label>
+              <ion-textarea 
+                placeholder="Informe todas as ações que foram realizadas" 
+                name="acoes"
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item col-12>
+              <ion-label stacked>Conclusão</ion-label>
+              <ion-textarea 
+                placeholder="Informe seu parecer de conclusão" 
+                name="conclusao"
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <div padding>
+              <button
+                color="secondary"
+                ion-button 
+                block
+                [disabled]="!f.valid">
+                Salvar e Prosseguir
+              </button>
+            </div>
+          </form>
+        </ion-list>
+      </ion-slide>
+
+      <ion-slide>
+        <ion-item>
+          <!--<ion-avatar item-start>
+            <img src="{{ carregarFoto('RAT') }}">
+          </ion-avatar>-->
+          <h2>Foto 1</h2>
+        </ion-item>
+
+        <ion-item>
+          <!--<ion-avatar item-start>
+            <img src="{{ carregarFoto('RAT') }}">
+          </ion-avatar>-->
+          <h2>Foto 2</h2>
+        </ion-item>
+
+        <ion-item>
+          <h2>Adicionar Foto</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto()">
+            <ion-icon color="secondary" name="add-circle" class="icon-button"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-slide>
+    </ion-slides>
+</ion-content>

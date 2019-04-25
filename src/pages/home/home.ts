@@ -48,7 +48,6 @@ export class HomePage {
   constructor(
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController,
     private appVersion: AppVersion,
     private market: Market,
     private events: Events,
@@ -72,11 +71,12 @@ export class HomePage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarChamadosStorage())
-      .then(() => this.obterRegistrosPonto())
-      .then(() => this.carregarLaudos())
-      .then(() => this.verificarNecessidadeRegistroPontoIntervalo())
-      .then(() => this.carregarVersaoApp());
+      .then(() => this.carregarChamadosStorage().catch(() => {}))
+      .then(() => this.obterRegistrosPonto().catch(() => {}))
+      .then(() => this.carregarLaudos().catch(() => {}))
+      .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
+      .then(() => this.carregarVersaoApp().catch(() => {}))
+      .catch(() => {});
   }
 
   public telaChamados() {
@@ -240,19 +240,5 @@ export class HomePage {
           reject();
         });
     });
-  }
-
-  private exibirAlerta(msg: string) {
-    const alerta = this.alertCtrl.create({
-      title: 'Alerta!',
-      subTitle: msg,
-      buttons: ['OK']
-    });
-
-    alerta.present();
-  }
-  
-  ionViewWillLeave() {
-    clearInterval(this.task);
   }
 }

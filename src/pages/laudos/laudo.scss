@@ -1,0 +1,33 @@
+laudo-page {
+    p {
+        font-size: 10pt !important;
+        color: #9E9E9E;
+    }
+
+    .icon-button {
+        font-size: 24px;
+    }
+
+    .first-divider, .first-item {
+        margin-top: 1px;
+    }
+
+    .badge {
+        font-weight: inherit;
+    }
+
+    ion-slides {
+        margin-top: 0px;
+        height: 100%; width:100%;
+        overflow:auto;
+    }
+
+    .swiper-slide {
+        overflow-y: scroll;
+        display: block;
+    }
+
+    .swiper-pagination-bullet {
+        display: none;
+    }
+}

@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar no-border-bottom>
-      <ion-title>Laudos</ion-title>
+      <ion-title>Laudos Pendentes</ion-title>
     </ion-navbar>
   </ion-header>
   
@@ -10,7 +10,9 @@
         (click)="telaLaudo(laudo)"
         *ngFor="let laudo of laudos; let i = index" ion-item>
         <h2>{{ laudo.codOS }}</h2>
-        <p>{{ laudo.dataHoraCad | date: 'dd/MM HH:mm' }}</p>
+        <p>Requisitado em: {{ laudo.dataHoraCad | date: 'dd/MM HH:mm' }}</p>
       </button>
     </ion-list>
+
+    <p text-center *ngIf="!laudos?.length">Nenhum Laudo Pendente</p>
   </ion-content>
