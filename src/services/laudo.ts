@@ -18,4 +18,10 @@ export class LaudoService {
       .catch((error: any) => Observable.throw(error.json())
     );
   }
+
+  enviarLaudoApi(laudo: Laudo): Observable<any> {
+    return this.http.post(Config.API_URL + 'Laudo', laudo)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
 }

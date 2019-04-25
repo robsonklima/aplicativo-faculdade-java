@@ -101,7 +101,15 @@ export class ChamadoPage {
     });
   }
 
-  public tirarFoto(modalidade: string) {
+  public tirarFoto(modalidade: string, sourceType: number) {
+    let tipo: string = "";
+
+    if (sourceType == 1) {
+      tipo = "Câmera"
+    } else {
+      tipo = "Galeria"
+    }
+
     let orientacoes = Config.ORIENTACAO_FOTO.filter((orientacao) => {
       return (orientacao.MODALIDADE == modalidade);
     });
@@ -118,17 +126,16 @@ export class ChamadoPage {
           handler: () => { }
         },
         {
-          text: 'Abrir Câmera',
+          text: 'Abrir ' + tipo,
           handler: () => {
             this.camera.getPicture({
               quality: 80,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
-              //correctOrientation: true,
              targetWidth: 720,
-              //targetHeight: 480,
               allowEdit: true,
+              sourceType: sourceType,
               saveToPhotoAlbum: true
             }).then(imageData => {
               this.foto = new Foto();

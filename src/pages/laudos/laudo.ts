@@ -6,6 +6,9 @@ import { Chamado } from '../../models/chamado';
 import { NgForm } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { Foto } from '../../models/foto';
+import { LaudoService } from '../../services/laudo';
+
+import moment from 'moment';
 
 @Component({
   selector: 'laudo-page',
@@ -24,6 +27,7 @@ export class LaudoPage {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private chamadoService: ChamadoService,
+    private laudoService: LaudoService,
     private camera: Camera
   ) {
     this.laudo = this.navParams.get('laudo');
@@ -34,7 +38,7 @@ export class LaudoPage {
   }
 
   ionViewWillEnter() {
-    this.configurarSlide(this.slides.getActiveIndex());
+    this.configurarSlide(this.slides.getActiveIndex());    
   }
 
   private carregarChamado(): Promise<any> {
@@ -53,11 +57,9 @@ export class LaudoPage {
     this.laudo.eventosErro = form.value.eventosErro;
     this.laudo.acoes = form.value.acoes;
     this.laudo.conclusao = form.value.conclusao;
-
-    this.exibirToast('Laudo atualizado com sucesso').then(() => {
-      this.configurarSlide(this.slides.getActiveIndex());
-      this.slides.slideTo(2, 500);
-    }).catch(() => {});
+    
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(2, 500);
   }
 
   public enviarLaudo() {
@@ -77,13 +79,20 @@ export class LaudoPage {
               return
             }
 
-
-            // AQUI REGRA DE SALVAR
-
-
-            setTimeout(() => { this.exibirToast('Laudo ' + this.laudo.codOS + ' enviado com sucesso').then(() => {
-              this.navCtrl.popToRoot();
-            }) }, 500);
+            this.laudoService.enviarLaudoApi(this.laudo).subscribe((res) => {
+              if (res) {
+                if (res.indexOf('00 - ') > -1) {
+                  setTimeout(() => { this.exibirToast('Laudo ' + this.laudo.codOS + ' enviado com sucesso').then(() => {
+                    this.navCtrl.popToRoot();
+                  }) }, 500);
+                } else {
+                  this.exibirToast('Não foi possível enviar o laudo. Favor tentar novamente');
+                }
+              }
+            },
+            err => {
+                this.exibirToast(err);
+            });
           }
         }
       ]
@@ -92,7 +101,7 @@ export class LaudoPage {
     confirmacao.present();
   }
 
-  public tirarFoto() {
+  public selecionarFoto(sourceType: number) {
     this.camera.getPicture({
       quality: 80,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -101,33 +110,11 @@ export class LaudoPage {
       correctOrientation: true,
       targetWidth: 720,
       targetHeight: 480,
+      sourceType: sourceType,
       allowEdit: true
     }).then(imageData => {
       this.foto = new Foto();
-      this.foto.nome = this.chamado.codOs.toString() + '_LAUDO_' + new Date().getUTCMilliseconds().toString();
-      this.foto.str = 'data:image/jpeg;base64,' + imageData;
-      this.foto.modalidade = "LAUDO";
-      this.laudo.fotos.push(this.foto);
-      this.camera.cleanup();
-    }).catch(err => {
-      setTimeout(() => { this.exibirToast(err) }, 500);
-    });
-  }
-
-  public selecionarFotoGaleria() {
-    this.camera.getPicture({
-      quality: 80,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true,
-      targetWidth: 720,
-      targetHeight: 480,
-      sourceType: 0,
-      allowEdit: true
-    }).then(imageData => {
-      this.foto = new Foto();
-      this.foto.nome = this.chamado.codOs.toString() + '_LAUDO_' + new Date().getUTCMilliseconds().toString();
+      this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
       this.foto.str = 'data:image/jpeg;base64,' + imageData;
       this.foto.modalidade = "LAUDO";
       this.laudo.fotos.push(this.foto);
@@ -176,6 +163,8 @@ export class LaudoPage {
     switch (i) {
       case 0:
         this.tituloSlide = (i + 1) + ". " + "Informações";
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
         break;
 
       case 1:
@@ -189,10 +178,14 @@ export class LaudoPage {
 
       case 2:
         this.tituloSlide = (i + 1) + ". " + "Fotos";
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
         break;
 
       case 3:
         this.tituloSlide = (i + 1) + ". " + "Envio";
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
         break;
     }
   }
