@@ -99,12 +99,18 @@
 
     <button 
       ion-item 
-      [disabled]="true">
+      (click)="telaMensagensTecnico(mensagensTecnico)">
       <ion-icon 
         color="primary" 
         name="mail" 
         item-start></ion-icon>
       Mensagens
+      <ion-badge 
+        item-end
+        *ngIf="mensagensTecnico?.length > 0"
+        [ngClass]="{ 'bd-red': mensagensTecnico?.length > 0 }">
+        {{ mensagensTecnico?.length }}
+      </ion-badge>
     </button>
 
     <button

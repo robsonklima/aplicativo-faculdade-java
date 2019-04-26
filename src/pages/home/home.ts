@@ -10,6 +10,7 @@ import { PecasPage } from '../pecas/pecas';
 import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
 import { LaudosPage } from '../laudos/laudos';
+import { MensagensPage } from '../mensagens/mensagens';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
@@ -29,6 +30,8 @@ import { TipoServicoService } from "../../services/tipo-servico";
 import { LaudoService } from '../../services/laudo';
 
 import moment from 'moment';
+import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
+import { MensagemTecnico } from '../../models/mensagem-tecnico';
 
 @Component({
   selector: 'home-page',
@@ -40,6 +43,7 @@ export class HomePage {
   loginPage = LoginPage;
   dg: DadosGlobais;
   chamados: Chamado[];
+  mensagensTecnico: MensagemTecnico[] = []
   laudos: Laudo[];
   task: any;
   perfilTecnico: boolean;
@@ -60,7 +64,8 @@ export class HomePage {
     private causaService: CausaService,
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService,
-    private laudoService: LaudoService
+    private laudoService: LaudoService,
+    private mensagemTecnicoService: MensagemTecnicoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
@@ -73,6 +78,7 @@ export class HomePage {
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage().catch(() => {}))
       .then(() => this.carregarLaudos().catch(() => {}))
+      .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
       .then(() => this.carregarVersaoApp().catch(() => {}))
@@ -93,6 +99,10 @@ export class HomePage {
 
   public telaIndicadoresMenu() {
     this.navCtrl.push(IndicadorMenuPage);
+  }
+
+  public telaMensagensTecnico(mensagensTecnico: MensagemTecnico[]) {
+    this.navCtrl.push(MensagensPage, { mensagensTecnico: mensagensTecnico});
   }
 
   public abrirPopover(event: MouseEvent) {
@@ -120,6 +130,17 @@ export class HomePage {
       .catch(err => {
         reject();
       })
+    });
+  }
+
+  public carregarMensagensTecnico(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.mensagemTecnicoService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario)
+        .subscribe(mt => {
+          this.mensagensTecnico = mt;
+
+          resolve(mt);
+        }, err => {});
     });
   }
 

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Mensagens</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="cards-bg">
+  <ion-card *ngFor="let mensagemTecnico of mensagensTecnico; let i = index">
+    <ion-item>
+      <h2>{{ mensagemTecnico.assunto }}</h2>
+      <p>Enviada em: {{ mensagemTecnico.dataHoraCad | date: 'dd/MM/yyyy HH:mm' }}</p>
+    </ion-item>
+
+    <ion-card-content>
+      <p>{{ mensagemTecnico.mensagem }}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col text-right>
+        <button ion-button icon-start clear small color="danger" (click)="marcarMensagemLida(mensagemTecnico, i)">
+          <div>Marcar como Lida</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ion-card padding text-center *ngIf="!mensagensTecnico?.length">
+    <ion-card-content>
+      <p>Nenhuma mensagem pendente.</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

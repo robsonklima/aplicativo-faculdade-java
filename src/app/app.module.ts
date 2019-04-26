@@ -45,6 +45,8 @@ import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
 import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
+import { FotosPage } from '../pages/fotos/fotos';
+import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 import { LaudosPage } from '../pages/laudos/laudos';
 import { LaudoPage } from '../pages/laudos/laudo';
 
@@ -65,12 +67,12 @@ import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
 import { LocalizacaoService } from '../services/localizacao';
 import { LaudoService } from '../services/laudo';
+import { MensagensPage } from '../pages/mensagens/mensagens';
+import { MensagemTecnicoService } from '../services/mensagem-tecnico';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
 import { LowercasePipe } from '../pipes/lowercase';
-import { FotosPage } from '../pages/fotos/fotos';
-import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,7 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     LocalizacaoEnvioPage,
     LaudosPage,
     LaudoPage,
+    MensagensPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -152,7 +155,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
     LaudosPage,
-    LaudoPage
+    LaudoPage,
+    MensagensPage
   ],
   providers: [
     StatusBar,
@@ -187,7 +191,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
     AjudaTopicoService,
     IndicadorService,
     LocalizacaoService,
-    LaudoService
+    LaudoService,
+    MensagemTecnicoService
   ]
 })
 export class AppModule {}
