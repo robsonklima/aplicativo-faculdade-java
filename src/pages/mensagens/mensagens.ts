@@ -44,7 +44,7 @@ export class MensagensPage {
   public marcarMensagemLida(mensagemTecnico: MensagemTecnico, i: number) {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmar Leitura',
-      message: 'Deseja confirmar a leitura desta mensagem ao seu líder?',
+      message: 'Deseja confirmar a leitura desta mensagem?',
       buttons: [
         {
           text: 'Cancelar',

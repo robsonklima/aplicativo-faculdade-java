@@ -8,7 +8,9 @@
   <ion-card *ngFor="let mensagemTecnico of mensagensTecnico; let i = index">
     <ion-item>
       <h2>{{ mensagemTecnico.assunto }}</h2>
-      <p>Enviada em: {{ mensagemTecnico.dataHoraCad | date: 'dd/MM/yyyy HH:mm' }}</p>
+      <p>
+        Enviada por <a ion-text color="primary">{{ mensagemTecnico.codUsuarioCad }}</a>
+      </p>
     </ion-item>
 
     <ion-card-content>
@@ -16,7 +18,12 @@
     </ion-card-content>
 
     <ion-row>
-      <ion-col text-right>
+      <ion-col text-center>
+        <button ion-button clear small color="silver-light">
+          <div>{{ mensagemTecnico.dataHoraCad | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </button>
+      </ion-col>
+      <ion-col text-center>
         <button ion-button icon-start clear small color="danger" (click)="marcarMensagemLida(mensagemTecnico, i)">
           <div>Marcar como Lida</div>
         </button>
