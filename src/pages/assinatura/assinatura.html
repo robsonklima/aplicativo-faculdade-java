@@ -1,21 +1,24 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Signature</ion-title>
+    <ion-title>Assinatura</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>
+  <div class="signature">
+    <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>
+  </div>
+
   <ion-grid>
     <ion-row>
       <ion-col col-4>
-        <button ion-button full color="danger" (click)="drawCancel()">Cancel</button>
+        <button ion-button full color="danger" (click)="drawCancel()">Cancelar</button>
       </ion-col>
       <ion-col col-4>
-        <button ion-button full color="light" (click)="drawClear()">Clear</button>
+        <button ion-button full color="light" (click)="drawClear()">Limpar</button>
       </ion-col>
       <ion-col col-4>
-        <button ion-button full color="secondary" (click)="drawComplete()">Done</button>
+        <button ion-button full color="secondary" (click)="drawComplete()">Salvar</button>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { HomePage } from '../home/home';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 
 @Component({
@@ -14,19 +13,14 @@ export class AssinaturaPage {
 
   public signaturePadOptions: Object = {
     'minWidth': 2,
-    'canvasWidth': 340,
+    'canvasWidth': 320,
     'canvasHeight': 200
   };
   public signatureImage: string;
 
   constructor(
-    private navCtrl: NavController,
-    private screenOrientation: ScreenOrientation
+    private navCtrl: NavController
   ) {}
-
-  ionViewWillEnter() {
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT).then(() => {}).catch(() => {})
-  }
 
   drawCancel() {
     this.navCtrl.push(HomePage);
@@ -39,9 +33,5 @@ export class AssinaturaPage {
 
   drawClear() {
     this.signaturePad.clear();
-  }
-
-  ionViewWillLeave() {
-    this.screenOrientation.unlock;
   }
 }

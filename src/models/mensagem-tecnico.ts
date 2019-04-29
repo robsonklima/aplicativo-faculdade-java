@@ -5,5 +5,7 @@ export class MensagemTecnico {
     indAtivo: number;
     CodFilial: number;
     codUsuarioCad: string;
+    nomeUsuario: string;
+    nomePerfil: string;
     dataHoraCad: string;
 }

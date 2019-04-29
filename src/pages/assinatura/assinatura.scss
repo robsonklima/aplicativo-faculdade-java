@@ -1,9 +1,13 @@
 assinatura-page {
-    signature-pad {
-        canvas {
-          border: dashed 1px #cccccc;
-          width: 100%; 
-          height: 200px;
-        }
+  .signature {
+    text-align: center;
+  }
+  
+  signature-pad {
+    canvas {
+      border: dashed 1px #cccccc;
+      width: 320px; 
+      height: 200px;
     }
+  }
 }
