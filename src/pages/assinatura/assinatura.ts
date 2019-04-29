@@ -25,9 +25,7 @@ export class AssinaturaPage {
   ) {}
 
   ionViewWillEnter() {
-    this.screenOrientation.lock(
-      this.screenOrientation.ORIENTATIONS.PORTRAIT
-    ).then(() => {}).catch(() => {})
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT).then(() => {}).catch(() => {})
   }
 
   drawCancel() {
@@ -41,5 +39,9 @@ export class AssinaturaPage {
 
   drawClear() {
     this.signaturePad.clear();
+  }
+
+  ionViewWillLeave() {
+    this.screenOrientation.unlock;
   }
 }
