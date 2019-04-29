@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events, ModalController } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -11,11 +11,13 @@ import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
 import { LaudosPage } from '../laudos/laudos';
 import { MensagensPage } from '../mensagens/mensagens';
+import { AssinaturaPage } from '../assinatura/assinatura';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
 import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Laudo } from '../../models/laudo';
+import { MensagemTecnico } from '../../models/mensagem-tecnico';
 
 import { Config } from "../../config/config";
 
@@ -28,10 +30,10 @@ import { CausaService } from "../../services/causa";
 import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
 import { LaudoService } from '../../services/laudo';
+import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 
 import moment from 'moment';
-import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
-import { MensagemTecnico } from '../../models/mensagem-tecnico';
+
 
 @Component({
   selector: 'home-page',
@@ -65,7 +67,8 @@ export class HomePage {
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService,
     private laudoService: LaudoService,
-    private mensagemTecnicoService: MensagemTecnicoService
+    private mensagemTecnicoService: MensagemTecnicoService,
+    private modalCtrl: ModalController
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
@@ -103,6 +106,14 @@ export class HomePage {
 
   public telaMensagensTecnico(mensagensTecnico: MensagemTecnico[]) {
     this.navCtrl.push(MensagensPage, { mensagensTecnico: mensagensTecnico});
+  }
+
+  public telaAssinatura(){
+    setTimeout(() => {
+      let modal = this.modalCtrl.create(AssinaturaPage);
+      modal.present();
+    }, 300);
+
   }
 
   public abrirPopover(event: MouseEvent) {

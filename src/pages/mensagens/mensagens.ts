@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, ToastController, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, ToastController, NavParams } from 'ionic-angular';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 import { DadosGlobais } from '../../models/dados-globais';

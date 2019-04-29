@@ -22,6 +22,8 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 import { Badge } from '@ionic-native/badge';
 import { Camera } from '@ionic-native/camera';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -49,6 +51,7 @@ import { FotosPage } from '../pages/fotos/fotos';
 import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 import { LaudosPage } from '../pages/laudos/laudos';
 import { LaudoPage } from '../pages/laudos/laudo';
+import { AssinaturaPage } from '../pages/assinatura/assinatura';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -105,12 +108,14 @@ import { LowercasePipe } from '../pipes/lowercase';
     LaudosPage,
     LaudoPage,
     MensagensPage,
+    AssinaturaPage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
   ],
   imports: [
     BrowserModule,
+    SignaturePadModule,
     HttpModule,
     IonicModule.forRoot(MyApp, {
       monthNames: ['janeiro', 'fevereiro', 'mar\u00e7o', 'abril', 'maio', 'junho', 
@@ -156,7 +161,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     LocalizacaoEnvioPage,
     LaudosPage,
     LaudoPage,
-    MensagensPage
+    MensagensPage,
+    AssinaturaPage
   ],
   providers: [
     StatusBar,
@@ -176,6 +182,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     AppAvailability,
     Device,
     Camera,
+    ScreenOrientation,
     DadosGlobaisService,
     ChamadoService,
     GeolocationService,
