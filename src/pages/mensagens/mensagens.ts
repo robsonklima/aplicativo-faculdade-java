@@ -77,6 +77,23 @@ export class MensagensPage {
     confirmacao.present();
   }
 
+  public ajuda() {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Mensagens',
+      message: `As mensagens permitem que você receba informações importantes sobre os processos de trabalho da sua filial. 
+                Ao confirmar a leitura, você torna seu coordenador ciente sobre o recebimento das orientações necessárias,
+                garantindo o alinhado da sua operação.`,
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {}
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({

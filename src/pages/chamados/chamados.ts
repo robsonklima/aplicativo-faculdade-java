@@ -150,19 +150,6 @@ export class ChamadosPage {
     confirmacao.present();
   }
 
-  public filtrarChamados(ev: any) {
-    this.carregarChamadosStorage().then(() => {
-      let val = ev.target.value;
-      
-      if (val && val.trim() != '') {
-        this.chamados = this.chamados.filter((chamado) => {
-          return (chamado.codOs.toString().toLowerCase()
-            .indexOf(val.toLowerCase()) > -1);
-        })
-      }
-    });
-  }
-
   public abrirPopover(event: MouseEvent) {
     const popover = this.popoverCtrl.create(ChamadosMaisOpcoesPage);
 

@@ -1,5 +1,12 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="ajuda()">
+        <ion-icon name="md-help-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+      
+
     <ion-title>Mensagens</ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,7 +16,8 @@
     <ion-item>
       <h2><b>{{ mensagemTecnico.assunto }}</b></h2>
       <p>
-        <a ion-text color="primary">{{ mensagemTecnico.nomeUsuario }}</a>, {{ mensagemTecnico.nomePerfil }}
+        <a ion-text color="primary">{{ mensagemTecnico.nomeUsuario }}</a>, 
+        {{ mensagemTecnico.nomePerfil }}
       </p>
     </ion-item>
 
@@ -18,7 +26,7 @@
     </ion-card-content>
 
     <ion-row>
-      <ion-col text-center>
+      <ion-col text-left>
         <button ion-button clear small color="silver-light">
           <div>{{ mensagemTecnico.dataHoraCad | date: 'dd/MM/yyyy HH:mm' }}</div>
         </button>

@@ -28,11 +28,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-searchbar 
-    *ngIf="chamados?.length"
-    (ionInput)="filtrarChamados($event)" 
-    placeholder="Pesquisar"></ion-searchbar>
-
   <ion-card 
     *ngFor="let chamado of chamados; let i = index"
     [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
