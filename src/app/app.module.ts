@@ -24,6 +24,7 @@ import { Badge } from '@ionic-native/badge';
 import { Camera } from '@ionic-native/camera';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -49,7 +50,6 @@ import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-
 import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
 import { FotosPage } from '../pages/fotos/fotos';
 import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
-import { LaudosPage } from '../pages/laudos/laudos';
 import { LaudoPage } from '../pages/laudos/laudo';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
 
@@ -105,7 +105,6 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
-    LaudosPage,
     LaudoPage,
     MensagensPage,
     AssinaturaPage,
@@ -159,7 +158,6 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
-    LaudosPage,
     LaudoPage,
     MensagensPage,
     AssinaturaPage
@@ -199,7 +197,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorService,
     LocalizacaoService,
     LaudoService,
-    MensagemTecnicoService
+    MensagemTecnicoService,
+    BackgroundGeolocation
   ]
 })
 export class AppModule {}

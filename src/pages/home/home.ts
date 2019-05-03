@@ -9,7 +9,6 @@ import { ChamadosPage } from "../chamados/chamados";
 import { PecasPage } from '../pecas/pecas';
 import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
-import { LaudosPage } from '../laudos/laudos';
 import { MensagensPage } from '../mensagens/mensagens';
 import { AssinaturaPage } from '../assinatura/assinatura';
 
@@ -90,10 +89,6 @@ export class HomePage {
 
   public telaChamados() {
     this.navCtrl.push(ChamadosPage);
-  }
-
-  public telaLaudos(laudos: Laudo[]) {
-    this.navCtrl.push(LaudosPage, { laudos: laudos});
   }
 
   public telaPecas() {

@@ -10,7 +10,7 @@
 
 0.0.37 - 22/11/2018
 - Indicadores;
-- Inserção de Fotos da RAT;
+- Inserção de Fotos da RAT Obrigatórias;
 
 0.0.36 - ??/??/2018
 - Inserção de Fotos da RAT;

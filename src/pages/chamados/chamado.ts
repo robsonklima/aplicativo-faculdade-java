@@ -26,6 +26,7 @@ import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 
 import moment from 'moment';
 import { Camera } from '@ionic-native/camera';
+import { LaudoPage } from '../laudos/laudo';
 
 @Component({
   selector: 'chamado-page',
@@ -91,6 +92,14 @@ export class ChamadoPage {
     modal.onDidDismiss(
       () => {}
     );
+  }
+
+  public telaLaudo(chamado: Chamado) {
+    const modal = this.modalCtrl.create(LaudoPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
   }
 
   public telaFotos() {
@@ -169,7 +178,7 @@ export class ChamadoPage {
       }
     }
 
-    return './assets/imgs/sem_foto.png';
+    return './assets/icon/no-photo.png';
   }
 
   public removerFoto(modalidade: string) {
@@ -200,18 +209,52 @@ export class ChamadoPage {
   }
 
   public verificarExistenciaFoto(modalidade: string): boolean {
-    if (this.chamado.rats.length > 0) {
+    if (typeof(this.chamado.rats) !== 'undefined') {
+      if (this.chamado.rats.length > 0) {
 
-      let fotos = this.chamado.rats[0].fotos.filter((foto) => {
-        return (foto.modalidade == modalidade);
-      });
-
-      if (fotos.length > 0) {
-        return true;  
+        let fotos = this.chamado.rats[0].fotos.filter((foto) => {
+          return (foto.modalidade == modalidade);
+        });
+  
+        if (fotos.length > 0) {
+          return true;  
+        }
       }
     }
 
     return false;
+  }
+
+  public verificarExistenciaLaudo(): boolean {
+    if (typeof(this.chamado.laudos) !== 'undefined') {
+      if (this.chamado.laudos.length > 0) {
+          return true;  
+      }
+    }
+
+    return false;
+  }
+
+  public removerLaudo() {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Deseja remover este laudo?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Excluir',
+          handler: () => {
+            this.chamado.laudos = [];
+            this.chamadoService.atualizarChamado(this.chamado);
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 
   public verificarChamadoExtraMaquina(): boolean {
@@ -300,8 +343,6 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  //this.exibirAlerta("Lat: " + location.coords.latitude + ", Lng: " + location.coords.longitude + ". Dist.: " + this.obterDistanciaRaio(location.coords.latitude, location.coords.longitude, this.chamado.localAtendimento.localizacao.latitude, this.chamado.localAtendimento.localizacao.longitude) + ".");
-
                   if (!this.chamado.indCercaEletronicaLiberada) {
                     if ((this.obterDistanciaRaio(
                       location.coords.latitude, 
@@ -311,13 +352,18 @@ export class ChamadoPage {
                       > Number(this.distanciaCercaEletronica))
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
-                      //return
                     }
                   }
 
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                   this.chamado.checkin.localizacao.latitude = location.coords.latitude;
                   this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                  
+                  let rat = new Rat();
+                  rat.fotos = [];
+                  rat.ratDetalhes = [];
+                  this.chamado.rats.push(rat);
+                  
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {
                     this.configurarSlide(this.slides.getActiveIndex());
                     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
@@ -516,7 +562,7 @@ export class ChamadoPage {
 
     this.exibirToast('Rat atualizada com sucesso').then(() => {
       this.configurarSlide(this.slides.getActiveIndex());
-      this.slides.slideTo(3, 500);
+      this.slides.slideTo(4, 500);
     }).catch(() => {});
   }
 
@@ -532,6 +578,13 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
+            if (!this.chamado.rats[0].numRat || !this.chamado.rats[0].horaInicio 
+              || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
+              || !this.chamado.rats[0].nomeAcompanhante) {
+              this.exibirToast('Favor informar os dados da RAT');
+              return;
+            }
+
             if (this.chamado.rats[0].ratDetalhes.length == 0) {
               this.exibirToast('Favor inserir os detalhes da RAT');
               return;
@@ -546,11 +599,6 @@ export class ChamadoPage {
               this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
               return;
             }
-
-            // if (this.verificarChamadoExtraMaquina() && this.chamado.rats[0].fotos.length < 1) {
-            //   this.exibirToast("Chamados EXTRA-MÁQUINA devem possuir fotos. Favor inserir as fotos do atendimento");
-            //   return;
-            // }
 
             this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
             this.chamado.statusServico.abreviacao = "F";
@@ -670,17 +718,24 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
         break;
       case 2:
+        this.tituloSlide = (i + 1) + ". " + "Imagens";
+
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
+        break;
+      case 3:
         this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
 
         this.slides.lockSwipeToPrev(false);
-        if (this.chamado.rats.length == 0) {
+        if (!this.chamado.rats[0].numRat || !this.chamado.rats[0].horaInicio 
+          || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
+          || !this.chamado.rats[0].nomeAcompanhante) {
           this.slides.lockSwipeToNext(true);
-        }
-        else {
-          this.slides.lockSwipeToNext(false);
-        }
+          } else {
+            this.slides.lockSwipeToNext(false);
+          }
         break;
-      case 3:
+      case 4:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
 
         this.slides.lockSwipeToPrev(false);
@@ -689,12 +744,6 @@ export class ChamadoPage {
           else {
             this.slides.lockSwipeToNext(false);
           }
-        break;
-      case 4:
-        this.tituloSlide = (i + 1) + ". " + "Imagens";
-
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
         break;
       case 5:
         this.tituloSlide = (i + 1) + ". " + "Checkout";
@@ -782,7 +831,7 @@ export class ChamadoPage {
     });
   }
 
-  exibirAlerta(msg: string) {
+  private exibirAlerta(msg: string) {
     const alerta = this.alertCtrl.create({
       title: 'Alerta!',
       subTitle: msg,

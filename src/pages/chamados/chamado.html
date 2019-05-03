@@ -258,6 +258,108 @@
     </ion-slide>
     <!-- Checkin -->
 
+    <!-- Imagens da RAT -->
+    <ion-slide>
+      <ion-item-group>
+        <ion-item-divider color="light" class="first-item">5.1 RAT Física</ion-item-divider>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('RAT') }}">
+          </ion-avatar>
+          <h2>Capturar RAT Física</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('RAT', 1)"
+            *ngIf="!verificarExistenciaFoto('RAT')"
+            [disabled]="chamado?.indRatEletronica">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('RAT')"
+            *ngIf="verificarExistenciaFoto('RAT')">
+            <ion-icon name="trash" color="danger"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item-divider color="light">5.2 Fotos do Equipamento</ion-item-divider>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('ETIQUETANUMSERIE') }}">
+          </ion-avatar>
+          <h2>Etiqueta Número de Série</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('ETIQUETANUMSERIE', 1)" 
+            *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('ETIQUETANUMSERIE')"
+            *ngIf="verificarExistenciaFoto('ETIQUETANUMSERIE')">
+            <ion-icon name="trash" color="danger"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('EQUIPAMENTOOPERACIONAL') }}">
+          </ion-avatar>
+          <h2>Equipamento Operacional</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL', 1)" 
+            *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('EQUIPAMENTOOPERACIONAL')"
+            *ngIf="verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('PARTEINTERNA') }}">
+          </ion-avatar>
+          <h2>Parte Interna</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('PARTEINTERNA')"
+            *ngIf="!verificarExistenciaFoto('PARTEINTERNA', 1)">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('PARTEINTERNA')"
+            *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item-divider color="light">5.3 Laudo Técnico</ion-item-divider>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="../assets/icon/attachment.png">
+          </ion-avatar>
+          <h2>Laudo</h2>
+       
+          <button ion-button clear item-end (click)="telaLaudo(chamado)"
+            *ngIf="!verificarExistenciaLaudo()">
+            <ion-icon name="add-circle" color="primary"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end (click)="removerLaudo()"
+            *ngIf="verificarExistenciaLaudo()">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-item-group>
+    </ion-slide>
+    <!-- Fotos da RAT -->
+
     <!-- Informações da RAT -->
     <ion-slide>
       <form #f="ngForm" (ngSubmit)="salvarRat(f)" class="form">
@@ -431,22 +533,16 @@
 
     <!-- Detalhes da RAT -->
     <ion-slide>
-      <ion-list>
-        <div padding>
+      <ion-list class="list-slide">
+        <ion-fab right bottom>
           <button 
-            color="secondary"
-            ion-button
-            block
+            ion-fab color="secondary" 
             (click)="telaRatDetalhe()"
             [disabled]="chamado?.rats?.length == 0">
-            Adicionar Detalhe
-          </button>
-        </div>
+            <ion-icon name="add"></ion-icon
+          ></button>
+        </ion-fab>
   
-        <ion-item-divider color="light">
-          Detalhes Adicionados
-        </ion-item-divider>
-
         <ion-item
           *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
           <ion-label>
@@ -469,119 +565,11 @@
         </ion-item>
 
         <ion-item *ngIf="chamado?.rats[0]?.ratDetalhes?.length == 0">
-          <p text-center>Nenhum detalhe adicionado</p>
+          <p text-center class="p-msg">Nenhum detalhe adicionado</p>
         </ion-item>
       </ion-list>
     </ion-slide>
     <!-- Detalhes da RAT -->
-
-    <!-- Imagens da RAT -->
-    <ion-slide>
-      <ion-item-group>
-        <ion-item-divider color="light" class="first-item">5.1 RAT Física</ion-item-divider>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('RAT') }}">
-          </ion-avatar>
-          <h2>Capturar RAT Física</h2>
-          <button ion-button clear item-end 
-            (click)="tirarFoto('RAT', 1)"
-            *ngIf="!verificarExistenciaFoto('RAT')"
-            [disabled]="chamado?.indRatEletronica">
-            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="tirarFoto('RAT', 0)"
-            *ngIf="!verificarExistenciaFoto('RAT')"
-            [disabled]="chamado?.indRatEletronica">
-            <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="removerFoto('RAT')"
-            *ngIf="verificarExistenciaFoto('RAT')">
-            <ion-icon name="trash" color="danger"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item-divider color="light">5.2 Fotos do Equipamento</ion-item-divider>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('ETIQUETANUMSERIE') }}">
-          </ion-avatar>
-          <h2>Etiqueta Número de Série</h2>
-          <button ion-button clear item-end 
-            (click)="tirarFoto('ETIQUETANUMSERIE', 1)" 
-            *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
-            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="tirarFoto('ETIQUETANUMSERIE', 0)" 
-            *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
-            <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="removerFoto('ETIQUETANUMSERIE')"
-            *ngIf="verificarExistenciaFoto('ETIQUETANUMSERIE')">
-            <ion-icon name="trash" color="danger"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('EQUIPAMENTOOPERACIONAL') }}">
-          </ion-avatar>
-          <h2>Equipamento Operacional</h2>
-          <button ion-button clear item-end 
-            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL', 1)" 
-            *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
-            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL', 0)" 
-            *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
-            <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="removerFoto('EQUIPAMENTOOPERACIONAL')"
-            *ngIf="verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
-            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="{{ carregarFoto('PARTEINTERNA') }}">
-          </ion-avatar>
-          <h2>Parte Interna</h2>
-          <button ion-button clear item-end 
-            (click)="tirarFoto('PARTEINTERNA')"
-            *ngIf="!verificarExistenciaFoto('PARTEINTERNA', 1)">
-            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="tirarFoto('PARTEINTERNA')"
-            *ngIf="!verificarExistenciaFoto('PARTEINTERNA', 0)">
-            <ion-icon ios="ios-photos" md="md-photos"></ion-icon>
-          </button>
-
-          <button ion-button clear item-end 
-            (click)="removerFoto('PARTEINTERNA')"
-            *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
-            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
-          </button>
-        </ion-item>
-      </ion-item-group>
-    </ion-slide>
-    <!-- Fotos da RAT -->
 
     <!-- Checkout -->
     <ion-slide>

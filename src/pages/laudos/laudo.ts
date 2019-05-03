@@ -1,14 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Slides, ToastController, AlertController, NavController } from 'ionic-angular';
-import { ChamadoService } from '../../services/chamado';
+import { NavParams, Slides, ToastController, AlertController, ViewController } from 'ionic-angular';
 import { Laudo } from '../../models/laudo';
 import { Chamado } from '../../models/chamado';
 import { NgForm } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { Foto } from '../../models/foto';
-import { LaudoService } from '../../services/laudo';
 
 import moment from 'moment';
+import { ChamadoService } from '../../services/chamado';
 
 @Component({
   selector: 'laudo-page',
@@ -17,55 +16,43 @@ import moment from 'moment';
 export class LaudoPage {
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
-  laudo: Laudo;
   chamado: Chamado;
+  laudo: Laudo;
   foto: Foto;
 
   constructor(
-    private navCtrl: NavController,
+    private chamadoService: ChamadoService,
     private navParams: NavParams,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private chamadoService: ChamadoService,
-    private laudoService: LaudoService,
+    private viewCtrl: ViewController,
     private camera: Camera
   ) {
-    this.laudo = this.navParams.get('laudo');
-  }
-
-  ionViewDidLoad() {
-    this.carregarChamado();
+    this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
+    this.laudo = new Laudo();
+
     this.configurarSlide(this.slides.getActiveIndex());    
   }
 
-  private carregarChamado(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadoApi(this.laudo.codOS).subscribe(chamado => {
-        this.chamado = chamado;
-
-        resolve(chamado);
-      }, err => {});
-    });
-  }
-
-  public salvarLaudo(form: NgForm) {
+  public criarLaudo(form: NgForm) {
     this.laudo.observacoes = form.value.observacoes;
     this.laudo.testeFuncional = form.value.testeFuncional;
     this.laudo.eventosErro = form.value.eventosErro;
     this.laudo.acoes = form.value.acoes;
     this.laudo.conclusao = form.value.conclusao;
+    this.laudo.fotos = [];
     
     this.configurarSlide(this.slides.getActiveIndex());
-    this.slides.slideTo(2, 500);
+    this.slides.slideTo(1, 500);
   }
 
-  public enviarLaudo() {
+  public salvarLaudo() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Deseja enviar o laudo agora?',
+      message: 'Deseja salvar este laudo?',
       buttons: [
         {
           text: 'Cancelar',
@@ -79,20 +66,9 @@ export class LaudoPage {
               return
             }
 
-            this.laudoService.enviarLaudoApi(this.laudo).subscribe((res) => {
-              if (res) {
-                if (res.indexOf('00 - ') > -1) {
-                  setTimeout(() => { this.exibirToast('Laudo ' + this.laudo.codOS + ' enviado com sucesso').then(() => {
-                    this.navCtrl.popToRoot();
-                  }) }, 500);
-                } else {
-                  this.exibirToast('Não foi possível enviar o laudo. Favor tentar novamente');
-                }
-              }
-            },
-            err => {
-                this.exibirToast(err);
-            });
+            this.chamado.laudos.push(this.laudo);
+            this.chamadoService.atualizarChamado(this.chamado);
+            this.fecharModal();
           }
         }
       ]
@@ -119,9 +95,7 @@ export class LaudoPage {
       this.foto.modalidade = "LAUDO";
       this.laudo.fotos.push(this.foto);
       this.camera.cleanup();
-    }).catch(err => {
-      setTimeout(() => { this.exibirToast(err) }, 500);
-    });
+    }).catch(err => {});
   }
 
   public removerFoto(i: number) {
@@ -145,6 +119,33 @@ export class LaudoPage {
     confirmacao.present();
   }
 
+  public alterarSlide() {
+    this.configurarSlide(this.slides.getActiveIndex());
+  }
+
+  private configurarSlide(i: number) {
+    switch (i) {
+      case 0:
+        this.tituloSlide = (i + 1) + ". " + "Roteiro de Análise";
+        if (!this.laudo.observacoes || !this.laudo.testeFuncional || !this.laudo.eventosErro || !this.laudo.acoes || !this.laudo.conclusao) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false);
+        }
+        break;
+      case 1:
+        this.tituloSlide = (i + 1) + ". " + "Fotos";
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
+        break;
+      case 2:
+        this.tituloSlide = (i + 1) + ". " + "Salvar";
+        this.slides.lockSwipeToPrev(false);
+        this.slides.lockSwipeToNext(false);
+        break;
+    }
+  }
+
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
@@ -155,38 +156,7 @@ export class LaudoPage {
     });
   }
 
-  public alterarSlide() {
-    this.configurarSlide(this.slides.getActiveIndex());
-  }
-
-  private configurarSlide(i: number) {
-    switch (i) {
-      case 0:
-        this.tituloSlide = (i + 1) + ". " + "Informações";
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-        break;
-
-      case 1:
-        this.tituloSlide = (i + 1) + ". " + "Roteiro de Análise";
-        if (!this.laudo.observacoes || !this.laudo.testeFuncional || !this.laudo.eventosErro || !this.laudo.acoes || !this.laudo.conclusao) {
-          this.slides.lockSwipeToNext(true);
-        } else {
-          this.slides.lockSwipeToNext(false);
-        }
-        break;
-
-      case 2:
-        this.tituloSlide = (i + 1) + ". " + "Fotos";
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-        break;
-
-      case 3:
-        this.tituloSlide = (i + 1) + ". " + "Envio";
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-        break;
-    }
+  public fecharModal() {
+    this.viewCtrl.dismiss();
   }
 }

@@ -105,6 +105,7 @@
     <plugin name="cordova-plugin-market" spec="^1.2.0" />
     <plugin name="cordova-plugin-appavailability" spec="^0.4.2" />
     <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^3.0.0-alpha.50" />
     <engine name="android" spec="4.0.0" />
     <engine name="browser" spec="^4.1.0" />
 </widget>

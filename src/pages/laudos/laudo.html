@@ -1,5 +1,14 @@
 <ion-header>
   <ion-navbar no-border-bottom>
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        (click)="fecharModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>Laudo: {{ chamado?.codOs }}</ion-title>
   </ion-navbar>
   <ion-toolbar>
@@ -11,114 +20,45 @@
   <ion-slides pager (ionSlideDidChange)="alterarSlide()">
       <ion-slide>
         <ion-list>
-          <ion-item class="first-item">
-            Cliente
-            <ion-note item-end>
-              {{ chamado?.cliente.numBanco }}-{{ chamado?.cliente.nomeCliente }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Agência
-            <ion-note item-end>
-              {{ chamado?.localAtendimento.numAgencia }}/{{ chamado?.localAtendimento.dcPosto }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Local
-            <ion-note item-end>
-              {{ chamado?.localAtendimento.nomeLocalAtendimento }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Série
-            <ion-note item-end>
-              {{ chamado?.equipamentoContrato.numSerie }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item class="first-item">
-            Data
-            <ion-note item-end>
-              {{ chamado?.dataHoraSolicitacaoOS | date: 'dd/MM HH:mm' }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item class="first-item">
-            Contato
-            <ion-note item-end>
-              {{ chamado?.nomeSolicitante }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item class="first-item">
-            Protocolo STN
-            <ion-note item-end>
-              123456
-            </ion-note>
-          </ion-item>
-
-          <ion-item class="first-item">
-            Modelo
-            <ion-note item-end>
-              {{ chamado?.equipamentoContrato.equipamento.codEEquip }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item class="first-item">
-            Código Pai
-            <ion-note item-end>
-              {{ chamado?.equipamentoContrato.contrato.codPai }}
-            </ion-note>
-          </ion-item>
-        </ion-list>
-
-        <p>Deslize a tela para prosseguir</p>
-      </ion-slide>
-
-      <ion-slide>
-        <ion-list>
-          <form #f="ngForm" (ngSubmit)="salvarLaudo(f)" class="form">
+          <form #f="ngForm" (ngSubmit)="criarLaudo(f)" class="form">
             <ion-item col-12 class="first-item">
               <ion-label stacked>Observações</ion-label>
-              <ion-textarea 
-                placeholder="Informe o estado da máquina quando a encontrou"
+              <ion-input 
+                placeholder="Informe o estado do equipamento"
                 name="observacoes"
                 [ngModel]=""
                 required>
-              </ion-textarea>
+              </ion-input>
             </ion-item>
 
             <ion-item col-12>
               <ion-label stacked>Teste Funcional</ion-label>
-              <ion-textarea 
+              <ion-input 
                 placeholder="Informe todos os testes que foram realizados" 
                 name="testeFuncional"
                 [ngModel]=""
                 required>
-              </ion-textarea>
+              </ion-input>
             </ion-item>
 
             <ion-item col-12>
               <ion-label stacked>Eventos de erro</ion-label>
-              <ion-textarea 
-                placeholder="Informe os erros" 
+              <ion-input 
+                placeholder="Informe os erros encontrados" 
                 name="eventosErro"
                 [ngModel]=""
                 required>
-              </ion-textarea>
+              </ion-input>
             </ion-item>
 
             <ion-item col-12>
               <ion-label stacked>Ações</ion-label>
-              <ion-textarea 
+              <ion-input 
                 placeholder="Informe todas as ações que foram realizadas" 
                 name="acoes"
                 [ngModel]=""
                 required>
-              </ion-textarea>
+              </ion-input>
             </ion-item>
 
             <ion-item col-12>
@@ -161,11 +101,9 @@
         <p class="p-msg" *ngIf="laudo?.fotos?.length == 0">Nenhuma foto adicionada</p>
 
         <ion-fab right bottom>
-          <button ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
-          <ion-fab-list side="left">
-            <button ion-fab (click)="selecionarFoto(0)" color="primary"><ion-icon ios="ios-photos" md="md-photos"></ion-icon></button>
-            <button ion-fab (click)="selecionarFoto(1)" color="primary"><ion-icon  ios="ios-camera" md="md-camera"></ion-icon></button>
-          </ion-fab-list>
+          <button ion-fab color="secondary" (click)="selecionarFoto(1)">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
         </ion-fab>
       </ion-slide>
 
@@ -175,8 +113,8 @@
             color="secondary"
             ion-button 
             block
-            (click)="enviarLaudo()">
-            Enviar
+            (click)="salvarLaudo()">
+            Salvar
           </button>
         </div>
       </ion-slide>
