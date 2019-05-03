@@ -148,7 +148,7 @@ export class ChamadoPage {
               saveToPhotoAlbum: true
             }).then(imageData => {
               this.foto = new Foto();
-              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + this.chamado.rats[0].numRat + '_' + modalidade;
+              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
               this.foto.str = 'data:image/jpeg;base64,' + imageData;
               this.foto.modalidade = modalidade;
               this.chamado.rats[0].fotos.push(this.foto);
@@ -178,7 +178,7 @@ export class ChamadoPage {
       }
     }
 
-    return './assets/icon/no-photo.png';
+    return 'assets/imgs/no-photo.png';
   }
 
   public removerFoto(modalidade: string) {
@@ -829,15 +829,5 @@ export class ChamadoPage {
 
       resolve(toast.present());
     });
-  }
-
-  private exibirAlerta(msg: string) {
-    const alerta = this.alertCtrl.create({
-      title: 'Alerta!',
-      subTitle: msg,
-      buttons: ['OK']
-    });
-
-    alerta.present();
   }
 }

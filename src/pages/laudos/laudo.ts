@@ -38,11 +38,15 @@ export class LaudoPage {
   }
 
   public criarLaudo(form: NgForm) {
+    this.laudo.codOS = this.chamado.codOs;
+    this.laudo.codTecnico = this.chamado.tecnico.codTecnico;
+    this.laudo.indAtivo = 1;
     this.laudo.observacoes = form.value.observacoes;
     this.laudo.testeFuncional = form.value.testeFuncional;
     this.laudo.eventosErro = form.value.eventosErro;
     this.laudo.acoes = form.value.acoes;
     this.laudo.conclusao = form.value.conclusao;
+    this.laudo.dataHoraCad = moment().format();
     this.laudo.fotos = [];
     
     this.configurarSlide(this.slides.getActiveIndex());
@@ -90,7 +94,7 @@ export class LaudoPage {
       allowEdit: true
     }).then(imageData => {
       this.foto = new Foto();
-      this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
+      this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.chamado.codOs + '_LAUDO';
       this.foto.str = 'data:image/jpeg;base64,' + imageData;
       this.foto.modalidade = "LAUDO";
       this.laudo.fotos.push(this.foto);
