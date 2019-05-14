@@ -560,10 +560,8 @@ export class ChamadoPage {
 
     this.chamadoService.atualizarChamado(this.chamado);
 
-    this.exibirToast('Rat atualizada com sucesso').then(() => {
-      this.configurarSlide(this.slides.getActiveIndex());
-      this.slides.slideTo(4, 500);
-    }).catch(() => {});
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(4, 500);
   }
 
   public fecharChamado() {
@@ -578,7 +576,7 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if (!this.chamado.rats[0].numRat || !this.chamado.rats[0].horaInicio 
+            if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
               || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
               || !this.chamado.rats[0].nomeAcompanhante) {
               this.exibirToast('Favor informar os dados da RAT');
@@ -727,7 +725,7 @@ export class ChamadoPage {
         this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
 
         this.slides.lockSwipeToPrev(false);
-        if (!this.chamado.rats[0].numRat || !this.chamado.rats[0].horaInicio 
+        if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
           || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
           || !this.chamado.rats[0].nomeAcompanhante) {
           this.slides.lockSwipeToNext(true);

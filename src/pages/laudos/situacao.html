@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-navbar no-border-bottom>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="fecharModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>Situação</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form #f="ngForm" (ngSubmit)="criarSituacao(f)" class="form">
+    <ion-item-divider color="light">Informações</ion-item-divider>
+
+    <ion-item col-12>
+      <ion-label stacked>Causa</ion-label>
+      <ion-textarea 
+        placeholder="Ex.: Teclado vandalizado"
+        name="causa"
+        [ngModel]=""
+        required>
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item col-12>
+      <ion-label stacked>Ação</ion-label>
+      <ion-textarea 
+        placeholder="Ex.: Necessária a substituição do teclado"
+        name="acao"
+        [ngModel]=""
+        required>
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item-divider color="light">
+      Fotos
+      <ion-badge 
+        item-end
+        class="badge"
+        color="light">{{ qtdFotosLaudo }}/6</ion-badge>
+    </ion-item-divider>
+
+    <ion-item col-12 *ngIf="!situacao?.fotos.length">
+      <p class="no-photo">Nenhuma Foto Inserida</p>
+    </ion-item>
+
+    <ion-item *ngFor="let foto of situacao?.fotos; let i = index">
+      <ion-avatar item-start>
+        <img src="{{ foto.str }}">
+      </ion-avatar>
+      <h2>Foto {{ i+1 }}</h2>
+      <button ion-button clear item-end 
+        (click)="removerFoto(i)">
+        <ion-icon name="trash" color="danger" class="icon-button"></ion-icon>
+      </button>
+    </ion-item>
+
+    <div padding>
+      <button
+        color="secondary"
+        ion-button 
+        block
+        [disabled]="!f.valid || !situacao?.fotos.length">
+        Salvar
+      </button>
+    </div>
+  </form>
+
+  <ion-fab right bottom>
+    <button 
+      ion-fab color="secondary" 
+      (click)="selecionarFoto(1)"
+      [disabled]="qtdFotosLaudo >= 6">
+      <ion-icon name="camera"></ion-icon
+    ></button>
+  </ion-fab>
+</ion-content>

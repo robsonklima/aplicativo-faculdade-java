@@ -1,24 +1,29 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="fecharModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>Assinatura</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <p class="p-msg">Realize sua assinatura no espaço demarcado</p>
+
   <div class="signature">
     <signature-pad [options]="signaturePadOptions" id="signatureCanvas"></signature-pad>
   </div>
 
   <ion-grid>
     <ion-row>
-      <ion-col col-4>
-        <button ion-button full color="danger" (click)="drawCancel()">Cancelar</button>
+      <ion-col col-6>
+        <button ion-button full color="light" (click)="limparAssinatura()">Limpar</button>
       </ion-col>
-      <ion-col col-4>
-        <button ion-button full color="light" (click)="drawClear()">Limpar</button>
-      </ion-col>
-      <ion-col col-4>
-        <button ion-button full color="secondary" (click)="drawComplete()">Salvar</button>
+      <ion-col col-6>
+        <button ion-button full color="secondary" (click)="salvarAssinatura()">Salvar</button>
       </ion-col>
     </ion-row>
   </ion-grid>

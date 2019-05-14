@@ -51,6 +51,7 @@ import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
 import { FotosPage } from '../pages/fotos/fotos';
 import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../pages/laudos/laudo';
+import { SituacaoPage } from '../pages/laudos/situacao';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
 
 import { DadosGlobaisService } from '../services/dados-globais';
@@ -106,6 +107,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
     LaudoPage,
+    SituacaoPage,
     MensagensPage,
     AssinaturaPage,
     CapitalizePipe,
@@ -159,6 +161,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorPerformanceTecnicoPage,
     LocalizacaoEnvioPage,
     LaudoPage,
+    SituacaoPage,
     MensagensPage,
     AssinaturaPage
   ],

@@ -20,52 +20,12 @@
   <ion-slides pager (ionSlideDidChange)="alterarSlide()">
       <ion-slide>
         <ion-list>
-          <form #f="ngForm" (ngSubmit)="criarLaudo(f)" class="form">
+          <form #formCreate="ngForm" (ngSubmit)="criarLaudo(formCreate)" class="form">
             <ion-item col-12 class="first-item">
-              <ion-label stacked>Observações</ion-label>
-              <ion-input 
-                placeholder="Informe o estado do equipamento"
-                name="observacoes"
-                [ngModel]=""
-                required>
-              </ion-input>
-            </ion-item>
-
-            <ion-item col-12>
-              <ion-label stacked>Teste Funcional</ion-label>
-              <ion-input 
-                placeholder="Informe todos os testes que foram realizados" 
-                name="testeFuncional"
-                [ngModel]=""
-                required>
-              </ion-input>
-            </ion-item>
-
-            <ion-item col-12>
-              <ion-label stacked>Eventos de erro</ion-label>
-              <ion-input 
-                placeholder="Informe os erros encontrados" 
-                name="eventosErro"
-                [ngModel]=""
-                required>
-              </ion-input>
-            </ion-item>
-
-            <ion-item col-12>
-              <ion-label stacked>Ações</ion-label>
-              <ion-input 
-                placeholder="Informe todas as ações que foram realizadas" 
-                name="acoes"
-                [ngModel]=""
-                required>
-              </ion-input>
-            </ion-item>
-
-            <ion-item col-12>
-              <ion-label stacked>Conclusão</ion-label>
+              <ion-label stacked>Relato do Cliente</ion-label>
               <ion-textarea 
-                placeholder="Informe seu parecer de conclusão" 
-                name="conclusao"
+                placeholder="Ex.: Teclado não responde aos comandos"
+                name="relatoCliente"
                 [ngModel]=""
                 required>
               </ion-textarea>
@@ -76,7 +36,7 @@
                 color="secondary"
                 ion-button 
                 block
-                [disabled]="!f.valid">
+                [disabled]="!formCreate.valid">
                 Salvar e Prosseguir
               </button>
             </div>
@@ -85,25 +45,63 @@
       </ion-slide>
 
       <ion-slide>
-        <ion-list>
-          <ion-item *ngFor="let foto of laudo?.fotos; let i = index">
-            <ion-avatar item-start>
-              <img src="{{ foto.str }}">
-            </ion-avatar>
-            <h2>Foto {{ i+1 }}</h2>
-            <button ion-button clear item-end 
-              (click)="removerFoto(i)">
-              <ion-icon name="trash" color="danger" class="icon-button"></ion-icon>
-            </button>
-          </ion-item>
-        </ion-list>
+        <p class="p-msg" *ngIf="!laudo?.situacoes?.length">Nenhuma situação informada</p>
 
-        <p class="p-msg" *ngIf="laudo?.fotos?.length == 0">Nenhuma foto adicionada</p>
+        <ion-item 
+          *ngFor="let situacao of laudo?.situacoes; let i = index" (click)="removerSituacao(i)">
+          <h2>Situação {{ i+1 }}</h2>
+          <p>{{ situacao.causa }}</p>
+          <p>{{ situacao.acao }}</p>
+          <ion-icon name="trash" color="danger" item-end></ion-icon>
+        </ion-item>
 
         <ion-fab right bottom>
-          <button ion-fab color="secondary" (click)="selecionarFoto(1)">
-            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-          </button>
+          <button 
+            ion-fab color="secondary" 
+            (click)="telaSituacao()">
+            <ion-icon name="add"></ion-icon
+          ></button>
+        </ion-fab>
+      </ion-slide>
+
+      <ion-slide>
+        <ion-list>
+          <form #formSave="ngForm" (ngSubmit)="salvarLaudo(formSave)" class="form">
+            <ion-item col-12 class="first-item">
+              <ion-label stacked>Conclusão</ion-label>
+              <ion-textarea 
+                placeholder="Ex.: Teclado danificado devido ao uso de força excessiva. Necessário a substituição do mesmo. Não há possibilidade de reparo devido, o mesmo ser criptografado."
+                name="conclusao"
+                rows="4"
+                [ngModel]=""
+                required>
+              </ion-textarea>
+            </ion-item>
+
+            <div padding>
+              <button
+                color="secondary"
+                ion-button 
+                block
+                [disabled]="!formSave.valid">
+                Salvar e Prosseguir
+              </button>
+            </div>
+          </form>
+        </ion-list>
+      </ion-slide>
+
+      <ion-slide>
+        <p class="p-msg" *ngIf="!laudo?.assinatura">Insira a sua assinatura</p>
+
+        <img class="img" *ngIf="laudo?.assinatura" src="{{ laudo?.assinatura }}" alt="">
+
+        <ion-fab right bottom>
+          <button 
+            ion-fab color="secondary" 
+            (click)="telaAssinatura()">
+            <ion-icon name="browsers"></ion-icon
+          ></button>
         </ion-fab>
       </ion-slide>
 
@@ -113,8 +111,8 @@
             color="secondary"
             ion-button 
             block
-            (click)="salvarLaudo()">
-            Salvar
+            (click)="finalizarLaudo()">
+            Salvar e Finalizar
           </button>
         </div>
       </ion-slide>

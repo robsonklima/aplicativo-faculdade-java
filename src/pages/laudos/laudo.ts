@@ -1,13 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
-import { NavParams, Slides, ToastController, AlertController, ViewController } from 'ionic-angular';
+import { Component, ViewChild, OnInit  } from '@angular/core';
+import { NavParams, Slides, ToastController, AlertController, 
+  ViewController, ModalController } from 'ionic-angular';
 import { Laudo } from '../../models/laudo';
 import { Chamado } from '../../models/chamado';
 import { NgForm } from '@angular/forms';
-import { Camera } from '@ionic-native/camera';
 import { Foto } from '../../models/foto';
 
-import moment from 'moment';
+import { SituacaoPage } from './situacao';
 import { ChamadoService } from '../../services/chamado';
+
+import moment from 'moment';
+import { AssinaturaPage } from '../assinatura/assinatura';
+
 
 @Component({
   selector: 'laudo-page',
@@ -26,53 +30,73 @@ export class LaudoPage {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
-    private camera: Camera
+    private modalCtrl: ModalController
   ) {
     this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
-    this.laudo = new Laudo();
+    this.configurarSlide(this.slides.getActiveIndex());
+  }
 
-    this.configurarSlide(this.slides.getActiveIndex());    
+  ngOnInit() {
+    this.laudo = new Laudo();
+  }
+
+  public telaSituacao() {
+    const modal = this.modalCtrl.create(SituacaoPage, { laudo: this.laudo });
+    modal.present();
+    modal.onDidDismiss((laudo) => {
+      this.laudo = laudo;
+
+      this.configurarSlide(this.slides.getActiveIndex());
+    }); 
+  }
+
+  public telaAssinatura() {
+    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO", laudo: this.laudo });
+    modal.present();
+    modal.onDidDismiss((laudo) => {
+      this.laudo = laudo;
+
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
   }
 
   public criarLaudo(form: NgForm) {
     this.laudo.codOS = this.chamado.codOs;
     this.laudo.codTecnico = this.chamado.tecnico.codTecnico;
-    this.laudo.indAtivo = 1;
-    this.laudo.observacoes = form.value.observacoes;
-    this.laudo.testeFuncional = form.value.testeFuncional;
-    this.laudo.eventosErro = form.value.eventosErro;
-    this.laudo.acoes = form.value.acoes;
-    this.laudo.conclusao = form.value.conclusao;
+    this.laudo.relatoCliente = form.value.relatoCliente;
     this.laudo.dataHoraCad = moment().format();
-    this.laudo.fotos = [];
+    this.laudo.situacoes = [];
+    this.laudo.assinatura = null;
+    this.laudo.indAtivo = 1;
     
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(1, 500);
   }
 
-  public salvarLaudo() {
+  public salvarLaudo(form: NgForm) {
+    this.laudo.conclusao = form.value.conclusao;
+    
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(3, 500);
+  }
+
+  public removerSituacao(i: number) {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Deseja salvar este laudo?',
+      message: 'Deseja excluir esta situação?',
       buttons: [
         {
           text: 'Cancelar',
-          handler: () => {}
+          handler: () => { }
         },
         {
           text: 'Confirmar',
           handler: () => {
-            if (this.laudo.fotos.length == 0) {
-              this.exibirToast('Favor anexar as fotos do laudo');
-              return
-            }
-
-            this.chamado.laudos.push(this.laudo);
-            this.chamadoService.atualizarChamado(this.chamado);
-            this.fecharModal();
+            this.laudo.situacoes.splice(i, 1);
+            this.exibirToast("Situação removida com sucesso")
           }
         }
       ]
@@ -81,31 +105,10 @@ export class LaudoPage {
     confirmacao.present();
   }
 
-  public selecionarFoto(sourceType: number) {
-    this.camera.getPicture({
-      quality: 80,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true,
-      targetWidth: 720,
-      targetHeight: 480,
-      sourceType: sourceType,
-      allowEdit: true
-    }).then(imageData => {
-      this.foto = new Foto();
-      this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.chamado.codOs + '_LAUDO';
-      this.foto.str = 'data:image/jpeg;base64,' + imageData;
-      this.foto.modalidade = "LAUDO";
-      this.laudo.fotos.push(this.foto);
-      this.camera.cleanup();
-    }).catch(err => {});
-  }
-
-  public removerFoto(i: number) {
+  public finalizarLaudo() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Deseja excluir esta foto?',
+      message: 'Deseja finalizar este laudo?',
       buttons: [
         {
           text: 'Cancelar',
@@ -114,7 +117,14 @@ export class LaudoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.laudo.fotos.splice(i, 1);
+            if (this.laudo.situacoes.length == 0) {
+              this.exibirToast('Favor informar as situações do laudo');
+              return
+            }
+
+            this.chamado.laudos.push(this.laudo);
+            this.chamadoService.atualizarChamado(this.chamado);
+            this.fecharModal();
           }
         }
       ]
@@ -130,22 +140,51 @@ export class LaudoPage {
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
-        this.tituloSlide = (i + 1) + ". " + "Roteiro de Análise";
-        if (!this.laudo.observacoes || !this.laudo.testeFuncional || !this.laudo.eventosErro || !this.laudo.acoes || !this.laudo.conclusao) {
+        this.tituloSlide = (i + 1) + ". " + "Relato do Cliente";
+        
+        if (!this.laudo.relatoCliente) {
           this.slides.lockSwipeToNext(true);
         } else {
           this.slides.lockSwipeToNext(false);
         }
+        
         break;
       case 1:
-        this.tituloSlide = (i + 1) + ". " + "Fotos";
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
+        this.tituloSlide = (i + 1) + ". " + "Situações";
+       
+        if (this.laudo.situacoes.length == 0) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false);
+        }
+       
         break;
       case 2:
-        this.tituloSlide = (i + 1) + ". " + "Salvar";
+        this.tituloSlide = (i + 1) + ". " + "Conclusão";
+        
+        if (!this.laudo.conclusao) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false);
+        }
+        
+        break;
+      case 3:
+        this.tituloSlide = (i + 1) + ". " + "Assinatura do Técnico";
+        
+        if (!this.laudo.assinatura) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false);
+        }
+        
+        break;
+      case 4:
+        this.tituloSlide = (i + 1) + ". " + "Finalizar";
+        
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
+        
         break;
     }
   }

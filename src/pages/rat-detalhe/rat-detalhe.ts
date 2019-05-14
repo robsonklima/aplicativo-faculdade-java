@@ -154,9 +154,9 @@ export class RatDetalhePage {
     let pecas: Peca[] = [];
 
     if (!tipoCausa.codTipoCausa  || !tipoServico.codTipoServico || !defeito.codDefeito || !causa.codCausa || !acao.codAcao ) {
-      this.exibirToast('Erro ao salvar detalhe! Tente novamente')
-      .then(() => {
+      this.exibirToast('Erro ao salvar detalhe! Tente novamente').then(() => {
         this.fecharModal();
+        
         return
       })
       .catch(() => {});

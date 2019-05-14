@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
-import { HomePage } from '../home/home';
+import { Laudo } from '../../models/laudo';
 
 
 @Component({
@@ -9,29 +9,30 @@ import { HomePage } from '../home/home';
   templateUrl: 'assinatura.html',
 })
 export class AssinaturaPage {
+  paginaOrigem: string;
+  laudo: Laudo;
   @ViewChild(SignaturePad) public signaturePad: SignaturePad;
-
-  public signaturePadOptions: Object = {
-    'minWidth': 2,
-    'canvasWidth': 320,
-    'canvasHeight': 200
-  };
+  public signaturePadOptions: Object = { 'minWidth': 2, 'canvasWidth': 320, 'canvasHeight': 200 };
   public signatureImage: string;
 
   constructor(
-    private navCtrl: NavController
-  ) {}
-
-  drawCancel() {
-    this.navCtrl.push(HomePage);
+    private viewCtrl: ViewController,
+    private navParams: NavParams
+  ) {
+    this.paginaOrigem = this.navParams.get('paginaOrigem');
+    this.laudo = this.navParams.get('laudo');
   }
 
-  drawComplete() {
+  public salvarAssinatura() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(HomePage, { signatureImage: this.signatureImage });
+
+    if (this.paginaOrigem == "LAUDO") {
+      this.laudo.assinatura = this.signatureImage;
+      this.viewCtrl.dismiss(this.laudo);
+    }
   }
 
-  drawClear() {
+  public limparAssinatura() {
     this.signaturePad.clear();
   }
 }
