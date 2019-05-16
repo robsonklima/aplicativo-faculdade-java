@@ -6,7 +6,6 @@ import { LocalAtendimento } from './local-atendimento';
 import { EquipamentoContrato } from './equipamento-contrato';
 import { TipoIntervencao } from './tipo-intervencao';
 import { Rat } from './rat';
-import { Laudo } from './laudo';
 
 export class Chamado {
 	codOs: number;
@@ -21,7 +20,6 @@ export class Chamado {
 	equipamentoContrato: EquipamentoContrato;
 	tipoIntervencao: TipoIntervencao;
 	rats: Rat[];
-	laudos: Laudo[];
 	defeitoRelatado: string;
 	observacao: string;
 	checkin: Checkin;
@@ -36,4 +34,5 @@ export class Chamado {
 	indBloqueioReincidencia: number;
 	indRatEletronica: number;
 	indCercaEletronicaLiberada: number;
+  laudos: any;
 }

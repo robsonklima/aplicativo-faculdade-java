@@ -209,7 +209,7 @@ export class ChamadoPage {
   }
 
   public verificarExistenciaFoto(modalidade: string): boolean {
-    if (typeof(this.chamado.rats) !== 'undefined') {
+    if (typeof(this.chamado.rats.length) !== 'undefined') {
       if (this.chamado.rats.length > 0) {
 
         let fotos = this.chamado.rats[0].fotos.filter((foto) => {
@@ -226,9 +226,13 @@ export class ChamadoPage {
   }
 
   public verificarExistenciaLaudo(): boolean {
-    if (typeof(this.chamado.laudos) !== 'undefined') {
-      if (this.chamado.laudos.length > 0) {
-          return true;  
+    if (typeof(this.chamado.rats) !== 'undefined') {
+      if (this.chamado.rats.length > 0) {
+        if (typeof(this.chamado.rats[0].laudos) !== 'undefined') {
+          if (this.chamado.rats[0].laudos.length > 0) {
+              return true;  
+          }
+        }
       }
     }
 
@@ -362,6 +366,7 @@ export class ChamadoPage {
                   let rat = new Rat();
                   rat.fotos = [];
                   rat.ratDetalhes = [];
+                  rat.laudos = [];
                   this.chamado.rats.push(rat);
                   
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {

@@ -122,8 +122,9 @@ export class LaudoPage {
               return
             }
 
-            this.chamado.laudos.push(this.laudo);
+            this.chamado.rats[0].laudos.push(this.laudo);
             this.chamadoService.atualizarChamado(this.chamado);
+
             this.fecharModal();
           }
         }
