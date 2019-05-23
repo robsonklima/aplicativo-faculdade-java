@@ -58,7 +58,7 @@ export class SituacaoPage {
       this.foto = new Foto();
       this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
       this.foto.str = 'data:image/jpeg;base64,' + imageData;
-      this.foto.modalidade = "LAUDO";
+      this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
       this.situacao.fotos.push(this.foto);
       this.camera.cleanup();
       this.qtdFotosLaudo = this.qtdFotosLaudo + 1;

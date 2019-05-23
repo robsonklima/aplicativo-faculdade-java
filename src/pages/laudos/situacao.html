@@ -20,6 +20,7 @@
         placeholder="Ex.: Teclado vandalizado"
         name="causa"
         [ngModel]=""
+        rows="3"
         required>
       </ion-textarea>
     </ion-item>
@@ -30,16 +31,17 @@
         placeholder="Ex.: Necessária a substituição do teclado"
         name="acao"
         [ngModel]=""
+        rows="3"
         required>
       </ion-textarea>
     </ion-item>
 
     <ion-item-divider color="light">
-      Fotos
+      Fotos ({{ qtdFotosLaudo }})
       <ion-badge 
         item-end
         class="badge"
-        color="light">{{ qtdFotosLaudo }}/6</ion-badge>
+        color="light">Máximo de 6 Fotos por Laudo</ion-badge>
     </ion-item-divider>
 
     <ion-item col-12 *ngIf="!situacao?.fotos.length">

@@ -251,7 +251,7 @@ export class ChamadoPage {
         {
           text: 'Excluir',
           handler: () => {
-            this.chamado.laudos = [];
+            this.chamado.rats[0].laudos = [];
             this.chamadoService.atualizarChamado(this.chamado);
           }
         }
