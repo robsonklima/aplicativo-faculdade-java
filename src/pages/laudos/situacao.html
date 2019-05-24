@@ -6,7 +6,7 @@
       </button>
     </ion-buttons>
 
-    <ion-title>Situação</ion-title>
+    <ion-title>Situação {{ laudo?.situacoes?.length+1 }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -17,10 +17,10 @@
     <ion-item col-12>
       <ion-label stacked>Causa</ion-label>
       <ion-textarea 
-        placeholder="Ex.: Teclado vandalizado"
+        placeholder="Insira de forma clara e objetiva o que causou o problema"
         name="causa"
         [ngModel]=""
-        rows="3"
+        rows="2"
         required>
       </ion-textarea>
     </ion-item>
@@ -28,10 +28,10 @@
     <ion-item col-12>
       <ion-label stacked>Ação</ion-label>
       <ion-textarea 
-        placeholder="Ex.: Necessária a substituição do teclado"
+        placeholder="Insira de forma clara e objetiva as ações praticadas ou à realizar"
         name="acao"
         [ngModel]=""
-        rows="3"
+        rows="2"
         required>
       </ion-textarea>
     </ion-item>
@@ -44,9 +44,7 @@
         color="light">Máximo de 6 Fotos por Laudo</ion-badge>
     </ion-item-divider>
 
-    <ion-item col-12 *ngIf="!situacao?.fotos.length">
-      <p class="no-photo">Nenhuma Foto Inserida</p>
-    </ion-item>
+      <p class="p-msg" *ngIf="!situacao?.fotos.length">Para inserir uma foto, clique no botão <ion-icon color="secondary" name="camera"></ion-icon>. Utilize o celular na horizontal, o que permitirá melhorar a qualidade da(s) sua(s) foto(s). Lembre-se que você poderá anexar o máximo de 2 fotos por situação e essa(s) foto(s) deve(m) demonstrar e registrar a causa do problema descrito nessa situação.</p>
 
     <ion-item *ngFor="let foto of situacao?.fotos; let i = index">
       <ion-avatar item-start>
@@ -64,7 +62,7 @@
         color="secondary"
         ion-button 
         block
-        [disabled]="!f.valid || !situacao?.fotos.length">
+        [disabled]="(!f.valid || !situacao?.fotos.length) && !plt.is('mobileweb')">
         Salvar
       </button>
     </div>

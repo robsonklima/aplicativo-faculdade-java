@@ -26,8 +26,13 @@ export class AssinaturaPage {
   public salvarAssinatura() {
     this.signatureImage = this.signaturePad.toDataURL();
 
-    if (this.paginaOrigem == "LAUDO") {
-      this.laudo.assinatura = this.signatureImage;
+    if (this.paginaOrigem == "LAUDO_TECNICO") {
+      this.laudo.assinaturaTecnico = this.signatureImage;
+      this.viewCtrl.dismiss(this.laudo);
+    }
+
+    if (this.paginaOrigem == "LAUDO_CLIENTE") {
+      this.laudo.assinaturaCliente = this.signatureImage;
       this.viewCtrl.dismiss(this.laudo);
     }
   }

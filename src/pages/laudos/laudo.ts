@@ -19,6 +19,7 @@ import { AssinaturaPage } from '../assinatura/assinatura';
 })
 export class LaudoPage {
   @ViewChild(Slides) slides: Slides;
+  semInformacoesRedeEletrica: boolean;
   tituloSlide: string;
   chamado: Chamado;
   laudo: Laudo;
@@ -53,13 +54,24 @@ export class LaudoPage {
     }); 
   }
 
-  public telaAssinatura() {
-    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO", laudo: this.laudo });
+  public telaAssinaturaTecnico() {
+    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO_TECNICO", laudo: this.laudo });
+    modal.present();
+    modal.onDidDismiss((laudo) => {
+      this.laudo = laudo;
+      
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
+  public telaAssinaturaCliente() {
+    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO_CLIENTE", laudo: this.laudo });
     modal.present();
     modal.onDidDismiss((laudo) => {
       this.laudo = laudo;
 
       this.configurarSlide(this.slides.getActiveIndex());
+      this.solicitarDadosCliente();
     });
   }
 
@@ -69,7 +81,10 @@ export class LaudoPage {
     this.laudo.relatoCliente = form.value.relatoCliente;
     this.laudo.dataHoraCad = moment().format();
     this.laudo.situacoes = [];
-    this.laudo.assinatura = null;
+    this.laudo.assinaturaTecnico = null;
+    this.laudo.assinaturaCliente = null;
+    this.laudo.nomeCliente = null;
+    this.laudo.matriculaCliente = null;
     this.laudo.indAtivo = 1;
     
     this.configurarSlide(this.slides.getActiveIndex());
@@ -80,7 +95,7 @@ export class LaudoPage {
     this.laudo.conclusao = form.value.conclusao;
     
     this.configurarSlide(this.slides.getActiveIndex());
-    this.slides.slideTo(3, 500);
+    this.slides.slideTo(4, 500);
   }
 
   public removerSituacao(i: number) {
@@ -103,6 +118,87 @@ export class LaudoPage {
     });
 
     confirmacao.present();
+  }
+
+  public marcarSemInformacoesRedeEletrica(event){
+    this.semInformacoesRedeEletrica = event.checked;
+  }
+
+  public salvarInformacoesRedeEletrica(form: NgForm) {
+    this.laudo.tensaoSemCarga = form.value.tensaoSemCarga;
+    this.laudo.tensaoComCarga = form.value.tensaoComCarga;
+    this.laudo.tensaoTerraENeutro = form.value.tensaoTerraENeutro;
+    this.laudo.indRedeEstabilizada = form.value.indRedeEstabilizada;
+    this.laudo.indPossuiNobreak = form.value.indPossuiNobreak;
+
+    if (!this.laudo.tensaoSemCarga || !this.laudo.tensaoComCarga || !this.laudo.tensaoTerraENeutro) {
+      this.solicitarJustificativa(); 
+    }
+    
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(3, 500);
+  }
+
+  private solicitarJustificativa() {
+    let prompt = this.alertCtrl.create({
+      title: 'Importante!',
+      message: `Você não informou todos os campos da rede elétrica e infra estrutura`,
+      enableBackdropDismiss: false,
+      inputs: [
+        {
+          name: 'justificativa',
+          type: 'text',
+          placeholder: 'Justificativa'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Salvar',
+          handler: res => {
+            if (!res.justificativa || res.justificativa.trim() == '') {
+              return false
+            }
+
+            this.laudo.justificativa = res.justificativa.trim();
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  private solicitarDadosCliente() {
+    let prompt = this.alertCtrl.create({
+      title: 'Dados do Cliente',
+      message: `Favor informar os dados do cliente`,
+      enableBackdropDismiss: false,
+      inputs: [
+        {
+          name: 'nomeCliente',
+          type: 'text',
+          placeholder: 'Nome do Cliente'
+        },
+        {
+          name: 'matriculaCliente',
+          type: 'text',
+          placeholder: 'Matrícula do Cliente'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Salvar',
+          handler: res => {
+            if (!res.nomeCliente || !res.matriculaCliente) {
+              return false
+            }
+
+            this.laudo.nomeCliente = res.nomeCliente.trim();
+            this.laudo.matriculaCliente = res.matriculaCliente.trim();
+          }
+        }
+      ]
+    });
+    prompt.present();
   }
 
   public finalizarLaudo() {
@@ -141,7 +237,7 @@ export class LaudoPage {
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
-        this.tituloSlide = (i + 1) + ". " + "Relato do Cliente";
+        this.tituloSlide = (i + 1) + ". " + "Relato do Cliente no Atendimento";
         
         if (!this.laudo.relatoCliente) {
           this.slides.lockSwipeToNext(true);
@@ -158,9 +254,18 @@ export class LaudoPage {
         } else {
           this.slides.lockSwipeToNext(false);
         }
-       
         break;
       case 2:
+        this.tituloSlide = (i + 1) + ". " + "Infraestrutura e Rede Elétrica";
+        
+        if ((!this.laudo.tensaoSemCarga && !this.laudo.tensaoComCarga && !this.laudo.tensaoTerraENeutro) && !this.semInformacoesRedeEletrica) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false); 
+        }
+        
+        break;
+      case 3:
         this.tituloSlide = (i + 1) + ". " + "Conclusão";
         
         if (!this.laudo.conclusao) {
@@ -170,17 +275,27 @@ export class LaudoPage {
         }
         
         break;
-      case 3:
+      case 4:
         this.tituloSlide = (i + 1) + ". " + "Assinatura do Técnico";
         
-        if (!this.laudo.assinatura) {
+        if (!this.laudo.assinaturaTecnico) {
           this.slides.lockSwipeToNext(true);
         } else {
           this.slides.lockSwipeToNext(false);
         }
         
         break;
-      case 4:
+      case 5:
+        this.tituloSlide = (i + 1) + ". " + "Assinatura do Cliente";
+        
+        if (!this.laudo.assinaturaCliente) {
+          this.slides.lockSwipeToNext(true);
+        } else {
+          this.slides.lockSwipeToNext(false);
+        }
+        
+        break;
+      case 6:
         this.tituloSlide = (i + 1) + ". " + "Finalizar";
         
         this.slides.lockSwipeToPrev(false);

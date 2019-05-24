@@ -7,7 +7,16 @@ export class Laudo {
     codOS: number;
     codRAT: number;
     codTecnico: number;
-    assinatura: string;
+    assinaturaTecnico: string;
+    assinaturaCliente: string;
     indAtivo: number;
     dataHoraCad: string;
+    tensaoComCarga: string;
+    tensaoSemCarga: string;
+    tensaoTerraENeutro: string;
+    indRedeEstabilizada: number;
+    indPossuiNobreak: number;
+    justificativa: string;
+    nomeCliente: string;
+    matriculaCliente: string;
   }

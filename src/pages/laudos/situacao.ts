@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
+import { Platform } from 'ionic-angular';
 
 import { Laudo } from '../../models/laudo';
 import { Foto } from '../../models/foto';
@@ -24,7 +25,8 @@ export class SituacaoPage {
     private navParams: NavParams,
     private viewCtrl: ViewController,
     private alertCtrl: AlertController,
-    private camera: Camera
+    private camera: Camera,
+    public plt: Platform
   ) {
     this.laudo = this.navParams.get('laudo');
   }
@@ -33,6 +35,7 @@ export class SituacaoPage {
     this.situacao = new LaudoSituacao();
     this.situacao.fotos = [];
     this.obterQtdFotosLaudo();
+    this
   }
 
   public criarSituacao(form: NgForm) {

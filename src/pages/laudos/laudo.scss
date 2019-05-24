@@ -5,15 +5,25 @@ laudo-page {
     }
 
     .p-msg {
-        margin-top: 16px !important;
+        margin: 16px auto !important;
+        width: 90%;
+        text-align: justify;
+    }
+
+    .p-msg-2 {
+        margin: 16px auto !important;
+        width: 90%;
+        text-align: center;
     }
 
     .icon-button {
         font-size: 24px;
     }
 
-    .first-divider, .first-item {
+    .first-divider-light {
         margin-top: 1px;
+        text-align: left;
+        height: 48px;
     }
 
     .badge {
