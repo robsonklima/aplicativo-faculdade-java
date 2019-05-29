@@ -13,8 +13,8 @@ export class LocalizacaoService {
     private http: Http
   ) { }
 
-  enviarLocalizacaoParaFilialApi(localizacao: Localizacao, codOS: Number): Observable<any> {
-    return this.http.post(Config.API_URL + 'Localizacao/' + codOS, localizacao)
+  enviarLocalizacao(localizacao: Localizacao): Observable<any> {
+    return this.http.post(Config.API_URL + 'Localizacao/', localizacao)
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));

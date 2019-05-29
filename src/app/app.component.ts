@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, ToastController, NavController, MenuController, Events } from 'ionic-angular';
+import { BackgroundGeolocationConfig, BackgroundGeolocationResponse, BackgroundGeolocation, 
+         BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -9,6 +11,8 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 
 import { Config } from "../config/config";
+import { Chamado } from '../models/chamado';
+import { Localizacao } from '../models/localizacao';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -16,12 +20,13 @@ import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
 import { DadosGlobais } from '../models/dados-globais';
 import { DadosGlobaisService } from '../services/dados-globais';
-import { Chamado } from '../models/chamado';
+import { LocalizacaoService } from '../services/localizacao';
 
 import { UsuarioService } from '../services/usuario';
 import { ChamadoService } from "../services/chamado";
 
 import moment from 'moment';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -31,7 +36,6 @@ export class MyApp {
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
   dataHoraUltAtualizacao: Date = new Date();
-
   dadosGlobais: DadosGlobais;
   chamados: Chamado[];
   task: any;
@@ -43,10 +47,12 @@ export class MyApp {
     private toastCtrl: ToastController,
     private events: Events,
     private backgroundMode: BackgroundMode,
+    private bGeolocation: BackgroundGeolocation,
     private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private dadosGlobaisService: DadosGlobaisService,
+    private localizacaoService: LocalizacaoService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
     private chamadoService: ChamadoService
@@ -80,6 +86,7 @@ export class MyApp {
               }, err => {});
               
               this.iniciarSincronizacao();
+              this.iniciarColetaLocalizacaoSegundoPlano();
 
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
@@ -115,28 +122,42 @@ export class MyApp {
     this.sincronizarChamados();
   }
 
-  private sincronizarChamados() {
-    this.dataHoraUltAtualizacao = new Date();
+  private sincronizarChamados(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.dataHoraUltAtualizacao = new Date();
 
-    this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
-      this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
-        this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
-          this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-            if (chamadosUnificados.length) {
-              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-                this.events.publish('sincronizacao:efetuada');
-              }).catch(() => {});
-            }
-          })
-          .catch(() => {});
-        }, err => {
-          if (!this.backgroundMode.isActive())
-            this.exibirToast('Não foi possível conectar ao servidor');
+      this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
+        this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
+          this.chamadoService.buscarChamadosApi(this.dadosGlobais.usuario.codTecnico).subscribe((chamadosApi) => {
+            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+              if (chamadosUnificados.length) {
+                this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+                  this.events.publish('sincronizacao:efetuada');
+
+                  resolve();
+                }).catch(() => {
+                  reject();
+                });
+              }
+            })
+            .catch(() => {
+              reject();
+            });
+          }, err => {
+            if (!this.backgroundMode.isActive())
+              this.exibirToast('Não foi possível conectar ao servidor');
+
+            reject();
+          });
+        })
+        .catch(() => {
+          reject();
         });
       })
-      .catch(() => {});
-    })
-    .catch(() => {});
+      .catch(() => {
+        reject();
+      });
+    });
   }
   
   private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
@@ -226,6 +247,23 @@ export class MyApp {
   private verificarIntervaloMinimoSincronizacao(): boolean {
     return (moment.duration(moment(new Date()).diff(moment(this.dataHoraUltAtualizacao))).seconds() 
       > Config.INT_MIN_SINC_CHAMADOS_SEG && this.dataHoraUltAtualizacao !== null);
+  }
+
+  private iniciarColetaLocalizacaoSegundoPlano() {
+    this.bGeolocation.configure(Config.POS_CONFIG_BG).then(() => {
+      this.bGeolocation
+        .on(BackgroundGeolocationEvents.location)
+        .subscribe((res: BackgroundGeolocationResponse) => {
+          let localizacao = new Localizacao();
+          localizacao.latitude = res.latitude;
+          localizacao.longitude = res.longitude;
+          localizacao.codUsuario = this.dadosGlobais.usuario.codUsuario;
+
+          this.localizacaoService.enviarLocalizacao(localizacao).subscribe(() => {}, err => {});
+        }, err => {});
+    }).catch((err) => {});
+    
+    this.bGeolocation.start();
   }
 
   private dispararSinalSonoroComVibracao() {

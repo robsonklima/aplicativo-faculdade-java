@@ -1,12 +1,29 @@
+import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
+
 export class Config {
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
   public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
+  public static POS_CONFIG_BG: BackgroundGeolocationConfig = {
+    desiredAccuracy: 10,
+    stationaryRadius: 50,
+    distanceFilter: 50,
+    debug: true,
+    stopOnTerminate: false,
+    interval: 3000,
+    fastestInterval: 3000,
+    activitiesInterval: 3000,
+    startForeground: true,
+    stopOnStillActivity: false,
+    activityType: 'AutomotiveNavigation',
+    saveBatteryOnBackground: true,
+    //maxLocations: 10,
+  };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;
-  public static INT_SINC_CHAMADOS_MILISEG = 300000;
+  public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
   public static CERCA_ELETRONICA = [
     { filial: 'FPR', distancia: 2.00 }, { filial: 'FRS', distancia: 2.55 },

@@ -171,6 +171,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Diagnostic,
     Geolocation,
+    BackgroundGeolocation,
     BackgroundMode,
     PhonegapLocalNotification,
     Badge,
@@ -200,8 +201,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     IndicadorService,
     LocalizacaoService,
     LaudoService,
-    MensagemTecnicoService,
-    BackgroundGeolocation
+    MensagemTecnicoService
   ]
 })
 export class AppModule {}

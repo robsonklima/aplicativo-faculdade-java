@@ -40,6 +40,7 @@ export class LocalizacaoEnvioPage {
       .then((dados: DadosGlobais) => {
         if (dados) 
           this.dg = dados;
+          this.localizacao.codUsuario = this.dg.usuario.codUsuario;
       })
       .catch((err) => {});
   }
@@ -61,7 +62,7 @@ export class LocalizacaoEnvioPage {
             });
             loader.present();
 
-            this.localizacaoService.enviarLocalizacaoParaFilialApi(this.localizacao, this.chamado.codOs)
+            this.localizacaoService.enviarLocalizacao(this.localizacao)
               .subscribe(() => {
                 this.exibirToast('Sua localização foi enviada com sucesso!');
                 loader.dismiss().then(() => this.fecharModal());
