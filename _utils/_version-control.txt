@@ -1,7 +1,9 @@
-0.0.38 - 14/03/2019
-- Inclusão de lançamento de laudos;
+0.0.39 - ??/??/????
+- Laudo técnico
+- Mudança na ordem de lançamento de fotos
 - Inclusão de visualização de mensagens;
-- Possibilidade de seleção de upload de fotos da galeria;
+- Captura da localização em plano de fundo
+- Possibilidade de seleção de upload de fotos da galeria (desativado);
 - Melhorias na interface de visualização;
 
 0.0.38 - 14/03/2019
