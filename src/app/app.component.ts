@@ -87,7 +87,6 @@ export class MyApp {
               }, err => {});
               
               this.iniciarSincronizacao();
-              
 
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
@@ -255,19 +254,19 @@ export class MyApp {
       this.bGeolocation
         .on(BackgroundGeolocationEvents.location)
         .subscribe((res: BackgroundGeolocationResponse) => {
-          let localizacao = new Localizacao();
-          localizacao.latitude = res.latitude;
-          localizacao.longitude = res.longitude;
+          let loc = new Localizacao();
+          loc.latitude = res.latitude;
+          loc.longitude = res.longitude;
           
           this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
             if (dg) {
-              localizacao.codUsuario = dg.usuario.codUsuario;    
+              loc.codUsuario = dg.usuario.codUsuario;
+
+              if (loc.codUsuario){
+                this.localizacaoService.enviarLocalizacao(loc).subscribe(() => {}, err => {});
+              }
             }
           }).catch();  
-
-          if (localizacao.codUsuario){
-            this.localizacaoService.enviarLocalizacao(localizacao).subscribe(() => {}, err => {});
-          }
         }, err => {});
     }).catch((err) => {});
     

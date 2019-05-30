@@ -8,8 +8,8 @@ export class Config {
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
   public static POS_CONFIG_BG: BackgroundGeolocationConfig = {
     desiredAccuracy: 10,
-    stationaryRadius: 50,
-    distanceFilter: 50,
+    stationaryRadius: 100,
+    distanceFilter: 100,
     debug: false,
     stopOnTerminate: false,
     interval: 3000,
@@ -19,7 +19,6 @@ export class Config {
     stopOnStillActivity: true,
     activityType: 'AutomotiveNavigation',
     saveBatteryOnBackground: true,
-    //startOnBoot: true,
     notificationsEnabled: false,
     notificationTitle: 'App Técnicos',
     notificationText: 'Sistema de Localização'
