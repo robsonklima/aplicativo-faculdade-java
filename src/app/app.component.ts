@@ -258,9 +258,14 @@ export class MyApp {
           let localizacao = new Localizacao();
           localizacao.latitude = res.latitude;
           localizacao.longitude = res.longitude;
-          localizacao.codUsuario = this.dadosGlobais.usuario.codUsuario;
+          
+          this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
+            if (dg) {
+              localizacao.codUsuario = dg.usuario.codUsuario;    
+            }
+          }).catch();  
 
-          if (this.dadosGlobais.usuario.codUsuario){
+          if (localizacao.codUsuario){
             this.localizacaoService.enviarLocalizacao(localizacao).subscribe(() => {}, err => {});
           }
         }, err => {});
