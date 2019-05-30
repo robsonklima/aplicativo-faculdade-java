@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events, ModalController, Platform, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, 
+  Events, ModalController, Platform } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -30,7 +31,6 @@ import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
 import { LaudoService } from '../../services/laudo';
 import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
-import { LocalizacaoService } from '../../services/localizacao';
 
 import moment from 'moment';
 

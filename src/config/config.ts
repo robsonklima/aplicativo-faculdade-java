@@ -10,7 +10,7 @@ export class Config {
     desiredAccuracy: 10,
     stationaryRadius: 50,
     distanceFilter: 50,
-    debug: true,
+    debug: false,
     stopOnTerminate: false,
     interval: 3000,
     fastestInterval: 3000,

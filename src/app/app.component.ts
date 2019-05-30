@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, ToastController, NavController, MenuController, Events } from 'ionic-angular';
-import { BackgroundGeolocationConfig, BackgroundGeolocationResponse, BackgroundGeolocation, 
+import { BackgroundGeolocationResponse, BackgroundGeolocation, 
          BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
