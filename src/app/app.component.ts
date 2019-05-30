@@ -254,16 +254,18 @@ export class MyApp {
       this.bGeolocation
         .on(BackgroundGeolocationEvents.location)
         .subscribe((res: BackgroundGeolocationResponse) => {
-          let loc = new Localizacao();
-          loc.latitude = res.latitude;
-          loc.longitude = res.longitude;
-          
           this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
             if (dg) {
+              let loc = new Localizacao();
+              loc.latitude = res.latitude;
+              loc.longitude = res.longitude;
               loc.codUsuario = dg.usuario.codUsuario;
 
               if (loc.codUsuario){
-                this.localizacaoService.enviarLocalizacao(loc).subscribe(() => {}, err => {});
+                this.localizacaoService.enviarLocalizacao(loc).subscribe(() => {
+                  this.dadosGlobais.localizacao = loc;
+                  this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
+                }, err => {});
               }
             }
           }).catch();  
