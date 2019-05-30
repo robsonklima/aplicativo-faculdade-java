@@ -16,10 +16,13 @@ export class Config {
     fastestInterval: 3000,
     activitiesInterval: 3000,
     startForeground: true,
-    stopOnStillActivity: false,
+    stopOnStillActivity: true,
     activityType: 'AutomotiveNavigation',
     saveBatteryOnBackground: true,
-    //maxLocations: 10,
+    //startOnBoot: true,
+    notificationsEnabled: false,
+    notificationTitle: 'App Técnicos',
+    notificationText: 'Sistema de Localização'
   };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;

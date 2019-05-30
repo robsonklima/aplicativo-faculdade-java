@@ -60,6 +60,7 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
+      this.iniciarColetaLocalizacaoSegundoPlano();
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -86,7 +87,7 @@ export class MyApp {
               }, err => {});
               
               this.iniciarSincronizacao();
-              this.iniciarColetaLocalizacaoSegundoPlano();
+              
 
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
@@ -259,7 +260,9 @@ export class MyApp {
           localizacao.longitude = res.longitude;
           localizacao.codUsuario = this.dadosGlobais.usuario.codUsuario;
 
-          this.localizacaoService.enviarLocalizacao(localizacao).subscribe(() => {}, err => {});
+          if (this.dadosGlobais.usuario.codUsuario){
+            this.localizacaoService.enviarLocalizacao(localizacao).subscribe(() => {}, err => {});
+          }
         }, err => {});
     }).catch((err) => {});
     

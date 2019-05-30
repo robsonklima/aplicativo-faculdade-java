@@ -231,11 +231,9 @@
         </ion-card>
 
         <div padding *ngIf="!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude">
-          <button (click)="telaLocalizacaoEnvio()" ion-button outline>
-            Minha Localização
-          </button>
+          <button color="secondary" (click)="efetuarCheckin()" ion-button outline icon-start class="btn-checkin">
+            <ion-icon name='ios-locate-outline' is-active="false"></ion-icon>
 
-          <button color="secondary" ion-button (click)="efetuarCheckin()">
             {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Checkin' : 'Checkin Efetuado' }}
           </button>
 
@@ -575,11 +573,9 @@
     <ion-slide>
       <ion-list>
         <div padding *ngIf="!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude">
-          <button (click)="telaLocalizacaoEnvio()" ion-button outline>
-            Minha Localização
-          </button>
-
-          <button color="secondary" ion-button (click)="efetuarCheckout()">
+          <button color="secondary" ion-button outline icon-start (click)="efetuarCheckout()" class="btn-checkout">
+            <ion-icon name='ios-locate-outline' is-active="false"></ion-icon>
+            
             {{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Checkout' : 'Checkout Efetuado' }}
           </button>
 
