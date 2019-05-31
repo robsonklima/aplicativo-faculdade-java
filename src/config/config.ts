@@ -12,16 +12,17 @@ export class Config {
     distanceFilter: 100,
     debug: false,
     stopOnTerminate: false,
-    interval: 3000,
-    fastestInterval: 3000,
-    activitiesInterval: 3000,
+    interval: 60000,
+    fastestInterval: 5000,
+    activitiesInterval: 10000,
     startForeground: true,
     stopOnStillActivity: true,
     activityType: 'AutomotiveNavigation',
     saveBatteryOnBackground: true,
     notificationsEnabled: false,
     notificationTitle: 'App Técnicos',
-    notificationText: 'Sistema de Localização'
+    notificationText: 'Sistema de Localização',
+    maxLocations: 500
   };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;

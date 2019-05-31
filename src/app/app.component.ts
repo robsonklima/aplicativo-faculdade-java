@@ -260,6 +260,7 @@ export class MyApp {
               loc.latitude = res.latitude;
               loc.longitude = res.longitude;
               loc.codUsuario = dg.usuario.codUsuario;
+              loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
               if (loc.codUsuario){
                 this.localizacaoService.enviarLocalizacao(loc).subscribe(() => {
