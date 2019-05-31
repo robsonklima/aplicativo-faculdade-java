@@ -8,11 +8,11 @@ export class Config {
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
   public static POS_CONFIG_BG: BackgroundGeolocationConfig = {
     desiredAccuracy: 10,
-    stationaryRadius: 100,
-    distanceFilter: 100,
+    stationaryRadius: 250,
+    distanceFilter: 250,
     debug: false,
     stopOnTerminate: false,
-    interval: 60000,
+    interval: 180000,
     fastestInterval: 5000,
     activitiesInterval: 10000,
     startForeground: true,
