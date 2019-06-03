@@ -12,7 +12,7 @@ export class Config {
     distanceFilter: 250,
     debug: false,
     stopOnTerminate: false,
-    interval: 180000,
+    interval: 60000,
     fastestInterval: 5000,
     activitiesInterval: 10000,
     startForeground: true,
