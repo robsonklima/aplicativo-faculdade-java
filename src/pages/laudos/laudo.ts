@@ -131,7 +131,7 @@ export class LaudoPage {
     this.laudo.indRedeEstabilizada = form.value.indRedeEstabilizada;
     this.laudo.indPossuiNobreak = form.value.indPossuiNobreak;
 
-    if (!this.laudo.tensaoSemCarga || !this.laudo.tensaoComCarga || !this.laudo.tensaoTerraENeutro) {
+    if (form.value.indSemInformacoesRedeEletrica) {
       this.solicitarJustificativa(); 
     }
     
