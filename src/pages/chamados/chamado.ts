@@ -27,6 +27,7 @@ import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import moment from 'moment';
 import { Camera } from '@ionic-native/camera';
 import { LaudoPage } from '../laudos/laudo';
+import { RatDetalhe } from '../../models/rat-detalhe';
 
 @Component({
   selector: 'chamado-page',
@@ -62,6 +63,8 @@ export class ChamadoPage {
     private checkinCheckoutService: CheckinCheckoutService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {
@@ -209,7 +212,7 @@ export class ChamadoPage {
   }
 
   public verificarExistenciaFoto(modalidade: string): boolean {
-    if (typeof(this.chamado.rats.length) !== 'undefined') {
+    if (typeof(this.chamado.rats) !== 'undefined') {
       if (this.chamado.rats.length > 0) {
 
         let fotos = this.chamado.rats[0].fotos.filter((foto) => {
@@ -259,6 +262,77 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
+  }
+
+  private verificarLaudoObrigatorio(): boolean {
+    // Clientes Específicos
+    if (
+      this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO || 
+      this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD || 
+      this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA || 
+      this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS || 
+      this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS
+    ) {
+      return true;
+    } 
+    
+    // BB Garantia
+    if (
+      this.chamado.cliente.codCliente == Config.CLIENTE.BB && 
+      this.chamado.equipamentoContrato.indGarantia == 1
+    ) {
+      return true;
+    }
+
+    // Vandalismo
+    if (this.verificarChamadoVandalismo()) {
+      return true;
+    }
+
+    // Clientes Específicos e Troca de Peça
+    if (
+      this.verificarChamadoTrocaPeca() &&
+      (
+        this.chamado.cliente.codCliente == Config.CLIENTE.CEF || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BNB
+      )
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private verificarChamadoVandalismo(): boolean {
+    if (typeof(this.chamado.rats) !== 'undefined') {
+      if (this.chamado.rats.length > 0) {
+        this.chamado.rats.forEach((rat: Rat) => {
+          rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
+            if (ratDetalhe.causa.codCausa == 526) {
+              return true;
+            }  
+          });
+        });
+      }
+    }
+
+    return false;
+  }
+
+  private verificarChamadoTrocaPeca(): boolean {
+    if (typeof(this.chamado.rats) !== 'undefined') {
+      if (this.chamado.rats.length > 0) {
+        this.chamado.rats.forEach((rat: Rat) => {
+          rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
+            if (ratDetalhe.acao.codAcao == 26) {
+              return true;
+            }  
+          });
+        });
+      }
+    }
+
+    return false;
   }
 
   public verificarChamadoExtraMaquina(): boolean {
@@ -415,7 +489,7 @@ export class ChamadoPage {
   }
 
   public efetuarCheckout() {
-    this.chamado.checkin.tentativas.push(moment().format());
+    this.chamado.checkout.tentativas.push(moment().format());
     this.chamadoService.atualizarChamado(this.chamado);
 
     const alerta = this.alertCtrl.create({
@@ -443,6 +517,11 @@ export class ChamadoPage {
                 return;
               }  
             }
+
+            if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
+              this.exibirToast("Este chamado deve possuir laudo");
+              return;
+            } 
 
             const loader = this.loadingCtrl.create({
               content: 'Obtendo sua localização...',

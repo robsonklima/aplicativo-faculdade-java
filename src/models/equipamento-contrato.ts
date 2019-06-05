@@ -7,4 +7,5 @@ export class EquipamentoContrato {
     numSerieCliente: string;
     equipamento: Equipamento;
     contrato: Contrato;
+    indGarantia: number;
 }

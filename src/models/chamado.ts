@@ -1,6 +1,7 @@
 import { Checkout } from './checkout';
 import { Checkin } from './checkin';
 import { Tecnico } from './tecnico';
+import { Cliente } from './cliente';
 import { StatusServico } from "./status-servico";
 import { LocalAtendimento } from './local-atendimento';
 import { EquipamentoContrato } from './equipamento-contrato';
@@ -15,6 +16,7 @@ export class Chamado {
 	numOsCliente: string;
 	codTecnico: number;
 	tecnico: Tecnico;
+	cliente: Cliente;
 	statusServico: StatusServico;
 	localAtendimento: LocalAtendimento;
 	equipamentoContrato: EquipamentoContrato;
@@ -34,5 +36,4 @@ export class Chamado {
 	indBloqueioReincidencia: number;
 	indRatEletronica: number;
 	indCercaEletronicaLiberada: number;
-  laudos: any;
 }
