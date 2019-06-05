@@ -128,8 +128,10 @@ export class LaudoPage {
     this.laudo.tensaoSemCarga = form.value.tensaoSemCarga;
     this.laudo.tensaoComCarga = form.value.tensaoComCarga;
     this.laudo.tensaoTerraENeutro = form.value.tensaoTerraENeutro;
+    this.laudo.temperatura = form.value.temperatura;
     this.laudo.indRedeEstabilizada = form.value.indRedeEstabilizada;
     this.laudo.indPossuiNobreak = form.value.indPossuiNobreak;
+    this.laudo.indPossuiArCond = form.value.indPossuiArCond;
 
     if (form.value.indSemInformacoesRedeEletrica) {
       this.solicitarJustificativa(); 

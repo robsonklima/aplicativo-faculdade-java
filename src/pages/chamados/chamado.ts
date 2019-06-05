@@ -432,6 +432,18 @@ export class ChamadoPage {
           handler: () => {
             this.registrarTentativaCheckinCheckout('CHECKOUT');
 
+            if (!this.platform.is('mobileweb')) {
+              if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+                this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+                return;
+              } 
+              
+              if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+                this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+                return;
+              }  
+            }
+
             const loader = this.loadingCtrl.create({
               content: 'Obtendo sua localização...',
               enableBackdropDismiss: true,
@@ -590,16 +602,6 @@ export class ChamadoPage {
 
             if (this.chamado.rats[0].ratDetalhes.length == 0) {
               this.exibirToast('Favor inserir os detalhes da RAT');
-              return;
-            }
-
-            if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-              this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
-              return;
-            } 
-            
-            if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-              this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
               return;
             }
 

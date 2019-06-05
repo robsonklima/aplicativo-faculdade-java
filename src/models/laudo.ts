@@ -14,8 +14,10 @@ export class Laudo {
     tensaoComCarga: string;
     tensaoSemCarga: string;
     tensaoTerraENeutro: string;
+    temperatura: string;
     indRedeEstabilizada: number;
     indPossuiNobreak: number;
+    indPossuiArCond: number;
     justificativa: string;
     nomeCliente: string;
     matriculaCliente: string;

@@ -102,6 +102,16 @@
                 </ion-input>
               </ion-item>
 
+              <ion-item col-12>
+                <ion-label stacked>Temperatura</ion-label>
+                <ion-input
+                  placeholder="Digite a Temperatura do Ambiente"
+                  name="temperatura"
+                  [required]="!semInformacoesRedeEletrica"
+                  [ngModel]="">
+                </ion-input>
+              </ion-item>
+
               <ion-item>
                 <ion-label>Rede Estabilizada?</ion-label>
                 
@@ -112,7 +122,7 @@
                   required>
                   <ion-option value="1">Sim</ion-option>
                   <ion-option value="0">Não</ion-option>
-                  <ion-option value="2">Não Sei</ion-option>
+                  <ion-option value="2">Não Tive Acesso</ion-option>
                 </ion-select>
               </ion-item>
 
@@ -126,7 +136,21 @@
                   required>
                   <ion-option value="1">Sim</ion-option>
                   <ion-option value="0">Não</ion-option>
-                  <ion-option value="2">Não Sei</ion-option>
+                  <ion-option value="2">Não Tive Acesso</ion-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Possui Ar Condicionado?</ion-label>
+                
+                <ion-select 
+                  name="indPossuiArCond" 
+                  placeholder="Selecione..." 
+                  [ngModel]="" 
+                  required>
+                  <ion-option value="1">Sim</ion-option>
+                  <ion-option value="0">Não</ion-option>
+                  <ion-option value="2">Não Tive Acesso</ion-option>
                 </ion-select>
               </ion-item>
 
