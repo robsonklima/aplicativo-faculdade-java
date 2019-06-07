@@ -60,7 +60,7 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      //this.iniciarColetaLocalizacaoSegundoPlano();
+      this.iniciarColetaLocalizacaoSegundoPlano();
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
