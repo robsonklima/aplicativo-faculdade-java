@@ -55,7 +55,6 @@ export class ChamadoService {
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
       .timeout(3000)
-      //.delay(1000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

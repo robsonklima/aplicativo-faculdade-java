@@ -65,14 +65,45 @@ export class LaudoPage {
   }
 
   public telaAssinaturaCliente() {
-    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO_CLIENTE", laudo: this.laudo });
-    modal.present();
-    modal.onDidDismiss((laudo) => {
-      this.laudo = laudo;
+    let prompt = this.alertCtrl.create({
+      title: 'Dados do Cliente',
+      message: `Favor informar os dados do cliente`,
+      enableBackdropDismiss: false,
+      inputs: [
+        {
+          name: 'nomeCliente',
+          type: 'text',
+          placeholder: 'Nome do Cliente'
+        },
+        {
+          name: 'matriculaCliente',
+          type: 'text',
+          placeholder: 'Matrícula do Cliente'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Salvar',
+          handler: res => {
+            if (!res.nomeCliente || !res.matriculaCliente) {
+              return false
+            }
 
-      this.configurarSlide(this.slides.getActiveIndex());
-      this.solicitarDadosCliente();
+            this.laudo.nomeCliente = res.nomeCliente.trim();
+            this.laudo.matriculaCliente = res.matriculaCliente.trim();
+
+            const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "LAUDO_CLIENTE", laudo: this.laudo });
+            modal.present();
+            modal.onDidDismiss((laudo) => {
+              this.laudo = laudo;
+
+              this.configurarSlide(this.slides.getActiveIndex());
+            });
+          }
+        }
+      ]
     });
+    prompt.present();
   }
 
   public criarLaudo(form: NgForm) {
@@ -162,40 +193,6 @@ export class LaudoPage {
             }
 
             this.laudo.justificativa = res.justificativa.trim();
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
-  private solicitarDadosCliente() {
-    let prompt = this.alertCtrl.create({
-      title: 'Dados do Cliente',
-      message: `Favor informar os dados do cliente`,
-      enableBackdropDismiss: false,
-      inputs: [
-        {
-          name: 'nomeCliente',
-          type: 'text',
-          placeholder: 'Nome do Cliente'
-        },
-        {
-          name: 'matriculaCliente',
-          type: 'text',
-          placeholder: 'Matrícula do Cliente'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Salvar',
-          handler: res => {
-            if (!res.nomeCliente || !res.matriculaCliente) {
-              return false
-            }
-
-            this.laudo.nomeCliente = res.nomeCliente.trim();
-            this.laudo.matriculaCliente = res.matriculaCliente.trim();
           }
         }
       ]
