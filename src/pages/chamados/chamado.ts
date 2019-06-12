@@ -263,38 +263,31 @@ export class ChamadoPage {
   }
 
   private verificarLaudoObrigatorio(): boolean {
-    // Clientes Específicos
     if (
-      this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO || 
-      this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD || 
-      this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA || 
-      this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS || 
-      this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS
-    ) {
-      return true;
-    } 
-    
-    // BB Garantia
-    if (
-      this.chamado.cliente.codCliente == Config.CLIENTE.BB && 
-      this.chamado.equipamentoContrato.indGarantia == 1
-    ) {
-      return true;
-    }
-
-    // Vandalismo
-    if (this.verificarChamadoVandalismo()) {
-      return true;
-    }
-
-    // Clientes Específicos e Troca de Peça
-    if (
-      this.verificarChamadoTrocaPeca() &&
       (
+        this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS ||
         this.chamado.cliente.codCliente == Config.CLIENTE.CEF || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.BNB
-      )
+        this.chamado.cliente.codCliente == Config.CLIENTE.BNB ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL || 
+        (
+          this.chamado.cliente.codCliente == Config.CLIENTE.BB && 
+          this.chamado.equipamentoContrato.indGarantia == 1
+        )
+      ) && this.verificarChamadoOrcamento()
     ) {
+      return true;
+    }
+
+    if (this.chamado.numReincidencias >= 5) {
+      return true;
+    }
+
+    if (this.verificarChamadoVandalismo()) {
       return true;
     }
 
@@ -317,12 +310,28 @@ export class ChamadoPage {
     return false;
   }
 
-  private verificarChamadoTrocaPeca(): boolean {
+  // private verificarChamadoTrocaPeca(): boolean {
+  //   if (typeof(this.chamado.rats) !== 'undefined') {
+  //     if (this.chamado.rats.length > 0) {
+  //       this.chamado.rats.forEach((rat: Rat) => {
+  //         rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
+  //           if (ratDetalhe.acao.codAcao == 26) {
+  //             return true;
+  //           }  
+  //         });
+  //       });
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
+  private verificarChamadoOrcamento(): boolean {
     if (typeof(this.chamado.rats) !== 'undefined') {
       if (this.chamado.rats.length > 0) {
         this.chamado.rats.forEach((rat: Rat) => {
           rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
-            if (ratDetalhe.acao.codAcao == 26) {
+            if (ratDetalhe.acao.codAcao == 17) {
               return true;
             }  
           });

@@ -36,4 +36,5 @@ export class Chamado {
 	indBloqueioReincidencia: number;
 	indRatEletronica: number;
 	indCercaEletronicaLiberada: number;
+	numReincidencias: number;
 }

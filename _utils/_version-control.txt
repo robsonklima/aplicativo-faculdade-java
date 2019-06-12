@@ -2,7 +2,7 @@
 - Laudo técnico
 - Mudança na ordem de lançamento de fotos
 - Inclusão de visualização de mensagens;
-- Captura da localização em plano de fundo
+- Captura da localização em plano de fundo (desativado);
 - Possibilidade de seleção de upload de fotos da galeria (desativado);
 - Melhorias na interface de visualização;
 
