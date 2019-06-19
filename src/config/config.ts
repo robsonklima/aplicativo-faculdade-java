@@ -12,7 +12,7 @@ export class Config {
     distanceFilter: 250,
     debug: false,
     stopOnTerminate: false,
-    interval: 60000,
+    interval: 180000,
     fastestInterval: 5000,
     activitiesInterval: 10000,
     startForeground: true,
@@ -22,7 +22,7 @@ export class Config {
     notificationsEnabled: false,
     notificationTitle: 'App Técnicos',
     notificationText: 'Sistema de Localização',
-    maxLocations: 500
+    maxLocations: 50
   };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;

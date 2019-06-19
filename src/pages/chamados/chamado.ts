@@ -291,6 +291,10 @@ export class ChamadoPage {
       return true;
     }
 
+    if (this.chamado.indOSIntervencaoEquipamento) {
+      return true;
+    }
+
     return false;
   }
 
@@ -309,22 +313,6 @@ export class ChamadoPage {
 
     return false;
   }
-
-  // private verificarChamadoTrocaPeca(): boolean {
-  //   if (typeof(this.chamado.rats) !== 'undefined') {
-  //     if (this.chamado.rats.length > 0) {
-  //       this.chamado.rats.forEach((rat: Rat) => {
-  //         rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
-  //           if (ratDetalhe.acao.codAcao == 26) {
-  //             return true;
-  //           }  
-  //         });
-  //       });
-  //     }
-  //   }
-
-  //   return false;
-  // }
 
   private verificarChamadoOrcamento(): boolean {
     if (typeof(this.chamado.rats) !== 'undefined') {

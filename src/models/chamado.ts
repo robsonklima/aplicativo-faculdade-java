@@ -37,4 +37,5 @@ export class Chamado {
 	indRatEletronica: number;
 	indCercaEletronicaLiberada: number;
 	numReincidencias: number;
+	indOSIntervencaoEquipamento: number;
 }

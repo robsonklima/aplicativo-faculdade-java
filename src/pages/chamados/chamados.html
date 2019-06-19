@@ -40,6 +40,15 @@
         class="title-icon" 
         item-start>
       </ion-icon>
+
+      <ion-icon
+        *ngIf="chamado.indOSIntervencaoEquipamento"
+        name="clipboard" 
+        color="danger" 
+        class="title-icon" 
+        item-start>
+      </ion-icon>
+
       <h2 class="cod-os">{{ chamado.codOs }}</h2>
       
       <ion-badge  
