@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
+import { Localizacao } from '../models/localizacao';
 import { Config } from './../config/config';
 import { Observable } from "rxjs/Observable";
+
 
 @Injectable()
 export class GeolocationService {
@@ -28,6 +30,13 @@ export class GeolocationService {
 
   buscarCoordenadasPorIp(): Observable<any> {
     return this.http.get('http://ip-api.com/json/')
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  enviarLocalizacao(localizacao: Localizacao): Observable<any> {
+    return this.http.post(Config.API_URL + 'LocalizacaoTecnico/', localizacao)
+      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

@@ -6,7 +6,7 @@ import { Chamado } from '../../models/chamado';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { DadosGlobaisService } from '../../services/dados-globais';
-import { LocalizacaoService } from '../../services/localizacao';
+import { GeolocationService } from '../../services/geo-location';
 
 @Component({
   selector: 'localizacao-envio-page',
@@ -24,7 +24,7 @@ export class LocalizacaoEnvioPage {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
-    private localizacaoService: LocalizacaoService
+    private geolocation: GeolocationService
   ) {
     this.localizacao.latitude = this.navParams.get('lat');
     this.localizacao.longitude = this.navParams.get('lng');
@@ -62,7 +62,7 @@ export class LocalizacaoEnvioPage {
             });
             loader.present();
 
-            this.localizacaoService.enviarLocalizacao(this.localizacao)
+            this.geolocation.enviarLocalizacao(this.localizacao)
               .subscribe(() => {
                 this.exibirToast('Sua localização foi enviada com sucesso!');
                 loader.dismiss().then(() => this.fecharModal());

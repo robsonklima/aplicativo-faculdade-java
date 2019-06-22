@@ -69,7 +69,6 @@ import { CheckinCheckoutService } from '../services/checkin-checkout';
 import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
-import { LocalizacaoService } from '../services/localizacao';
 import { LaudoService } from '../services/laudo';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemTecnicoService } from '../services/mensagem-tecnico';
@@ -199,7 +198,6 @@ import { LowercasePipe } from '../pipes/lowercase';
     FotoService,
     AjudaTopicoService,
     IndicadorService,
-    LocalizacaoService,
     LaudoService,
     MensagemTecnicoService
   ]

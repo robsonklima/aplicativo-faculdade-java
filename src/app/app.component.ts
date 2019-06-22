@@ -20,8 +20,7 @@ import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
 import { DadosGlobais } from '../models/dados-globais';
 import { DadosGlobaisService } from '../services/dados-globais';
-import { LocalizacaoService } from '../services/localizacao';
-
+import { GeolocationService } from '../services/geo-location';
 import { UsuarioService } from '../services/usuario';
 import { ChamadoService } from "../services/chamado";
 
@@ -52,7 +51,7 @@ export class MyApp {
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private dadosGlobaisService: DadosGlobaisService,
-    private localizacaoService: LocalizacaoService,
+    private geolocation: GeolocationService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
     private chamadoService: ChamadoService
@@ -263,7 +262,7 @@ export class MyApp {
               loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
               if (loc.codUsuario){
-                this.localizacaoService.enviarLocalizacao(loc).subscribe(() => {
+                this.geolocation.enviarLocalizacao(loc).subscribe(() => {
                   this.dadosGlobais.localizacao = loc;
                   this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
                 }, err => {});

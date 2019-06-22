@@ -21,7 +21,7 @@ export class Config {
     saveBatteryOnBackground: true,
     notificationsEnabled: false,
     notificationTitle: 'App Técnicos',
-    notificationText: 'Sistema de Localização',
+    notificationText: 'Sistema de Sincronização',
     maxLocations: 50
   };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
