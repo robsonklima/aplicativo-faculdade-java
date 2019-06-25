@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, AlertController } from 'ionic-angular';
+import { NavParams, ViewController, AlertController, Platform } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-import { Platform } from 'ionic-angular';
 
 import { Laudo } from '../../models/laudo';
 import { Foto } from '../../models/foto';
@@ -26,7 +25,7 @@ export class SituacaoPage {
     private viewCtrl: ViewController,
     private alertCtrl: AlertController,
     private camera: Camera,
-    public plt: Platform
+    private platform: Platform,
   ) {
     this.laudo = this.navParams.get('laudo');
   }
@@ -47,25 +46,28 @@ export class SituacaoPage {
   }
 
   public selecionarFoto(sourceType: number) {
-    this.camera.getPicture({
-      quality: 80,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation: true,
-      targetWidth: 720,
-      targetHeight: 480,
-      sourceType: sourceType,
-      allowEdit: true
-    }).then(imageData => {
-      this.foto = new Foto();
-      this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
-      this.foto.str = 'data:image/jpeg;base64,' + imageData;
-      this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
-      this.situacao.fotos.push(this.foto);
-      this.camera.cleanup();
-      this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
-    }).catch(err => { });
+    this.platform.ready().then(() => {
+      this.camera.getPicture({
+        quality: 80,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        correctOrientation: true,
+        targetWidth: 720,
+        targetHeight: 480,
+        sourceType: sourceType,
+        allowEdit: true
+      }).then(imageData => {
+        this.foto = new Foto();
+        this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
+        this.foto.str = 'data:image/jpeg;base64,' + imageData;
+        this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
+        this.situacao.fotos.push(this.foto);
+        this.camera.cleanup();
+        this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
+      }).catch(err => { });
+    })
+    .catch(() => {});
   }
 
   public removerFoto(i: number) {

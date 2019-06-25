@@ -138,27 +138,30 @@ export class ChamadoPage {
         {
           text: 'Abrir ' + tipo,
           handler: () => {
-            this.camera.getPicture({
-              quality: 80,
-              destinationType: this.camera.DestinationType.DATA_URL,
-              encodingType: this.camera.EncodingType.JPEG,
-              mediaType: this.camera.MediaType.PICTURE,
-             targetWidth: 720,
-              allowEdit: true,
-              sourceType: sourceType,
-              saveToPhotoAlbum: true
-            }).then(imageData => {
-              this.foto = new Foto();
-              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
-              this.foto.str = 'data:image/jpeg;base64,' + imageData;
-              this.foto.modalidade = modalidade;
-              this.chamado.rats[0].fotos.push(this.foto);
-              this.chamadoService.atualizarChamado(this.chamado);
-              this.camera.cleanup();
-              setTimeout(() => { 
-                this.exibirToast("Foto adicionada com sucesso");
-              }, 500);
-            }).catch(err => {});
+            this.platform.ready().then(() => {
+              this.camera.getPicture({
+                quality: 80,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+               targetWidth: 720,
+                allowEdit: true,
+                sourceType: sourceType,
+                saveToPhotoAlbum: true
+              }).then(imageData => {
+                this.foto = new Foto();
+                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
+                this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                this.foto.modalidade = modalidade;
+                this.chamado.rats[0].fotos.push(this.foto);
+                this.chamadoService.atualizarChamado(this.chamado);
+                this.camera.cleanup();
+                setTimeout(() => { 
+                  this.exibirToast("Foto adicionada com sucesso");
+                }, 500);
+              }).catch(err => {});
+            })
+            .catch(() => {});
           }
         }
       ]
@@ -404,8 +407,6 @@ export class ChamadoPage {
               return
             }
 
-            this.registrarTentativaCheckinCheckout('CHECKIN');
-            
             const loader = this.loadingCtrl.create({
               content: 'Obtendo sua localização...',
               enableBackdropDismiss: true,
@@ -499,18 +500,14 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.registrarTentativaCheckinCheckout('CHECKOUT');
-
-            if (!this.platform.is('mobileweb')) {
-              if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-                this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
-                return;
-              } 
-              
-              if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-                this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
-                return;
-              }  
+            if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+              this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+              return;
+            } 
+            
+            if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+              this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+              return;
             }
 
             if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
@@ -700,16 +697,6 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
-  }
-
-  private registrarTentativaCheckinCheckout(modalidade: string) {
-    if (modalidade.indexOf('CHECKIN') > -1) {
-      this.chamado.checkin.tentativas.push(moment().format());
-    } else {
-      this.chamado.checkout.tentativas.push(moment().format());
-    }
-
-    this.chamadoService.atualizarChamado(this.chamado);
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
