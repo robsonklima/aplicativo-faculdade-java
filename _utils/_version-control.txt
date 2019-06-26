@@ -1,4 +1,4 @@
-0.0.39 - 19/06/2019
+0.0.39 - 25/06/2019
 - Laudo técnico
 - Mudança na ordem de lançamento de fotos
 - Inclusão de visualização de mensagens;
