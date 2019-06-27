@@ -82,7 +82,7 @@ export class MensagensPage {
       title: 'Mensagens',
       message: `As mensagens permitem que você receba informações importantes sobre os processos de trabalho da sua filial. 
                 Ao confirmar a leitura, você torna seu coordenador ciente sobre o recebimento das orientações necessárias,
-                garantindo o alinhado da sua operação.`,
+                garantindo o alinhamento da operação.`,
       buttons: [
         {
           text: 'Ok',
