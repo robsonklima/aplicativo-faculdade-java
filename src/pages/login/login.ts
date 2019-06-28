@@ -6,10 +6,14 @@ import { AppVersion } from '@ionic-native/app-version';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { HomePage } from '../home/home';
+import { Login } from '../../models/login';
 import { Usuario } from '../../models/usuario';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { UsuarioService } from '../../services/usuario';
+
+import { Config } from "../../config/config";
+
 
 @Component({
   selector: 'login-page',
@@ -39,7 +43,7 @@ export class LoginPage implements OnInit {
     this.appVersion.getVersionNumber().then((versaoApp) => {
       this.versaoApp = versaoApp;
     }).catch(() => {
-      this.versaoApp = '0.0.37';
+      this.versaoApp = Config.VERSAO_APP;
     });
   }
 
@@ -53,29 +57,33 @@ export class LoginPage implements OnInit {
     usuario.codUsuario = form.value.codUsuario;
     usuario.senha = form.value.senha;
 
-    this.usuarioService.login(usuario)
-      .subscribe((usuario) => {
-        if(usuario) {
-          loading.dismiss().then(() => {
-            this.usuario = usuario;
-            this.salvarDadosGlobais();
-            this.usuarioService.salvarCredenciais(this.usuario);
-            this.events.publish('login:efetuado', this.dadosGlobais);
-            this.menuCtrl.enable(true);
-            this.navCtrl.setRoot(HomePage);
-          });
-        } else {
-          loading.dismiss().then(() => {
-            this.exibirAlerta(`Usuário ou senha inválidos ou você não 
-              possui e-mail da empresa cadastrado`);
-          });
-        }
-      },
-      err => {
+    let login = new Login();
+    login.usuario = usuario;
+    login.versaoAplicativo = this.versaoApp;
+
+    this.usuarioService.login(login).subscribe((login) => {
+      console.log(login);
+
+      if(login && !login.erro) {
         loading.dismiss().then(() => {
-          this.exibirToast('Não foi possível autenticar');
+          this.usuario = login.usuario;
+          this.salvarDadosGlobais();
+          this.usuarioService.salvarCredenciais(this.usuario);
+          this.events.publish('login:efetuado', this.dadosGlobais);
+          this.menuCtrl.enable(true);
+          this.navCtrl.setRoot(HomePage);
         });
+      } else {
+        loading.dismiss().then(() => {
+          this.exibirAlerta(login.mensagem);
+        });
+      }
+    },
+    err => {
+      loading.dismiss().then(() => {
+        this.exibirToast(err);
       });
+    });
   }
  
   public recuperarSenha() {

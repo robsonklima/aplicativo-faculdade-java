@@ -1,6 +1,7 @@
 import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
 
 export class Config {
+  public static VERSAO_APP = "0.0.39";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -86,6 +87,6 @@ export class Config {
     },
   ]
 
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }
