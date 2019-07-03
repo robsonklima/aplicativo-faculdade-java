@@ -265,6 +265,7 @@ export class MyApp {
                 this.geolocation.enviarLocalizacao(loc).subscribe(() => {
                   this.dadosGlobais.localizacao = loc;
                   this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
+                  this.events.publish('sincronizacao:solicitada');
                 }, err => {});
               }
             }

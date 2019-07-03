@@ -1,7 +1,7 @@
 import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
 
 export class Config {
-  public static VERSAO_APP = "0.0.39";
+  public static VERSAO_APP = "0.0.40";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -9,21 +9,21 @@ export class Config {
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
   public static POS_CONFIG_BG: BackgroundGeolocationConfig = {
     desiredAccuracy: 10,
-    stationaryRadius: 250,
-    distanceFilter: 250,
+    stationaryRadius: 0,
+    distanceFilter: 0,
     debug: false,
     stopOnTerminate: false,
-    interval: 180000,
-    fastestInterval: 5000,
-    activitiesInterval: 10000,
+    interval: 300000,
+    fastestInterval: 300000,
+    activitiesInterval: 300000,
     startForeground: true,
-    stopOnStillActivity: true,
+    stopOnStillActivity: false,
     activityType: 'AutomotiveNavigation',
     saveBatteryOnBackground: true,
     notificationsEnabled: false,
     notificationTitle: 'App Técnicos',
     notificationText: 'Sistema de Sincronização',
-    maxLocations: 50
+    maxLocations: 1
   };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;

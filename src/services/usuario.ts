@@ -27,7 +27,7 @@ export class UsuarioService {
   }
 
   public login(login: Login): Observable<Login> {
-    return this.http.post(Config.API_URL + 'Login', login)
+    return this.http.post(Config.API_URL + 'UsuarioLogin', login)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

@@ -510,6 +510,7 @@
             <ion-textarea 
               placeholder="Descreva o serviço realizado" 
               name="obsRAT"
+              [maxlength]="1000"
               [ngModel]="chamado?.rats[0]?.obsRAT"
               required>
             </ion-textarea>
