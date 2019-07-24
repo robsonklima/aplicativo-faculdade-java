@@ -118,7 +118,7 @@ export class MyApp {
       this.sincronizarChamados();
     }, Config.INT_SINC_CHAMADOS_MILISEG);
 
-    this.sincronizarChamados();
+    this.sincronizarChamados().then(() => {}).catch(() => {});
   }
 
   private sincronizarChamados(): Promise<any> {
