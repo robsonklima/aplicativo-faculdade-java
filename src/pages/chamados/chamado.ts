@@ -268,15 +268,15 @@ export class ChamadoPage {
   private verificarLaudoObrigatorio(): boolean {
     if (
       (
-        this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO   || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD    || 
         this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS ||
-        this.chamado.cliente.codCliente == Config.CLIENTE.CEF || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.BNB ||
-        this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE ||
-        this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS      || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS  ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.CEF         || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BNB         ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE     ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL    || 
         (
           this.chamado.cliente.codCliente == Config.CLIENTE.BB && 
           this.chamado.equipamentoContrato.indGarantia == 1
