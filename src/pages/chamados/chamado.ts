@@ -427,6 +427,9 @@ export class ChamadoPage {
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
                     }
+
+                    if (this.chamado.indOSIntervencaoEquipamento)
+                      this.exibirAlerta('Este chamado exige lançamento de laudo!');
                   }
 
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
@@ -895,5 +898,15 @@ export class ChamadoPage {
 
       resolve(toast.present());
     });
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 }

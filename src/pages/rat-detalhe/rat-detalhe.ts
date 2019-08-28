@@ -176,6 +176,10 @@ export class RatDetalhePage {
       if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
         this.apresentarCampoProtocoloStn();
       }
+
+      if (causa.codECausa.substring(0, 2) == "08") {
+        this.exibirAlerta("Este chamado exige lançamento de laudo!");
+      }
     }
   }
 
@@ -370,6 +374,16 @@ export class RatDetalhePage {
 
   public alterarSlide() {
     this.configurarSlide(this.slides.getActiveIndex());
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 
   private fecharModal() {

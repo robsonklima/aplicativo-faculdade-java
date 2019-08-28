@@ -82,6 +82,11 @@
         class="font-red sla">
         SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
       </p>
+      <p 
+        *ngIf="chamado.indOSIntervencaoEquipamento"
+        class="font-red" >
+        Este chamado exige lançamento de laudo!
+      </p>
     </ion-card-content>
 
     <ion-grid
