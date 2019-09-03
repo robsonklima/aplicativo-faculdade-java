@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController } from 'ionic-angular';
+import { NavParams, NavController, LoadingController, Loading } from 'ionic-angular';
 import { DadosGlobais } from '../../models/dados-globais';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { MensagemPage } from './mensagem';
@@ -20,14 +20,21 @@ export class MensagensPage {
     private navCtrl: NavController,
     private navParams: NavParams,
     private mtService: MensagemTecnicoService,
-    private dadosGlobaisService: DadosGlobaisService
+    private dadosGlobaisService: DadosGlobaisService,
+    private loadingCtrl: LoadingController
   ) {
     this.mensagensTecnico = this.navParams.get('mensagensTecnico');
   }
 
   ionViewWillEnter() {
+    const loading = this.loadingCtrl.create({ 
+      content: 'Carregando mensagens...' 
+    });
+    loading.present();
+
     this.carregarDadosGlobais()
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
+      .then(() => loading.dismiss())
       .catch(() => {});
   }
 
