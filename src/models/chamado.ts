@@ -38,4 +38,7 @@ export class Chamado {
 	indCercaEletronicaLiberada: number;
 	numReincidencias: number;
 	indOSIntervencaoEquipamento: number;
+	qtdCedulasPagas: number;
+    qtdCedulasRejeitadas: number;
+    justificativaCedulas: number;
 }
