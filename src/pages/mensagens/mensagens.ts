@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { AlertController, ToastController, NavParams } from 'ionic-angular';
-import { MensagemTecnico } from '../../models/mensagem-tecnico';
-import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
+import { NavParams, NavController } from 'ionic-angular';
 import { DadosGlobais } from '../../models/dados-globais';
+import { MensagemTecnico } from '../../models/mensagem-tecnico';
+import { MensagemPage } from './mensagem';
+
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 
 
 @Component({
@@ -15,10 +17,9 @@ export class MensagensPage {
   mensagensTecnico: MensagemTecnico[] = [];
 
   constructor(
-    private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
+    private navCtrl: NavController,
     private navParams: NavParams,
-    private mensagemTecnicoService: MensagemTecnicoService,
+    private mtService: MensagemTecnicoService,
     private dadosGlobaisService: DadosGlobaisService
   ) {
     this.mensagensTecnico = this.navParams.get('mensagensTecnico');
@@ -26,7 +27,7 @@ export class MensagensPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais()
-      .then(() => {})
+      .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .catch(() => {});
   }
 
@@ -41,66 +42,18 @@ export class MensagensPage {
     });
   }
 
-  public marcarMensagemLida(mensagemTecnico: MensagemTecnico, i: number) {
-    const confirmacao = this.alertCtrl.create({
-      title: 'Confirmar Leitura',
-      message: 'Deseja confirmar a leitura desta mensagem?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          handler: () => {}
-        },
-        {
-          text: 'Confirmar',
-          handler: () => {
-            mensagemTecnico.codUsuarioCad = this.dg.usuario.codUsuario;
-
-            this.mensagemTecnicoService.enviarMensagemTecnicoApi(mensagemTecnico).subscribe((res) => {
-              if (res) {
-                if (res.indexOf('00 - ') > -1) {
-                  setTimeout(() => { this.exibirToast('Mensagem ' + mensagemTecnico.assunto + ' marcada como lida').then(() => {
-                    this.mensagensTecnico.splice(i, 1);
-                  }) }, 500);
-                } else {
-                  this.exibirToast('Ocorreu um erro');
-                }
-              }
-            },
-            err => {
-                this.exibirToast(err);
-            });
-          }
-        }
-      ]
-    });
-
-    confirmacao.present();
+  public telaMensagemTecnico(mensagemTecnico: MensagemTecnico) {
+    this.navCtrl.push(MensagemPage, { mensagemTecnico: mensagemTecnico });
   }
 
-  public ajuda() {
-    const confirmacao = this.alertCtrl.create({
-      title: 'Mensagens',
-      message: `As mensagens permitem que você receba informações importantes sobre os processos de trabalho da sua filial. 
-                Ao confirmar a leitura, você torna seu coordenador ciente sobre o recebimento das orientações necessárias,
-                garantindo o alinhamento da operação.`,
-      buttons: [
-        {
-          text: 'Ok',
-          handler: () => {}
-        }
-      ]
-    });
-
-    confirmacao.present();
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
+  public carregarMensagensTecnico(): Promise<any> {
     return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
-      });
+      this.mtService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario)
+        .subscribe(mt => {
+          this.mensagensTecnico = mt;
 
-      resolve(toast.present());
+          resolve();
+        }, err => {});
     });
   }
 }

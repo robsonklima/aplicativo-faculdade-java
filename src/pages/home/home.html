@@ -82,7 +82,7 @@
 
     <button 
       ion-item 
-      (click)="telaMensagensTecnico(mensagensTecnico)">
+      (click)="telaMensagensTecnico()">
       <ion-icon 
         color="primary" 
         name="mail" 
@@ -90,9 +90,9 @@
       Mensagens
       <ion-badge 
         item-end
-        *ngIf="mensagensTecnico?.length > 0"
-        [ngClass]="{ 'bd-red': mensagensTecnico?.length > 0 }">
-        {{ mensagensTecnico?.length }}
+        *ngIf="qtdMensagensTecnicoNaoLidas"
+        [ngClass]="{ 'bd-red': qtdMensagensTecnicoNaoLidas }">
+        {{ qtdMensagensTecnicoNaoLidas }}
       </ion-badge>
     </button>
 
