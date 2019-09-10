@@ -36,15 +36,15 @@ export class IndicadorService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfPecasMaisTrocadasTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfPecasMaisTrocadasTecnico')
+  buscarGrfPecasMaisTrocadasTecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfPecasMaisTrocadasTecnico/' + codTecnico)
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarGrfPecasMaisPendenciadasTecnicoApi(): Observable<any> {
-    return this.http.get(Config.API_URL + 'GrfPecasMaisPendenciadasTecnico')
+  buscarGrfPecasMaisPendenciadasTecnicoApi(codTecnico: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'GrfPecasMaisPendenciadasTecnico/' + codTecnico)
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
