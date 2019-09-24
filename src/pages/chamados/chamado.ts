@@ -144,10 +144,10 @@ export class ChamadoPage {
                 destinationType: this.camera.DestinationType.DATA_URL,
                 encodingType: this.camera.EncodingType.JPEG,
                 mediaType: this.camera.MediaType.PICTURE,
-               targetWidth: 720,
+                targetWidth: 720,
                 allowEdit: true,
                 sourceType: sourceType,
-                saveToPhotoAlbum: true
+                saveToPhotoAlbum: false
               }).then(imageData => {
                 this.foto = new Foto();
                 this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
