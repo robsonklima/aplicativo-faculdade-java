@@ -281,7 +281,7 @@ export class IndicadorPerformanceTecnicoPage {
 
   private carregarGrfPecasMaisTrocadasTecnicoApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfPecasMaisTrocadasTecnicoApi()
+      this.indicadorService.buscarGrfPecasMaisTrocadasTecnicoApi(this.dg.usuario.codTecnico)
         .subscribe(dados => {
           if (dados) {
             dados.forEach((d, i) => {
@@ -301,7 +301,7 @@ export class IndicadorPerformanceTecnicoPage {
 
   private carregarGrfPecasMaisPendenciadasTecnicoApi(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indicadorService.buscarGrfPecasMaisPendenciadasTecnicoApi()
+      this.indicadorService.buscarGrfPecasMaisPendenciadasTecnicoApi(this.dg.usuario.codTecnico)
         .subscribe(dados => {
           if (dados) {
             dados.forEach((d, i) => {

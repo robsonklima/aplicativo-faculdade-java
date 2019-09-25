@@ -53,6 +53,8 @@ import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-env
 import { LaudoPage } from '../pages/laudos/laudo';
 import { SituacaoPage } from '../pages/laudos/situacao';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
+import { MensagensPage } from '../pages/mensagens/mensagens';
+import { MensagemPage } from '../pages/mensagens/mensagem';
 
 import { DadosGlobaisService } from '../services/dados-globais';
 import { ChamadoService } from "../services/chamado";
@@ -70,12 +72,12 @@ import { AjudaTopicoService } from '../services/ajuda-topico';
 import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
 import { LaudoService } from '../services/laudo';
-import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemTecnicoService } from '../services/mensagem-tecnico';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
 import { LowercasePipe } from '../pipes/lowercase';
+
 
 @NgModule({
   declarations: [
@@ -108,6 +110,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     LaudoPage,
     SituacaoPage,
     MensagensPage,
+    MensagemPage,
     AssinaturaPage,
     CapitalizePipe,
     EllipsisPipe,
@@ -162,6 +165,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     LaudoPage,
     SituacaoPage,
     MensagensPage,
+    MensagemPage,
     AssinaturaPage
   ],
   providers: [

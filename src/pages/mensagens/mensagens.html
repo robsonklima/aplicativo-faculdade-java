@@ -1,47 +1,28 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="ajuda()">
-        <ion-icon name="md-help-circle"></ion-icon>
-      </button>
-    </ion-buttons>
-      
-
     <ion-title>Mensagens</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="cards-bg">
-  <ion-card *ngFor="let mensagemTecnico of mensagensTecnico; let i = index">
-    <ion-item>
-      <h2><b>{{ mensagemTecnico.assunto }}</b></h2>
-      <p>
-        por: <a ion-text color="primary">{{ mensagemTecnico.nomeUsuario }}</a>, 
-        {{ mensagemTecnico.nomePerfil }}
-      </p>
-    </ion-item>
-
-    <ion-card-content>
-      <p>{{ mensagemTecnico.mensagem }}</p>
-    </ion-card-content>
-
-    <ion-row>
-      <ion-col text-left>
-        <button ion-button clear small color="silver-light">
-          <div>{{ mensagemTecnico.dataHoraCad | date: 'dd/MM/yyyy HH:mm' }}</div>
-        </button>
-      </ion-col>
-      <ion-col text-center>
-        <button ion-button icon-start outline small color="secondary" (click)="marcarMensagemLida(mensagemTecnico, i)">
-          <div>Marcar como Lida</div>
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
+<ion-content>
+  <ion-list>
+    <button 
+      ion-item 
+      *ngFor="let mensagemTecnico of mensagensTecnico; let i = index" 
+      (click)="telaMensagemTecnico(mensagemTecnico)">
+      {{ mensagemTecnico.assunto }}
+      <ion-badge 
+        item-end
+        *ngIf="!mensagemTecnico.indLeitura"
+        [ngClass]="{ 'bd-red': !mensagemTecnico.indLeitura }">
+        !
+      </ion-badge>
+    </button>  
+  </ion-list>
 
   <ion-card padding text-center *ngIf="!mensagensTecnico?.length">
     <ion-card-content>
-      <p>Nenhuma mensagem pendente.</p>
+      <p>Nenhuma mensagem encontrada</p>
     </ion-card-content>
   </ion-card>
 </ion-content>

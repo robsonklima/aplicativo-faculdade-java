@@ -177,6 +177,10 @@ export class RatDetalhePage {
         this.apresentarCampoProtocoloStn();
       }
 
+      if (causa.codECausa.substring(0, 2) == "15") {
+        this.apresentarCamposQuantidadesCedulas();
+      }
+
       if (causa.codECausa.substring(0, 2) == "08") {
         this.exibirAlerta("Este chamado exige lançamento de laudo!");
       }
@@ -328,6 +332,70 @@ export class RatDetalhePage {
         }
       ]
     });
+    prompt.present();
+  }
+
+  private apresentarCamposQuantidadesCedulas() {
+    let prompt = this.alertCtrl.create({
+      title: 'Quantidade de Cédulas',
+      message: `Preencha os campos abaixo`,
+      enableBackdropDismiss: false,
+      inputs: [
+        {
+          name: 'qtdCedulasPagas',
+          type: 'number',
+          placeholder: 'Qtd Cédulas Pagas'
+        },
+        {
+          name: 'qtdCedulasRejeitadas',
+          type: 'number',
+          placeholder: 'Qtd Cédulas Rejeitadas'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Salvar',
+          handler: dados => {
+            if ((!dados.qtdCedulasPagas || dados.qtdCedulasPagas.trim() == '') || 
+                (!dados.qtdCedulasRejeitadas || dados.qtdCedulasRejeitadas.trim() == '')) {
+              this.exibirAlerta('Favor informar a quantidade de cédulas pagas e rejeitadas!');
+              
+              return false;
+            }
+
+            if ((dados.qtdCedulasPagas <= this.chamado.qtdCedulasPagas || 
+                dados.qtdCedulasRejeitadas <= this.chamado.qtdCedulasRejeitadas) &&
+                prompt.data.inputs.length == 2) {
+              
+              let justificativaJaAdicionada: Boolean = false;
+              
+              prompt.data.inputs.forEach(input => {
+                if (input.name == 'justificativaCedulas')
+                  justificativaJaAdicionada = true;
+              });
+
+              if (!justificativaJaAdicionada) {
+                prompt.addInput({
+                  name: 'justificativaCedulas',
+                  type: 'text',
+                  placeholder: 'Justificativa'
+                });
+              }
+
+              return false;
+            }
+
+            this.chamado.qtdCedulasPagas = dados.qtdCedulasPagas.trim();
+            this.chamado.qtdCedulasRejeitadas = dados.qtdCedulasRejeitadas.trim();
+
+            if (prompt.data.inputs.length == 3) {
+              this.chamado.justificativaCedulas = dados.justificativaCedulas.trim();
+            }
+          }
+        }
+      ]
+    });
+
     prompt.present();
   }
 

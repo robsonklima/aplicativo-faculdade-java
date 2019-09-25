@@ -3,6 +3,7 @@ export class MensagemTecnico {
     assunto: string;
     mensagem: string;
     indAtivo: number;
+    indLeitura: number;
     CodFilial: number;
     codUsuarioCad: string;
     nomeUsuario: string;

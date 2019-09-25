@@ -45,7 +45,7 @@ export class HomePage {
   loginPage = LoginPage;
   dg: DadosGlobais;
   chamados: Chamado[];
-  mensagensTecnico: MensagemTecnico[] = []
+  qtdMensagensTecnicoNaoLidas: number;
   laudos: Laudo[];
   task: any;
   perfilTecnico: boolean;
@@ -101,8 +101,8 @@ export class HomePage {
     this.navCtrl.push(IndicadorMenuPage);
   }
 
-  public telaMensagensTecnico(mensagensTecnico: MensagemTecnico[]) {
-    this.navCtrl.push(MensagensPage, { mensagensTecnico: mensagensTecnico});
+  public telaMensagensTecnico() {
+    this.navCtrl.push(MensagensPage);
   }
 
   public telaAssinatura(){
@@ -145,9 +145,9 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       this.mensagemTecnicoService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario)
         .subscribe(mt => {
-          this.mensagensTecnico = mt;
+          this.qtdMensagensTecnicoNaoLidas = mt.filter((msg) => { return (!msg.indLeitura) }).length;
 
-          resolve(mt);
+          resolve();
         }, err => {});
     });
   }
