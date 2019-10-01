@@ -4,7 +4,9 @@ import { NavParams, Platform, Slides, AlertController, LoadingController,
          ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
+import { Diagnostic } from '@ionic-native/diagnostic';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Camera } from '@ionic-native/camera';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -25,7 +27,6 @@ import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 
 import moment from 'moment';
-import { Camera } from '@ionic-native/camera';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhe } from '../../models/rat-detalhe';
 
@@ -48,6 +49,7 @@ export class ChamadoPage {
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
+    private diagnostic: Diagnostic,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
@@ -66,13 +68,20 @@ export class ChamadoPage {
   }
 
   ionViewWillEnter() {
-    this.configurarSlide(this.slides.getActiveIndex());
+    this.platform.ready().then(() => { 
+      this.diagnostic.isCameraAuthorized().then((authorized) => {
+        this.diagnostic.requestCameraAuthorization().then((status) => {
+          this.configurarSlide(this.slides.getActiveIndex());
 
-    this.carregarDadosGlobais()
-      .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
-      .then(() => this.obterRegistrosPonto())
-      .then(() => this.registrarLeituraOs())
-      .catch(() => {});
+          this.carregarDadosGlobais()
+            .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
+            .then(() => this.obterRegistrosPonto())
+            .then(() => this.registrarLeituraOs())
+            .catch(() => {});
+            
+        }).catch(() => { this.navCtrl.pop() });
+      }).catch(() => { this.navCtrl.pop() });
+    }).catch(() => { this.navCtrl.pop() });
   }
 
   public alterarSlide() {
@@ -145,7 +154,7 @@ export class ChamadoPage {
                 encodingType: this.camera.EncodingType.JPEG,
                 mediaType: this.camera.MediaType.PICTURE,
                 targetWidth: 720,
-                allowEdit: true,
+                //allowEdit: true,
                 sourceType: sourceType,
                 saveToPhotoAlbum: false
               }).then(imageData => {
@@ -155,10 +164,7 @@ export class ChamadoPage {
                 this.foto.modalidade = modalidade;
                 this.chamado.rats[0].fotos.push(this.foto);
                 this.chamadoService.atualizarChamado(this.chamado);
-                this.camera.cleanup();
-                setTimeout(() => { 
-                  this.exibirToast("Foto adicionada com sucesso");
-                }, 500);
+                //this.camera.cleanup();
               }).catch(err => {});
             })
             .catch(() => {});

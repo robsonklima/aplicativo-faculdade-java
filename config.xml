@@ -19,7 +19,7 @@
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashScreenDelay" value="5000" />
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashScreen" value="screen" />
     <preference name="ShowSplashScreen" value="true" />
@@ -116,6 +116,7 @@
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
     <plugin name="cordova-plugin-compat" spec="^1.2.0" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
     <engine name="android" spec="^6.3.0" />
     <engine name="browser" spec="^4.1.0" />
 </widget>
