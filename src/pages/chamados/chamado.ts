@@ -4,9 +4,9 @@ import { NavParams, Platform, Slides, AlertController, LoadingController,
          ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
-import { Diagnostic } from '@ionic-native/diagnostic';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -49,7 +49,7 @@ export class ChamadoPage {
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
-    private diagnostic: Diagnostic,
+    private androidPermissions: AndroidPermissions,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
@@ -68,20 +68,14 @@ export class ChamadoPage {
   }
 
   ionViewWillEnter() {
-    this.platform.ready().then(() => { 
-      this.diagnostic.isCameraAuthorized().then((authorized) => {
-        this.diagnostic.requestCameraAuthorization().then((status) => {
-          this.configurarSlide(this.slides.getActiveIndex());
+    this.configurarSlide(this.slides.getActiveIndex());
 
-          this.carregarDadosGlobais()
-            .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
-            .then(() => this.obterRegistrosPonto())
-            .then(() => this.registrarLeituraOs())
-            .catch(() => {});
-            
-        }).catch(() => { this.navCtrl.pop() });
-      }).catch(() => { this.navCtrl.pop() });
-    }).catch(() => { this.navCtrl.pop() });
+    this.carregarDadosGlobais()
+      .then(() => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA))
+      .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
+      .then(() => this.obterRegistrosPonto())
+      .then(() => this.registrarLeituraOs())
+      .catch(() => {});
   }
 
   public alterarSlide() {
@@ -147,27 +141,27 @@ export class ChamadoPage {
         {
           text: 'Abrir ' + tipo,
           handler: () => {
-            this.platform.ready().then(() => {
-              this.camera.getPicture({
-                quality: 80,
-                destinationType: this.camera.DestinationType.DATA_URL,
-                encodingType: this.camera.EncodingType.JPEG,
-                mediaType: this.camera.MediaType.PICTURE,
-                targetWidth: 720,
-                //allowEdit: true,
-                sourceType: sourceType,
-                saveToPhotoAlbum: false
-              }).then(imageData => {
-                this.foto = new Foto();
-                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
-                this.foto.str = 'data:image/jpeg;base64,' + imageData;
-                this.foto.modalidade = modalidade;
-                this.chamado.rats[0].fotos.push(this.foto);
-                this.chamadoService.atualizarChamado(this.chamado);
-                //this.camera.cleanup();
-              }).catch(err => {});
-            })
-            .catch(() => {});
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
+              this.platform.ready().then(() => {
+                this.camera.getPicture({
+                  quality: 80,
+                  destinationType: this.camera.DestinationType.DATA_URL,
+                  encodingType: this.camera.EncodingType.JPEG,
+                  mediaType: this.camera.MediaType.PICTURE,
+                  targetWidth: 720,
+                  sourceType: sourceType,
+                  saveToPhotoAlbum: false
+                }).then(imageData => {
+                  this.foto = new Foto();
+                  this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
+                  this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                  this.foto.modalidade = modalidade;
+                  this.chamado.rats[0].fotos.push(this.foto);
+                  this.chamadoService.atualizarChamado(this.chamado);
+                  this.camera.cleanup();
+                }).catch(err => {});
+              }).catch();
+            }).catch();
           }
         }
       ]

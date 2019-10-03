@@ -12,6 +12,7 @@ import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
 import { MensagensPage } from '../mensagens/mensagens';
 import { AssinaturaPage } from '../assinatura/assinatura';
+import { TestePage } from '../teste/teste';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
@@ -110,7 +111,10 @@ export class HomePage {
       let modal = this.modalCtrl.create(AssinaturaPage);
       modal.present();
     }, 300);
+  }
 
+  public telaTeste() {
+    this.navCtrl.push(TestePage);
   }
 
   public abrirPopover(event: MouseEvent) {

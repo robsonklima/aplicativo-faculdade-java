@@ -21,7 +21,7 @@ ionic cordova build --release android
 SHORTCUT PERTO
 ionic cordova build --release android
 "C:\Program Files\Java\jdk1.8.0_144\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\test-projects\ionic3-at\_utils\app-tecnicos-key.keystore" "D:\test-projects\ionic3-at\platforms\android\build\outputs\apk\android-release-unsigned.apk" sat_mobile
-"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\build\outputs\apk\android-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.40.apk"
+"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\build\outputs\apk\android-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.41.apk"
 
 UTILS
 https://goo.gl/kCXcYC
