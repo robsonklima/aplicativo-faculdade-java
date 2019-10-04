@@ -1,11 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, ToastController, NavController, MenuController, Events } from 'ionic-angular';
-import { BackgroundGeolocationResponse, BackgroundGeolocation, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { Platform, NavController, MenuController, Events } from 'ionic-angular';
+
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { BackgroundMode } from '@ionic-native/background-mode';
-import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
@@ -43,12 +41,9 @@ export class MyApp {
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    private toastCtrl: ToastController,
+    androidPermissions: AndroidPermissions,
     private events: Events,
-    private backgroundMode: BackgroundMode,
     private bGeolocation: BackgroundGeolocation,
-    private androidPermissions: AndroidPermissions,
-    private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private dadosGlobaisService: DadosGlobaisService,
@@ -65,7 +60,6 @@ export class MyApp {
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
-        this.iniciarSincronizacao();
       });
 
       this.events.subscribe('sincronizacao:solicitada', () => {
@@ -79,13 +73,6 @@ export class MyApp {
           if (dados) {
             if (dados.usuario) {
               this.usuarioService.salvarCredenciais(dados.usuario);
-
-              this.backgroundMode.setDefaults({ title: '', text: '', silent: true });
-              this.backgroundMode.enable();
-
-              this.backgroundMode.on("activate").subscribe(() => { 
-                this.iniciarSincronizacao(); 
-              }, err => {});
               
               this.iniciarSincronizacao();
 
@@ -141,23 +128,10 @@ export class MyApp {
                 });
               }
             })
-            .catch(() => {
-              reject();
-            });
-          }, err => {
-            if (!this.backgroundMode.isActive())
-              this.exibirToast('Não foi possível conectar ao servidor');
-
-            reject();
-          });
-        })
-        .catch(() => {
-          reject();
-        });
-      })
-      .catch(() => {
-        reject();
-      });
+            .catch(() => { reject() });
+          }, err => { reject() });
+        }).catch(() => { reject() });
+      }).catch(() => { reject() });
     });
   }
   
@@ -175,7 +149,7 @@ export class MyApp {
         if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
           chamados.push(ca);
 
-          this.exibirMensagem(ca.codOs.toString(), 'Chamado Recebido');
+          this.dispararSinalSonoroComVibracao();
         }
       });
 
@@ -203,9 +177,7 @@ export class MyApp {
           });
           
           // Chamados removidos
-          if (!chamadoEncontrado) {
-            //this.exibirMensagem(cs.codOs.toString(), 'Chamado Removido');
-          } else {
+          if (chamadoEncontrado) {
             chamados.push(cs);
           }
         });
@@ -222,21 +194,21 @@ export class MyApp {
           if (res) {
             if (res.indexOf('00 - ') > -1) {
               this.chamadoService.apagarChamadoStorage(chamado).then(() => {
-                this.exibirMensagem(chamado.codOs.toString(), 'Chamado sincronizado no servidor');
+                this.dispararSinalSonoroComVibracao();
 
                 resolve(true);
               }).catch(() => {
                 reject(false);
               });
             } else {
-              this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
+              this.dispararSinalSonoroComVibracao();
 
               reject(false);
             }
           }
         },
         err => {
-          this.exibirMensagem(chamado.codOs.toString(), 'Não foi possível sincronizar');
+          this.dispararSinalSonoroComVibracao();
           reject(false);
         });
       });
@@ -252,9 +224,7 @@ export class MyApp {
 
   private iniciarColetaLocalizacaoSegundoPlano() {
     this.bGeolocation.configure(Config.POS_CONFIG_BG).then(() => {
-      this.bGeolocation
-        .on(BackgroundGeolocationEvents.location)
-        .subscribe((res: BackgroundGeolocationResponse) => {
+      this.bGeolocation.on(BackgroundGeolocationEvents.location).subscribe((res: BackgroundGeolocationResponse) => {
           this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
             if (dg) {
               let loc = new Localizacao();
@@ -265,15 +235,18 @@ export class MyApp {
 
               if (loc.codUsuario){
                 this.geolocation.enviarLocalizacao(loc).subscribe(() => {
-                  this.dadosGlobais.localizacao = loc;
-                  this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
-                  this.iniciarSincronizacao();
+                  //this.dadosGlobais.localizacao = loc;
+                  //this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais).then(() => {
+                    this.iniciarSincronizacao();
+                  //}).catch();
                 }, err => {});
               }
             }
-          }).catch();  
+          }).catch();
+
+          //this.bGeolocation.finish();
         }, err => {});
-    }).catch((err) => {});
+    }).catch();
     
     this.bGeolocation.start();
   }
@@ -290,47 +263,6 @@ export class MyApp {
         }, 1000);
       }, err => {});
     }, err => {});
-  }
-
-  private exibirMensagem(titulo: string, corpo: string) {
-    if (this.backgroundMode.isActive()) {
-      this.dispararSinalSonoroComVibracao();
-      this.exibirNotificacao(titulo, corpo);
-    } else {
-      this.exibirToast(titulo + ' - ' + corpo);
-    }
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
-      });
-
-      resolve(toast.present());
-      reject();
-    });
-  }
-
-  private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      resolve(
-        this.localNotification.requestPermission()
-          .then((permission) => {
-            if (permission === 'granted') {
-              this.localNotification.create(
-                titulo, 
-                {
-                  tag: titulo,
-                  body: corpo,
-                  icon: 'assets/icon/favicon.ico'
-                }
-              );
-            }
-          })
-          .catch()
-      );
-    });
   }
 
   public sair() {

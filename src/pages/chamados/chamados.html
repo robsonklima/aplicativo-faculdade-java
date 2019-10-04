@@ -90,7 +90,7 @@
     </ion-card-content>
 
     <ion-grid
-      [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }" 
+      *ngIf="!chamado.dataHoraFechamento"
       tappable 
       class="botoes">
       <ion-row>
