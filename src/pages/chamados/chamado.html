@@ -267,7 +267,7 @@
           </ion-avatar>
           <h2>Capturar RAT Física</h2>
           <button ion-button clear item-end 
-            (click)="tirarFoto('RAT', 1)"
+            (click)="tirarFoto('RAT')"
             *ngIf="!verificarExistenciaFoto('RAT')"
             [disabled]="chamado?.indRatEletronica">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
@@ -288,7 +288,7 @@
           </ion-avatar>
           <h2>Etiqueta Número de Série</h2>
           <button ion-button clear item-end 
-            (click)="tirarFoto('ETIQUETANUMSERIE', 1)" 
+            (click)="tirarFoto('ETIQUETANUMSERIE')" 
             *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -306,7 +306,7 @@
           </ion-avatar>
           <h2>Equipamento Operacional</h2>
           <button ion-button clear item-end 
-            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL', 1)" 
+            (click)="tirarFoto('EQUIPAMENTOOPERACIONAL')" 
             *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -325,7 +325,7 @@
           <h2>Parte Interna</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('PARTEINTERNA')"
-            *ngIf="!verificarExistenciaFoto('PARTEINTERNA', 1)">
+            *ngIf="!verificarExistenciaFoto('PARTEINTERNA')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
 

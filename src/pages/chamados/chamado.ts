@@ -65,13 +65,16 @@ export class ChamadoPage {
     private checkinCheckoutService: CheckinCheckoutService
   ) {
     this.chamado = this.navParams.get('chamado');
+
+    platform.ready().then(() => {
+      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]);
+    });
   }
 
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
 
     this.carregarDadosGlobais()
-      .then(() => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA))
       .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
@@ -114,60 +117,28 @@ export class ChamadoPage {
     });
   }
 
-  public tirarFoto(modalidade: string, sourceType: number) {
-    let tipo: string = "";
-
-    if (sourceType == 1) {
-      tipo = "Câmera"
-    } else {
-      tipo = "Galeria"
-    }
-
-    let orientacoes = Config.ORIENTACAO_FOTO.filter((orientacao) => {
-      return (orientacao.MODALIDADE == modalidade);
-    });
-
-    if (orientacoes.length == 0)
-      return;
-
-    const confirmacao = this.alertCtrl.create({
-      title: orientacoes[0].DESCRICAO,
-      message: orientacoes[0].MENSAGEM,
-      buttons: [
-        {
-          text: 'Cancelar',
-          handler: () => { }
-        },
-        {
-          text: 'Abrir ' + tipo,
-          handler: () => {
-            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
-              this.platform.ready().then(() => {
-                this.camera.getPicture({
-                  quality: 80,
-                  destinationType: this.camera.DestinationType.DATA_URL,
-                  encodingType: this.camera.EncodingType.JPEG,
-                  mediaType: this.camera.MediaType.PICTURE,
-                  targetWidth: 720,
-                  sourceType: sourceType,
-                  saveToPhotoAlbum: false
-                }).then(imageData => {
-                  this.foto = new Foto();
-                  this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
-                  this.foto.str = 'data:image/jpeg;base64,' + imageData;
-                  this.foto.modalidade = modalidade;
-                  this.chamado.rats[0].fotos.push(this.foto);
-                  this.chamadoService.atualizarChamado(this.chamado);
-                  this.camera.cleanup();
-                }).catch(err => {});
-              }).catch();
-            }).catch();
-          }
-        }
-      ]
-    });
-
-    confirmacao.present();
+  public tirarFoto(modalidade: string) {
+    this.platform.ready().then(() => {
+      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
+        this.camera.getPicture({
+          quality: 80,
+          destinationType: this.camera.DestinationType.DATA_URL,
+          encodingType: this.camera.EncodingType.JPEG,
+          mediaType: this.camera.MediaType.PICTURE,
+          targetWidth: 720,
+          sourceType: 1,
+          saveToPhotoAlbum: false
+        }).then(imageData => {
+          this.foto = new Foto();
+          this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
+          this.foto.str = 'data:image/jpeg;base64,' + imageData;
+          this.foto.modalidade = modalidade;
+          this.chamado.rats[0].fotos.push(this.foto);
+          this.chamadoService.atualizarChamado(this.chamado);
+          this.camera.cleanup();
+        }).catch();
+      }).catch();
+    }).catch();
   }
 
   public carregarFoto(modalidade: string): string {

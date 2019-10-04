@@ -31,13 +31,16 @@ export class SituacaoPage {
     private androidPermissions: AndroidPermissions,
   ) {
     this.laudo = this.navParams.get('laudo');
+
+    platform.ready().then(() => {
+      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]);
+    });
   }
 
   ionViewWillEnter() {
     this.situacao = new LaudoSituacao();
     this.situacao.fotos = [];
     this.obterQtdFotosLaudo();
-    this
   }
 
   public criarSituacao(form: NgForm) {
@@ -49,7 +52,7 @@ export class SituacaoPage {
   }
 
   public selecionarFoto(sourceType: number) {
-    this.platform.ready().then(() => { 
+    this.platform.ready().then(() => {
       this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
         this.camera.getPicture({
           quality: 80,
@@ -65,8 +68,8 @@ export class SituacaoPage {
           this.foto.str = 'data:image/jpeg;base64,' + imageData;
           this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
           this.situacao.fotos.push(this.foto);
-          this.camera.cleanup();
           this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
+          this.camera.cleanup();
         }).catch(err => {});
       }).catch(() => {});
     }).catch(() => {});

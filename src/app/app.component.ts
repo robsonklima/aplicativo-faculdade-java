@@ -1,17 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, ToastController, NavController, MenuController, Events } from 'ionic-angular';
-//import { BackgroundGeolocationResponse, BackgroundGeolocation, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundGeolocationResponse, BackgroundGeolocation, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 
 import { Config } from "../config/config";
 import { Chamado } from '../models/chamado';
-//import { Localizacao } from '../models/localizacao';
+import { Localizacao } from '../models/localizacao';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -45,12 +46,13 @@ export class MyApp {
     private toastCtrl: ToastController,
     private events: Events,
     private backgroundMode: BackgroundMode,
-    //private bGeolocation: BackgroundGeolocation,
+    private bGeolocation: BackgroundGeolocation,
+    private androidPermissions: AndroidPermissions,
     private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private dadosGlobaisService: DadosGlobaisService,
-    //private geolocation: GeolocationService,
+    private geolocation: GeolocationService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
     private chamadoService: ChamadoService
@@ -58,7 +60,8 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      //this.iniciarColetaLocalizacaoSegundoPlano();
+      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]);
+      this.iniciarColetaLocalizacaoSegundoPlano();
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -247,33 +250,33 @@ export class MyApp {
       > Config.INT_MIN_SINC_CHAMADOS_SEG && this.dataHoraUltAtualizacao !== null);
   }
 
-  // private iniciarColetaLocalizacaoSegundoPlano() {
-  //   this.bGeolocation.configure(Config.POS_CONFIG_BG).then(() => {
-  //     this.bGeolocation
-  //       .on(BackgroundGeolocationEvents.location)
-  //       .subscribe((res: BackgroundGeolocationResponse) => {
-  //         this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
-  //           if (dg) {
-  //             let loc = new Localizacao();
-  //             loc.latitude = res.latitude;
-  //             loc.longitude = res.longitude;
-  //             loc.codUsuario = dg.usuario.codUsuario;
-  //             loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
+  private iniciarColetaLocalizacaoSegundoPlano() {
+    this.bGeolocation.configure(Config.POS_CONFIG_BG).then(() => {
+      this.bGeolocation
+        .on(BackgroundGeolocationEvents.location)
+        .subscribe((res: BackgroundGeolocationResponse) => {
+          this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
+            if (dg) {
+              let loc = new Localizacao();
+              loc.latitude = res.latitude;
+              loc.longitude = res.longitude;
+              loc.codUsuario = dg.usuario.codUsuario;
+              loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
-  //             if (loc.codUsuario){
-  //               this.geolocation.enviarLocalizacao(loc).subscribe(() => {
-  //                 this.dadosGlobais.localizacao = loc;
-  //                 this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
-  //                 this.events.publish('sincronizacao:solicitada');
-  //               }, err => {});
-  //             }
-  //           }
-  //         }).catch();  
-  //       }, err => {});
-  //   }).catch((err) => {});
+              if (loc.codUsuario){
+                this.geolocation.enviarLocalizacao(loc).subscribe(() => {
+                  this.dadosGlobais.localizacao = loc;
+                  this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
+                  this.iniciarSincronizacao();
+                }, err => {});
+              }
+            }
+          }).catch();  
+        }, err => {});
+    }).catch((err) => {});
     
-  //   this.bGeolocation.start();
-  // }
+    this.bGeolocation.start();
+  }
 
   private dispararSinalSonoroComVibracao() {
     this.nativeAudio.preloadSimple('audioPop', 'assets/sounds/hangouts.ogg').then(() => {
