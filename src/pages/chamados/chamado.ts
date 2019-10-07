@@ -118,27 +118,39 @@ export class ChamadoPage {
   }
 
   public tirarFoto(modalidade: string) {
+    if (!this.platform.is('cordova')) return;
+
     this.platform.ready().then(() => {
-      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
-        this.camera.getPicture({
-          quality: 80,
-          destinationType: this.camera.DestinationType.DATA_URL,
-          encodingType: this.camera.EncodingType.JPEG,
-          mediaType: this.camera.MediaType.PICTURE,
-          targetWidth: 720,
-          sourceType: 1,
-          saveToPhotoAlbum: false
-        }).then(imageData => {
-          this.foto = new Foto();
-          this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
-          this.foto.str = 'data:image/jpeg;base64,' + imageData;
-          this.foto.modalidade = modalidade;
-          this.chamado.rats[0].fotos.push(this.foto);
-          this.chamadoService.atualizarChamado(this.chamado);
-          this.camera.cleanup();
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
+        result => {
+          this.platform.ready().then(() => {
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA).then(() => {
+              this.camera.getPicture({
+                quality: 80,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+                targetWidth: 720,
+                sourceType: 1,
+                saveToPhotoAlbum: false
+              }).then(imageData => {
+                this.foto = new Foto();
+                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
+                this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                this.foto.modalidade = modalidade;
+                this.chamado.rats[0].fotos.push(this.foto);
+                this.chamadoService.atualizarChamado(this.chamado);
+                this.camera.cleanup();
+              }).catch();
+            }).catch();
+          }).catch();
         }).catch();
-      }).catch();
-    }).catch();
+      },
+      err => {
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
+        this.exibirToast('Erro ao acessar a câmera.')
+      }
+    );
   }
 
   public carregarFoto(modalidade: string): string {

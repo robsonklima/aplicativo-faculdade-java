@@ -55,8 +55,11 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]);
-      this.iniciarColetaLocalizacaoSegundoPlano();
+      
+      if (platform.is('cordova')) {
+        androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]).catch();
+        this.iniciarColetaLocalizacaoSegundoPlano();
+      }
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -225,17 +228,16 @@ export class MyApp {
   private iniciarColetaLocalizacaoSegundoPlano() {
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 10,
-      stationaryRadius: 3,
+      stationaryRadius: 15,
       distanceFilter: 30,
       debug: true,
       stopOnTerminate: false,
-      interval: 2 * 60000,
-      fastestInterval: 2 * 60000,
-      activitiesInterval: 2 * 60000,
-      //notificationsEnabled: false,
+      interval: 5 * 60000,
+      fastestInterval: 5 * 60000,
+      activitiesInterval: 5 * 60000,
       notificationTitle: 'App Técnicos',
       notificationText: 'Sistema de Sincronização',
-      //maxLocations: 1
+      maxLocations: 1
     };
 
     this.bGeolocation.configure(config).then(() => {
@@ -260,7 +262,7 @@ export class MyApp {
         }, err => {});
     }).catch();
     
-    this.bGeolocation.start();
+    this.bGeolocation.start().then().catch();
   }
 
   private dispararSinalSonoroComVibracao() {

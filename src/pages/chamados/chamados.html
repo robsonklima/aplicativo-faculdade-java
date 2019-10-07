@@ -28,6 +28,15 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <!-- <div class="sync-button">
+    <button
+      color="primary"
+      ion-button 
+      block>
+      Sincronizar
+    </button>
+  </div> -->
+
   <ion-card 
     *ngFor="let chamado of chamados; let i = index"
     [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">

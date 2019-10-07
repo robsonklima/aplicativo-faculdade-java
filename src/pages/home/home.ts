@@ -18,7 +18,6 @@ import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
 import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Laudo } from '../../models/laudo';
-import { MensagemTecnico } from '../../models/mensagem-tecnico';
 
 import { Config } from "../../config/config";
 
