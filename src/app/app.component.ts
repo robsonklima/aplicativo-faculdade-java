@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 
-import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -223,7 +223,22 @@ export class MyApp {
   }
 
   private iniciarColetaLocalizacaoSegundoPlano() {
-    this.bGeolocation.configure(Config.POS_CONFIG_BG).then(() => {
+    const config: BackgroundGeolocationConfig = {
+      desiredAccuracy: 10,
+      stationaryRadius: 3,
+      distanceFilter: 30,
+      debug: true,
+      stopOnTerminate: false,
+      interval: 2 * 60000,
+      fastestInterval: 2 * 60000,
+      activitiesInterval: 2 * 60000,
+      //notificationsEnabled: false,
+      notificationTitle: 'App Técnicos',
+      notificationText: 'Sistema de Sincronização',
+      //maxLocations: 1
+    };
+
+    this.bGeolocation.configure(config).then(() => {
       this.bGeolocation.on(BackgroundGeolocationEvents.location).subscribe((res: BackgroundGeolocationResponse) => {
           this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
             if (dg) {
@@ -235,10 +250,7 @@ export class MyApp {
 
               if (loc.codUsuario){
                 this.geolocation.enviarLocalizacao(loc).subscribe(() => {
-                  //this.dadosGlobais.localizacao = loc;
-                  //this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais).then(() => {
-                    this.iniciarSincronizacao();
-                  //}).catch();
+                  this.iniciarSincronizacao();
                 }, err => {});
               }
             }
