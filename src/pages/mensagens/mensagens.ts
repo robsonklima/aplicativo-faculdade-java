@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, LoadingController, Loading } from 'ionic-angular';
+import { NavParams, NavController, LoadingController } from 'ionic-angular';
 import { DadosGlobais } from '../../models/dados-globais';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { MensagemPage } from './mensagem';

@@ -17,12 +17,14 @@ export class DadosGlobaisService {
     private storage: Storage
   ) { }
 
-  insereDadosGlobaisStorage(dadosGlobais: DadosGlobais) {
-    this.dadosGlobais = dadosGlobais;
+  insereDadosGlobaisStorage(dadosGlobais: DadosGlobais): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobais = dadosGlobais;
 
-    this.storage.set('DadosGlobais', this.dadosGlobais)
-      .then()
-      .catch();
+      this.storage.set('DadosGlobais', this.dadosGlobais).then(() => {
+        resolve(this.dadosGlobais);
+      }).catch();
+    });
   }
 
   buscarDadosGlobaisStorage(): Promise<DadosGlobais> {

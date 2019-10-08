@@ -25,6 +25,29 @@ import { Camera } from '@ionic-native/camera';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+
+import { DadosGlobaisService } from '../services/dados-globais';
+import { ChamadoService } from "../services/chamado";
+import { GeolocationService } from './../services/geo-location';
+import { UsuarioService } from '../services/usuario';
+import { AcaoService } from "../services/acao";
+import { DefeitoService } from "../services/defeito";
+import { CausaService } from "../services/causa";
+import { PecaService } from "../services/peca";
+import { TipoServicoService } from "../services/tipo-servico";
+import { EquipamentoContratoService } from '../services/equipamento-contrato';
+import { HistoricoDetalhePage } from '../pages/historico/historico-detalhe';
+import { CheckinCheckoutService } from '../services/checkin-checkout';
+import { AjudaTopicoService } from '../services/ajuda-topico';
+import { FotoService } from '../services/foto';
+import { IndicadorService } from '../services/indicador';
+import { LaudoService } from '../services/laudo';
+import { MensagemTecnicoService } from '../services/mensagem-tecnico';
+
+import { CapitalizePipe } from '../pipes/capitalize';
+import { EllipsisPipe } from '../pipes/ellipsis';
+import { LowercasePipe } from '../pipes/lowercase';
 
 import { LoginPage } from "../pages/login/login";
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
@@ -55,28 +78,7 @@ import { SituacaoPage } from '../pages/laudos/situacao';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
-
-import { DadosGlobaisService } from '../services/dados-globais';
-import { ChamadoService } from "../services/chamado";
-import { GeolocationService } from './../services/geo-location';
-import { UsuarioService } from '../services/usuario';
-import { AcaoService } from "../services/acao";
-import { DefeitoService } from "../services/defeito";
-import { CausaService } from "../services/causa";
-import { PecaService } from "../services/peca";
-import { TipoServicoService } from "../services/tipo-servico";
-import { EquipamentoContratoService } from '../services/equipamento-contrato';
-import { HistoricoDetalhePage } from '../pages/historico/historico-detalhe';
-import { CheckinCheckoutService } from '../services/checkin-checkout';
-import { AjudaTopicoService } from '../services/ajuda-topico';
-import { FotoService } from '../services/foto';
-import { IndicadorService } from '../services/indicador';
-import { LaudoService } from '../services/laudo';
-import { MensagemTecnicoService } from '../services/mensagem-tecnico';
-
-import { CapitalizePipe } from '../pipes/capitalize';
-import { EllipsisPipe } from '../pipes/ellipsis';
-import { LowercasePipe } from '../pipes/lowercase';
+import { TestePage } from '../pages/teste/teste';
 
 
 @NgModule({
@@ -112,6 +114,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     MensagensPage,
     MensagemPage,
     AssinaturaPage,
+    TestePage,
     CapitalizePipe,
     EllipsisPipe,
     LowercasePipe
@@ -166,7 +169,8 @@ import { LowercasePipe } from '../pipes/lowercase';
     SituacaoPage,
     MensagensPage,
     MensagemPage,
-    AssinaturaPage
+    AssinaturaPage,
+    TestePage
   ],
   providers: [
     StatusBar,
@@ -177,6 +181,7 @@ import { LowercasePipe } from '../pipes/lowercase';
     BackgroundGeolocation,
     BackgroundMode,
     PhonegapLocalNotification,
+    AndroidPermissions,
     Badge,
     NativeAudio,
     Vibration,

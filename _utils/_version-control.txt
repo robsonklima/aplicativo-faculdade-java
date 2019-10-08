@@ -1,3 +1,10 @@
+0.0.41 - 03/10/2019
+- Correções problemas de perimssão Android 9.0;
+
+0.0.40 - 03/10/2019
+- Contagem cédulas mecanismo;
+- Novas mensagens laudo.
+
 0.0.39 - 25/06/2019
 - Laudo técnico
 - Mudança na ordem de lançamento de fotos

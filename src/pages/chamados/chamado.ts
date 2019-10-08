@@ -5,6 +5,9 @@ import { NavParams, Platform, Slides, AlertController, LoadingController,
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
+import { Camera } from '@ionic-native/camera';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -25,9 +28,9 @@ import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 
 import moment from 'moment';
-import { Camera } from '@ionic-native/camera';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhe } from '../../models/rat-detalhe';
+
 
 @Component({
   selector: 'chamado-page',
@@ -48,6 +51,8 @@ export class ChamadoPage {
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
+    private diagnostic: Diagnostic,
+    private androidPermissions: AndroidPermissions,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
@@ -63,6 +68,12 @@ export class ChamadoPage {
     private checkinCheckoutService: CheckinCheckoutService
   ) {
     this.chamado = this.navParams.get('chamado');
+
+    platform.ready().then(() => {
+      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, 
+        androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+        androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
+    });
   }
 
   ionViewWillEnter() {
@@ -111,63 +122,71 @@ export class ChamadoPage {
     });
   }
 
-  public tirarFoto(modalidade: string, sourceType: number) {
-    let tipo: string = "";
+  public tirarFoto(modalidade: string) {
+    if (!this.platform.is('cordova')) return;
 
-    if (sourceType == 1) {
-      tipo = "Câmera"
-    } else {
-      tipo = "Galeria"
-    }
+    this.platform.ready().then(() => {
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(result => {
+        this.obterPermissaoCamera().then(res => {
+          this.androidPermissions.requestPermissions([
+            this.androidPermissions.PERMISSION.CAMERA, 
+            this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+            this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
+          ]).then(() => {
+            this.camera.getPicture({
+              quality: 80,
+              targetWidth: 720,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              saveToPhotoAlbum: false,
+              sourceType: 1
+            }).then(imageData => {
+              this.foto = new Foto();
+              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
+              this.foto.str = 'data:image/jpeg;base64,' + imageData;
+              this.foto.modalidade = modalidade;
+              this.chamado.rats[0].fotos.push(this.foto);
+              this.chamadoService.atualizarChamado(this.chamado).catch(e => {});
+              this.camera.cleanup();
+            }).catch(e => {});
+          }).catch(e => {});
+        }).catch(e => { this.exibirToast('Erro ao acessar a câmera.') });
+      }).catch(e => {});
+    }).catch(e => {});
+  }
 
-    let orientacoes = Config.ORIENTACAO_FOTO.filter((orientacao) => {
-      return (orientacao.MODALIDADE == modalidade);
+  private obterPermissaoCamera(): Promise<any>  {
+    return new Promise((resolve, reject) => {
+      this.platform.ready().then(() => {
+        this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((cameraStatus) => {
+          this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.READ_EXTERNAL_STORAGE).then((readStatus) => {
+            this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.WRITE_EXTERNAL_STORAGE).then((writeStatus) => {
+              //alert(`AuthorizationStatus`);
+              //alert(status);
+              if (cameraStatus != this.diagnostic.permissionStatus.GRANTED || readStatus != this.diagnostic.permissionStatus.GRANTED || writeStatus != this.diagnostic.permissionStatus.GRANTED) {
+                this.diagnostic.requestRuntimePermission([
+                  this.diagnostic.permission.CAMERA, 
+                  this.diagnostic.permission.READ_EXTERNAL_STORAGE,
+                  this.diagnostic.permission.WRITE_EXTERNAL_STORAGE
+                ]).then((data) => {
+                  //alert(`getCameraAuthorizationStatus`);
+                  //alert(data);
+                  resolve();
+                })
+              } else {
+                //alert("We have the permission");
+                resolve();
+              }
+            }, (statusError) => {
+              //alert(`statusError`);
+              //alert(statusError);
+              reject();
+            });
+          }).catch(e => { reject() });
+        }).catch(e => { reject() });
+      }).catch(e => { reject() });
     });
-
-    if (orientacoes.length == 0)
-      return;
-
-    const confirmacao = this.alertCtrl.create({
-      title: orientacoes[0].DESCRICAO,
-      message: orientacoes[0].MENSAGEM,
-      buttons: [
-        {
-          text: 'Cancelar',
-          handler: () => { }
-        },
-        {
-          text: 'Abrir ' + tipo,
-          handler: () => {
-            this.platform.ready().then(() => {
-              this.camera.getPicture({
-                quality: 80,
-                destinationType: this.camera.DestinationType.DATA_URL,
-                encodingType: this.camera.EncodingType.JPEG,
-                mediaType: this.camera.MediaType.PICTURE,
-               targetWidth: 720,
-                allowEdit: true,
-                sourceType: sourceType,
-                saveToPhotoAlbum: true
-              }).then(imageData => {
-                this.foto = new Foto();
-                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" +this.chamado.codOs.toString() + '_' + modalidade;
-                this.foto.str = 'data:image/jpeg;base64,' + imageData;
-                this.foto.modalidade = modalidade;
-                this.chamado.rats[0].fotos.push(this.foto);
-                this.chamadoService.atualizarChamado(this.chamado);
-                this.camera.cleanup();
-                setTimeout(() => { 
-                  this.exibirToast("Foto adicionada com sucesso");
-                }, 500);
-              }).catch(err => {});
-            })
-            .catch(() => {});
-          }
-        }
-      ]
-    });
-
-    confirmacao.present();
   }
 
   public carregarFoto(modalidade: string): string {
