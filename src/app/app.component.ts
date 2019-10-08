@@ -1,10 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events, App } from 'ionic-angular';
 
-import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, 
+  BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Diagnostic } from '@ionic-native/diagnostic';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 
@@ -42,6 +44,7 @@ export class MyApp {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     androidPermissions: AndroidPermissions,
+    private diagnostic: Diagnostic,
     private events: Events,
     private bGeolocation: BackgroundGeolocation,
     private nativeAudio: NativeAudio,
@@ -50,16 +53,26 @@ export class MyApp {
     private geolocation: GeolocationService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
-    private chamadoService: ChamadoService
+    private chamadoService: ChamadoService,
+    public app: App
   ) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      
-      if (platform.is('cordova')) {
-        androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]).catch();
-        this.iniciarColetaLocalizacaoSegundoPlano();
-      }
+      	
+      this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((status) => {
+        if (status != this.diagnostic.permissionStatus.GRANTED) {
+          this.diagnostic.requestRuntimePermission(this.diagnostic.permission.CAMERA).then((data) => {
+            androidPermissions.requestPermissions([
+              androidPermissions.PERMISSION.CAMERA, 
+              androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+              androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
+            ]).catch();
+          })
+        }
+      }, (statusError) => {});
+
+      this.iniciarColetaLocalizacaoSegundoPlano();
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -230,7 +243,7 @@ export class MyApp {
       desiredAccuracy: 10,
       stationaryRadius: 15,
       distanceFilter: 30,
-      debug: true,
+      debug: false,
       stopOnTerminate: false,
       interval: 5 * 60000,
       fastestInterval: 5 * 60000,
