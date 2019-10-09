@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, AlertController, Platform, ToastController } from 'ionic-angular';
+import { NavParams, ViewController, AlertController, Platform } from 'ionic-angular';
 
 import { Camera } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -30,7 +30,6 @@ export class SituacaoPage {
     private alertCtrl: AlertController,
     private camera: Camera,
     private platform: Platform,
-    private toastCtrl: ToastController,
     private androidPermissions: AndroidPermissions,
   ) {
     this.laudo = this.navParams.get('laudo');
@@ -148,16 +147,6 @@ export class SituacaoPage {
 
     this.laudo.situacoes.forEach(situacao => {
       this.qtdFotosLaudo = this.qtdFotosLaudo + situacao.fotos.length;
-    });
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
-      });
-
-      resolve(toast.present());
     });
   }
 
