@@ -58,10 +58,26 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      	
-      this.obterPermissaoCamera().then(() => { 
-        this.iniciarColetaLocalizacaoSegundoPlano();
-      }).catch(e => {});
+
+      if (platform.is('cordova')) {
+        platform.ready().then(() => {
+          this.diagnostic.requestRuntimePermissions([
+            this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
+            this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
+          ]).then(() => {
+            this.androidPermissions.requestPermissions([
+              this.androidPermissions.PERMISSION.CAMERA, this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+              this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
+            ]).then(() => {
+              this.iniciarColetaLocalizacaoSegundoPlano();
+            }).catch(() => {
+              this.iniciarColetaLocalizacaoSegundoPlano();
+            });
+          }).catch(() => {
+            this.iniciarColetaLocalizacaoSegundoPlano();
+          });
+        }).catch();
+      }
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -268,20 +284,8 @@ export class MyApp {
   private obterPermissaoCamera(): Promise<any>  {
     return new Promise((resolve, reject) => {
       this.platform.ready().then(() => {
-        this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((cameraStatus) => {
-          this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.READ_EXTERNAL_STORAGE).then((readStatus) => {
-            this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.WRITE_EXTERNAL_STORAGE).then((writeStatus) => {
-              if (cameraStatus != this.diagnostic.permissionStatus.GRANTED || readStatus != this.diagnostic.permissionStatus.GRANTED || writeStatus != this.diagnostic.permissionStatus.GRANTED) {
-                this.diagnostic.requestRuntimePermission([ this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE]).then(() => { 
-                  this.androidPermissions.requestPermissions([ this.androidPermissions.PERMISSION.CAMERA, this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]).then(() => { 
-                    resolve();
-                  }).catch(e => { resolve() });
-                }).catch(e => { resolve() });
-              } else { 
-                resolve();
-              }
-            }, (statusError) => { resolve() });
-          }).catch(e => { resolve() });
+        this.diagnostic.requestRuntimePermission([ this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE]).then(() => { 
+            resolve();
         }).catch(e => { resolve() });
       }).catch(e => { resolve() });
     });

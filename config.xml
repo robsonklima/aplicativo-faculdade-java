@@ -1,16 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="perto.sat.apptecnicos" version="0.0.48" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="perto.sat.apptecnicos" version="0.0.49" xmlns="http://www.w3.org/ns/widgets">
     <name>App Técnicos</name>
     <description>Aplicativo para automação dos atendimentos técnicos da equipe de assistência técnica da empresa Perto S.A.</description>
     <author email="equipe.sat@perto.com.br" href="">Robson Lima</author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="content://*" />
+    <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="file:///**/*" />
+    <allow-navigation href="filesystem://**/*" />
+    <allow-navigation href="cdvfile://**/*" />
     <preference name="loadUrlTimeoutValue" value="700000" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
@@ -46,6 +51,9 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <feature name="Camera">
+            <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+        </feature>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -118,5 +126,7 @@
     <plugin name="cordova-plugin-camera" spec="https://github.com/apache/cordova-plugin-camera">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
+    <allow-navigation href="http://10.3.198.14:8100" />
+    <allow-navigation href="http://192.168.177.2:8100" />
     <engine name="browser" spec="^4.1.0" />
 </widget>

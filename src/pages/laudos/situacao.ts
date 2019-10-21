@@ -54,71 +54,40 @@ export class SituacaoPage {
   }
 
   public selecionarFoto(sourceType: number) {
-    if (!this.platform.is('cordova')) return;
-
     this.platform.ready().then(() => {
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(result => {
-        this.obterPermissaoCamera().then(() => {
-          this.androidPermissions.requestPermissions([
-            this.androidPermissions.PERMISSION.CAMERA, 
-            this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-            this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
-          ]).then(() => {
-            this.camera.getPicture({
-              quality: 80,
-              targetWidth: 720,
-              targetHeight: 960,
-              destinationType: this.camera.DestinationType.DATA_URL,
-              encodingType: this.camera.EncodingType.JPEG,
-              mediaType: this.camera.MediaType.PICTURE,
-              saveToPhotoAlbum: false,
-              sourceType: 1
-            }).then(imageData => {
-              this.foto = new Foto();
+      if (!this.platform.is('cordova')) return;
+
+      this.diagnostic.requestRuntimePermissions([
+        this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
+        this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
+        this.diagnostic.permission.CAMERA
+      ]).then(() => {
+        this.androidPermissions.requestPermissions([
+          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+          this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+          this.androidPermissions.PERMISSION.CAMERA
+        ]).then(() => {
+          this.camera.getPicture({
+            quality: 50,
+            targetWidth: 480,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE,
+            saveToPhotoAlbum: false,
+            cameraDirection: this.camera.Direction.BACK,
+            sourceType: 1
+          }).then(imageData => {
+            this.foto = new Foto();
               this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
               this.foto.str = 'data:image/jpeg;base64,' + imageData;
               this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
               this.situacao.fotos.push(this.foto);
               this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
               this.camera.cleanup();
-            }).catch(e => {});
-          }).catch(e => {});
-        }).catch(e => {});
-      }).catch(e => {});
-    }).catch(e => {});
-  }
-
-  private obterPermissaoCamera(): Promise<any>  {
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((cameraStatus) => {
-          this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.READ_EXTERNAL_STORAGE).then((readStatus) => {
-            this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.WRITE_EXTERNAL_STORAGE).then((writeStatus) => {
-              //alert(`AuthorizationStatus`);
-              //alert(status);
-              if (cameraStatus != this.diagnostic.permissionStatus.GRANTED || readStatus != this.diagnostic.permissionStatus.GRANTED || writeStatus != this.diagnostic.permissionStatus.GRANTED) {
-                this.diagnostic.requestRuntimePermission([
-                  this.diagnostic.permission.CAMERA, 
-                  this.diagnostic.permission.READ_EXTERNAL_STORAGE,
-                  this.diagnostic.permission.WRITE_EXTERNAL_STORAGE
-                ]).then((data) => {
-                  //alert(`getCameraAuthorizationStatus`);
-                  //alert(data);
-                  resolve();
-                })
-              } else {
-                //alert("We have the permission");
-                resolve();
-              }
-            }, (statusError) => {
-              //alert(`statusError`);
-              //alert(statusError);
-              reject();
-            });
-          }).catch(e => { reject() });
-        }).catch(e => { reject() });
-      }).catch(e => { reject() });
-    });
+          }).catch();
+        }).catch();
+      }).catch();
+    }).catch();
   }
 
   public removerFoto(i: number) {
