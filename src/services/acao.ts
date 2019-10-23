@@ -41,9 +41,7 @@ export class AcaoService {
       this.acoes = acoes != null ? acoes : [];
       return this.acoes.slice();
     })
-    .catch(
-    err => console.log(err)
-    );
+    .catch();
   }
 
   acaoEstaNoStorage(codAcao: number): boolean {
@@ -68,7 +66,7 @@ export class AcaoService {
         .then((res) => {
           resolve(res);
         })
-        .catch(err => console.log(err));
+        .catch();
     });
   }
 

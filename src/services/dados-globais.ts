@@ -43,7 +43,7 @@ export class DadosGlobaisService {
         .then((res) => {
           resolve(res);
         })
-        .catch(err => console.log(err));
+        .catch();
     });
   }
 

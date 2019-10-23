@@ -1,6 +1,6 @@
 {
     "name": "app-tecnicos",
-    "version": "0.0.49",
+    "version": "0.0.50",
     "author": "Robson Lima",
     "homepage": "http://ionicframework.com/",
     "private": true,
@@ -127,12 +127,8 @@
             }
         },
         "platforms": [
-<<<<<<< HEAD
             "browser",
             "android"
-=======
-            "browser"
->>>>>>> 49489e5f51885815441d62485223151c58af0087
         ]
     }
 }

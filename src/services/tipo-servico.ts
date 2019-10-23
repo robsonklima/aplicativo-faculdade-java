@@ -43,9 +43,7 @@ export class TipoServicoService {
         this.tipoServicos = causas != null ? causas : [];
         return this.tipoServicos.slice();
       })
-      .catch(
-      err => console.log(err)
-      );
+      .catch();
   }
 
   tipoServicoEstaNoStorage(codTipoServico: number): boolean {
@@ -70,7 +68,7 @@ export class TipoServicoService {
         .then((res) => {
           resolve(res);
         })
-        .catch(err => console.log(err));
+        .catch();
     });
   }
 

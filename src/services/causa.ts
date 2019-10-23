@@ -32,9 +32,7 @@ export class CausaService {
         this.causas = causas != null ? causas : [];
         return this.causas.slice();
       })
-      .catch(
-      err => console.log(err)
-      );
+      .catch();
   }
 
   causaEstaNoStorage(codCausa: number): boolean {
