@@ -11,6 +11,7 @@ import { Foto } from '../../models/foto';
 import moment from 'moment';
 import { LaudoSituacao } from '../../models/laudo-situacao';
 import { NgForm } from '@angular/forms';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class SituacaoPage {
 
   constructor(
     private diagnostic: Diagnostic,
+    private backgroundMode: BackgroundMode,
     private navParams: NavParams,
     private viewCtrl: ViewController,
     private alertCtrl: AlertController,
@@ -57,6 +59,8 @@ export class SituacaoPage {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) return;
 
+      this.backgroundMode.enable();
+
       this.diagnostic.requestRuntimePermissions([
         this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
         this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
@@ -69,12 +73,11 @@ export class SituacaoPage {
         ]).then(() => {
           this.camera.getPicture({
             quality: 50,
-            targetWidth: 480,
+            targetWidth: 380,
             destinationType: this.camera.DestinationType.DATA_URL,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE,
             saveToPhotoAlbum: false,
-            cameraDirection: this.camera.Direction.BACK,
             sourceType: 1
           }).then(imageData => {
             this.foto = new Foto();
@@ -83,11 +86,11 @@ export class SituacaoPage {
               this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
               this.situacao.fotos.push(this.foto);
               this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
-              this.camera.cleanup();
-          }).catch();
-        }).catch();
-      }).catch();
-    }).catch();
+              this.camera.cleanup().catch();
+          }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+        }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+      }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+    }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
   }
 
   public removerFoto(i: number) {
@@ -117,6 +120,16 @@ export class SituacaoPage {
     this.laudo.situacoes.forEach(situacao => {
       this.qtdFotosLaudo = this.qtdFotosLaudo + situacao.fotos.length;
     });
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 
   public fecharModal() {

@@ -85,6 +85,7 @@ export class MyApp {
 
       this.events.subscribe('sincronizacao:solicitada', () => {
         this.iniciarSincronizacao();
+        
       });
       
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {

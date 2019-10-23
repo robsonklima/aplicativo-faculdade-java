@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="perto.sat.apptecnicos" version="0.0.49" xmlns="http://www.w3.org/ns/widgets">
+<widget id="perto.sat.apptecnicos" version="0.0.51" xmlns="http://www.w3.org/ns/widgets">
     <name>App Técnicos</name>
     <description>Aplicativo para automação dos atendimentos técnicos da equipe de assistência técnica da empresa Perto S.A.</description>
     <author email="equipe.sat@perto.com.br" href="">Robson Lima</author>
@@ -54,6 +54,9 @@
         <feature name="Camera">
             <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
         </feature>
+        <config-file parent="./" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        </config-file>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -128,5 +131,6 @@
     </plugin>
     <allow-navigation href="http://10.3.198.14:8100" />
     <allow-navigation href="http://192.168.177.2:8100" />
+    <plugin name="br.com.aqila.camera" spec="https://github.com/mateusnava/aqila-camera.git" />
     <engine name="browser" spec="^4.1.0" />
 </widget>

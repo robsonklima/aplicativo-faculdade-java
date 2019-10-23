@@ -1,13 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, 
-         ToastController, ModalController, NavController, Events, 
-         ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -50,6 +49,7 @@ export class ChamadoPage {
 
   constructor(
     private platform: Platform,
+    private bg: BackgroundMode,
     private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private androidPermissions: AndroidPermissions,
@@ -132,6 +132,8 @@ export class ChamadoPage {
         return;
       } 
 
+      this.bg.enable();
+
       this.diagnostic.requestRuntimePermissions([
         this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
         this.diagnostic.permission.CAMERA
@@ -143,12 +145,11 @@ export class ChamadoPage {
           this.diagnostic.isCameraAvailable().then(() => {
             this.camera.getPicture({
               quality: 50,
-              targetWidth: 480,
+              targetWidth: 380,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
               saveToPhotoAlbum: false,
-              cameraDirection: this.camera.Direction.BACK,
               sourceType: 1
             }).then(imageData => {
               this.foto = new Foto();
@@ -157,12 +158,13 @@ export class ChamadoPage {
               this.foto.modalidade = modalidade;
               this.chamado.rats[0].fotos.push(this.foto);
               this.chamadoService.atualizarChamado(this.chamado).catch();
-              //this.camera.cleanup().then().catch();
-            }).catch(e => { this.exibirAlerta(e) });
-          }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
-        }).catch(e => { this.exibirAlerta(e) });
-      }).catch(e => { this.exibirAlerta(e) });
-    }).catch(e => { this.exibirAlerta(e) });
+              this.camera.cleanup().catch();
+              this.bg.disable();
+            }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao tirar a foto. Favor tentar novamente') });
+          }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+        }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+      }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+    }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
   }
 
   public carregarFoto(modalidade: string): string {
