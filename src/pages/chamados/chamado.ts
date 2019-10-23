@@ -1,13 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, 
-         ToastController, ModalController, NavController, Events, 
-         ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -50,6 +49,7 @@ export class ChamadoPage {
 
   constructor(
     private platform: Platform,
+    private bg: BackgroundMode,
     private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private androidPermissions: AndroidPermissions,
@@ -68,12 +68,7 @@ export class ChamadoPage {
     private checkinCheckoutService: CheckinCheckoutService
   ) {
     this.chamado = this.navParams.get('chamado');
-
-    platform.ready().then(() => {
-      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, 
-        androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-        androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
-    });
+    console.log(this.chamado);
   }
 
   ionViewWillEnter() {
@@ -84,6 +79,14 @@ export class ChamadoPage {
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
+
+    if (this.chamado.rats.length == 0) {
+      let rat = new Rat();
+      rat.fotos = [];
+      rat.ratDetalhes = [];
+      rat.laudos = [];
+      this.chamado.rats.push(rat);
+    }
   }
 
   public alterarSlide() {
@@ -123,19 +126,26 @@ export class ChamadoPage {
   }
 
   public tirarFoto(modalidade: string) {
-    if (!this.platform.is('cordova')) return;
-
     this.platform.ready().then(() => {
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(result => {
-        this.obterPermissaoCamera().then(res => {
-          this.androidPermissions.requestPermissions([
-            this.androidPermissions.PERMISSION.CAMERA, 
-            this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-            this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
-          ]).then(() => {
+      if (!this.platform.is('cordova')) {
+        this.exibirToast('Este recurso somente pode ser acessado no dispositivo');
+        return;
+      } 
+
+      this.bg.enable();
+
+      this.diagnostic.requestRuntimePermissions([
+        this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
+        this.diagnostic.permission.CAMERA
+      ]).then(() => {
+        this.androidPermissions.requestPermissions([
+          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+          this.androidPermissions.PERMISSION.CAMERA
+        ]).then(() => {
+          this.diagnostic.isCameraAvailable().then(() => {
             this.camera.getPicture({
-              quality: 80,
-              targetWidth: 720,
+              quality: 50,
+              targetWidth: 380,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
@@ -147,46 +157,14 @@ export class ChamadoPage {
               this.foto.str = 'data:image/jpeg;base64,' + imageData;
               this.foto.modalidade = modalidade;
               this.chamado.rats[0].fotos.push(this.foto);
-              this.chamadoService.atualizarChamado(this.chamado).catch(e => {});
-              this.camera.cleanup();
-            }).catch(e => {});
-          }).catch(e => {});
-        }).catch(e => { this.exibirToast('Erro ao acessar a câmera.') });
-      }).catch(e => {});
-    }).catch(e => {});
-  }
-
-  private obterPermissaoCamera(): Promise<any>  {
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((cameraStatus) => {
-          this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.READ_EXTERNAL_STORAGE).then((readStatus) => {
-            this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.WRITE_EXTERNAL_STORAGE).then((writeStatus) => {
-              //alert(`AuthorizationStatus`);
-              //alert(status);
-              if (cameraStatus != this.diagnostic.permissionStatus.GRANTED || readStatus != this.diagnostic.permissionStatus.GRANTED || writeStatus != this.diagnostic.permissionStatus.GRANTED) {
-                this.diagnostic.requestRuntimePermission([
-                  this.diagnostic.permission.CAMERA, 
-                  this.diagnostic.permission.READ_EXTERNAL_STORAGE,
-                  this.diagnostic.permission.WRITE_EXTERNAL_STORAGE
-                ]).then((data) => {
-                  //alert(`getCameraAuthorizationStatus`);
-                  //alert(data);
-                  resolve();
-                })
-              } else {
-                //alert("We have the permission");
-                resolve();
-              }
-            }, (statusError) => {
-              //alert(`statusError`);
-              //alert(statusError);
-              reject();
-            });
-          }).catch(e => { reject() });
-        }).catch(e => { reject() });
-      }).catch(e => { reject() });
-    });
+              this.chamadoService.atualizarChamado(this.chamado).catch();
+              this.camera.cleanup().catch();
+              this.bg.disable();
+            }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao tirar a foto. Favor tentar novamente') });
+          }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+        }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+      }).catch(() => { this.bg.disable(); this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+    }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
   }
 
   public carregarFoto(modalidade: string): string {
@@ -454,12 +432,6 @@ export class ChamadoPage {
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                   this.chamado.checkin.localizacao.latitude = location.coords.latitude;
                   this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                  
-                  let rat = new Rat();
-                  rat.fotos = [];
-                  rat.ratDetalhes = [];
-                  rat.laudos = [];
-                  this.chamado.rats.push(rat);
                   
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {
                     this.configurarSlide(this.slides.getActiveIndex());

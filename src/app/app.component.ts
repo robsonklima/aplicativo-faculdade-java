@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events, App } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, 
   BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
@@ -40,10 +40,10 @@ export class MyApp {
   task: any;
 
   constructor(
-    platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    androidPermissions: AndroidPermissions,
+    private platform: Platform,
+    private androidPermissions: AndroidPermissions,
     private diagnostic: Diagnostic,
     private events: Events,
     private bGeolocation: BackgroundGeolocation,
@@ -53,26 +53,31 @@ export class MyApp {
     private geolocation: GeolocationService,
     private usuarioService: UsuarioService,
     private menuCtrl: MenuController,
-    private chamadoService: ChamadoService,
-    public app: App
+    private chamadoService: ChamadoService
   ) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      	
-      this.diagnostic.getPermissionAuthorizationStatus(this.diagnostic.permission.CAMERA).then((status) => {
-        if (status != this.diagnostic.permissionStatus.GRANTED) {
-          this.diagnostic.requestRuntimePermission(this.diagnostic.permission.CAMERA).then((data) => {
-            androidPermissions.requestPermissions([
-              androidPermissions.PERMISSION.CAMERA, 
-              androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-              androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
-            ]).catch();
-          })
-        }
-      }, (statusError) => {});
 
-      this.iniciarColetaLocalizacaoSegundoPlano();
+      if (platform.is('cordova')) {
+        platform.ready().then(() => {
+          this.diagnostic.requestRuntimePermissions([
+            this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
+            this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
+          ]).then(() => {
+            this.androidPermissions.requestPermissions([
+              this.androidPermissions.PERMISSION.CAMERA, this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
+              this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
+            ]).then(() => {
+              this.iniciarColetaLocalizacaoSegundoPlano();
+            }).catch(() => {
+              this.iniciarColetaLocalizacaoSegundoPlano();
+            });
+          }).catch(() => {
+            this.iniciarColetaLocalizacaoSegundoPlano();
+          });
+        }).catch();
+      }
 
       this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
         this.dadosGlobais = dadosGlobais;
@@ -80,6 +85,7 @@ export class MyApp {
 
       this.events.subscribe('sincronizacao:solicitada', () => {
         this.iniciarSincronizacao();
+        
       });
       
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
@@ -264,18 +270,26 @@ export class MyApp {
               loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
               if (loc.codUsuario){
-                this.geolocation.enviarLocalizacao(loc).subscribe(() => {
-                  this.iniciarSincronizacao();
-                }, err => {});
+                this.obterPermissaoCamera().then(() => {
+                  this.geolocation.enviarLocalizacao(loc).subscribe(() => { this.iniciarSincronizacao() }, err => {});
+                }).catch(e => {});
               }
             }
           }).catch();
-
-          //this.bGeolocation.finish();
         }, err => {});
     }).catch();
     
     this.bGeolocation.start().then().catch();
+  }
+
+  private obterPermissaoCamera(): Promise<any>  {
+    return new Promise((resolve, reject) => {
+      this.platform.ready().then(() => {
+        this.diagnostic.requestRuntimePermission([ this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE]).then(() => { 
+            resolve();
+        }).catch(e => { resolve() });
+      }).catch(e => { resolve() });
+    });
   }
 
   private dispararSinalSonoroComVibracao() {
