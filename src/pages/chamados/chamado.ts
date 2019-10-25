@@ -14,7 +14,6 @@ import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from './../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
-import { CheckinCheckoutService } from '../../services/checkin-checkout';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
@@ -67,8 +66,7 @@ export class ChamadoPage {
     private camera: Camera,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
-    private usuarioService: UsuarioService,
-    private checkinCheckoutService: CheckinCheckoutService
+    private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
