@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
-import { BackgroundMode } from '@ionic-native/background-mode';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -41,10 +40,7 @@ export class MyApp {
   constructor(
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    diagnostic: Diagnostic,
-    androidPermissions: AndroidPermissions,
-    private platform: Platform,
-    private bMode: BackgroundMode,
+    platform: Platform,
     private events: Events,
     private bGeolocation: BackgroundGeolocation,
     private nativeAudio: NativeAudio,

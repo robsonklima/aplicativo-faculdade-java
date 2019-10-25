@@ -16,17 +16,11 @@ ZIPALIGN [DON'T FORGET TO CHANGE VERSION NUMBER]
 SHORTCUT DELL
 ionic cordova build --release android
 "C:\Program Files\Java\jdk1.8.0_101\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-key.keystore" "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" sat_mobile
-"I:\ionic-projects\app-tecnicos\_utils\zipalign" -v 4 "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-release-0.0.40.apk"
+"I:\ionic-projects\app-tecnicos\_utils\zipalign" -v 4 "I:\ionic-projects\app-tecnicos\platforms\android\build\outputs\apk\android-release-unsigned.apk" "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-release-0.0.52.apk"
 
 SHORTCUT PERTO
 ionic cordova run android -l -c --address
 
 ionic cordova build --release android
-"C:\Program Files\Java\jdk1.8.0_144\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\test-projects\ionic3-at\_utils\app-tecnicos-key.keystore" "D:\test-projects\ionic3-at\platforms\android\build\outputs\apk\android-release-unsigned.apk" sat_mobile
-"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\build\outputs\apk\android-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.51.apk"
-
-UTILS
-https://goo.gl/kCXcYC
-
-VERSION-CONTROL
-https://goo.gl/XQb4jr
+"C:\Program Files\Java\jdk1.8.0_144\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\test-projects\ionic3-at\_utils\app-tecnicos-key.keystore" "D:\test-projects\ionic3-at\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk" sat_mobile
+"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.51.apk"

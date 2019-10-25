@@ -1,12 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, 
+         ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { AppAvailability } from '@ionic-native/app-availability';
 import { Diagnostic } from '@ionic-native/diagnostic';
-//import { BackgroundMode } from '@ionic-native/background-mode';
+import { Market } from '@ionic-native/market';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -49,10 +51,11 @@ export class ChamadoPage {
 
   constructor(
     private platform: Platform,
-    //private bg: BackgroundMode,
+    private appAvailability: AppAvailability,
     private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private androidPerm: AndroidPermissions,
+    private market: Market,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
@@ -131,26 +134,33 @@ export class ChamadoPage {
         return;
       }
 
-      this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
-        this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
-          this.camera.getPicture({
-            quality: 80, targetWidth: 380,
-            destinationType: this.camera.DestinationType.DATA_URL,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE,
-            saveToPhotoAlbum: false,
-            sourceType: 1
-          }).then(imageData => {
-            this.foto = new Foto();
-            this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
-            this.foto.str = 'data:image/jpeg;base64,' + imageData;
-            this.foto.modalidade = modalidade;
-            this.chamado.rats[0].fotos.push(this.foto);
-            this.chamadoService.atualizarChamado(this.chamado).catch();
-            this.camera.cleanup().catch();
-          }).catch(() => { this.exibirAlerta('Erro ao tirar a foto. Favor tentar novamente') });
-        }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
-      }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+      this.appAvailability.check('net.sourceforge.opencamera').then(
+        (yes: boolean) => {
+          this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
+            this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
+              this.camera.getPicture({
+                quality: 80, targetWidth: 380,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+                saveToPhotoAlbum: false,
+                sourceType: 1
+              }).then(imageData => {
+                this.foto = new Foto();
+                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
+                this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                this.foto.modalidade = modalidade;
+                this.chamado.rats[0].fotos.push(this.foto);
+                this.chamadoService.atualizarChamado(this.chamado).catch();
+                this.camera.cleanup().catch();
+              }).catch(() => { this.exibirAlerta('Erro ao tirar a foto. Favor tentar novamente') });
+            }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+          }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+        },
+        (no: boolean) => {
+          this.exibirToast('Favor instalar o aplicativo Open Camera').then(() => { this.market.open('net.sourceforge.opencamera') });
+          return;
+        }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
     }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
   }
 
