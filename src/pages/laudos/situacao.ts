@@ -11,7 +11,6 @@ import { Foto } from '../../models/foto';
 import moment from 'moment';
 import { LaudoSituacao } from '../../models/laudo-situacao';
 import { NgForm } from '@angular/forms';
-import { BackgroundMode } from '@ionic-native/background-mode';
 
 
 @Component({
@@ -26,19 +25,14 @@ export class SituacaoPage {
 
   constructor(
     private diagnostic: Diagnostic,
-    private backgroundMode: BackgroundMode,
     private navParams: NavParams,
     private viewCtrl: ViewController,
     private alertCtrl: AlertController,
     private camera: Camera,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions,
+    private androidPerm: AndroidPermissions,
   ) {
     this.laudo = this.navParams.get('laudo');
-
-    platform.ready().then(() => {
-      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA]);
-    });
   }
 
   ionViewWillEnter() {
@@ -59,21 +53,17 @@ export class SituacaoPage {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) return;
 
-      this.backgroundMode.enable();
-
       this.diagnostic.requestRuntimePermissions([
-        this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
         this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
         this.diagnostic.permission.CAMERA
       ]).then(() => {
-        this.androidPermissions.requestPermissions([
-          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-          this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-          this.androidPermissions.PERMISSION.CAMERA
+        this.androidPerm.requestPermissions([
+          this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE,
+          this.androidPerm.PERMISSION.CAMERA
         ]).then(() => {
           this.camera.getPicture({
-            quality: 50,
-            targetWidth: 380,
+            quality: 80,
+            targetWidth: 320,
             destinationType: this.camera.DestinationType.DATA_URL,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE,

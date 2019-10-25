@@ -1,8 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
-
-import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, 
-  BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -42,9 +41,10 @@ export class MyApp {
   constructor(
     statusBar: StatusBar,
     splashScreen: SplashScreen,
+    diagnostic: Diagnostic,
+    androidPermissions: AndroidPermissions,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions,
-    private diagnostic: Diagnostic,
+    private bMode: BackgroundMode,
     private events: Events,
     private bGeolocation: BackgroundGeolocation,
     private nativeAudio: NativeAudio,
@@ -58,35 +58,10 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-
-      if (platform.is('cordova')) {
-        platform.ready().then(() => {
-          this.diagnostic.requestRuntimePermissions([
-            this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, 
-            this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
-          ]).then(() => {
-            this.androidPermissions.requestPermissions([
-              this.androidPermissions.PERMISSION.CAMERA, this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-              this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.ACCESS_FINE_LOCATION
-            ]).then(() => {
-              this.iniciarColetaLocalizacaoSegundoPlano();
-            }).catch(() => {
-              this.iniciarColetaLocalizacaoSegundoPlano();
-            });
-          }).catch(() => {
-            this.iniciarColetaLocalizacaoSegundoPlano();
-          });
-        }).catch();
-      }
-
-      this.events.subscribe('login:efetuado', (dadosGlobais: DadosGlobais) => {
-        this.dadosGlobais = dadosGlobais;
-      });
-
-      this.events.subscribe('sincronizacao:solicitada', () => {
-        this.iniciarSincronizacao();
-        
-      });
+      
+      if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
+      this.events.subscribe('login:efetuado', (dg: DadosGlobais) => { this.dadosGlobais = dg });
+      this.events.subscribe('sincronizacao:solicitada', () => { this.iniciarSincronizacao() });
       
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         if (dados) 
@@ -270,9 +245,7 @@ export class MyApp {
               loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
               if (loc.codUsuario){
-                this.obterPermissaoCamera().then(() => {
-                  this.geolocation.enviarLocalizacao(loc).subscribe(() => { this.iniciarSincronizacao() }, err => {});
-                }).catch(e => {});
+                this.geolocation.enviarLocalizacao(loc).subscribe(() => { this.iniciarSincronizacao() }, err => {});
               }
             }
           }).catch();
@@ -280,16 +253,6 @@ export class MyApp {
     }).catch();
     
     this.bGeolocation.start().then().catch();
-  }
-
-  private obterPermissaoCamera(): Promise<any>  {
-    return new Promise((resolve, reject) => {
-      this.platform.ready().then(() => {
-        this.diagnostic.requestRuntimePermission([ this.diagnostic.permission.CAMERA, this.diagnostic.permission.READ_EXTERNAL_STORAGE, this.diagnostic.permission.WRITE_EXTERNAL_STORAGE]).then(() => { 
-            resolve();
-        }).catch(e => { resolve() });
-      }).catch(e => { resolve() });
-    });
   }
 
   private dispararSinalSonoroComVibracao() {

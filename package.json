@@ -44,12 +44,12 @@
         "android-versions": "^1.5.0",
         "angular2-signaturepad": "^2.8.0",
         "chart.js": "^2.7.2",
-        "cordova-android": "7.0.0",
+        "cordova-android": "^7.0.0",
         "cordova-browser": "^4.1.0",
         "cordova-plugin-android-permissions": "^1.0.0",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-appavailability": "^0.4.2",
-        "cordova-plugin-background-mode": "^0.7.2",
+        "cordova-plugin-background-mode": "git+https://github.com/katzer/cordova-plugin-background-mode.git",
         "cordova-plugin-badge": "^0.8.6",
         "cordova-plugin-camera": "git+https://github.com/apache/cordova-plugin-camera.git",
         "cordova-plugin-compat": "^1.2.0",
@@ -95,7 +95,6 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "cordova-plugin-app-version": {},
-            "cordova-plugin-background-mode": {},
             "cordova-plugin-geolocation": {
                 "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
             },
@@ -124,7 +123,8 @@
             "cordova-plugin-android-permissions": {},
             "cordova-plugin-camera": {
                 "ANDROID_SUPPORT_V4_VERSION": "27.+"
-            }
+            },
+            "cordova-plugin-background-mode": {}
         },
         "platforms": [
             "browser",
