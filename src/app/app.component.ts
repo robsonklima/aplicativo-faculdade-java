@@ -50,7 +50,8 @@ export class MyApp {
     private chamadoService: ChamadoService
   ) {
     platform.ready().then(() => {
-      statusBar.styleDefault();
+      statusBar.overlaysWebView(false);
+      statusBar.backgroundColorByHexString('#488aff');
       splashScreen.hide();
       
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
@@ -86,11 +87,9 @@ export class MyApp {
   }
 
   private iniciarSincronizacao() {
-    if (!this.dadosGlobais.usuario.codTecnico) { return }
+    if (!this.dadosGlobais.usuario.codTecnico) return;
 
-    if (!this.verificarIntervaloMinimoSincronizacao()) {
-      return
-    } 
+    if (!this.verificarIntervaloMinimoSincronizacao()) return;
 
     clearInterval(this.task);
 

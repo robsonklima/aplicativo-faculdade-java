@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController, NavController, AlertController, 
-  ToastController,  PopoverController, Events } from 'ionic-angular';
+import { Platform, LoadingController, NavController, AlertController, ToastController,  PopoverController, Events } from 'ionic-angular';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Badge } from '@ionic-native/badge';
 
 import { Config } from "../../config/config";
+import { DadosGlobaisService } from '../../services/dados-globais';
 
 import { ChamadoPage } from "../chamados/chamado";
 import { Chamado } from '../../models/chamado';
 import { ChamadosMaisOpcoesPage } from './chamados-mais-opcoes';
 
 import { ChamadoService } from "../../services/chamado";
+import { DadosGlobais } from '../../models/dados-globais';
+
+import moment from 'moment';
+
 
 @Component({
   selector: 'chamados-page',
@@ -20,10 +24,14 @@ import { ChamadoService } from "../../services/chamado";
 })
 export class ChamadosPage {
   chamados: Chamado[];
+  dataHoraUltAtualizacao: Date = new Date();
+  dg: DadosGlobais;
 
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
+    private loadingCtrl: LoadingController,
+    private popoverCtrl: PopoverController,
     private toastCtrl: ToastController,
     private platform: Platform,
     private events: Events,
@@ -31,8 +39,7 @@ export class ChamadosPage {
     private geolocation: Geolocation,
     private inAppBrowser: InAppBrowser,
     private chamadoService: ChamadoService,
-    private loadingCtrl: LoadingController,
-    private popoverCtrl: PopoverController
+    private dadosGlobaisService: DadosGlobaisService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => {
@@ -42,21 +49,25 @@ export class ChamadosPage {
   }
 
   ionViewWillEnter() { 
-    this.carregarChamadosStorage();
+    this.carregarDadosGlobais().then(() => { this.carregarChamadosStorage() }).catch();
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(dados);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
   }
 
   public telaChamado(chamado: Chamado) {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
-  }
-
-  public atualizarChamados(refresher) {
-    setTimeout(() => {
-      this.events.publish('sincronizacao:solicitada');
-
-      setTimeout(() => {
-        refresher.complete();
-      }, 7500);
-    }, 7500);
   }
 
   public abrirMapaNavegador(chamado: Chamado) {
@@ -160,6 +171,115 @@ export class ChamadosPage {
         return;
     });
   }
+
+
+  public sincronizar() {
+    if (!this.dg.usuario.codTecnico) return;
+
+    const loading = this.loadingCtrl.create({ content: 'Sincronizando...' });
+    loading.present();
+
+    this.sincronizarChamados().then(() => { loading.dismiss(); this.carregarChamadosStorage(); }).catch(() => { loading.dismiss() });
+  }
+
+  private sincronizarChamados(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.dataHoraUltAtualizacao = new Date();
+
+      this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
+        this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
+          this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
+            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+              if (chamadosUnificados.length) {
+                this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+                  resolve();
+                }).catch(() => {
+                  reject();
+                });
+              }
+            })
+            .catch(() => { reject() });
+          }, err => { reject() });
+        }).catch(() => { reject() });
+      }).catch(() => { reject() });
+    });
+  }
+
+  private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
+    return new Promise((resolve, reject) => {
+      if (chamadosApi.length == 0) {
+        reject();
+        return
+      }
+
+      let chamados: Chamado[] = [];
+      
+      // Chamados adicionados
+      chamadosApi.forEach((ca) => {
+        if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
+          chamados.push(ca);
+        }
+      });
+
+      // Chamados atualizados
+      if (chamadosStorage.length > 0) {
+        chamadosStorage.forEach((cs) => {
+          let chamadoEncontrado: boolean = false;
+
+          chamadosApi.forEach((ca) => {
+            if (cs.codOs == ca.codOs) {
+              chamadoEncontrado = true;
+
+              if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
+                Object.keys(ca).forEach((atributo) => {
+                  if (atributo !== 'codOs' 
+                      && atributo !== 'checkin' 
+                      && atributo !== 'checkout' 
+                      && atributo !== 'rats'
+                      && !cs.dataHoraFechamento) {
+                    cs[atributo] = ca[atributo]; 
+                  }
+                });
+              }
+            }
+          });
+          
+          // Chamados removidos
+          if (chamadoEncontrado) {
+            chamados.push(cs);
+          }
+        });
+      }
+    
+      resolve(chamados);
+    });
+  }
+
+  private sincronizarChamadosFechados(chamados: Chamado[]): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      chamados.forEach((chamado) => {
+        this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
+          if (res) {
+            if (res.indexOf('00 - ') > -1) {
+              this.chamadoService.apagarChamadoStorage(chamado).then(() => {
+                resolve(true);
+              }).catch(() => {
+                reject(false);
+              });
+            } else {
+              reject(false);
+            }
+          }
+        },
+        err => {
+          reject(false);
+        });
+      });
+
+      resolve(true);
+    });
+  }
+
 
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {

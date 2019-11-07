@@ -13,6 +13,13 @@
         <ion-icon name="trash"></ion-icon>
       </button>
 
+      <button 
+        ion-button 
+        icon-only 
+        (click)="sincronizar()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+
       <button ion-button icon-only (click)="abrirPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -23,23 +30,10 @@
 </ion-header>
 
 <ion-content class="cards-bg">
-  <ion-refresher 
-    (ionRefresh)="atualizarChamados($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
-  <!-- <div class="sync-button">
-    <button
-      color="primary"
-      ion-button 
-      block>
-      Sincronizar
-    </button>
-  </div> -->
-
   <ion-card 
     *ngFor="let chamado of chamados; let i = index"
-    [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
+    [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }"
+    (click)="telaChamado(chamado)">
     <ion-item
       [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
       <ion-icon
@@ -179,7 +173,6 @@
             icon-only
             clear
             small
-            (click)="telaChamado(chamado)"
             [disabled]="chamado.dataHoraFechamento">
             <ion-icon *ngIf="chamado.checkin.localizacao.latitude 
               || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
@@ -194,7 +187,7 @@
   <ion-card padding text-center *ngIf="!chamados?.length">
     <ion-card-content>
       <p>
-        Nenhum chamado encontrado <br>Deslize a tela para baixo para atualizar
+        Nenhum chamado encontrado. Clique em Atualizar <ion-icon name="refresh"></ion-icon> para tentar novamente.
       </p>
     </ion-card-content>
   </ion-card>
