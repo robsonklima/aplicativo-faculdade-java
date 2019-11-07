@@ -40,13 +40,7 @@ export class ChamadosPage {
     private inAppBrowser: InAppBrowser,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
-  ) {
-    this.events.subscribe('sincronizacao:efetuada', () => {
-      setTimeout(() => {
-        this.carregarChamadosStorage();
-      }, 3500);
-    });
-  }
+  ) {}
 
   ionViewWillEnter() { 
     this.carregarDadosGlobais().then(() => { this.carregarChamadosStorage() }).catch();
@@ -159,7 +153,7 @@ export class ChamadosPage {
     });
 
     confirmacao.present();
-  }
+  } 
 
   public abrirPopover(event: MouseEvent) {
     const popover = this.popoverCtrl.create(ChamadosMaisOpcoesPage);
