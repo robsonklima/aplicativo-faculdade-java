@@ -44,6 +44,10 @@ import { FotoService } from '../services/foto';
 import { IndicadorService } from '../services/indicador';
 import { LaudoService } from '../services/laudo';
 import { MensagemTecnicoService } from '../services/mensagem-tecnico';
+import { EquipamentoPOSService } from '../services/equipamento-pos';
+import { OperadoraTelefoniaService } from '../services/operadora-telefonia';
+import { MotivoComunicacaoService } from '../services/motivo-comunicacao';
+import { TipoComunicacaoService } from '../services/tipo-comunicacao';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -208,7 +212,11 @@ import { TestePage } from '../pages/teste/teste';
     AjudaTopicoService,
     IndicadorService,
     LaudoService,
-    MensagemTecnicoService
+    MensagemTecnicoService,
+    EquipamentoPOSService,
+    OperadoraTelefoniaService,
+    MotivoComunicacaoService,
+    TipoComunicacaoService
   ]
 })
 export class AppModule {}

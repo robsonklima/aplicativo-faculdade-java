@@ -264,7 +264,7 @@ export class MyApp {
 
   public sair() {
     this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
-        this.nav.setRoot(this.loginPage);
-      }).catch((err) => {});
+      this.nav.setRoot(this.loginPage);
+    }).catch((err) => {});
   }
 }

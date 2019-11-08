@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, 
-  Events, ModalController, Platform } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -11,8 +10,6 @@ import { PecasPage } from '../pecas/pecas';
 import { HomeMaisOpcoesPage } from '../home/home-mais-opcoes';
 import { IndicadorMenuPage } from '../indicadores/indicador-menu';
 import { MensagensPage } from '../mensagens/mensagens';
-import { AssinaturaPage } from '../assinatura/assinatura';
-import { TestePage } from '../teste/teste';
 
 import { Chamado } from "../../models/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
@@ -20,6 +17,7 @@ import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Laudo } from '../../models/laudo';
 
 import { Config } from "../../config/config";
+import moment from 'moment';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { UsuarioService } from '../../services/usuario';
@@ -31,8 +29,10 @@ import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
 import { LaudoService } from '../../services/laudo';
 import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
-
-import moment from 'moment';
+import { EquipamentoPOSService } from '../../services/equipamento-pos';
+import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
+import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
+import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
 
 
 @Component({
@@ -52,7 +52,6 @@ export class HomePage {
   usuarioPonto: UsuarioPonto;
 
   constructor(
-    platform: Platform,
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private appVersion: AppVersion,
@@ -69,12 +68,13 @@ export class HomePage {
     private tipoServicoService: TipoServicoService,
     private laudoService: LaudoService,
     private mensagemTecnicoService: MensagemTecnicoService,
-    private modalCtrl: ModalController
+    private equipamentoPOSService: EquipamentoPOSService,
+    private tipoComunicacaoService: TipoComunicacaoService,
+    private motivoComunicacaoService: MotivoComunicacaoService,
+    private operadoraTelefonicaService: OperadoraTelefoniaService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
-      setTimeout(() => {
-        this.carregarChamadosStorage();
-      }, 2000);
+      setTimeout(() => { this.carregarChamadosStorage() }, 2000);
     });
   }
 
@@ -103,17 +103,6 @@ export class HomePage {
 
   public telaMensagensTecnico() {
     this.navCtrl.push(MensagensPage);
-  }
-
-  public telaAssinatura(){
-    setTimeout(() => {
-      let modal = this.modalCtrl.create(AssinaturaPage);
-      modal.present();
-    }, 300);
-  }
-
-  public telaTeste() {
-    this.navCtrl.push(TestePage);
   }
 
   public abrirPopover(event: MouseEvent) {
@@ -178,11 +167,9 @@ export class HomePage {
 
   private verificarNecessidadeAtualizacao(): boolean {
     let limiteAtualizacao = new Date();
-    limiteAtualizacao.setDate(limiteAtualizacao.getDate() 
-      - Config.INT_SINC_BD_LOCAL_DIAS);
+    limiteAtualizacao.setDate(limiteAtualizacao.getDate() - Config.INT_SINC_BD_LOCAL_DIAS);
 
-    if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao)
-      return true;
+    if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao) return true;
 
     return false;
   }
@@ -191,19 +178,27 @@ export class HomePage {
     const loading = this.loadingCtrl.create({ content: 'Aguarde, sincronizando dados offline...' });
     loading.present();
 
-    this.tipoServicoService.buscarTipoServicosApi()
-      .subscribe(tipoServicos => { this.acaoService.buscarAcoesApi()
-        .subscribe(acoes => { this.defeitoService.buscarDefeitosApi()
-          .subscribe(defeitos => { this.causaService.buscarCausasApi()
-            .subscribe(causas => { this.pecaService.buscarPecasApi()
-              .subscribe(pecas => {
-                loading.dismiss();
-                this.salvarDadosGlobais();
+    this.tipoServicoService.buscarTipoServicosApi().subscribe(() => { 
+      this.acaoService.buscarAcoesApi().subscribe(() => { 
+        this.defeitoService.buscarDefeitosApi().subscribe(() => { 
+          this.causaService.buscarCausasApi().subscribe(() => { 
+            this.pecaService.buscarPecasApi().subscribe(() => {
+              this.equipamentoPOSService.buscarEquipamentosPOSApi().subscribe(() => {
+                this.operadoraTelefonicaService.buscarOperadorasApi().subscribe(() => {
+                  this.tipoComunicacaoService.buscarTiposComunicacaoApi().subscribe(() => {
+                    this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
+                      loading.dismiss();
+                  
+                      this.salvarDadosGlobais();
+                    });                
+                  });                
+                });                
               }, err => { loading.dismiss() });
             }, err => { loading.dismiss() });
           }, err => { loading.dismiss() });
         }, err => { loading.dismiss() });
       }, err => { loading.dismiss() });
+    }, err => { loading.dismiss() });
   }
 
   private salvarDadosGlobais() {
