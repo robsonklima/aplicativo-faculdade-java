@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, 
-         ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -10,26 +9,33 @@ import { AppAvailability } from '@ionic-native/app-availability';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Market } from '@ionic-native/market';
 
-import { Config } from './../../config/config';
-import { DadosGlobaisService } from '../../services/dados-globais';
-import { ChamadoService } from './../../services/chamado';
-import { UsuarioService } from '../../services/usuario';
-
+import moment from 'moment';
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
 import { Rat } from "../../models/rat";
 import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Foto } from '../../models/foto';
+import { EquipamentoPOS } from '../../models/equipamentoPOS';
+import { RatDetalhe } from '../../models/rat-detalhe';
+import { TipoComunicacao } from '../../models/tipo-comunicacao';
+import { MotivoComunicacao } from '../../models/motivo-comunicacao';
+import { OperadoraTelefonia } from '../../models/operadora-telefonia';
+
+import { Config } from './../../config/config';
+import { DadosGlobaisService } from '../../services/dados-globais';
+import { ChamadoService } from './../../services/chamado';
+import { UsuarioService } from '../../services/usuario';
+import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
+import { EquipamentoPOSService } from '../../services/equipamento-pos';
+import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
+import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
-
-import moment from 'moment';
 import { LaudoPage } from '../laudos/laudo';
-import { RatDetalhe } from '../../models/rat-detalhe';
 
 
 @Component({
@@ -45,6 +51,10 @@ export class ChamadoPage {
   foto: Foto;
   qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
   distanciaCercaEletronica: number = 0;
+  equipamentosPOS: EquipamentoPOS[] = [];
+  tiposComunicacao: TipoComunicacao[] = [];
+  operadoras: OperadoraTelefonia[] = [];
+  motivosComunicacao: MotivoComunicacao[] = [];
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
 
@@ -55,6 +65,8 @@ export class ChamadoPage {
     private diagnostic: Diagnostic,
     private androidPerm: AndroidPermissions,
     private market: Market,
+    private events: Events,
+    private camera: Camera,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
@@ -62,20 +74,27 @@ export class ChamadoPage {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
-    private events: Events,
-    private camera: Camera,
     private dadosGlobaisService: DadosGlobaisService,
+    private equipamentoPOSService: EquipamentoPOSService,
+    private tipoComunicacaoService: TipoComunicacaoService,
+    private operadorasTelefoniaService: OperadoraTelefoniaService,
+    private motivoComunicacaoService: MotivoComunicacaoService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
 
     this.carregarDadosGlobais()
-      .then(() => this.obterDistanciaRaioFilial(this.dg.usuario.filial.nomeFilial))
+      .then(() => this.buscarEquipamentosPOS())
+      .then(() => this.buscarTiposComunicacao()) 
+      .then(() => this.buscarMotivosComunicacao()) 
+      .then(() => this.buscarOperadoras()) 
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -522,6 +541,19 @@ export class ChamadoPage {
     rat.ratDetalhes = [];
     rat.fotos = [];
 
+    rat.equipamentoRetirado = form.value.equipamentoRetirado;
+    rat.numSerieRetirada = form.value.numSerieRetirada;
+    rat.equipamentoInstalado = form.value.equipamentoInstalado;
+    rat.numSerieInstalada = form.value.numSerieInstalada;
+    rat.rede = form.value.rede;
+    rat.tipoComunicacao = form.value.tipoComunicacao;
+    rat.operadoraChipRetirado = form.value.operadoraChipRetirado;
+    rat.nroChipRetirado = form.value.nroChipRetirado;
+    rat.operadoraChipInstalado = form.value.operadoraChipInstalado;
+    rat.nroChipInstalado = form.value.nroChipInstalado;
+    rat.motivoComunicacao = form.value.motivoComunicacao;
+    rat.obsMotivoComunicacao = form.value.obsMotivoComunicacao;
+
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
@@ -563,6 +595,19 @@ export class ChamadoPage {
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
       this.chamado.rats[0].codUsuarioCad = this.dg.usuario.codUsuario;
+      
+      this.chamado.rats[0].equipamentoRetirado = form.value.equipamentoRetirado;
+      this.chamado.rats[0].numSerieRetirada = form.value.numSerieRetirada;
+      this.chamado.rats[0].equipamentoInstalado = form.value.equipamentoInstalado;
+      this.chamado.rats[0].numSerieInstalada = form.value.numSerieInstalada;
+      this.chamado.rats[0].rede = form.value.rede;
+      this.chamado.rats[0].tipoComunicacao = form.value.tipoComunicacao;
+      this.chamado.rats[0].operadoraChipRetirado = form.value.operadoraChipRetirado;
+      this.chamado.rats[0].nroChipRetirado = form.value.nroChipRetirado;
+      this.chamado.rats[0].operadoraChipInstalado = form.value.operadoraChipInstalado;
+      this.chamado.rats[0].nroChipInstalado = form.value.nroChipInstalado;
+      this.chamado.rats[0].motivoComunicacao = form.value.motivoComunicacao;
+      this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
 
       if (this.usuarioPonto) {
         this.chamado.rats[0].horarioInicioIntervalo = this.usuarioPonto.registros[1];
@@ -570,8 +615,7 @@ export class ChamadoPage {
       }
     }
 
-    this.chamadoService.atualizarChamado(this.chamado);
-
+    this.chamadoService.atualizarChamado(this.chamado);    
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(4, 500);
   }
@@ -798,17 +842,68 @@ export class ChamadoPage {
     return deg * (Math.PI/180)
   }
 
-  private obterDistanciaRaioFilial(nomeFilial: string): Promise<any> {
-    return new  Promise((resolve, reject) => {
-      let cerca = Config.CERCA_ELETRONICA.filter((d) => {
-        return (d.filial.toString().indexOf(nomeFilial) > -1);
+  public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
+    return new Promise((resolve, reject) => {
+      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => { 
+        this.equipamentosPOS = equips;
+
+        resolve(equips);
+      }).catch(err => {
+        reject(err);
       });
+    });
+  }
 
-      if(cerca)
-        this.distanciaCercaEletronica = cerca[0].distancia;
+  public compararEquipamentosPOS(e1: EquipamentoPOS, e2: EquipamentoPOS): boolean {
+    return e1 && e2 ? e1.codEquip == e2.codEquip : e1 == e2;
+  }
 
-      resolve(cerca);
-    })
+  public buscarTiposComunicacao(): Promise<TipoComunicacao[]> {
+    return new Promise((resolve, reject) => {
+      this.tipoComunicacaoService.buscarTiposComunicacaoStorage().then((tiposCom: TipoComunicacao[]) => { 
+        this.tiposComunicacao = tiposCom;
+
+        resolve(tiposCom);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public compararTiposComunicacao(t1: TipoComunicacao, t2: TipoComunicacao): boolean {
+    return t1 && t2 ? t1.codTipoComunicacao == t2.codTipoComunicacao : t1 == t2;
+  }
+
+  public buscarOperadoras(): Promise<OperadoraTelefonia[]> {
+    return new Promise((resolve, reject) => {
+      this.operadorasTelefoniaService.buscarOperadorasStorage().then((operadoras: OperadoraTelefonia[]) => { 
+        this.operadoras = operadoras;
+
+        resolve(operadoras);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public compararOperadoras(o1: OperadoraTelefonia, o2: OperadoraTelefonia): boolean {
+    return o1 && o2 ? o1.codOperadoraTelefonica == o2.codOperadoraTelefonica : o1 == o2;
+  }
+
+  public buscarMotivosComunicacao(): Promise<MotivoComunicacao[]> {
+    return new Promise((resolve, reject) => {
+      this.motivoComunicacaoService.buscarMotivosComunicacaoStorage().then((motivos: MotivoComunicacao[]) => { 
+        this.motivosComunicacao = motivos;
+
+        resolve(motivos);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public compararMotivosComunicacao(m1: MotivoComunicacao, m2: MotivoComunicacao): boolean {
+    return m1 && m2 ? m1.codMotivoComunicacao == m2.codMotivoComunicacao : m1 == m2;
   }
 
   private exibirToast(mensagem: string): Promise<any> {

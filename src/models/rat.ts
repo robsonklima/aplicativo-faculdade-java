@@ -2,6 +2,10 @@ import { Tecnico } from './tecnico';
 import { RatDetalhe } from "./rat-detalhe";
 import { Foto } from './foto';
 import { Laudo } from './laudo';
+import { EquipamentoPOS } from './equipamentoPOS';
+import { MotivoComunicacao } from './motivo-comunicacao';
+import { TipoComunicacao } from './tipo-comunicacao';
+import { OperadoraTelefonia } from './operadora-telefonia';
 
 export class Rat {
 	codRat?: number;
@@ -22,4 +26,16 @@ export class Rat {
 	codUsuarioCad: string;
 	horarioInicioIntervalo: string;
 	horarioTerminoIntervalo: string;
+	equipamentoRetirado: EquipamentoPOS;
+	numSerieRetirada: string;
+	equipamentoInstalado: EquipamentoPOS;
+	numSerieInstalada: string;
+	rede: string;
+	tipoComunicacao: TipoComunicacao
+	motivoComunicacao: MotivoComunicacao;
+	operadoraChipRetirado: OperadoraTelefonia;
+	nroChipRetirado: string;
+	operadoraChipInstalado: OperadoraTelefonia;
+	nroChipInstalado: string;
+	obsMotivoComunicacao: string;
 }
