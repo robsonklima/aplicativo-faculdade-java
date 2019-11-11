@@ -18,17 +18,13 @@ export class AcaoService {
 
   buscarAcoesApi(): Observable<Acao[]> {
     return this.http.get(Config.API_URL + 'Acao')
-      .map((res: Response) => {
-        this.insereAcoesStorage(res.json());
-      })
+      .map((res: Response) => { this.insereAcoesStorage(res.json()) })
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   insereAcoesStorage(acoes: Acao[]) {
     acoes.forEach(acao => {
-      if (!this.acaoEstaNoStorage(acao.codAcao)) {
-        this.acoes.push(acao);
-      }
+      if (!this.acaoEstaNoStorage(acao.codAcao)) { this.acoes.push(acao) }
     });
 
     this.storage.set('Acoes', this.acoes)

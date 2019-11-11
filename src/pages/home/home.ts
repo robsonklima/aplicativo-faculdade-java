@@ -33,6 +33,7 @@ import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
 import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
+import { EquipamentoCausaService } from '../../services/equipamento-causa';
 
 
 @Component({
@@ -71,7 +72,8 @@ export class HomePage {
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
     private motivoComunicacaoService: MotivoComunicacaoService,
-    private operadoraTelefonicaService: OperadoraTelefoniaService
+    private operadoraTelefonicaService: OperadoraTelefoniaService,
+    private equipamentoCausaService: EquipamentoCausaService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -175,24 +177,46 @@ export class HomePage {
   }
 
   public atualizarBDLocal() {
-    const loading = this.loadingCtrl.create({ content: 'Aguarde, sincronizando dados offline...' });
+    let loading = this.loadingCtrl.create({ content: 'Aguarde...' });
     loading.present();
-
+    
     this.tipoServicoService.buscarTipoServicosApi().subscribe(() => { 
+      loading.setContent("Preparando a tabela local: Tipos de Serviço");
+
       this.acaoService.buscarAcoesApi().subscribe(() => { 
+        loading.setContent("Preparando a tabela local: Ações");
+        
         this.defeitoService.buscarDefeitosApi().subscribe(() => { 
+          loading.setContent("Preparando a tabela local: Defeitos");
+
           this.causaService.buscarCausasApi().subscribe(() => { 
+            loading.setContent("Preparando a tabela local: Causas");
+
             this.pecaService.buscarPecasApi().subscribe(() => {
+              loading.setContent("Preparando a tabela local: Peças");
+
               this.equipamentoPOSService.buscarEquipamentosPOSApi().subscribe(() => {
+                loading.setContent("Preparando a tabela local: Equipamentos POS");
+
                 this.operadoraTelefonicaService.buscarOperadorasApi().subscribe(() => {
+                  loading.setContent("Preparando a tabela local: Operadoras");
+
                   this.tipoComunicacaoService.buscarTiposComunicacaoApi().subscribe(() => {
+                    loading.setContent("Preparando a tabela local: Tipos de Comunicação");
+
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
-                      loading.dismiss();
-                  
-                      this.salvarDadosGlobais();
-                    });                
-                  });                
-                });                
+                      loading.setContent("Preparando a tabela local: Motivos de Comunicação");
+                      
+                      //this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                        //loading.setContent("Preparando a tabela local: Equipamentos e Causas. Este processo pode levar até 2 minutos. Favor não encerrar a aplicacão");  
+
+                        loading.dismiss();
+                    
+                        this.salvarDadosGlobais();
+                      //}, err => { loading.dismiss() });
+                    }, err => { loading.dismiss() });
+                  }, err => { loading.dismiss() });
+                }, err => { loading.dismiss() });
               }, err => { loading.dismiss() });
             }, err => { loading.dismiss() });
           }, err => { loading.dismiss() });

@@ -48,6 +48,7 @@ import { EquipamentoPOSService } from '../services/equipamento-pos';
 import { OperadoraTelefoniaService } from '../services/operadora-telefonia';
 import { MotivoComunicacaoService } from '../services/motivo-comunicacao';
 import { TipoComunicacaoService } from '../services/tipo-comunicacao';
+import { EquipamentoCausaService } from '../services/equipamento-causa';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -216,7 +217,8 @@ import { TestePage } from '../pages/teste/teste';
     EquipamentoPOSService,
     OperadoraTelefoniaService,
     MotivoComunicacaoService,
-    TipoComunicacaoService
+    TipoComunicacaoService,
+    EquipamentoCausaService
   ]
 })
 export class AppModule {}
