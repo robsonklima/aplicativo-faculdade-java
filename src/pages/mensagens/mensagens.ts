@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, LoadingController } from 'ionic-angular';
+import { NavParams, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { DadosGlobais } from '../../models/dados-globais';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { MensagemPage } from './mensagem';
@@ -21,12 +21,13 @@ export class MensagensPage {
     private navParams: NavParams,
     private mtService: MensagemTecnicoService,
     private dadosGlobaisService: DadosGlobaisService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {
     this.mensagensTecnico = this.navParams.get('mensagensTecnico');
   }
 
-  ionViewWillEnter() {
+  ngOnInit() {
     const loading = this.loadingCtrl.create({ 
       content: 'Carregando mensagens...' 
     });
@@ -60,7 +61,20 @@ export class MensagensPage {
           this.mensagensTecnico = mt;
 
           resolve();
-        }, err => {});
+        }, () => {
+          this.exibirAlerta('Erro ao carregar dados do servidor');
+          this.navCtrl.pop();
+        });
     });
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 }

@@ -25,9 +25,11 @@ export class MensagemPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
+      if (this.mensagemTecnico.indLeitura == 1) return;
+
       this.mtService.enviarMensagemTecnicoApi(this.mensagemTecnico).subscribe((r) => {
         this.mensagemTecnico.indLeitura = 1;
-      }, err => {});
+      }, () => {});
     }).catch(() => {});
   }
 

@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="cards-bg">
+<ion-content>
   <ion-list>
     <button 
       ion-item 
@@ -14,7 +14,7 @@
       <ion-badge 
         item-end
         *ngIf="!mensagemTecnico.indLeitura"
-        [ngClass]="{ 'bd-red': !mensagemTecnico.indLeitura }">
+        [ngClass]="{ 'bg-yellow': !mensagemTecnico.indLeitura }">
         !
       </ion-badge>
     </button>  
