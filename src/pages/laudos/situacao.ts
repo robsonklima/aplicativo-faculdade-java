@@ -68,6 +68,7 @@ export class SituacaoPage {
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE,
             saveToPhotoAlbum: false,
+            allowEdit: true,
             sourceType: 1
           }).then(imageData => {
             this.foto = new Foto();

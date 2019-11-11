@@ -156,11 +156,13 @@ export class ChamadoPage {
           this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
             this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
               this.camera.getPicture({
-                quality: 80, targetWidth: 380,
+                quality: 80, 
+                targetWidth: 380,
                 destinationType: this.camera.DestinationType.DATA_URL,
                 encodingType: this.camera.EncodingType.JPEG,
                 mediaType: this.camera.MediaType.PICTURE,
                 saveToPhotoAlbum: false,
+                allowEdit: true,
                 sourceType: 1
               }).then(imageData => {
                 this.foto = new Foto();
