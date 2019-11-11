@@ -505,7 +505,7 @@
             </ion-col>
           </ion-row>
 
-          <div class="campos-pos">
+          <div class="campos-pos" *ngIf="verificarSeEquipamentoEPOS()">
             <ion-row>
               <ion-col col-12 text-left class="no-padding padding-left">
                 <ion-label stacked class="label-title" left-align>Informações do POS</ion-label>

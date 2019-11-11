@@ -83,8 +83,6 @@ export class ChamadoPage {
     private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado);
-    
   }
 
   ionViewWillEnter() {
@@ -94,7 +92,7 @@ export class ChamadoPage {
       .then(() => this.buscarEquipamentosPOS())
       .then(() => this.buscarTiposComunicacao()) 
       .then(() => this.buscarMotivosComunicacao()) 
-      .then(() => this.buscarOperadoras()) 
+      .then(() => this.buscarOperadoras())
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -696,6 +694,18 @@ export class ChamadoPage {
           reject();
         });
     });
+  }
+
+  public verificarSeEquipamentoEPOS(): boolean {
+    var i;
+    
+    for (i = 0; i < this.equipamentosPOS.length; i++) {
+        if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.codEquipContrato) {
+            return true;
+        }
+    }
+    
+    return false;
   }
 
   public removerRatDetalhe(ratDetalhe: any, i: number) {
