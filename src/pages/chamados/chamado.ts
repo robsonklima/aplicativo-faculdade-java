@@ -477,16 +477,18 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-              this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
-              return;
-            } 
-            
-            if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-              this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
-              return;
+            if (this.platform.is('cordova')) {
+              if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+                this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+                return;
+              } 
+              
+              if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+                this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+                return;
+              }
             }
-
+            
             if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
               this.exibirToast("Este chamado deve possuir laudo");
               return;
