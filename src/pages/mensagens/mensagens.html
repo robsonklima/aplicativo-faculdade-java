@@ -20,9 +20,5 @@
     </button>  
   </ion-list>
 
-  <ion-card padding text-center *ngIf="!mensagensTecnico?.length">
-    <ion-card-content>
-      <p>Nenhuma mensagem encontrada</p>
-    </ion-card-content>
-  </ion-card>
+  <p *ngIf="!mensagensTecnico?.length" text-center>Nenhuma mensagem encontrada</p>
 </ion-content>
