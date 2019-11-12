@@ -185,40 +185,31 @@ export class HomePage {
     let loading = this.loadingCtrl.create({ content: 'Aguarde...' });
     loading.present();
     
+    loading.setContent("Preparando a tabela local: Tipos de Serviço");
     this.tipoServicoService.buscarTipoServicosApi().subscribe(() => { 
-      loading.setContent("Preparando a tabela local: Tipos de Serviço");
-
+      loading.setContent("Preparando a tabela local: Ações");
       this.acaoService.buscarAcoesApi().subscribe(() => { 
-        loading.setContent("Preparando a tabela local: Ações");
-        
+        loading.setContent("Preparando a tabela local: Defeitos");
         this.defeitoService.buscarDefeitosApi().subscribe(() => { 
-          loading.setContent("Preparando a tabela local: Defeitos");
-
+          loading.setContent("Preparando a tabela local: Causas");
           this.causaService.buscarCausasApi().subscribe(() => { 
-            loading.setContent("Preparando a tabela local: Causas");
-
+            loading.setContent("Preparando a tabela local: Peças");
             this.pecaService.buscarPecasApi().subscribe(() => {
-              loading.setContent("Preparando a tabela local: Peças");
-
+              loading.setContent("Preparando a tabela local: Equipamentos POS");
               this.equipamentoPOSService.buscarEquipamentosPOSApi().subscribe(() => {
-                loading.setContent("Preparando a tabela local: Equipamentos POS");
-
+                loading.setContent("Preparando a tabela local: Operadoras");
                 this.operadoraTelefonicaService.buscarOperadorasApi().subscribe(() => {
-                  loading.setContent("Preparando a tabela local: Operadoras");
-
+                  loading.setContent("Preparando a tabela local: Tipos de Comunicação");
                   this.tipoComunicacaoService.buscarTiposComunicacaoApi().subscribe(() => {
-                    loading.setContent("Preparando a tabela local: Tipos de Comunicação");
-
+                    loading.setContent("Preparando a tabela local: Motivos de Comunicação");
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
-                      loading.setContent("Preparando a tabela local: Motivos de Comunicação");
-                      
-                      this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
-                        loading.setContent("Preparando a tabela local: Equipamentos e Causas. Este processo pode levar até 2 minutos. Favor não encerrar a aplicacão");  
-
+                      //loading.setContent(`Preparando a tabela local: Equipamentos e Causas. Este processo 
+                                          //pode levar até 2 minutos. Favor não encerrar a aplicacão`);  
+                      //this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
                         loading.dismiss();
                     
                         this.salvarDadosGlobais();
-                      }, err => { loading.dismiss() });
+                      //}, err => { loading.dismiss() });
                     }, err => { loading.dismiss() });
                   }, err => { loading.dismiss() });
                 }, err => { loading.dismiss() });

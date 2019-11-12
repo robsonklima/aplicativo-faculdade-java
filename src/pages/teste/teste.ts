@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { EquipamentoCausa } from '../../models/equipamento-causa';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
@@ -14,12 +15,14 @@ export class TestePage {
   equipamentosCausas: EquipamentoCausa[] = [];
   causas: any[] = [];
   equipamentosPOS: EquipamentoPOS[] = [];
-
+  
   constructor(
     private loadingCtrl: LoadingController,
     private equipamentoCausaService: EquipamentoCausaService,
     private equipamentoPOSService: EquipamentoPOSService
-  ) { }
+  ) {
+    
+  }
 
   ionViewWillEnter() {
     this.carregarEquipamentosPOS();
