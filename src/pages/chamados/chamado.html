@@ -681,6 +681,22 @@
               </ion-select>
             </ion-item>
 
+            <ion-item col-12 class="no-border-bottom">
+              <ion-label stacked>Status do Serviço</ion-label>
+
+              <ion-select 
+                placeholder="Selecione..." 
+                name="statusServico"
+                [ngModel]="chamado?.rats[0]?.statusServico"
+                [compareWith]="compararStatusServicos">
+                <ion-option 
+                  *ngFor="let statusServico of statusServicos"
+                  [value]="statusServico">
+                  {{ statusServico?.nomeStatusServico }}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+
             <ion-item col-12 class="pos-left no-border-bottom">
               <ion-label stacked>Obs. Motivo Comunicação</ion-label>
 

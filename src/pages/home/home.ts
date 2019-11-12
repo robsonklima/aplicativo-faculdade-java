@@ -36,6 +36,7 @@ import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { TestePage } from '../teste/teste';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
+import { StatusServicoService } from '../../services/status-servico';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class HomePage {
     private tipoComunicacaoService: TipoComunicacaoService,
     private motivoComunicacaoService: MotivoComunicacaoService,
     private operadoraTelefonicaService: OperadoraTelefoniaService,
-    private motivoCancelamentoService: MotivoCancelamentoService
+    private motivoCancelamentoService: MotivoCancelamentoService,
+    private statusServicoService: StatusServicoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -206,19 +208,22 @@ export class HomePage {
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
                       loading.setContent("Preparando a tabela local: Motivos de Cancelamento");
                       this.motivoCancelamentoService.buscarMotivosCancelamentoPOSApi().subscribe(() => {
-                        loading.dismiss();
-                    
-                        this.salvarDadosGlobais();
-                      }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Cancelamento. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-                    }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Comunicação. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-                  }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Comunicação. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-                }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Operadoras de Telefonia. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-              }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Equipamentos POS. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-            }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Peças. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-          }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Causas. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-        }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Defeitos. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-      }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Ações. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
-    }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Tipos de Serviço. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+                        loading.setContent("Preparando a tabela local: Status de Serviços");
+                        this.statusServicoService.buscarStatusServicosApi().subscribe(() => {
+                          loading.dismiss();
+                      
+                          this.salvarDadosGlobais();
+                        }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+                      }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+                    }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+                  }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+                }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+              }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+            }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+          }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+        }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+      }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+    }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
   }
 
   private salvarDadosGlobais() {

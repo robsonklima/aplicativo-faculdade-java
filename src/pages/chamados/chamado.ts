@@ -38,6 +38,8 @@ import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
+import { StatusServicoService } from '../../services/status-servico';
+import { StatusServico } from '../../models/status-servico';
 
 
 @Component({
@@ -52,6 +54,7 @@ export class ChamadoPage {
   operadoras: OperadoraTelefonia[] = [];
   motivosComunicacao: MotivoComunicacao[] = [];
   motivosCancelamento: MotivoCancelamento[] = [];
+  statusServicos: StatusServico[] = [];
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
   @ViewChild(Slides) slides: Slides;
@@ -84,7 +87,8 @@ export class ChamadoPage {
     private motivoComunicacaoService: MotivoComunicacaoService,
     private motivoCancelamentoService: MotivoCancelamentoService,
     private chamadoService: ChamadoService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private statusServicoService: StatusServicoService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
@@ -98,6 +102,7 @@ export class ChamadoPage {
       .then(() => this.buscarMotivosComunicacao()) 
       .then(() => this.buscarMotivosCancelamento())
       .then(() => this.buscarOperadoras())
+      .then(() => this.buscarStatusServicos())
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -545,6 +550,7 @@ export class ChamadoPage {
     rat.nomeAcompanhante = form.value.nomeAcompanhante;
     rat.codUsuarioCad = this.dg.usuario.codUsuario;
     rat.obsRAT = form.value.obsRAT;
+    rat.statusServico = form.value.statusServico;
     rat.ratDetalhes = [];
     rat.fotos = [];
 
@@ -603,6 +609,7 @@ export class ChamadoPage {
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
       this.chamado.rats[0].codUsuarioCad = this.dg.usuario.codUsuario;
+      this.chamado.rats[0].statusServico = form.value.statusServico;
       
       this.chamado.rats[0].equipamentoRetirado = form.value.equipamentoRetirado;
       this.chamado.rats[0].numSerieRetirada = form.value.numSerieRetirada;
@@ -941,6 +948,22 @@ export class ChamadoPage {
 
   public compararMotivosCancelamento(m1: MotivoCancelamento, m2: MotivoCancelamento): boolean {
     return m1 && m2 ? m1.codMotivoCancelamento == m2.codMotivoCancelamento : m1 == m2;
+  }
+
+  public buscarStatusServicos(): Promise<StatusServico[]> {
+    return new Promise((resolve, reject) => {
+      this.statusServicoService.buscarStatusServicosStorage().then((status: StatusServico[]) => { 
+        this.statusServicos = status;
+        
+        resolve(status);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public compararStatusServicos(ss1: StatusServico, ss2: StatusServico): boolean {
+    return ss1 && ss2 ? ss1.codStatusServico == ss2.codStatusServico : ss1 == ss2;
   }
 
   private exibirToast(mensagem: string): Promise<any> {

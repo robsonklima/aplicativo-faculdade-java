@@ -85,6 +85,7 @@ import { AssinaturaPage } from '../pages/assinatura/assinatura';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
 import { TestePage } from '../pages/teste/teste';
+import { StatusServicoService } from '../services/status-servico';
 
 
 @NgModule({
@@ -220,7 +221,8 @@ import { TestePage } from '../pages/teste/teste';
     MotivoComunicacaoService,
     MotivoCancelamentoService,
     TipoComunicacaoService,
-    EquipamentoCausaService
+    EquipamentoCausaService,
+    StatusServicoService
   ]
 })
 export class AppModule {}

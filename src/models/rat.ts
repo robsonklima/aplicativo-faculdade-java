@@ -7,11 +7,13 @@ import { MotivoComunicacao } from './motivo-comunicacao';
 import { TipoComunicacao } from './tipo-comunicacao';
 import { OperadoraTelefonia } from './operadora-telefonia';
 import { MotivoCancelamento } from './motivo-cancelamento';
+import { StatusServico } from './status-servico';
 
 export class Rat {
 	codRat?: number;
 	codOs?: number;
 	numRat: string;
+	statusServico: StatusServico;
 	tecnico: Tecnico;
 	dataInicio: string;
 	dataSolucao: string;
