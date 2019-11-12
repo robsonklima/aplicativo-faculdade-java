@@ -505,7 +505,8 @@
             </ion-col>
           </ion-row>
 
-          <div class="campos-pos" *ngIf="verificarSeEquipamentoEPOS()">
+          <!-- <div class="campos-pos" *ngIf="verificarSeEquipamentoEPOS()"> -->
+          <div class="campos-pos">
             <ion-row>
               <ion-col col-12 text-left class="no-padding padding-left">
                 <ion-label stacked class="label-title" left-align>Informações do POS</ion-label>
@@ -648,7 +649,7 @@
               </ion-select>
             </ion-item>
 
-            <ion-item col-12 class="pos-left no-border-bottom">
+            <ion-item col-6 class="pos-left">
               <ion-label stacked>Motivo Comunicação</ion-label>
 
               <ion-select 
@@ -660,6 +661,22 @@
                   *ngFor="let motivoComunicacao of motivosComunicacao"
                   [value]="motivoComunicacao">
                   {{ motivoComunicacao?.nomeMotivoComunicacao }}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item col-6>
+              <ion-label stacked>Motivo Cancelamento</ion-label>
+
+              <ion-select 
+                placeholder="Selecione..." 
+                name="motivoCancelamento"
+                [ngModel]="chamado?.rats[0]?.motivoCancelamento"
+                [compareWith]="compararMotivosCancelamento">
+                <ion-option 
+                  *ngFor="let motivoCancelamento of motivosCancelamento"
+                  [value]="motivoCancelamento">
+                  {{ motivoCancelamento?.nomeMotivoCancelamento }}
                 </ion-option>
               </ion-select>
             </ion-item>

@@ -6,6 +6,7 @@ import { EquipamentoPOS } from './equipamentoPOS';
 import { MotivoComunicacao } from './motivo-comunicacao';
 import { TipoComunicacao } from './tipo-comunicacao';
 import { OperadoraTelefonia } from './operadora-telefonia';
+import { MotivoCancelamento } from './motivo-cancelamento';
 
 export class Rat {
 	codRat?: number;
@@ -33,6 +34,7 @@ export class Rat {
 	rede: string;
 	tipoComunicacao: TipoComunicacao
 	motivoComunicacao: MotivoComunicacao;
+	motivoCancelamento: MotivoCancelamento;
 	operadoraChipRetirado: OperadoraTelefonia;
 	nroChipRetirado: string;
 	operadoraChipInstalado: OperadoraTelefonia;

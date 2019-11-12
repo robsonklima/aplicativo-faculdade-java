@@ -20,6 +20,7 @@ import { RatDetalhe } from '../../models/rat-detalhe';
 import { TipoComunicacao } from '../../models/tipo-comunicacao';
 import { MotivoComunicacao } from '../../models/motivo-comunicacao';
 import { OperadoraTelefonia } from '../../models/operadora-telefonia';
+import { MotivoCancelamento } from '../../models/motivo-cancelamento';
 
 import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -36,6 +37,7 @@ import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
+import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 
 
 @Component({
@@ -43,20 +45,21 @@ import { LaudoPage } from '../laudos/laudo';
   templateUrl: 'chamado.html'
 })
 export class ChamadoPage {
-  @ViewChild(Slides) slides: Slides;
-  tituloSlide: string;
-  dg: DadosGlobais;
-  chamado: Chamado;
-  usuarioPonto: UsuarioPonto;
-  foto: Foto;
   qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
   distanciaCercaEletronica: number = 0;
   equipamentosPOS: EquipamentoPOS[] = [];
   tiposComunicacao: TipoComunicacao[] = [];
   operadoras: OperadoraTelefonia[] = [];
   motivosComunicacao: MotivoComunicacao[] = [];
+  motivosCancelamento: MotivoCancelamento[] = [];
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
+  @ViewChild(Slides) slides: Slides;
+  usuarioPonto: UsuarioPonto;
+  tituloSlide: string;
+  dg: DadosGlobais;
+  chamado: Chamado;
+  foto: Foto;
 
   constructor(
     private platform: Platform,
@@ -79,6 +82,7 @@ export class ChamadoPage {
     private tipoComunicacaoService: TipoComunicacaoService,
     private operadorasTelefoniaService: OperadoraTelefoniaService,
     private motivoComunicacaoService: MotivoComunicacaoService,
+    private motivoCancelamentoService: MotivoCancelamentoService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService
   ) {
@@ -92,6 +96,7 @@ export class ChamadoPage {
       .then(() => this.buscarEquipamentosPOS())
       .then(() => this.buscarTiposComunicacao()) 
       .then(() => this.buscarMotivosComunicacao()) 
+      .then(() => this.buscarMotivosCancelamento())
       .then(() => this.buscarOperadoras())
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
@@ -553,6 +558,7 @@ export class ChamadoPage {
     rat.nroChipRetirado = form.value.nroChipRetirado;
     rat.operadoraChipInstalado = form.value.operadoraChipInstalado;
     rat.nroChipInstalado = form.value.nroChipInstalado;
+    rat.motivoCancelamento = form.value.motivoCancelamento;
     rat.motivoComunicacao = form.value.motivoComunicacao;
     rat.obsMotivoComunicacao = form.value.obsMotivoComunicacao;
 
@@ -609,6 +615,7 @@ export class ChamadoPage {
       this.chamado.rats[0].operadoraChipInstalado = form.value.operadoraChipInstalado;
       this.chamado.rats[0].nroChipInstalado = form.value.nroChipInstalado;
       this.chamado.rats[0].motivoComunicacao = form.value.motivoComunicacao;
+      this.chamado.rats[0].motivoCancelamento = form.value.motivoCancelamento;
       this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
 
       if (this.usuarioPonto) {
@@ -918,6 +925,22 @@ export class ChamadoPage {
 
   public compararMotivosComunicacao(m1: MotivoComunicacao, m2: MotivoComunicacao): boolean {
     return m1 && m2 ? m1.codMotivoComunicacao == m2.codMotivoComunicacao : m1 == m2;
+  }
+
+  public buscarMotivosCancelamento(): Promise<MotivoCancelamento[]> {
+    return new Promise((resolve, reject) => {
+      this.motivoCancelamentoService.buscarMotivosCancelamentoStorage().then((motivos: MotivoCancelamento[]) => { 
+        this.motivosCancelamento = motivos;
+        
+        resolve(motivos);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public compararMotivosCancelamento(m1: MotivoCancelamento, m2: MotivoCancelamento): boolean {
+    return m1 && m2 ? m1.codMotivoCancelamento == m2.codMotivoCancelamento : m1 == m2;
   }
 
   private exibirToast(mensagem: string): Promise<any> {

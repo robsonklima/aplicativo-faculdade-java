@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events, AlertController } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -35,6 +35,7 @@ import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { TestePage } from '../teste/teste';
+import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 
 
 @Component({
@@ -59,6 +60,7 @@ export class HomePage {
     private appVersion: AppVersion,
     private market: Market,
     private events: Events,
+    private alertCtrl: AlertController,
     private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
@@ -68,13 +70,13 @@ export class HomePage {
     private causaService: CausaService,
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService,
-    private laudoService: LaudoService,
+    private nav: NavController,
     private mensagemTecnicoService: MensagemTecnicoService,
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
     private motivoComunicacaoService: MotivoComunicacaoService,
     private operadoraTelefonicaService: OperadoraTelefoniaService,
-    private equipamentoCausaService: EquipamentoCausaService
+    private motivoCancelamentoService: MotivoCancelamentoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -84,7 +86,6 @@ export class HomePage {
   ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage().catch(() => {}))
-      .then(() => this.carregarLaudos().catch(() => {}))
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
@@ -199,43 +200,31 @@ export class HomePage {
               this.equipamentoPOSService.buscarEquipamentosPOSApi().subscribe(() => {
                 loading.setContent("Preparando a tabela local: Operadoras");
                 this.operadoraTelefonicaService.buscarOperadorasApi().subscribe(() => {
-                  loading.setContent("Preparando a tabela local: Tipos de Comunicação");
+                  loading.setContent("Preparando a tabela local: Motivos de Comunicação");
                   this.tipoComunicacaoService.buscarTiposComunicacaoApi().subscribe(() => {
                     loading.setContent("Preparando a tabela local: Motivos de Comunicação");
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
-                      //loading.setContent(`Preparando a tabela local: Equipamentos e Causas. Este processo 
-                                          //pode levar até 2 minutos. Favor não encerrar a aplicacão`);  
-                      //this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                      loading.setContent("Preparando a tabela local: Motivos de Cancelamento");
+                      this.motivoCancelamentoService.buscarMotivosCancelamentoPOSApi().subscribe(() => {
                         loading.dismiss();
                     
                         this.salvarDadosGlobais();
-                      //}, err => { loading.dismiss() });
-                    }, err => { loading.dismiss() });
-                  }, err => { loading.dismiss() });
-                }, err => { loading.dismiss() });
-              }, err => { loading.dismiss() });
-            }, err => { loading.dismiss() });
-          }, err => { loading.dismiss() });
-        }, err => { loading.dismiss() });
-      }, err => { loading.dismiss() });
-    }, err => { loading.dismiss() });
+                      }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Cancelamento. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+                    }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Comunicação. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+                  }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Motivos de Comunicação. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+                }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Operadoras de Telefonia. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+              }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Equipamentos POS. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+            }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Peças. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+          }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Causas. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+        }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Defeitos. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+      }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar as Ações. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
+    }, () => { loading.dismiss().then(() => this.exibirAlerta(`Não foi possível carregar os Tipos de Serviço. Favor tentar novamente. Permanecendo este problema, favor entrar em contato com o seu coordenador.`).then(() => {this.sair() })) });
   }
 
   private salvarDadosGlobais() {
     this.dg.dataHoraCadastro = new Date().toString();
 
     this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
-  }
-
-  private carregarLaudos(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.laudoService.buscarLaudosApi(this.dg.usuario.codTecnico)
-        .subscribe(laudos => {
-          this.laudos = laudos;
-
-          resolve(laudos);
-        }, err => {});
-    });
   }
 
   private carregarVersaoApp(): Promise<any> {
@@ -287,5 +276,24 @@ export class HomePage {
           reject();
         });
     });
+  }
+
+  private exibirAlerta(msg: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const alerta = this.alertCtrl.create({
+        title: 'Alerta!',
+        subTitle: msg,
+        buttons: ['OK']
+      });
+  
+      alerta.present();
+      resolve();
+    });
+  }
+
+  private sair() {
+    this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
+      this.nav.setRoot(this.loginPage);
+    }).catch((err) => {});
   }
 }
