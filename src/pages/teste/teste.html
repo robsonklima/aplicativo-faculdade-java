@@ -1,9 +1,30 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>Teste</ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <ion-title>Teste</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <p>Teste</p>
+  <ion-list>
+    <ion-item col-12>
+      <ion-label stacked>Equipamento</ion-label>
+      
+      <ion-select 
+        placeholder="Selecione..." 
+        name="equipamento"
+        (ionChange)="buscarCausas($event.codEquip)">
+        <ion-option 
+          *ngFor="let equipamento of equipamentosPOS"
+          [value]="equipamento">
+          {{ equipamento?.nomeEquip }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item col-12
+      *ngFor="let causa of causas; let i = index">
+      <h2>{{ causa?.codECausa }}</h2>
+      <p>{{ causa?.nomeCausa }}</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

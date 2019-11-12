@@ -34,6 +34,7 @@ import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
 import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
+import { TestePage } from '../teste/teste';
 
 
 @Component({
@@ -105,6 +106,10 @@ export class HomePage {
 
   public telaMensagensTecnico() {
     this.navCtrl.push(MensagensPage);
+  }
+
+  public telaTeste() {
+    this.navCtrl.push(TestePage);
   }
 
   public abrirPopover(event: MouseEvent) {
@@ -207,13 +212,13 @@ export class HomePage {
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
                       loading.setContent("Preparando a tabela local: Motivos de Comunicação");
                       
-                      //this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
-                        //loading.setContent("Preparando a tabela local: Equipamentos e Causas. Este processo pode levar até 2 minutos. Favor não encerrar a aplicacão");  
+                      this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                        loading.setContent("Preparando a tabela local: Equipamentos e Causas. Este processo pode levar até 2 minutos. Favor não encerrar a aplicacão");  
 
                         loading.dismiss();
                     
                         this.salvarDadosGlobais();
-                      //}, err => { loading.dismiss() });
+                      }, err => { loading.dismiss() });
                     }, err => { loading.dismiss() });
                   }, err => { loading.dismiss() });
                 }, err => { loading.dismiss() });
