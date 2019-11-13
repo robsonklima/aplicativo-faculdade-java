@@ -41,5 +41,6 @@ export class Rat {
 	nroChipRetirado: string;
 	operadoraChipInstalado: OperadoraTelefonia;
 	nroChipInstalado: string;
+	obsMotivoCancelamento: string;
 	obsMotivoComunicacao: string;
 }

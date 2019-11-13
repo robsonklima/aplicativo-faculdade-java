@@ -554,20 +554,6 @@ export class ChamadoPage {
     rat.ratDetalhes = [];
     rat.fotos = [];
 
-    rat.equipamentoRetirado = form.value.equipamentoRetirado;
-    rat.numSerieRetirada = form.value.numSerieRetirada;
-    rat.equipamentoInstalado = form.value.equipamentoInstalado;
-    rat.numSerieInstalada = form.value.numSerieInstalada;
-    rat.rede = form.value.rede;
-    rat.tipoComunicacao = form.value.tipoComunicacao;
-    rat.operadoraChipRetirado = form.value.operadoraChipRetirado;
-    rat.nroChipRetirado = form.value.nroChipRetirado;
-    rat.operadoraChipInstalado = form.value.operadoraChipInstalado;
-    rat.nroChipInstalado = form.value.nroChipInstalado;
-    rat.motivoCancelamento = form.value.motivoCancelamento;
-    rat.motivoComunicacao = form.value.motivoComunicacao;
-    rat.obsMotivoComunicacao = form.value.obsMotivoComunicacao;
-
     if (this.usuarioPonto) {
       rat.horarioInicioIntervalo = this.usuarioPonto.registros[1];
       rat.horarioTerminoIntervalo = this.usuarioPonto.registros[2];
@@ -609,22 +595,7 @@ export class ChamadoPage {
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
       this.chamado.rats[0].codUsuarioCad = this.dg.usuario.codUsuario;
-      this.chamado.rats[0].statusServico = form.value.statusServico;
       
-      this.chamado.rats[0].equipamentoRetirado = form.value.equipamentoRetirado;
-      this.chamado.rats[0].numSerieRetirada = form.value.numSerieRetirada;
-      this.chamado.rats[0].equipamentoInstalado = form.value.equipamentoInstalado;
-      this.chamado.rats[0].numSerieInstalada = form.value.numSerieInstalada;
-      this.chamado.rats[0].rede = form.value.rede;
-      this.chamado.rats[0].tipoComunicacao = form.value.tipoComunicacao;
-      this.chamado.rats[0].operadoraChipRetirado = form.value.operadoraChipRetirado;
-      this.chamado.rats[0].nroChipRetirado = form.value.nroChipRetirado;
-      this.chamado.rats[0].operadoraChipInstalado = form.value.operadoraChipInstalado;
-      this.chamado.rats[0].nroChipInstalado = form.value.nroChipInstalado;
-      this.chamado.rats[0].motivoComunicacao = form.value.motivoComunicacao;
-      this.chamado.rats[0].motivoCancelamento = form.value.motivoCancelamento;
-      this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
-
       if (this.usuarioPonto) {
         this.chamado.rats[0].horarioInicioIntervalo = this.usuarioPonto.registros[1];
         this.chamado.rats[0].horarioTerminoIntervalo = this.usuarioPonto.registros[2];
@@ -634,6 +605,28 @@ export class ChamadoPage {
     this.chamadoService.atualizarChamado(this.chamado);    
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(4, 500);
+  }
+
+  public salvarInformacoesPOS(form: NgForm) {
+    this.chamado.rats[0].statusServico = form.value.statusServico;
+    this.chamado.rats[0].equipamentoRetirado = form.value.equipamentoRetirado;
+    this.chamado.rats[0].numSerieRetirada = form.value.numSerieRetirada;
+    this.chamado.rats[0].equipamentoInstalado = form.value.equipamentoInstalado;
+    this.chamado.rats[0].numSerieInstalada = form.value.numSerieInstalada;
+    this.chamado.rats[0].rede = form.value.rede;
+    this.chamado.rats[0].tipoComunicacao = form.value.tipoComunicacao;
+    this.chamado.rats[0].operadoraChipRetirado = form.value.operadoraChipRetirado;
+    this.chamado.rats[0].nroChipRetirado = form.value.nroChipRetirado;
+    this.chamado.rats[0].operadoraChipInstalado = form.value.operadoraChipInstalado;
+    this.chamado.rats[0].nroChipInstalado = form.value.nroChipInstalado;
+    this.chamado.rats[0].motivoComunicacao = form.value.motivoComunicacao;
+    this.chamado.rats[0].motivoCancelamento = form.value.motivoCancelamento;
+    this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
+    this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
+
+    this.chamadoService.atualizarChamado(this.chamado);    
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(5, 500);
   }
 
   public fecharChamado() {
@@ -798,6 +791,13 @@ export class ChamadoPage {
           }
         break;
       case 4:
+          this.tituloSlide = (i + 1) + ". " + "Informações do POS";
+
+          this.slides.lockSwipeToPrev(false);
+          this.slides.lockSwipeToNext(false);
+  
+          break;
+      case 5:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
 
         this.slides.lockSwipeToPrev(false);
@@ -807,7 +807,7 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 5:
+      case 6:
         this.tituloSlide = (i + 1) + ". " + "Checkout";
 
         this.slides.lockSwipeToPrev(false);
@@ -818,13 +818,13 @@ export class ChamadoPage {
           this.slides.lockSwipeToNext(false);
         }
         break;
-      case 6:
+      case 7:
         this.tituloSlide = (i + 1) + ". " + "Conferência";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
-      case 7:
+      case 8:
         this.tituloSlide = (i + 1) + ". " + "Fechamento";
         
         this.slides.lockSwipeToPrev(false);
