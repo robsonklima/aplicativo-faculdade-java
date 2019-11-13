@@ -304,6 +304,27 @@ export class LaudoPage {
     }
   }
 
+  public fecharModalConfirmacao() {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Ao sair você perderá as informações inseridas?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.fecharModal()
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
