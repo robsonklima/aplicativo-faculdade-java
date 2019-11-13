@@ -755,16 +755,6 @@ export class ChamadoPage {
     confirmacao.present();
   }
 
-  public removerCaracteresNaoAlfabeticos(event: any) {
-    let novoTexto = event.target.value;
-
-    let regExp = new RegExp('^[A-Za-z? ]+$');
-
-    if (!regExp.test(novoTexto)) {
-      event.target.value = novoTexto.slice(0, -1);
-    }
-  }
-
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
