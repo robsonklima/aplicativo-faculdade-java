@@ -40,33 +40,7 @@ export class Config {
     BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, METRO_RIO: 538, CEF: 58, BNB: 253, 
     PROTEGE: 490, BANRISUL: 2
   };
-  public static ORIENTACAO_FOTO = [
-    {
-      MODALIDADE: 'RAT',
-      DESCRICAO: 'Foto da RAT',
-      MENSAGEM: `A foto da RAT consiste na digitalização do documento de relatório de atendimento. 
-                 Nesta opção procure recortar a foto para centralizar a imagem no documento.`
-    },
-    {
-      MODALIDADE: 'ETIQUETANUMSERIE',
-      DESCRICAO: 'Etiqueta Nro. Série',
-      MENSAGEM: `Esta foto deve identificar a etiqueta com o número de série do equipamento de forma legível. 
-                 Utilize o recurso de recorte para centralizar a imagem.`
-    },
-    {
-      MODALIDADE: 'EQUIPAMENTOOPERACIONAL',
-      DESCRICAO: 'Eqp. Operacional',
-      MENSAGEM: `Esta foto deve mostrar o equipamento em funcionamento após o atendimento. Se possível 
-                 apresentar o periférico que foi realizada a manutenção na imagem.`
-    },
-    {
-      MODALIDADE: 'PARTEINTERNA',
-      DESCRICAO: 'Parte Interna',
-      MENSAGEM: `A foto da parte interna deve mostrar o interior do equipamento. Se possível posicione a 
-                 câmera de forma vertical ao capturar a imagem.`
-    },
-  ]
 
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }

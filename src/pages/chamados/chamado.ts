@@ -40,6 +40,8 @@ import { LaudoPage } from '../laudos/laudo';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 import { StatusServicoService } from '../../services/status-servico';
 import { StatusServico } from '../../models/status-servico';
+import { DefeitoPOSService } from '../../services/defeito-pos';
+import { DefeitoPOS } from '../../models/defeito-pos';
 
 
 @Component({
@@ -54,6 +56,7 @@ export class ChamadoPage {
   operadoras: OperadoraTelefonia[] = [];
   motivosComunicacao: MotivoComunicacao[] = [];
   motivosCancelamento: MotivoCancelamento[] = [];
+  defeitosPOS: DefeitoPOS[] = [];
   statusServicos: StatusServico[] = [];
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
@@ -86,6 +89,7 @@ export class ChamadoPage {
     private operadorasTelefoniaService: OperadoraTelefoniaService,
     private motivoComunicacaoService: MotivoComunicacaoService,
     private motivoCancelamentoService: MotivoCancelamentoService,
+    private defeitoPOSService: DefeitoPOSService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService,
     private statusServicoService: StatusServicoService
@@ -103,6 +107,7 @@ export class ChamadoPage {
       .then(() => this.buscarMotivosCancelamento())
       .then(() => this.buscarOperadoras())
       .then(() => this.buscarStatusServicos())
+      .then(() => this.buscarDefeitosPOS())
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -629,6 +634,12 @@ export class ChamadoPage {
     this.slides.slideTo(5, 500);
   }
 
+  public salvarStatusServico(statusServico: StatusServico) {
+    this.chamado.rats[0].statusServico = statusServico;
+
+    this.chamadoService.atualizarChamado(this.chamado);    
+  }
+
   public fecharChamado() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
@@ -714,7 +725,8 @@ export class ChamadoPage {
         }
     }
     
-    return false;
+    //return false;
+    return true;
   }
 
   public removerRatDetalhe(ratDetalhe: any, i: number) {
@@ -795,7 +807,6 @@ export class ChamadoPage {
 
           this.slides.lockSwipeToPrev(false);
           this.slides.lockSwipeToNext(false);
-  
           break;
       case 5:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
@@ -974,6 +985,27 @@ export class ChamadoPage {
 
       resolve(toast.present());
     });
+  }
+
+  public buscarDefeitosPOS(): Promise<DefeitoPOS[]> {
+    return new Promise((resolve, reject) => {
+      this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitos: DefeitoPOS[]) => { 
+        this.defeitosPOS = defeitos;
+
+        resolve(defeitos);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  public verificarDefeitoPOSExiteTrocaEquipamento(codDefeitoPOS: number): boolean {
+    this.defeitosPOS.forEach(defeito => {
+      if (defeito.codDefeitoPOS == codDefeitoPOS && defeito.exigeTrocaEquipamento) 
+        return true;
+    });
+
+    return false;
   }
 
   private exibirAlerta(msg: string) {

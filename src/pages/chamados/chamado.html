@@ -532,10 +532,9 @@
 
     <!-- Informações POS -->
     <ion-slide>
-      <form #fPos="ngForm" (ngSubmit)="salvarInformacoesPOS(fPos)" class="form">
-        <ion-list>
-          <!-- <div class="campos-pos" *ngIf="verificarSeEquipamentoEPOS()"> -->
-          <div class="campos-pos">
+      <div class="campos-pos" *ngIf="verificarSeEquipamentoEPOS()">
+        <form #fPos="ngForm" (ngSubmit)="salvarInformacoesPOS(fPos)" class="form">
+          <ion-list>
             <ion-item col-12 class="no-border-bottom">
               <ion-label stacked>Status do Serviço</ion-label>
 
@@ -543,7 +542,9 @@
                 placeholder="Selecione o Status do Serviço" 
                 name="statusServico"
                 [ngModel]="chamado?.rats[0]?.statusServico"
-                [compareWith]="compararStatusServicos">
+                [compareWith]="compararStatusServicos"
+                (ionChange)="salvarStatusServico($event)"
+                required>
                 <ion-option 
                   *ngFor="let statusServico of statusServicos"
                   [value]="statusServico">
@@ -552,20 +553,35 @@
               </ion-select>
             </ion-item>
 
-            <ion-item col-12>
+            <ion-item col-12 *ngIf="chamado?.rats[0]?.statusServico?.codStatusServico == 2 
+              || chamado?.rats[0]?.statusServico?.codStatusServico == 16">
               <ion-label stacked>Motivo Cancelamento</ion-label>
 
               <ion-select 
                 placeholder="Selecione o Motivo do Cancelamento" 
                 name="motivoCancelamento"
                 [ngModel]="chamado?.rats[0]?.motivoCancelamento"
-                [compareWith]="compararMotivosCancelamento">
+                [compareWith]="compararMotivosCancelamento"
+                required>
                 <ion-option 
                   *ngFor="let motivoCancelamento of motivosCancelamento"
                   [value]="motivoCancelamento">
                   {{ motivoCancelamento?.nomeMotivoCancelamento }}
                 </ion-option>
               </ion-select>
+            </ion-item>
+
+            <ion-item col-12 *ngIf="chamado?.rats[0]?.statusServico?.codStatusServico == 2 
+              || chamado?.rats[0]?.statusServico?.codStatusServico == 16">
+              <ion-label stacked>Obs. Motivo Cancelamento</ion-label>
+
+              <ion-input
+                type="text"
+                name="obsMotivoCancelamento" 
+                placeholder="Obs. Motivo Cancelamento"
+                [ngModel]="chamado?.rats[0]?.obsMotivoCancelamento"
+                required>
+              </ion-input>
             </ion-item>
 
             <ion-item col-12>
@@ -575,7 +591,9 @@
                 placeholder="Selecione o Equipamento Retirado" 
                 name="equipamentoRetirado" 
                 [ngModel]="chamado?.rats[0]?.equipamentoRetirado"
-                [compareWith]="compararEquipamentosPOS">
+                [compareWith]="compararEquipamentosPOS"
+                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 
+                || verificarDefeitoPOSExiteTrocaEquipamento(chamado?.codDefeitoPOS)">
                 <ion-option 
                   *ngFor="let equipamento of equipamentosPOS"
                   [value]="equipamento">
@@ -592,7 +610,9 @@
                 placeholder="Número da Série Retirada" 
                 name="numSerieRetirada"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.numSerieRetirada">
+                [ngModel]="chamado?.rats[0]?.numSerieRetirada"
+                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3
+                || verificarDefeitoPOSExiteTrocaEquipamento(chamado?.codDefeitoPOS)">
               </ion-input>
             </ion-item>
 
@@ -603,7 +623,8 @@
                 placeholder="Selecione o Equipamento Instalado" 
                 name="equipamentoInstalado"
                 [ngModel]="chamado?.rats[0]?.equipamentoInstalado"
-                [compareWith]="compararEquipamentosPOS">
+                [compareWith]="compararEquipamentosPOS"
+                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3">
                 <ion-option 
                   *ngFor="let equipamento of equipamentosPOS"
                   [value]="equipamento">
@@ -619,18 +640,20 @@
                 placeholder="Número da Série Instalada" 
                 name="numSerieInstalada"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.numSerieInstalada">
+                [ngModel]="chamado?.rats[0]?.numSerieInstalada"
+                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3">
               </ion-input>
             </ion-item>
 
-            <ion-item col-12>
+            <ion-item col-12 *ngIf="chamado?.cliente?.codCliente == 2">
               <ion-label stacked>Rede</ion-label>
               <ion-input
                 type="text"
                 name="rede" 
                 placeholder="Rede"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.rede">
+                [ngModel]="chamado?.rats[0]?.rede"
+                required>
               </ion-input>
             </ion-item>
 
@@ -704,17 +727,6 @@
               </ion-select>
             </ion-item>
 
-            <ion-item col-12>
-              <ion-label stacked>Obs. Motivo Cancelamento</ion-label>
-
-              <ion-input
-                type="text"
-                name="obsMotivoCancelamento" 
-                placeholder="Obs. Motivo Cancelamento"
-                [ngModel]="chamado?.rats[0]?.obsMotivoCancelamento">
-              </ion-input>
-            </ion-item>
-
             <div padding>
               <button
                 color="secondary"
@@ -724,9 +736,15 @@
                 Salvar e Prosseguir
               </button>
             </div>
-          </div>
-        </ion-list>
-      </form>
+          </ion-list>
+        </form>
+      </div>
+
+      <ion-list class="list-slide">
+        <ion-item class="no-border-bottom" *ngIf="!verificarSeEquipamentoEPOS()">
+          <p text-center class="p-msg">Não é necessário preencher</p> 
+        </ion-item>
+      </ion-list>
     </ion-slide>
     <!-- Informações POS -->
 
@@ -764,7 +782,7 @@
         </ion-item>
 
         <ion-item *ngIf="chamado?.rats[0]?.ratDetalhes?.length == 0">
-          <p text-center class="p-msg">Nenhum detalhe adicionado</p>
+          <p text-center class="p-msg">Insira os detalhes da RAT</p>
         </ion-item>
       </ion-list>
     </ion-slide>

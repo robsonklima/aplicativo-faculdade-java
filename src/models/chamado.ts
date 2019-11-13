@@ -40,5 +40,6 @@ export class Chamado {
 	indOSIntervencaoEquipamento: number;
 	qtdCedulasPagas: number;
     qtdCedulasRejeitadas: number;
-    justificativaCedulas: number;
+	justificativaCedulas: number;
+	codDefeitoPOS: number;
 }

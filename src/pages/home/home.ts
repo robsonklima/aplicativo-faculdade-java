@@ -37,6 +37,7 @@ import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { TestePage } from '../teste/teste';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 import { StatusServicoService } from '../../services/status-servico';
+import { DefeitoPOSService } from '../../services/defeito-pos';
 
 
 @Component({
@@ -78,7 +79,8 @@ export class HomePage {
     private motivoComunicacaoService: MotivoComunicacaoService,
     private operadoraTelefonicaService: OperadoraTelefoniaService,
     private motivoCancelamentoService: MotivoCancelamentoService,
-    private statusServicoService: StatusServicoService
+    private statusServicoService: StatusServicoService,
+    private defeitoPOSService: DefeitoPOSService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -210,9 +212,12 @@ export class HomePage {
                       this.motivoCancelamentoService.buscarMotivosCancelamentoPOSApi().subscribe(() => {
                         loading.setContent("Preparando a tabela local: Status de Serviços");
                         this.statusServicoService.buscarStatusServicosApi().subscribe(() => {
-                          loading.dismiss();
-                      
-                          this.salvarDadosGlobais();
+                          loading.setContent("Preparando a tabela local: Defeitos de POS");
+                          this.defeitoPOSService.buscarDefeitosPOSApi().subscribe(() => {
+                            loading.dismiss();
+                        
+                            this.salvarDadosGlobais();
+                          }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                         }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                       }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                     }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
