@@ -1,5 +1,11 @@
 0.0.53 
-- Campos POS.
+- Adição de Campos de preenchimento relativos ao POS/Banrisul;
+- Correção do campo Nome Acompanhante para aceitar caracteres com acento;
+- Melhoria na tela laudo: sistema pergunta antes de fechar a tela;
+- Remoção dos botões inativos da tela inicial;
+- Melhoria no módulo mensagens: itens permanecem na tela mesmo após a leitura;
+- Padronização dos icones: sem foto e laudo;
+- Melhoria na usabilidade da tela de listagem de chamados: evento de clique expandido para todo o cartão do chamado;
 
 0.0.52 01/11/2019
 - Correcao camera Android 9.
