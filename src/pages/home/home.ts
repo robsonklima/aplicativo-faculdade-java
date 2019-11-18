@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -27,13 +27,11 @@ import { DefeitoService } from "../../services/defeito";
 import { CausaService } from "../../services/causa";
 import { PecaService } from "../../services/peca";
 import { TipoServicoService } from "../../services/tipo-servico";
-import { LaudoService } from '../../services/laudo';
 import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
 import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
-import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { TestePage } from '../teste/teste';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 import { StatusServicoService } from '../../services/status-servico';
@@ -62,7 +60,6 @@ export class HomePage {
     private appVersion: AppVersion,
     private market: Market,
     private events: Events,
-    private alertCtrl: AlertController,
     private popoverCtrl: PopoverController,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
@@ -288,20 +285,7 @@ export class HomePage {
     });
   }
 
-  private exibirAlerta(msg: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const alerta = this.alertCtrl.create({
-        title: 'Alerta!',
-        subTitle: msg,
-        buttons: ['OK']
-      });
-  
-      alerta.present();
-      resolve();
-    });
-  }
-
-  private sair() {
+  public sair() {
     this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
       this.nav.setRoot(this.loginPage);
     }).catch((err) => {});

@@ -380,7 +380,6 @@
               type="text" 
               placeholder="Nome" 
               name="nomeAcompanhante"
-              (keyup)="removerCaracteresNaoAlfabeticos($event)"
               [maxlength]="50"
               [ngModel]="chamado?.rats[0]?.nomeAcompanhante">
             </ion-input>

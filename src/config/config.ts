@@ -37,8 +37,8 @@ export class Config {
     FILIAL_TECNICO_DE_CAMPO_COM_CHAMADOS: 84,
   };
   public static CLIENTE = {
-    BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, METRO_RIO: 538, CEF: 58, BNB: 253, 
-    PROTEGE: 490, BANRISUL: 2
+    BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, 
+    METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2
   };
 
   //public static API_URL = 'http://localhost:60687/api/';

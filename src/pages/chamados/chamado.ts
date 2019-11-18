@@ -664,6 +664,18 @@ export class ChamadoPage {
               return;
             }
 
+            if (this.verificarSeEquipamentoEPOS()) {
+              if (!this.chamado.rats[0].statusServico.codStatusServico) {
+                this.exibirToast('Favor informar o status do serviço do POS');
+                return;
+              }
+
+              if (this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL && !this.chamado.rats[0].rede) {
+                this.exibirToast('Favor informar a rede do equipamento');
+                return;
+              }
+            }
+
             this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
             this.chamado.statusServico.abreviacao = "F";
             this.chamado.statusServico.nomeStatusServico = "FECHADO";
@@ -725,8 +737,7 @@ export class ChamadoPage {
         }
     }
     
-    //return false;
-    return true;
+    return false;
   }
 
   public removerRatDetalhe(ratDetalhe: any, i: number) {
@@ -753,16 +764,6 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
-  }
-
-  public removerCaracteresNaoAlfabeticos(event: any) {
-    let novoTexto = event.target.value;
-
-    let regExp = new RegExp('^[A-Za-z? ]+$');
-
-    if (!regExp.test(novoTexto)) {
-      event.target.value = novoTexto.slice(0, -1);
-    }
   }
 
   private configurarSlide(i: number) {
