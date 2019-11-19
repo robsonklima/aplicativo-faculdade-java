@@ -88,8 +88,7 @@ export class ChamadoService {
 
   verificarExisteCheckinEmOutroChamado(): boolean {
     return (this.chamados.filter((c) => {
-      return ((c.checkin.localizacao.latitude || c.checkin.localizacao.longitude) 
-        && !c.dataHoraFechamento);
+      return ((c.checkin.localizacao.latitude || c.checkin.localizacao.longitude) && !c.dataHoraFechamento);
     }).length > 0);
   }
   

@@ -99,8 +99,6 @@ export class ChamadoPage {
     private statusServicoService: StatusServicoService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado);
-    
   }
 
   ionViewWillEnter() {
@@ -428,8 +426,7 @@ export class ChamadoPage {
   public efetuarCheckin() {
     const alerta = this.alertCtrl.create({
       title: 'Confirmar o Checkin?',
-      message: `Somente confirme o Checkin se você realmente estiver 
-                  no local do atendimento`,
+      message: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
       buttons: [
         {
           text: 'Cancelar',
@@ -643,114 +640,24 @@ export class ChamadoPage {
 
             this.exibirToast('Chamado Fechado!!!')
 
-            this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
-            this.chamado.statusServico.abreviacao = "F";
-            this.chamado.statusServico.nomeStatusServico = "FECHADO";
-            this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+            // this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
+            // this.chamado.statusServico.abreviacao = "F";
+            // this.chamado.statusServico.nomeStatusServico = "FECHADO";
+            // this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-            this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.navCtrl.pop().then(() => {
-                this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
-                  this.events.publish('sincronizacao:solicitada');
-                }).catch();
-              }).catch();
-            }).catch();
+            // this.chamadoService.atualizarChamado(this.chamado).then(() => {
+            //   this.navCtrl.pop().then(() => {
+            //     this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
+            //       this.events.publish('sincronizacao:solicitada');
+            //     }).catch();
+            //   }).catch();
+            // }).catch();
           }
         }
       ]
     });
 
     confirmacao.present();
-  }
-
-  public salvarStatusServico(statusServico: StatusServico) {
-    this.chamado.rats[0].statusServico = statusServico;
-
-    this.chamadoService.atualizarChamado(this.chamado);    
-  }
-
-  public salvarDefeitoPOS(defeitoPOS: DefeitoPOS) {
-    if (this.chamado.rats.length) {
-      this.chamado.rats[0].defeitoPOS = defeitoPOS;
-
-      this.chamadoService.atualizarChamado(this.chamado);
-    }
-  }
-
-  private carregarDadosGlobais(): Promise<DadosGlobais> {
-    return new Promise((resolve, reject) => {
-      this.dadosGlobaisService.buscarDadosGlobaisStorage()
-        .then((dados) => {
-          if (dados)
-            this.dg = dados;
-            resolve(dados);
-        })
-        .catch((err) => {
-          reject(new Error(err.message))
-        });
-    });
-  }
-
-  private obterRegistrosPonto(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.usuarioService.buscarRegistrosPonto(
-        this.dg.usuario.codUsuario)
-        .subscribe(res => {
-          this.usuarioPonto = res;
-          
-          resolve(this.usuarioPonto);
-        },
-        err => {
-          reject();
-        });
-    });
-  }
-
-  public verificarSeEquipamentoEPOS(): boolean {
-    var i;
-    
-    for (i = 0; i < this.equipamentosPOS.length; i++) {
-      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
-          return true;
-      }
-
-      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
-
-  public verificarEquipamentoPossuiChip(): boolean {
-    if (
-      (
-        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
-        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_G
-      ) || (
-        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
-        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_G
-      )
-    ) {
-      return true;
-    }
-        
-
-    return false;
-  }
-
-  public verificarSeDefeitoExigeTroca(): boolean {
-    var i;
-    
-    for (i = 0; i < this.defeitosPOS.length; i++) {
-      if (this.defeitosPOS[i].codDefeitoPOS === this.chamado.rats[0].defeitoPOS.codDefeitoPOS) {
-        if(this.defeitosPOS[i].exigeTrocaEquipamento) {
-          return true;
-        }
-      }
-    }
-    
-    return false;
   }
 
   private validarCamposObrigatorios(): boolean {
@@ -941,6 +848,96 @@ export class ChamadoPage {
     }
 
     return true;
+  }
+
+  public salvarStatusServico(statusServico: StatusServico) {
+    this.chamado.rats[0].statusServico = statusServico;
+
+    this.chamadoService.atualizarChamado(this.chamado);    
+  }
+
+  public salvarDefeitoPOS(defeitoPOS: DefeitoPOS) {
+    if (this.chamado.rats.length) {
+      this.chamado.rats[0].defeitoPOS = defeitoPOS;
+
+      this.chamadoService.atualizarChamado(this.chamado);
+    }
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(dados);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
+  }
+
+  private obterRegistrosPonto(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.usuarioService.buscarRegistrosPonto(
+        this.dg.usuario.codUsuario)
+        .subscribe(res => {
+          this.usuarioPonto = res;
+          
+          resolve(this.usuarioPonto);
+        },
+        err => {
+          reject();
+        });
+    });
+  }
+
+  public verificarSeEquipamentoEPOS(): boolean {
+    var i;
+    
+    for (i = 0; i < this.equipamentosPOS.length; i++) {
+      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
+          return true;
+      }
+
+      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  public verificarEquipamentoPossuiChip(): boolean {
+    if (
+      (
+        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
+        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_G
+      ) || (
+        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
+        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_G
+      )
+    ) {
+      return true;
+    }
+        
+
+    return false;
+  }
+
+  public verificarSeDefeitoExigeTroca(): boolean {
+    var i;
+    
+    for (i = 0; i < this.defeitosPOS.length; i++) {
+      if (this.defeitosPOS[i].codDefeitoPOS === this.chamado.rats[0].defeitoPOS.codDefeitoPOS) {
+        if(this.defeitosPOS[i].exigeTrocaEquipamento) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
   }
 
   public removerRatDetalhe(ratDetalhe: any, i: number) {
