@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController, NavController, AlertController, ToastController,  PopoverController, Events } from 'ionic-angular';
+import { Platform, LoadingController, NavController, AlertController, ToastController,  PopoverController } from 'ionic-angular';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -14,8 +14,6 @@ import { ChamadosMaisOpcoesPage } from './chamados-mais-opcoes';
 
 import { ChamadoService } from "../../services/chamado";
 import { DadosGlobais } from '../../models/dados-globais';
-
-import moment from 'moment';
 
 
 @Component({
@@ -34,7 +32,6 @@ export class ChamadosPage {
     private popoverCtrl: PopoverController,
     private toastCtrl: ToastController,
     private platform: Platform,
-    private events: Events,
     private badge: Badge,
     private geolocation: Geolocation,
     private inAppBrowser: InAppBrowser,

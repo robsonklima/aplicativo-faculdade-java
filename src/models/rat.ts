@@ -8,6 +8,7 @@ import { TipoComunicacao } from './tipo-comunicacao';
 import { OperadoraTelefonia } from './operadora-telefonia';
 import { MotivoCancelamento } from './motivo-cancelamento';
 import { StatusServico } from './status-servico';
+import { DefeitoPOS } from './defeito-pos';
 
 export class Rat {
 	codRat?: number;
@@ -43,4 +44,5 @@ export class Rat {
 	nroChipInstalado: string;
 	obsMotivoCancelamento: string;
 	obsMotivoComunicacao: string;
+	defeitoPOS: DefeitoPOS;
 }

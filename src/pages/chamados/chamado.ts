@@ -10,6 +10,9 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { Market } from '@ionic-native/market';
 
 import moment from 'moment';
+import _ from 'lodash';
+
+import { Config } from './../../config/config';
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
 import { Rat } from "../../models/rat";
@@ -22,7 +25,6 @@ import { MotivoComunicacao } from '../../models/motivo-comunicacao';
 import { OperadoraTelefonia } from '../../models/operadora-telefonia';
 import { MotivoCancelamento } from '../../models/motivo-cancelamento';
 
-import { Config } from './../../config/config';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from './../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
@@ -42,6 +44,7 @@ import { StatusServicoService } from '../../services/status-servico';
 import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
 import { DefeitoPOS } from '../../models/defeito-pos';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -66,6 +69,7 @@ export class ChamadoPage {
   dg: DadosGlobais;
   chamado: Chamado;
   foto: Foto;
+  config: any;
 
   constructor(
     private platform: Platform,
@@ -95,6 +99,8 @@ export class ChamadoPage {
     private statusServicoService: StatusServicoService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {
@@ -111,6 +117,7 @@ export class ChamadoPage {
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
+      
 
     if (this.chamado.rats.length == 0) {
       let rat = new Rat();
@@ -492,22 +499,7 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if (this.platform.is('cordova')) {
-              if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-                this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
-                return;
-              } 
-              
-              if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-                this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
-                return;
-              }
-            }
-            
-            if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
-              this.exibirToast("Este chamado deve possuir laudo");
-              return;
-            } 
+            if (!this.validarCamposObrigatorios()) return;
 
             const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
             loader.present();
@@ -628,16 +620,11 @@ export class ChamadoPage {
     this.chamado.rats[0].motivoCancelamento = form.value.motivoCancelamento;
     this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
+    this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
 
     this.chamadoService.atualizarChamado(this.chamado);    
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(5, 500);
-  }
-
-  public salvarStatusServico(statusServico: StatusServico) {
-    this.chamado.rats[0].statusServico = statusServico;
-
-    this.chamadoService.atualizarChamado(this.chamado);    
   }
 
   public fecharChamado() {
@@ -652,29 +639,9 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
-              || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
-              || !this.chamado.rats[0].nomeAcompanhante) {
-              this.exibirToast('Favor informar os dados da RAT');
-              return;
-            }
+            if (!this.validarCamposObrigatorios()) return;
 
-            if (this.chamado.rats[0].ratDetalhes.length == 0) {
-              this.exibirToast('Favor inserir os detalhes da RAT');
-              return;
-            }
-
-            if (this.verificarSeEquipamentoEPOS()) {
-              if (!this.chamado.rats[0].statusServico.codStatusServico) {
-                this.exibirToast('Favor informar o status do serviço do POS');
-                return;
-              }
-
-              if (this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL && !this.chamado.rats[0].rede) {
-                this.exibirToast('Favor informar a rede do equipamento');
-                return;
-              }
-            }
+            this.exibirToast('Chamado Fechado!!!')
 
             this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
             this.chamado.statusServico.abreviacao = "F";
@@ -683,20 +650,31 @@ export class ChamadoPage {
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
               this.navCtrl.pop().then(() => {
-                this.exibirToast('Chamado fechado no seu smartphone, aguarde a sincronização com o servidor').then(() => {
+                this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
                   this.events.publish('sincronizacao:solicitada');
-                })
-                .catch();
-                })
-                .catch();
-            })
-            .catch();
+                }).catch();
+              }).catch();
+            }).catch();
           }
         }
       ]
     });
 
     confirmacao.present();
+  }
+
+  public salvarStatusServico(statusServico: StatusServico) {
+    this.chamado.rats[0].statusServico = statusServico;
+
+    this.chamadoService.atualizarChamado(this.chamado);    
+  }
+
+  public salvarDefeitoPOS(defeitoPOS: DefeitoPOS) {
+    if (this.chamado.rats.length) {
+      this.chamado.rats[0].defeitoPOS = defeitoPOS;
+
+      this.chamadoService.atualizarChamado(this.chamado);
+    }
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -732,12 +710,237 @@ export class ChamadoPage {
     var i;
     
     for (i = 0; i < this.equipamentosPOS.length; i++) {
-        if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.codEquipContrato) {
-            return true;
-        }
+      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
+          return true;
+      }
+
+      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
+        return true;
+      }
     }
     
     return false;
+  }
+
+  public verificarEquipamentoPossuiChip(): boolean {
+    if (
+      (
+        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
+        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_G
+      ) || (
+        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
+        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_G
+      )
+    ) {
+      return true;
+    }
+        
+
+    return false;
+  }
+
+  public verificarSeDefeitoExigeTroca(): boolean {
+    var i;
+    
+    for (i = 0; i < this.defeitosPOS.length; i++) {
+      if (this.defeitosPOS[i].codDefeitoPOS === this.chamado.rats[0].defeitoPOS.codDefeitoPOS) {
+        if(this.defeitosPOS[i].exigeTrocaEquipamento) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  }
+
+  private validarCamposObrigatorios(): boolean {
+    // ATM
+    if (this.chamado.rats.length == 0) {
+      this.exibirToast("favor inserir a RAT");
+
+      return;
+    }
+
+    if (this.platform.is('cordova')) {
+      if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+        this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+
+        return;
+      } 
+      
+      if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+        this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+
+        return;
+      }
+    }
+
+    if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
+      this.exibirToast("Este chamado deve possuir um laudo");
+
+      return;
+    }
+
+    if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
+      || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
+      this.exibirToast('Favor informar os dados da RAT');
+
+      return false;
+    }
+
+    if (this.chamado.rats[0].ratDetalhes.length == 0) {
+      this.exibirToast('Favor inserir os detalhes da RAT');
+
+      return false;
+    }
+
+    // POS
+    if (!this.verificarSeEquipamentoEPOS()) return true;
+
+    if (!_.has(this.chamado.rats[0], 'statusServico') || !_.has(this.chamado.rats[0].statusServico, 'codStatusServico')) {
+      this.exibirToast("Informe o status de serviço do POS");
+
+      return false;
+    }
+
+    if (!_.has(this.chamado.rats[0], 'defeitoPOS') || !_.has(this.chamado.rats[0].defeitoPOS, 'codDefeitoPOS')) {
+      this.exibirToast("Informe o defeito apresentado pelo POS");
+
+      return false;
+    }
+
+    if (
+      this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO || 
+      this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO
+    ) {
+      if (!_.has(this.chamado.rats[0], 'motivoCancelamento') || !_.has(this.chamado.rats[0].motivoCancelamento, 'codMotivoCancelamento') || !this.chamado.rats[0].obsMotivoCancelamento) {
+        this.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação');
+
+        return false;
+      }
+    }
+
+    if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.FECHADO) {
+      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.INSTALAÇÃO) {
+        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+
+          return false;
+        }
+
+        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
+          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+
+          return false;
+        }
+
+        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
+          this.exibirToast('Favor inserir a rede do equipamento POS');
+
+          return false;
+        }
+      }
+
+      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.CORRETIVA) {
+        if (this.verificarSeDefeitoExigeTroca()) {
+          if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
+            this.exibirToast('Favor inserir o equipamento POS instalado');
+  
+            return false;
+          }
+  
+          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
+            this.exibirToast('Favor inserir o equipamento POS retirado');
+  
+            return false;
+          }
+        }
+
+        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
+          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+
+          return false;
+        }
+
+        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
+          this.exibirToast('Favor inserir a rede do equipamento POS');
+
+          return false;
+        }
+      }
+
+      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.DESINSTALAÇÃO) {
+        if (this.verificarSeDefeitoExigeTroca()) {
+          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
+            this.exibirToast('Favor inserir o equipamento POS retirado e a série');
+  
+            return false;
+          }
+        }
+
+        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
+          this.exibirToast('Favor inserir a rede do equipamento POS');
+
+          return false;
+        }
+      }
+
+      if (
+        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.REMANEJAMENTO ||
+        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.TROCA_VELOHC
+      ) {
+        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+  
+          return false;
+        }
+
+        if (this.verificarSeDefeitoExigeTroca()) {
+          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
+            this.exibirToast('Favor inserir o equipamento POS retirado');
+    
+            return false;
+          }
+        }
+  
+        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
+          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+  
+          return false;
+        }
+  
+        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
+          this.exibirToast('Favor inserir a rede do equipamento POS');
+  
+          return false;
+        }
+      }
+  
+      if (
+        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ATUALIZACAO ||
+        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ALTERAÇÃO_ENGENHARIA
+      ) {
+        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+  
+          return false;
+        }
+  
+        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
+          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+  
+          return false;
+        }
+  
+        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
+          this.exibirToast('Favor inserir a rede do equipamento POS');
+  
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   public removerRatDetalhe(ratDetalhe: any, i: number) {
@@ -998,6 +1201,10 @@ export class ChamadoPage {
         reject(err);
       });
     });
+  }
+
+  public compararDefeitosPOS(def1: DefeitoPOS, def2: DefeitoPOS): boolean {
+    return def1 && def2 ? def1.codDefeitoPOS == def2.codDefeitoPOS : def1 == def2;
   }
 
   public verificarDefeitoPOSExiteTrocaEquipamento(codDefeitoPOS: number): boolean {

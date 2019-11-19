@@ -15,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="chamado-content-page outer-content">
-  <ion-slides pager (ionSlideDidChange)="alterarSlide()">
+  <ion-slides pager (ionSlideDidChange)="alterarSlide()" >
     <!-- Informações -->
     <ion-slide>
       <ion-list>
@@ -542,8 +542,7 @@
                 name="statusServico"
                 [ngModel]="chamado?.rats[0]?.statusServico"
                 [compareWith]="compararStatusServicos"
-                (ionChange)="salvarStatusServico($event)"
-                required>
+                (ionChange)="salvarStatusServico($event)">
                 <ion-option 
                   *ngFor="let statusServico of statusServicos"
                   [value]="statusServico">
@@ -552,8 +551,24 @@
               </ion-select>
             </ion-item>
 
-            <ion-item col-12 *ngIf="chamado?.rats[0]?.statusServico?.codStatusServico == 2 
-              || chamado?.rats[0]?.statusServico?.codStatusServico == 16">
+            <ion-item col-12 class="no-border-bottom">
+              <ion-label stacked>Defeito do POS</ion-label>
+
+              <ion-select 
+                placeholder="Selecione o Defeito do POS" 
+                name="defeitoPOS"
+                [ngModel]="chamado?.rats[0]?.defeitoPOS"
+                [compareWith]="compararDefeitosPOS"
+                (ionChange)="salvarDefeitoPOS($event)">
+                <ion-option 
+                  *ngFor="let defeitoPOS of defeitosPOS"
+                  [value]="defeitoPOS">
+                  {{ defeitoPOS?.nomeDefeitoPOS }}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item col-12>
               <ion-label stacked>Motivo Cancelamento</ion-label>
 
               <ion-select 
@@ -561,7 +576,7 @@
                 name="motivoCancelamento"
                 [ngModel]="chamado?.rats[0]?.motivoCancelamento"
                 [compareWith]="compararMotivosCancelamento"
-                required>
+                [disabled]="this.chamado?.rats[0]?.statusServico?.codStatusServico != 2 && this.chamado?.rats[0]?.statusServico?.codStatusServico != 16">
                 <ion-option 
                   *ngFor="let motivoCancelamento of motivosCancelamento"
                   [value]="motivoCancelamento">
@@ -570,8 +585,7 @@
               </ion-select>
             </ion-item>
 
-            <ion-item col-12 *ngIf="chamado?.rats[0]?.statusServico?.codStatusServico == 2 
-              || chamado?.rats[0]?.statusServico?.codStatusServico == 16">
+            <ion-item col-12>
               <ion-label stacked>Obs. Motivo Cancelamento</ion-label>
 
               <ion-input
@@ -579,7 +593,7 @@
                 name="obsMotivoCancelamento" 
                 placeholder="Obs. Motivo Cancelamento"
                 [ngModel]="chamado?.rats[0]?.obsMotivoCancelamento"
-                required>
+                [disabled]="this.chamado?.rats[0]?.statusServico?.codStatusServico != 2 && this.chamado?.rats[0]?.statusServico?.codStatusServico != 16">
               </ion-input>
             </ion-item>
 
@@ -590,9 +604,7 @@
                 placeholder="Selecione o Equipamento Retirado" 
                 name="equipamentoRetirado" 
                 [ngModel]="chamado?.rats[0]?.equipamentoRetirado"
-                [compareWith]="compararEquipamentosPOS"
-                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 
-                || verificarDefeitoPOSExiteTrocaEquipamento(chamado?.codDefeitoPOS)">
+                [compareWith]="compararEquipamentosPOS">
                 <ion-option 
                   *ngFor="let equipamento of equipamentosPOS"
                   [value]="equipamento">
@@ -609,9 +621,7 @@
                 placeholder="Número da Série Retirada" 
                 name="numSerieRetirada"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.numSerieRetirada"
-                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3
-                || verificarDefeitoPOSExiteTrocaEquipamento(chamado?.codDefeitoPOS)">
+                [ngModel]="chamado?.rats[0]?.numSerieRetirada">
               </ion-input>
             </ion-item>
 
@@ -622,8 +632,7 @@
                 placeholder="Selecione o Equipamento Instalado" 
                 name="equipamentoInstalado"
                 [ngModel]="chamado?.rats[0]?.equipamentoInstalado"
-                [compareWith]="compararEquipamentosPOS"
-                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3">
+                [compareWith]="compararEquipamentosPOS">
                 <ion-option 
                   *ngFor="let equipamento of equipamentosPOS"
                   [value]="equipamento">
@@ -639,20 +648,18 @@
                 placeholder="Número da Série Instalada" 
                 name="numSerieInstalada"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.numSerieInstalada"
-                [required]="chamado?.tipoIntervencao?.codTipoIntervencao == 3">
+                [ngModel]="chamado?.rats[0]?.numSerieInstalada">
               </ion-input>
             </ion-item>
 
-            <ion-item col-12 *ngIf="chamado?.cliente?.codCliente == 2">
+            <ion-item col-12>
               <ion-label stacked>Rede</ion-label>
               <ion-input
                 type="text"
                 name="rede" 
                 placeholder="Rede"
                 maxlength="50"
-                [ngModel]="chamado?.rats[0]?.rede"
-                required>
+                [ngModel]="chamado?.rats[0]?.rede">
               </ion-input>
             </ion-item>
 
@@ -673,24 +680,26 @@
             </ion-item>
 
             <ion-item col-12>
-              <ion-label stacked>Número do Chip Instalado</ion-label>
+              <ion-label stacked for="nroChipInstalado">Número do Chip Instalado</ion-label>
 
               <ion-input
                 type="text"
                 name="nroChipInstalado" 
                 placeholder="Número do Chip Instalado"
-                [ngModel]="chamado?.rats[0]?.nroChipInstalado">
+                [ngModel]="chamado?.rats[0]?.nroChipInstalado"
+                [disabled]="!this.verificarEquipamentoPossuiChip()">
               </ion-input>
             </ion-item>
 
             <ion-item col-12>
-              <ion-label stacked>Operadora do Chip Instalado</ion-label>
+              <ion-label stacked for="operadoraChipInstalado">Operadora do Chip Instalado</ion-label>
 
               <ion-select 
                 placeholder="Selecione a Operadora do Chip Instalado" 
                 name="operadoraChipInstalado"
                 [ngModel]="chamado?.rats[0]?.operadoraChipInstalado"
-                [compareWith]="compararOperadoras">
+                [compareWith]="compararOperadoras"
+                [disabled]="!this.verificarEquipamentoPossuiChip()">
                 <ion-option 
                   *ngFor="let operadora of operadoras"
                   [value]="operadora">
@@ -706,7 +715,8 @@
                 type="text"
                 name="nroChipRetirado" 
                 placeholder="Número do Chip Retirado" 
-                [ngModel]="chamado?.rats[0]?.nroChipRetirado">
+                [ngModel]="chamado?.rats[0]?.nroChipRetirado"
+                [disabled]="!this.verificarEquipamentoPossuiChip()">
               </ion-input>
             </ion-item>
 
@@ -717,7 +727,8 @@
                 placeholder="Selecione a Operadora do Chip Retirado" 
                 name="operadoraChipRetirado"
                 [ngModel]="chamado?.rats[0]?.operadoraChipRetirado"
-                [compareWith]="compararOperadoras">
+                [compareWith]="compararOperadoras"
+                [disabled]="!this.verificarEquipamentoPossuiChip()">
                 <ion-option 
                   *ngFor="let operadora of operadoras"
                   [value]="operadora">
@@ -727,11 +738,7 @@
             </ion-item>
 
             <div padding>
-              <button
-                color="secondary"
-                ion-button 
-                block
-                [disabled]="!fPos.valid">
+              <button color="secondary" ion-button block>
                 Salvar e Prosseguir
               </button>
             </div>

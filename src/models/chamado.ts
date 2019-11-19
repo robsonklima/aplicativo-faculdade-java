@@ -10,6 +10,7 @@ import { Rat } from './rat';
 
 export class Chamado {
 	codOs: number;
+	codEquip: number;
 	dataHoraAberturaOS: string;
 	dataHoraSolicitacaoOS: string;
 	nomeSolicitante: string;
