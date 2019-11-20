@@ -87,6 +87,8 @@ import { MensagemPage } from '../pages/mensagens/mensagem';
 import { TestePage } from '../pages/teste/teste';
 import { StatusServicoService } from '../services/status-servico';
 import { DefeitoPOSService } from '../services/defeito-pos';
+import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
+import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
 
 
 @NgModule({
@@ -122,10 +124,11 @@ import { DefeitoPOSService } from '../services/defeito-pos';
     MensagensPage,
     MensagemPage,
     AssinaturaPage,
-    TestePage,
     CapitalizePipe,
     EllipsisPipe,
-    LowercasePipe
+    LowercasePipe,
+    FerramentasTecnicoPage,
+    TestePage,
   ],
   imports: [
     BrowserModule,
@@ -178,7 +181,8 @@ import { DefeitoPOSService } from '../services/defeito-pos';
     MensagensPage,
     MensagemPage,
     AssinaturaPage,
-    TestePage
+    FerramentasTecnicoPage,
+    TestePage,
   ],
   providers: [
     StatusBar,
@@ -224,7 +228,8 @@ import { DefeitoPOSService } from '../services/defeito-pos';
     TipoComunicacaoService,
     EquipamentoCausaService,
     StatusServicoService,
-    DefeitoPOSService
+    DefeitoPOSService,
+    FerramentaTecnicoService
   ]
 })
 export class AppModule {}

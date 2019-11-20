@@ -87,6 +87,17 @@
 
     <button
       ion-item
+      *ngIf="true"
+      (click)="telaFerramentasTecnico()">
+      <ion-icon 
+        color="primary" 
+        name="md-briefcase" 
+        item-start></ion-icon>
+      Ferramentas
+    </button>
+
+    <button
+      ion-item
       *ngIf="false"
       (click)="telaTeste()">
       <ion-icon 

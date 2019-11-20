@@ -36,6 +36,8 @@ import { TestePage } from '../teste/teste';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 import { StatusServicoService } from '../../services/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
+import { FerramentasTecnicoPage } from '../ferramentas-tecnico/ferramentas-tecnico';
+import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
 
 
 @Component({
@@ -77,7 +79,8 @@ export class HomePage {
     private operadoraTelefonicaService: OperadoraTelefoniaService,
     private motivoCancelamentoService: MotivoCancelamentoService,
     private statusServicoService: StatusServicoService,
-    private defeitoPOSService: DefeitoPOSService
+    private defeitoPOSService: DefeitoPOSService,
+    private ferramentaTecnicoService: FerramentaTecnicoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -108,6 +111,10 @@ export class HomePage {
 
   public telaMensagensTecnico() {
     this.navCtrl.push(MensagensPage);
+  }
+
+  public telaFerramentasTecnico() {
+    this.navCtrl.push(FerramentasTecnicoPage);
   }
 
   public telaTeste() {
@@ -211,9 +218,12 @@ export class HomePage {
                         this.statusServicoService.buscarStatusServicosApi().subscribe(() => {
                           loading.setContent("Preparando a tabela local: Defeitos de POS");
                           this.defeitoPOSService.buscarDefeitosPOSApi().subscribe(() => {
-                            loading.dismiss();
-                        
-                            this.salvarDadosGlobais();
+                            loading.setContent("Preparando a tabela local: Ferramentas dos Técnicos");
+                            this.ferramentaTecnicoService.buscarFerramentasTecnicoApi().subscribe(() => {
+                              loading.dismiss();
+                          
+                              this.salvarDadosGlobais();
+                            }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                           }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                         }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                       }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });

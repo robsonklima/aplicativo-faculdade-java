@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -40,6 +40,7 @@ export class MyApp {
     splashScreen: SplashScreen,
     platform: Platform,
     private events: Events,
+    private alertCtrl: AlertController,
     private bGeolocation: BackgroundGeolocation,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
@@ -217,7 +218,7 @@ export class MyApp {
       desiredAccuracy: 10,
       stationaryRadius: 15,
       distanceFilter: 30,
-      debug: false,
+      debug: true,
       stopOnTerminate: false,
       interval: 5 * 60000,
       fastestInterval: 5 * 60000,
@@ -242,7 +243,9 @@ export class MyApp {
               }
             }
           }).catch();
-        }, err => {});
+        }, err => {
+          this.exibirAlerta(err);
+        });
     }).catch();
     
     this.bGeolocation.start().then().catch();
@@ -260,6 +263,16 @@ export class MyApp {
         }, 1000);
       }, err => {});
     }, err => {});
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 
   public sair() {

@@ -440,38 +440,46 @@ export class ChamadoPage {
               return
             }
 
-            const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
-            loader.present();
-
             this.platform.ready().then(() => {
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                loader.dismiss().then(() => {
-                  if (!this.chamado.indCercaEletronicaLiberada) {
-                    if ((this.obterDistanciaRaio(
-                      location.coords.latitude, 
-                      location.coords.longitude, 
-                      this.chamado.localAtendimento.localizacao.latitude, 
-                      this.chamado.localAtendimento.localizacao.longitude) 
-                      > Number(this.distanciaCercaEletronica))
-                    ) {
-                      this.exibirToast('Você está distante do local de atendimento');
+              this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
+                if (!gpsStatus) {
+                  this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
+
+                  return;
+                }
+
+                const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
+                loader.present();
+  
+                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                  loader.dismiss().then(() => {
+                    if (!this.chamado.indCercaEletronicaLiberada) {
+                      if ((this.obterDistanciaRaio(
+                        location.coords.latitude, 
+                        location.coords.longitude, 
+                        this.chamado.localAtendimento.localizacao.latitude, 
+                        this.chamado.localAtendimento.localizacao.longitude) 
+                        > Number(this.distanciaCercaEletronica))
+                      ) {
+                        this.exibirToast('Você está distante do local de atendimento');
+                      }
+  
+                      if (this.chamado.indOSIntervencaoEquipamento)
+                        this.exibirAlerta('Este chamado exige lançamento de laudo!');
                     }
-
-                    if (this.chamado.indOSIntervencaoEquipamento)
-                      this.exibirAlerta('Este chamado exige lançamento de laudo!');
-                  }
-
-                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                  
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+  
+                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                    
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                    }).catch(() => { loader.dismiss() });
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
-              }).catch(() => { loader.dismiss() });
-            }).catch(() => { loader.dismiss() });
+              }).catch(() => {});
+            }).catch(() => {});
           }
         }
       ]
@@ -502,30 +510,38 @@ export class ChamadoPage {
             loader.present();
 
             this.platform.ready().then(() => {
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                loader.dismiss().then(() => {
-                  if (!this.chamado.indCercaEletronicaLiberada) {
-                    if ((this.obterDistanciaRaio(
-                      location.coords.latitude, 
-                      location.coords.longitude, 
-                      this.chamado.localAtendimento.localizacao.latitude, 
-                      this.chamado.localAtendimento.localizacao.longitude) 
-                      > Number(this.distanciaCercaEletronica))
-                    ) {
-                      this.exibirToast('Você está distante do local de atendimento');
+              this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
+                if (!gpsStatus) {
+                  this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
+
+                  return;
+                }
+
+                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                  loader.dismiss().then(() => {
+                    if (!this.chamado.indCercaEletronicaLiberada) {
+                      if ((this.obterDistanciaRaio(
+                        location.coords.latitude, 
+                        location.coords.longitude, 
+                        this.chamado.localAtendimento.localizacao.latitude, 
+                        this.chamado.localAtendimento.localizacao.longitude) 
+                        > Number(this.distanciaCercaEletronica))
+                      ) {
+                        this.exibirToast('Você está distante do local de atendimento');
+                      }
                     }
-                  }
-                  
-                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                    
+                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                      this.configurarSlide(this.slides.getActiveIndex());
+                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                    }).catch(() => { loader.dismiss() });
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
-              }).catch(() => { loader.dismiss() });
-            }).catch(() => { loader.dismiss() });
+              }).catch(() => {});
+            }).catch(() => {});
           }
         }
       ]
@@ -638,20 +654,20 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            this.exibirToast('Chamado Fechado!!!')
+            //this.exibirToast('Chamado Fechado!!!')
 
-            // this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
-            // this.chamado.statusServico.abreviacao = "F";
-            // this.chamado.statusServico.nomeStatusServico = "FECHADO";
-            // this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+            this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
+            this.chamado.statusServico.abreviacao = "F";
+            this.chamado.statusServico.nomeStatusServico = "FECHADO";
+            this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-            // this.chamadoService.atualizarChamado(this.chamado).then(() => {
-            //   this.navCtrl.pop().then(() => {
-            //     this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
-            //       this.events.publish('sincronizacao:solicitada');
-            //     }).catch();
-            //   }).catch();
-            // }).catch();
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.navCtrl.pop().then(() => {
+                this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
+                  this.events.publish('sincronizacao:solicitada');
+                }).catch();
+              }).catch();
+            }).catch();
           }
         }
       ]

@@ -79,7 +79,7 @@ export class LoginPage implements OnInit {
     },
     err => {
       loading.dismiss().then(() => {
-        this.exibirToast(err);
+        this.exibirAlerta(err);
       });
     });
   }
