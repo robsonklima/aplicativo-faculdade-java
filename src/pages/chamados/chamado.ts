@@ -44,7 +44,6 @@ import { StatusServicoService } from '../../services/status-servico';
 import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
 import { DefeitoPOS } from '../../models/defeito-pos';
-import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
