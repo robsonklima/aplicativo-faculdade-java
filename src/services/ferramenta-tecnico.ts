@@ -17,8 +17,8 @@ export class FerramentaTecnicoService {
     private storage: Storage
   ) { }
 
-  buscarFerramentasTecnicoApi(): Observable<FerramentaTecnico[]> {
-    return this.http.get(Config.API_URL + 'FerramentaTecnico')
+  buscarFerramentasTecnicoApi(codUsuario: string, ferramentas: FerramentaTecnico[]): Observable<any> {
+    return this.http.post(Config.API_URL + 'FerramentaTecnico', { codUsuario: codUsuario, ferramentasTecnico: ferramentas })
       .map((res: Response) => { this.storage.set('FerramentasTecnico', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }
@@ -31,6 +31,20 @@ export class FerramentaTecnicoService {
       }).catch(() => {
         reject();
       });
+    });
+  }
+
+  atualizarFerramentaTecnico(ferramentaTecnico: FerramentaTecnico): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('FerramentasTecnico').then((ferramentas: FerramentaTecnico[]) => {
+        ferramentas.forEach((f, i) => {
+          if(f.codFerramentaTecnico === ferramentaTecnico.codFerramentaTecnico)
+            ferramentas[i] = ferramentaTecnico;
+        });
+
+        this.storage.set('FerramentasTecnico', ferramentas).then(() => { resolve(true) }).catch(() => { reject(false) });
+      })
+      .catch(() => { reject(false)} );
     });
   }
 }

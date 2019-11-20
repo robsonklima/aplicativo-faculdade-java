@@ -219,10 +219,12 @@ export class HomePage {
                           loading.setContent("Preparando a tabela local: Defeitos de POS");
                           this.defeitoPOSService.buscarDefeitosPOSApi().subscribe(() => {
                             loading.setContent("Preparando a tabela local: Ferramentas dos Técnicos");
-                            this.ferramentaTecnicoService.buscarFerramentasTecnicoApi().subscribe(() => {
-                              loading.dismiss();
-                          
-                              this.salvarDadosGlobais();
+                            this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
+                              this.ferramentaTecnicoService.buscarFerramentasTecnicoApi(this.dg.usuario.codUsuario, ferramentas).subscribe(() => {
+                                loading.dismiss();
+                            
+                                this.salvarDadosGlobais();
+                              }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                             }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                           }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
                         }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });

@@ -1,5 +1,5 @@
 export class Config {
-  public static VERSAO_APP = "0.0.40";
+  public static VERSAO_APP = "0.0.54";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -18,7 +18,7 @@ export class Config {
     PEÇA_TRANSITO: 9, PECA_FALTANTE: 10, PECA_SEPARADA: 11, FECHADO_P_ANALISE: 12, ORCAMENTO_APROVADO: 13,
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
-  public static INT_SINC_BD_LOCAL_DIAS = 7;
+  public static INT_SINC_BD_LOCAL_DIAS = 1;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
   public static CERCA_ELETRONICA = [

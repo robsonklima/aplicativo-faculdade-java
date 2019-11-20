@@ -22,7 +22,7 @@ import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
         </ion-list-header>
 
         <ion-item *ngFor="let ferramenta of ferramentasTecnico">
-          <ion-toggle checked="false"></ion-toggle>
+          <ion-toggle [checked]="ferramenta.selecionado" (ionChange)="selecionarFerramenta(ferramenta, $event)"></ion-toggle>
 
           <ion-label>
             {{ ferramenta?.nomeFerramentaTecnico }}
@@ -61,7 +61,7 @@ export class FerramentasTecnicoPage {
     });
   }
 
-  public buscarFerramentasTecnico(): Promise<FerramentaTecnico[]> {
+  private buscarFerramentasTecnico(): Promise<FerramentaTecnico[]> {
     return new Promise((resolve, reject) => {
       this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas: FerramentaTecnico[]) => { 
         this.ferramentasTecnico = ferramentas;
@@ -71,5 +71,11 @@ export class FerramentasTecnicoPage {
         reject(err);
       });
     });
+  }
+
+  public selecionarFerramenta(ferramentaTecnico: FerramentaTecnico, e: any) {
+    ferramentaTecnico.selecionado = (e.checked) ? 1 : 0;
+
+    this.ferramentaTecnicoService.atualizarFerramentaTecnico(ferramentaTecnico).catch();
   }
 }
