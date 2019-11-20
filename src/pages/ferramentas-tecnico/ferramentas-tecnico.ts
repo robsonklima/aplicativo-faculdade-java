@@ -18,7 +18,7 @@ import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
       <ion-list>
         <ion-list-header>
           Selecione as ferramentas que você possui <br />
-          <i ion-text color="primary">Ferramentas não marcadas serão tratadas pelo coordenador</i>
+          <b ion-text color="primary">Ferramentas não marcadas serão tratadas pelo coordenador</b>
         </ion-list-header>
 
         <ion-item *ngFor="let ferramenta of ferramentasTecnico">
