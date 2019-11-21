@@ -89,6 +89,8 @@ import { StatusServicoService } from '../services/status-servico';
 import { DefeitoPOSService } from '../services/defeito-pos';
 import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
 import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
+import { AcaoCausaService } from '../services/acao-causa';
+import { DefeitoCausaService } from '../services/defeito-causa';
 
 
 @NgModule({
@@ -229,7 +231,9 @@ import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas
     EquipamentoCausaService,
     StatusServicoService,
     DefeitoPOSService,
-    FerramentaTecnicoService
+    FerramentaTecnicoService,
+    AcaoCausaService,
+    DefeitoCausaService
   ]
 })
 export class AppModule {}

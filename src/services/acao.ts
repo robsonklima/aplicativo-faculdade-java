@@ -18,18 +18,8 @@ export class AcaoService {
 
   buscarAcoesApi(): Observable<Acao[]> {
     return this.http.get(Config.API_URL + 'Acao')
-      .map((res: Response) => { this.insereAcoesStorage(res.json()) })
+      .map((res: Response) => { this.storage.set('Acoes', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
-  }
-
-  insereAcoesStorage(acoes: Acao[]) {
-    acoes.forEach(acao => {
-      if (!this.acaoEstaNoStorage(acao.codAcao)) { this.acoes.push(acao) }
-    });
-
-    this.storage.set('Acoes', this.acoes)
-      .then()
-      .catch();
   }
 
   buscarAcoesStorage() {
@@ -38,18 +28,6 @@ export class AcaoService {
       return this.acoes.slice();
     })
     .catch();
-  }
-
-  acaoEstaNoStorage(codAcao: number): boolean {
-    let acaoEncontrada: boolean = false;
-
-    this.acoes.forEach(acao => {
-      if (acao.codAcao === codAcao) {
-        acaoEncontrada = true;
-      }
-    });
-
-    return acaoEncontrada;
   }
 
   apagarAcoesStorage(): Promise<any> {

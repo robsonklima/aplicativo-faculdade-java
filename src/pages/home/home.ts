@@ -38,6 +38,9 @@ import { StatusServicoService } from '../../services/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
 import { FerramentasTecnicoPage } from '../ferramentas-tecnico/ferramentas-tecnico';
 import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
+import { EquipamentoCausaService } from '../../services/equipamento-causa';
+import { DefeitoCausaService } from '../../services/defeito-causa';
+import { AcaoCausaService } from '../../services/acao-causa';
 
 
 @Component({
@@ -80,7 +83,10 @@ export class HomePage {
     private motivoCancelamentoService: MotivoCancelamentoService,
     private statusServicoService: StatusServicoService,
     private defeitoPOSService: DefeitoPOSService,
-    private ferramentaTecnicoService: FerramentaTecnicoService
+    private ferramentaTecnicoService: FerramentaTecnicoService,
+    private equipamentoCausaService: EquipamentoCausaService,
+    private defeitoCausaService: DefeitoCausaService,
+    private acaoCausaService: AcaoCausaService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -221,23 +227,32 @@ export class HomePage {
                             loading.setContent("Preparando a tabela local: Ferramentas dos Técnicos");
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
                               this.ferramentaTecnicoService.buscarFerramentasTecnicoApi(this.dg.usuario.codUsuario, ferramentas).subscribe(() => {
-                                loading.dismiss();
-                            
-                                this.salvarDadosGlobais();
-                              }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                            }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                          }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                        }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                      }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                    }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                  }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-                }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-              }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-            }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-          }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-        }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-      }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
-    }, () => { loading.dismiss().then(() => { this.atualizarBDLocal() }) });
+                                loading.setContent("Preparando a tabela local: Equipamentos e Causas");
+                                this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                                  loading.setContent("Preparando a tabela local: Defeitos e Causas");
+                                  this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
+                                    loading.setContent("Preparando a tabela local: Ações e Causas");
+                                    this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
+                                      loading.dismiss();
+  
+                                      this.salvarDadosGlobais();
+                                    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                                  }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                                }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                              }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                            }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                          }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                        }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                      }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                  }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+              }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+            }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+          }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+        }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+      }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
   }
 
   private salvarDadosGlobais() {
