@@ -165,11 +165,11 @@ export class ChamadoPage {
   public tirarFoto(modalidade: string) {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) {
-        this.exibirToast('Este recurso somente pode ser acessado no dispositivo');
+        this.exibirToast(Config.MSG.RECURSO_NATIVO);
         return;
       }
 
-      this.appAvailability.check('net.sourceforge.opencamera').then(
+      this.appAvailability.check(Config.OPEN_CAMERA).then(
         (yes: boolean) => {
           this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
             this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
@@ -190,9 +190,9 @@ export class ChamadoPage {
                 this.chamado.rats[0].fotos.push(this.foto);
                 this.chamadoService.atualizarChamado(this.chamado).catch();
                 this.camera.cleanup().catch();
-              }).catch(() => { this.exibirAlerta('Erro ao tirar a foto. Favor tentar novamente') });
-            }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
-          }).catch(() => { this.exibirAlerta('Erro ao obter permissões para acessar a câmera') });
+              }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+            }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
         },
         (no: boolean) => {
           this.exibirToast('Favor instalar o aplicativo Open Camera').then(() => { 
@@ -200,8 +200,8 @@ export class ChamadoPage {
           });
           
           return;
-        }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
-    }).catch(() => { this.exibirAlerta('O dispositivo não respondeu') });
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+    }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
   }
 
   public carregarFoto(modalidade: string): string {
@@ -425,8 +425,8 @@ export class ChamadoPage {
 
   public efetuarCheckin() {
     const alerta = this.alertCtrl.create({
-      title: 'Confirmar o Checkin?',
-      message: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.CHECKIN_CONFIRMACAO,
       buttons: [
         {
           text: 'Cancelar',
@@ -436,7 +436,7 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.exibirToast('Você possui checkin aberto em outro chamado');
+              this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO);
 
               return
             }
@@ -449,7 +449,8 @@ export class ChamadoPage {
               //     return;
               //   }
 
-                const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
+                const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
+                  dismissOnPageChange: true });
                 loader.present();
   
                 this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
@@ -494,9 +495,8 @@ export class ChamadoPage {
     this.chamadoService.atualizarChamado(this.chamado);
 
     const alerta = this.alertCtrl.create({
-      title: 'Confirmar o Checkout?',
-      message: `Somente confirme o checkout se você já concluiu o chamado 
-	                e deixará o local de atendimento`,
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.CHECKOUT_CONFIRMACAO,
       buttons: [
         {
           text: 'Cancelar',
@@ -507,7 +507,8 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
+            const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
+              dismissOnPageChange: true });
             loader.present();
 
             this.platform.ready().then(() => {

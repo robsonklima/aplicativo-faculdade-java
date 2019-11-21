@@ -4,6 +4,7 @@ export class Config {
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
   public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
+  public static OPEN_CAMERA = 'net.sourceforge.opencamera';
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static TIPO_INTERVENCAO = { 
@@ -53,7 +54,17 @@ export class Config {
     BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, 
     METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2
   };
-
+  public static MSG = {
+    RECURSO_NATIVO: 'Este recurso deve ser acessado no dispositivo',
+    ERRO_PERMISSAO_CAMERA: 'Erro ao obter permissões para acessar a câmera',
+    ERRO_RESPOSTA_DISPOSITIVO: 'O dispositivo não respondeu',
+    ERRO_FOTO: 'Erro ao tirar a foto. Favor tentar novamente',
+    CHECKIN_EM_ABERTO: 'Você possui checkin aberto em outro chamado',
+    CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
+    CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
+    CONFIRMACAO: 'Confirmação',
+    OBTENDO_LOCALIZACAO: 'Obtendo sua localização...',
+  }
   public static API_URL = 'http://localhost:60687/api/';
   //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }
