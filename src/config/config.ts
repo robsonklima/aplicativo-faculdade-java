@@ -63,7 +63,7 @@ export class Config {
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
     CONFIRMACAO: 'Confirmação',
-    OBTENDO_LOCALIZACAO: 'Obtendo sua localização...',
+    OBTENDO_LOCALIZACAO: 'Obtendo sua localização...'
   }
   public static API_URL = 'http://localhost:60687/api/';
   //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
