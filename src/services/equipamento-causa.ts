@@ -23,11 +23,14 @@ export class EquipamentoCausaService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarEquipamentosCausasStorage() {
-    return this.storage.get('EquipamentosCausas').then((eCausas: EquipamentoCausa[]) => {
-      this.equipamentosCausas = eCausas != null ? eCausas : [];
-      return this.equipamentosCausas.slice();
-    }).catch();
+  buscarEquipamentosCausasStorage(): Promise<EquipamentoCausa[]> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('EquipamentosCausas').then((eCausas: EquipamentoCausa[]) => {
+        this.equipamentosCausas = eCausas != null ? eCausas : [];
+
+        resolve(this.equipamentosCausas.slice());
+      }).catch(() => reject());
+    });
   }
 
   buscarCausasPorEquipamento(codEquip: number): Promise<EquipamentoCausa[]> {
@@ -38,9 +41,7 @@ export class EquipamentoCausaService {
         });
         
         resolve(equipamentosCausas);
-      }).catch(() => {
-        reject();
-      });
+      }).catch(() => reject());
     });
   }
 }

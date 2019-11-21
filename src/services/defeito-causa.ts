@@ -23,12 +23,14 @@ export class DefeitoCausaService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarDefeitosCausasStorage() {
-    return this.storage.get('DefeitosCausas').then((dCausas: DefeitoCausa[]) => {
-      this.defeitosCausas = dCausas != null ? dCausas : [];
-      return this.defeitosCausas.slice();
-    })
-    .catch();
+  buscarDefeitosCausasStorage(): Promise<DefeitoCausa[]> {
+    return new Promise((resolve, reject) => {
+      this.storage.get('DefeitosCausas').then((dCausas: DefeitoCausa[]) => {
+        this.defeitosCausas = dCausas != null ? dCausas : [];
+
+        resolve(this.defeitosCausas.slice());
+      }).catch(() => reject());
+    });
   }
 
   buscarDefeitosPorCausa(codCausa: number): Promise<DefeitoCausa[]> {
@@ -39,9 +41,7 @@ export class DefeitoCausaService {
         });
         
         resolve(defeitosCausas);
-      }).catch(() => {
-        reject();
-      });
+      }).catch(() => reject());
     });
   }
 }

@@ -27,10 +27,9 @@ export class DefeitoPOSService {
     return new Promise((resolve, reject) => {
       this.storage.get('DefeitosPOS').then((defeitos: DefeitoPOS[]) => {
         this.defeitos = defeitos != null ? defeitos : [];
+        
         resolve(this.defeitos.slice());
-      }).catch(() => {
-        reject();
-      });
+      }).catch(() => reject());
     });
   }
 }

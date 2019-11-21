@@ -28,9 +28,7 @@ export class FerramentaTecnicoService {
       this.storage.get('FerramentasTecnico').then((ferramentas: FerramentaTecnico[]) => {
         this.ferramentas = ferramentas != null ? ferramentas : [];
         resolve(this.ferramentas.slice());
-      }).catch(() => {
-        reject();
-      });
+      }).catch(() => reject());
     });
   }
 
@@ -43,8 +41,7 @@ export class FerramentaTecnicoService {
         });
 
         this.storage.set('FerramentasTecnico', ferramentas).then(() => { resolve(true) }).catch(() => { reject(false) });
-      })
-      .catch(() => { reject(false)} );
+      }).catch(() => reject(false));
     });
   }
 }

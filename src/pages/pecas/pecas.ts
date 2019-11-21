@@ -8,10 +8,6 @@ import { DadosGlobais } from '../../models/dados-globais';
 
 import { PecaService } from "../../services/peca";
 import { DadosGlobaisService } from '../../services/dados-globais';
-import { AcaoService } from "../../services/acao";
-import { DefeitoService } from "../../services/defeito";
-import { CausaService } from "../../services/causa";
-import { TipoServicoService } from "../../services/tipo-servico";
 
 @Component({
   selector: 'pecas-page',
@@ -26,11 +22,7 @@ export class PecasPage {
     private loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
     private pecaService: PecaService,
-    private dadosGlobaisService: DadosGlobaisService,
-    private acaoService: AcaoService,
-    private defeitoService: DefeitoService,
-    private causaService: CausaService,
-    private tipoServicoService: TipoServicoService
+    private dadosGlobaisService: DadosGlobaisService
   ) {}
 
   ionViewWillEnter() {
@@ -84,19 +76,10 @@ export class PecasPage {
     const loading = this.loadingCtrl.create({ content: 'Aguarde, sincronizando dados offline...' });
     loading.present();
 
-    this.tipoServicoService.buscarTipoServicosApi()
-      .subscribe(tipoServicos => { this.acaoService.buscarAcoesApi()
-        .subscribe(acoes => { this.defeitoService.buscarDefeitosApi()
-          .subscribe(defeitos => { this.causaService.buscarCausasApi()
-            .subscribe(causas => { this.pecaService.buscarPecasApi()
-              .subscribe(pecas => {
-                loading.dismiss();
-                this.salvarDadosGlobais();
-              }, err => { loading.dismiss() });
-            }, err => { loading.dismiss() });
-          }, err => { loading.dismiss() });
-        }, err => { loading.dismiss() });
-      }, err => { loading.dismiss() });
+     this.pecaService.buscarPecasApi()
+      .subscribe(() => {
+        loading.dismiss();
+      }, () => { loading.dismiss() });
   }
 
   private carregarDadosGlobais() {
@@ -106,11 +89,5 @@ export class PecasPage {
           this.dadosGlobais = dados;
       })
       .catch((err) => {});
-  }
-
-  private salvarDadosGlobais() {
-    this.dadosGlobais.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-
-    this.dadosGlobaisService.insereDadosGlobaisStorage(this.dadosGlobais);
   }
 }

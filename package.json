@@ -114,6 +114,12 @@
             "cordova-plugin-appavailability": {},
             "cordova-plugin-market": {},
             "cordova-plugin-screen-orientation": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-android-permissions": {},
+            "cordova-plugin-camera": {
+                "ANDROID_SUPPORT_V4_VERSION": "27.+"
+            },
+            "cordova-plugin-background-mode": {},
             "cordova-plugin-mauron85-background-geolocation": {
                 "GOOGLE_PLAY_SERVICES_VERSION": "11+",
                 "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
@@ -123,13 +129,7 @@
                 "ACCOUNT_LABEL": "@string/app_name",
                 "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
                 "CONTENT_AUTHORITY": "$PACKAGE_NAME"
-            },
-            "cordova-plugin-compat": {},
-            "cordova-plugin-android-permissions": {},
-            "cordova-plugin-camera": {
-                "ANDROID_SUPPORT_V4_VERSION": "27.+"
-            },
-            "cordova-plugin-background-mode": {}
+            }
         },
         "platforms": [
             "browser",

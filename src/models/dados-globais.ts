@@ -4,6 +4,6 @@ import { Localizacao } from './localizacao';
 export class DadosGlobais {
     usuario: Usuario;
     senhaExpirada: boolean;
-    dataHoraCadastro: string;
+    dataHoraCadastro: Date;
     localizacao: Localizacao;
 }

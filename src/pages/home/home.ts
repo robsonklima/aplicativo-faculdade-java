@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events, AlertController } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -61,6 +61,7 @@ export class HomePage {
 
   constructor(
     private navCtrl: NavController,
+    private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private appVersion: AppVersion,
     private market: Market,
@@ -104,7 +105,33 @@ export class HomePage {
   }
 
   public telaChamados() {
-    this.navCtrl.push(ChamadosPage);
+    if (!this.verificarNecessidadeAtualizacao()) {
+      this.navCtrl.push(ChamadosPage);
+
+      return;
+    }
+      
+
+    const confirmacao = this.alertCtrl.create({
+      title: Config.MSG.ALERTA,
+      message: Config.MSG.ATUALIZAR_DADOS_LOCAIS,
+      buttons: [
+        {
+          text: Config.MSG.CANCELAR,
+          handler: () => {}
+        },
+        {
+          text: Config.MSG.ATUALIZAR,
+          handler: () => {
+            this.atualizarBDLocal();
+
+            this.carregarChamadosStorage();
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 
   public telaPecas() {
@@ -176,11 +203,6 @@ export class HomePage {
           return;
         }
         
-        if (!this.dg.dataHoraCadastro || this.verificarNecessidadeAtualizacao()) {
-          this.atualizarBDLocal();
-          this.carregarChamadosStorage();
-        }
-
         resolve(true);
       })
       .catch((err) => { reject(false) });
@@ -188,10 +210,48 @@ export class HomePage {
   }
 
   private verificarNecessidadeAtualizacao(): boolean {
-    let limiteAtualizacao = new Date();
-    limiteAtualizacao.setDate(limiteAtualizacao.getDate() - Config.INT_SINC_BD_LOCAL_DIAS);
+    if ((this.dg.dataHoraCadastro > moment().add(Config.INT_SINC_BD_LOCAL_DIAS, "day").toDate()) || !this.dg.dataHoraCadastro) return true;
 
-    if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao) return true;
+    this.tipoServicoService.buscarTipoServicosStorage().then((tiposServicos) => {
+      this.acaoService.buscarAcoesStorage().then((acoes) => {
+        this.defeitoService.buscarDefeitosStorage().then((defeitos) => {
+          this.causaService.buscarCausasStorage().then((causas) => {
+            this.pecaService.buscarPecasStorage().then((pecas) => {
+              this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equipamentos) => {
+                this.operadoraTelefonicaService.buscarOperadorasStorage().then((operadoras) => {
+                  this.tipoComunicacaoService.buscarTiposComunicacaoStorage().then((tiposComunicacao) => {
+                    this.motivoComunicacaoService.buscarMotivosComunicacaoStorage().then((motivosComuni) => {
+                      this.motivoCancelamentoService.buscarMotivosCancelamentoStorage().then((motivosCancel) => {
+                        this.statusServicoService.buscarStatusServicosStorage().then((statusServicos) => {
+                          this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitosPOS) => {
+                            this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
+                              this.equipamentoCausaService.buscarEquipamentosCausasStorage().then((equipCausas) => {
+                                this.defeitoCausaService.buscarDefeitosCausasStorage().then((defeitosCausas) => {
+                                  this.acaoCausaService.buscarAcoesCausasStorage().then((acoesCausas) => {
+                                    if (
+                                      !tiposServicos.length || !acoes.length || !defeitos.length || !causas.length || 
+                                      !pecas.length || !equipamentos.length || !operadoras.length || !tiposComunicacao.length ||
+                                      !motivosComuni.length || !motivosCancel.length || !statusServicos.length || !defeitosPOS.length ||
+                                      !ferramentas.length || !equipCausas.length || !defeitosCausas.length || !acoesCausas.length
+                                    ) {
+                                      return true;
+                                    }
+                                  });
+                                });
+                              });
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
 
     return false;
   }
@@ -200,63 +260,114 @@ export class HomePage {
     let loading = this.loadingCtrl.create({ content: 'Aguarde...' });
     loading.present();
     
-    loading.setContent("Preparando a tabela local: Tipos de Serviço");
+    loading.setContent(Config.MSG.CRIANDO_TAB_TIPOS_SERVICOS);
     this.tipoServicoService.buscarTipoServicosApi().subscribe(() => { 
-      loading.setContent("Preparando a tabela local: Ações");
+      loading.setContent(Config.MSG.CRIANDO_TAB_ACOES);
       this.acaoService.buscarAcoesApi().subscribe(() => { 
-        loading.setContent("Preparando a tabela local: Defeitos");
+        loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS);
         this.defeitoService.buscarDefeitosApi().subscribe(() => { 
-          loading.setContent("Preparando a tabela local: Causas");
+          loading.setContent(Config.MSG.CRIANDO_TAB_CAUSAS);
           this.causaService.buscarCausasApi().subscribe(() => { 
-            loading.setContent("Preparando a tabela local: Peças");
+            loading.setContent(Config.MSG.CRIANDO_TAB_PECAS);
             this.pecaService.buscarPecasApi().subscribe(() => {
-              loading.setContent("Preparando a tabela local: Equipamentos POS");
+              loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMENTOS_POS);
               this.equipamentoPOSService.buscarEquipamentosPOSApi().subscribe(() => {
-                loading.setContent("Preparando a tabela local: Operadoras");
+                loading.setContent(Config.MSG.CRIANDO_TAB_OPERADORAS);
                 this.operadoraTelefonicaService.buscarOperadorasApi().subscribe(() => {
-                  loading.setContent("Preparando a tabela local: Motivos de Comunicação");
+                  loading.setContent(Config.MSG.CRIANDO_TAB_TIPOS_COMUNICACAO);
                   this.tipoComunicacaoService.buscarTiposComunicacaoApi().subscribe(() => {
-                    loading.setContent("Preparando a tabela local: Motivos de Comunicação");
+                    loading.setContent(Config.MSG.CRIANDO_TAB_MOTIVOS_COMUNICACAO);
                     this.motivoComunicacaoService.buscarMotivosComunicacaoPOSApi().subscribe(() => {
-                      loading.setContent("Preparando a tabela local: Motivos de Cancelamento");
+                      loading.setContent(Config.MSG.CRIANDO_TAB_MOTIVOS_CANCELAMENTO);
                       this.motivoCancelamentoService.buscarMotivosCancelamentoPOSApi().subscribe(() => {
-                        loading.setContent("Preparando a tabela local: Status de Serviços");
+                        loading.setContent(Config.MSG.CRIANDO_TAB_STATUS_SERVICO);
                         this.statusServicoService.buscarStatusServicosApi().subscribe(() => {
-                          loading.setContent("Preparando a tabela local: Defeitos de POS");
+                          loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_POS);
                           this.defeitoPOSService.buscarDefeitosPOSApi().subscribe(() => {
-                            loading.setContent("Preparando a tabela local: Ferramentas dos Técnicos");
+                            loading.setContent(Config.MSG.CRIANDO_TAB_FERRAMENTAS);
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
                               this.ferramentaTecnicoService.buscarFerramentasTecnicoApi(this.dg.usuario.codUsuario, ferramentas).subscribe(() => {
-                                loading.setContent("Preparando a tabela local: Equipamentos e Causas");
+                                loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMETNOS_CAUSAS);
                                 this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
-                                  loading.setContent("Preparando a tabela local: Defeitos e Causas");
+                                  loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_CAUSAS);
                                   this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
-                                    loading.setContent("Preparando a tabela local: Ações e Causas");
+                                    loading.setContent(Config.MSG.CRIANDO_TAB_ACOES_CAUSAS);
                                     this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
                                       loading.dismiss();
   
                                       this.salvarDadosGlobais();
-                                    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                                  }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                                }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                              }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                            }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                          }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                        }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                      }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                  }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-                }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-              }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-            }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-          }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-        }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-      }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
-    }, (e) => { loading.dismiss().then(() => { console.log(e);}) });
+                                    }, (e) => { 
+                                      loading.dismiss(); 
+                                      this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES_CAUSAS);
+                                    });
+                                  }, (e) => { 
+                                    loading.dismiss(); 
+                                    this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_CAUSAS);
+                                  });
+                                }, (e) => { 
+                                  loading.dismiss(); 
+                                  this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_CAUSAS);
+                                });
+                              }, (e) => { 
+                                loading.dismiss(); 
+                                this.exibirAlerta(Config.MSG.ERRO_OBTER_FERRAMENTAS); 
+                              });
+                            }, (e) => { 
+                              loading.dismiss(); 
+                              this.exibirAlerta(Config.MSG.ERRO_OBTER_FERRAMENTAS); 
+                            });
+                          }, (e) => { 
+                            loading.dismiss(); 
+                            this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_POS); 
+                          });
+                        }, (e) => { 
+                          loading.dismiss(); 
+                          this.exibirAlerta(Config.MSG.ERRO_OBTER_STATUS_SERVICOS); 
+                        });
+                      }, (e) => { 
+                        loading.dismiss(); 
+                        this.exibirAlerta(Config.MSG.ERRO_OBTER_MOTIVOS_CANCELAMENTO); 
+                      });
+                    }, (e) => { 
+                      loading.dismiss(); 
+                      this.exibirAlerta(Config.MSG.ERRO_OBTER_MOTIVOS_COMUNICACAO); 
+                    });
+                  }, (e) => { 
+                    loading.dismiss(); 
+                    this.exibirAlerta(Config.MSG.ERRO_OBTER_TIPOS_COMUNICACAO); 
+                  });
+                }, (e) => { 
+                  loading.dismiss(); 
+                  this.exibirAlerta(Config.MSG.ERRO_OBTER_OPERADORAS); 
+                });
+              }, (e) => { 
+                loading.dismiss(); 
+                this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_POS); 
+              });
+            }, (e) => { 
+              loading.dismiss(); 
+              this.exibirAlerta(Config.MSG.ERRO_OBTER_PECAS); 
+            });
+          }, (e) => { 
+            loading.dismiss(); 
+            this.exibirAlerta(Config.MSG.ERRO_OBTER_CAUSAS); 
+          });
+        }, (e) => { 
+          loading.dismiss(); 
+          this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS); 
+        });
+      }, (e) => { 
+        loading.dismiss(); 
+        this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES); 
+      });
+    }, (e) => { 
+      loading.dismiss(); 
+      this.exibirAlerta(Config.MSG.ERRO_OBTER_TIPOS_SERVICO); 
+    });
   }
 
   private salvarDadosGlobais() {
-    this.dg.dataHoraCadastro = new Date().toString();
+    this.dg.dataHoraCadastro = moment().toDate();
 
     this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
   }
@@ -310,6 +421,16 @@ export class HomePage {
           reject();
         });
     });
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: Config.MSG.ALERTA,
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 
   public sair() {
