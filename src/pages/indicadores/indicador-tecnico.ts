@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 
-import { Config } from '../../config/config';
+import { Config } from '../../models/config';
 import { Chart } from 'chart.js';
 
 import { DadosGlobaisService } from '../../services/dados-globais';

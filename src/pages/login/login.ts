@@ -12,7 +12,7 @@ import { Usuario } from '../../models/usuario';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { UsuarioService } from '../../services/usuario';
 
-import { Config } from "../../config/config";
+import { Config } from "../../models/config";
 
 
 @Component({

@@ -7,7 +7,7 @@ import { Chamado } from '../../models/chamado';
 import { Foto } from '../../models/foto';
 
 import { ChamadoService } from '../../services/chamado';
-import { Config } from '../../config/config';
+import { Config } from '../../models/config';
 
 @Component({
   selector: 'fotos-page',

@@ -9,7 +9,7 @@ import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
 
-import { Config } from './../config/config';
+import { Config } from '../models/config';
 import { Chamado } from "../models/chamado";
 
 @Injectable()

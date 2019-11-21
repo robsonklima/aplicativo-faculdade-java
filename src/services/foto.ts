@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import 'rxjs/Rx';
 
-import { Config } from './../config/config';
+import { Config } from '../models/config';
 
 import { Foto } from '../models/foto';
 

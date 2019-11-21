@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 
-import { Config } from "../config/config";
+import { Config } from "../models/config";
 import { Chamado } from '../models/chamado';
 import { Localizacao } from '../models/localizacao';
 

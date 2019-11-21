@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Storage } from "@ionic/storage";
 import 'rxjs/Rx';
 
-import { Config } from './../config/config';
+import { Config } from '../models/config';
 import { Observable } from "rxjs/Observable";
 import { OperadoraTelefonia } from '../models/operadora-telefonia';
 

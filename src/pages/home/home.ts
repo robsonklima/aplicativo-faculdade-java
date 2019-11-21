@@ -16,7 +16,7 @@ import { DadosGlobais } from '../../models/dados-globais';
 import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Laudo } from '../../models/laudo';
 
-import { Config } from "../../config/config";
+import { Config } from "../../models/config";
 import moment from 'moment';
 
 import { DadosGlobaisService } from '../../services/dados-globais';

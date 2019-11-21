@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { Chart } from 'chart.js';
-import { Config } from '../../config/config';
+import { Config } from '../../models/config';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { DadosGlobaisService } from '../../services/dados-globais';

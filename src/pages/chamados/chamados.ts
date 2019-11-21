@@ -5,7 +5,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Badge } from '@ionic-native/badge';
 
-import { Config } from "../../config/config";
+import { Config } from "../../models/config";
 import { DadosGlobaisService } from '../../services/dados-globais';
 
 import { ChamadoPage } from "../chamados/chamado";

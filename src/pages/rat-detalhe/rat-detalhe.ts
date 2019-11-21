@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { AlertController, NavParams, Slides, ToastController, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
-import { Config } from './../../config/config';
+import { Config } from '../../models/config';
 
 import { Chamado } from './../../models/chamado';
 import { TipoServico } from "../../models/tipo-servico";

@@ -5,7 +5,7 @@ import { Chart } from 'chart.js';
 import { DadosGlobais } from '../../models/dados-globais';
 import { IndicadorService } from '../../services/indicador';
 import { DadosGlobaisService } from '../../services/dados-globais';
-import { Config } from '../../config/config';
+import { Config } from '../../models/config';
 
 @Component({
   selector: 'indicador-performance-tecnico-page',

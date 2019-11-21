@@ -12,7 +12,7 @@ import { Market } from '@ionic-native/market';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { Config } from './../../config/config';
+import { Config } from '../../models/config';
 import { DadosGlobais } from '../../models/dados-globais';
 import { Chamado } from "../../models/chamado";
 import { Rat } from "../../models/rat";
