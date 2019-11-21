@@ -1,4 +1,7 @@
-0.0.53 
+0.0.54 
+- Ferramentas Técnicos;
+
+0.0.53 - 23/12/19
 - Adição de Campos de preenchimento relativos ao POS/Banrisul;
 - Correção do campo Nome Acompanhante para aceitar caracteres com acento;
 - Melhoria na tela laudo: sistema pergunta antes de fechar a tela;

@@ -437,16 +437,17 @@ export class ChamadoPage {
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
               this.exibirToast('Você possui checkin aberto em outro chamado');
+
               return
             }
 
             this.platform.ready().then(() => {
-              this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
-                if (!gpsStatus) {
-                  this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
+              // this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
+              //   if (!this.platform.is('cordova') && !gpsStatus) {
+              //     this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
 
-                  return;
-                }
+              //     return;
+              //   }
 
                 const loader = this.loadingCtrl.create({ content: 'Obtendo sua localização...', enableBackdropDismiss: true, dismissOnPageChange: true });
                 loader.present();
@@ -479,7 +480,7 @@ export class ChamadoPage {
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
               }).catch(() => {});
-            }).catch(() => {});
+            // }).catch(() => {});
           }
         }
       ]
@@ -510,12 +511,12 @@ export class ChamadoPage {
             loader.present();
 
             this.platform.ready().then(() => {
-              this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
-                if (!gpsStatus) {
-                  this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
+              // this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
+              //   if (!gpsStatus) {
+              //     this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
 
-                  return;
-                }
+              //     return;
+              //   }
 
                 this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                   loader.dismiss().then(() => {
@@ -541,7 +542,7 @@ export class ChamadoPage {
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
               }).catch(() => {});
-            }).catch(() => {});
+            // }).catch(() => {});
           }
         }
       ]
