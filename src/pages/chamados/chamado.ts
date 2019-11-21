@@ -44,7 +44,6 @@ import { StatusServicoService } from '../../services/status-servico';
 import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
 import { DefeitoPOS } from '../../models/defeito-pos';
-import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -96,7 +95,7 @@ export class ChamadoPage {
     private defeitoPOSService: DefeitoPOSService,
     private chamadoService: ChamadoService,
     private usuarioService: UsuarioService,
-    private statusServicoService: StatusServicoService
+    private statusServicoService: StatusServicoService,
   ) {
     this.chamado = this.navParams.get('chamado');
   }

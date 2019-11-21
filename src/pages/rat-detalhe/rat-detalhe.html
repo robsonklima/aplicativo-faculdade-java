@@ -13,10 +13,7 @@ v<ion-header>
       <button 
         ion-button 
         icon-only 
-        [disabled]="!ratDetalhe 
-          || (ratDetalhe.pecas.length == 0 
-          && (ratDetalhe.acao.codAcao == 19 
-          || ratDetalhe.acao.codAcao == 26))"
+        [disabled]="!ratDetalhe || (ratDetalhe.pecas.length == 0 && (ratDetalhe.acao.codAcao == 19 || ratDetalhe.acao.codAcao == 26))"
         (click)="salvarRatDetalheNoChamadoESair()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
@@ -124,6 +121,7 @@ v<ion-header>
               name="causa" 
               [disabled]="componentes?.length == 0"
               [ngModel]="ratDetalhe?.causa" 
+              (ionChange)="buscarDefeitosEAcoes($event.codCausa)"
               required>
               <ion-option 
                 *ngFor="let causa of componentes" 
@@ -140,6 +138,7 @@ v<ion-header>
               placeholder="Selecione..." 
               name="defeito" 
               [ngModel]="ratDetalhe?.defeito" 
+              [disabled]="defeitos?.length == 0"
               required>
               <ion-option 
                 *ngFor="let defeito of defeitos" 
@@ -156,6 +155,7 @@ v<ion-header>
               placeholder="Selecione..." 
               name="acao" 
               [ngModel]="ratDetalhe?.acao"
+              [disabled]="acoes?.length == 0"
               required>
               <ion-option 
                 *ngFor="let acao of acoes" 

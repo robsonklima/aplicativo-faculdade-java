@@ -19,6 +19,12 @@ import { CausaService } from "../../services/causa";
 import { DefeitoService } from "../../services/defeito";
 import { PecaService } from '../../services/peca';
 import { ChamadoService } from "../../services/chamado";
+import { EquipamentoCausaService } from '../../services/equipamento-causa';
+import { EquipamentoCausa } from '../../models/equipamento-causa';
+import { DefeitoCausaService } from '../../services/defeito-causa';
+import { AcaoCausaService } from '../../services/acao-causa';
+import { DefeitoCausa } from '../../models/defeito-causa';
+import { AcaoCausa } from '../../models/acao-causa';
 
 @Component({
   selector: 'rat-detalhe-page',
@@ -51,22 +57,23 @@ export class RatDetalhePage {
     private viewCtrl: ViewController,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private tipoServicoService: TipoServicoService,
     private acaoService: AcaoService,
     private causaService: CausaService,
     private defeitoService: DefeitoService,
     private pecaService: PecaService,
-    private chamadoService: ChamadoService
+    private chamadoService: ChamadoService,
+    private tipoServicoService: TipoServicoService,
+    private equipamentoCausaService: EquipamentoCausaService,
+    private defeitoCausaService: DefeitoCausaService,
+    private acaoCausaService: AcaoCausaService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
+    this.buscarEquipamentosCausasStorage();
     this.buscarTipoCausas();
-    this.buscarModulos();
-    this.buscarDefeitos();
-    this.buscarAcoes();
   }
 
   public buscarTipoCausas() {
@@ -89,7 +96,7 @@ export class RatDetalhePage {
       .catch(err => {});
   }
 
-  public buscarModulos() {
+  private buscarModulos() {
     this.causaService.buscarCausasStorage()
       .then((causas: Causa[]) => {
         this.modulos = causas.filter((causa) => { 
@@ -176,10 +183,6 @@ export class RatDetalhePage {
       if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
         this.apresentarCampoProtocoloStn();
       }
-
-      // if (causa.codECausa.substring(0, 2) == "15") {
-      //   this.apresentarCamposQuantidadesCedulas();
-      // }
 
       if (causa.codECausa.substring(0, 2) == "08") {
         this.exibirAlerta("Este chamado exige lançamento de laudo!");
@@ -335,70 +338,6 @@ export class RatDetalhePage {
     prompt.present();
   }
 
-  // private apresentarCamposQuantidadesCedulas() {
-  //   let prompt = this.alertCtrl.create({
-  //     title: 'Quantidade de Cédulas',
-  //     message: `Preencha os campos abaixo`,
-  //     enableBackdropDismiss: false,
-  //     inputs: [
-  //       {
-  //         name: 'qtdCedulasPagas',
-  //         type: 'number',
-  //         placeholder: 'Qtd Cédulas Pagas'
-  //       },
-  //       {
-  //         name: 'qtdCedulasRejeitadas',
-  //         type: 'number',
-  //         placeholder: 'Qtd Cédulas Rejeitadas'
-  //       }
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Salvar',
-  //         handler: dados => {
-  //           if ((!dados.qtdCedulasPagas || dados.qtdCedulasPagas.trim() == '') || 
-  //               (!dados.qtdCedulasRejeitadas || dados.qtdCedulasRejeitadas.trim() == '')) {
-  //             this.exibirAlerta('Favor informar a quantidade de cédulas pagas e rejeitadas!');
-              
-  //             return false;
-  //           }
-
-  //           if ((dados.qtdCedulasPagas <= this.chamado.qtdCedulasPagas || 
-  //               dados.qtdCedulasRejeitadas <= this.chamado.qtdCedulasRejeitadas) &&
-  //               prompt.data.inputs.length == 2) {
-              
-  //             let justificativaJaAdicionada: Boolean = false;
-              
-  //             prompt.data.inputs.forEach(input => {
-  //               if (input.name == 'justificativaCedulas')
-  //                 justificativaJaAdicionada = true;
-  //             });
-
-  //             if (!justificativaJaAdicionada) {
-  //               prompt.addInput({
-  //                 name: 'justificativaCedulas',
-  //                 type: 'text',
-  //                 placeholder: 'Justificativa'
-  //               });
-  //             }
-
-  //             return false;
-  //           }
-
-  //           this.chamado.qtdCedulasPagas = dados.qtdCedulasPagas.trim();
-  //           this.chamado.qtdCedulasRejeitadas = dados.qtdCedulasRejeitadas.trim();
-
-  //           if (prompt.data.inputs.length == 3) {
-  //             this.chamado.justificativaCedulas = dados.justificativaCedulas.trim();
-  //           }
-  //         }
-  //       }
-  //     ]
-  //   });
-
-  //   prompt.present();
-  // }
-
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
@@ -420,6 +359,31 @@ export class RatDetalhePage {
           .catch(err => { })
       );
     });
+  }
+
+  public buscarEquipamentosCausasStorage() {
+    this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip).then((eCausas: EquipamentoCausa[]) => { 
+      if (eCausas.length) 
+        this.modulos = eCausas[0].causas;
+      else
+        this.buscarModulos();
+    }).catch();
+  }
+
+  public buscarDefeitosEAcoes(codCausa: number) {
+    this.defeitoCausaService.buscarDefeitosPorCausa(codCausa).then((dCausas: DefeitoCausa[]) => { 
+      if (dCausas.length)
+        this.defeitos = dCausas[0].defeitos;
+      else
+        this.buscarDefeitos();
+    }).catch();
+
+    this.acaoCausaService.buscarAcoesPorCausa(codCausa).then((aCausas: AcaoCausa[]) => { 
+      if (aCausas.length)
+        this.acoes = aCausas[0].acoes;
+      else
+        this.buscarAcoes();
+    }).catch();
   }
 
   private configurarSlide(i: number) {

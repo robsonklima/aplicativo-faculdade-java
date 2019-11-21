@@ -30,4 +30,18 @@ export class DefeitoCausaService {
     })
     .catch();
   }
+
+  buscarDefeitosPorCausa(codCausa: number): Promise<DefeitoCausa[]> {
+    return new Promise((resolve, reject) => {
+      this.buscarDefeitosCausasStorage().then((dCausas: DefeitoCausa[]) => { 
+        let defeitosCausas: DefeitoCausa[] = dCausas.filter(defeitosCausas => {
+          return Number(defeitosCausas.causa.codCausa) === codCausa;
+        });
+        
+        resolve(defeitosCausas);
+      }).catch(() => {
+        reject();
+      });
+    });
+  }
 }

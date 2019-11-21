@@ -19,39 +19,28 @@ export class EquipamentoCausaService {
 
   buscarEquipamentosCausasApi(): Observable<EquipamentoCausa[]> {
     return this.http.get(Config.API_URL + 'EquipamentoCausa')
-      .map((res: Response) => {
-        this.insereEquipamentosCausasStorage(res.json());
-      })
+      .map((res: Response) => { this.storage.set('EquipamentosCausas', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
-  }
-
-  insereEquipamentosCausasStorage(eCausas: EquipamentoCausa[]) {
-    eCausas.forEach(e => {
-      if (!this.equipamentoAcaoEstaNoStorage(e.equipamento.codEquip)) {
-        this.equipamentosCausas.push(e);
-      }
-    });
-
-    this.storage.set('EquipamentosCausas', eCausas).then().catch();
   }
 
   buscarEquipamentosCausasStorage() {
     return this.storage.get('EquipamentosCausas').then((eCausas: EquipamentoCausa[]) => {
       this.equipamentosCausas = eCausas != null ? eCausas : [];
       return this.equipamentosCausas.slice();
-    })
-    .catch();
+    }).catch();
   }
 
-  equipamentoAcaoEstaNoStorage(codEquip: number): boolean {
-    let found: boolean = false;
-
-    this.equipamentosCausas.forEach(e => {
-      if (e.equipamento.codEquip === codEquip) {
-        found = true;
-      }
+  buscarCausasPorEquipamento(codEquip: number): Promise<EquipamentoCausa[]> {
+    return new Promise((resolve, reject) => {
+      this.buscarEquipamentosCausasStorage().then((eCausas: EquipamentoCausa[]) => { 
+        let equipamentosCausas: EquipamentoCausa[] = eCausas.filter(equipamentosCausas => {
+          return Number(equipamentosCausas.equipamento.codEquip) === codEquip;
+        });
+        
+        resolve(equipamentosCausas);
+      }).catch(() => {
+        reject();
+      });
     });
-
-    return found;
   }
 }
