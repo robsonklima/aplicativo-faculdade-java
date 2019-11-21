@@ -1,28 +1,38 @@
-0.0.54 
-- Ferramentas Técnicos;
+0.0.54 - 23/12/19
+- Adição das configurações das Ferramentas dos Técnicos: técnico poderá informar as ferramentas que possui;
+- Correção nos ícones quando não havia foto para mostrar;
+- Melhora na página de consulta de peças, otimização da consulta;
+- Melhora na página de busca de chamados, otimização da consulta;
+- Correção na visualização dos detalhes da peça, onde ocorria um erro quando não havia imagem para exibir;
+- Defeitos, ações e componentes/causas são exibidos de acordo com o contexto do equipamento;
+- Tela de chamados somente poderá ser acessada quando o banco de dados local estiver atualizado;
+- Reformulação da rotina de atualização dos dados locais;
+- Expansão do banco de dados local;
 
 
 0.0.53 - 23/12/19
 - Adição de Campos de preenchimento relativos ao POS/Banrisul;
+- Remoção do evento push down durante a atualização da lista de chamados e inserido botão no topo da página;
 - Correção do campo Nome Acompanhante para aceitar caracteres com acento;
 - Melhoria na tela laudo: sistema pergunta antes de fechar a tela;
 - Remoção dos botões inativos da tela inicial;
 - Melhoria no módulo mensagens: itens permanecem na tela mesmo após a leitura;
 - Padronização dos icones: sem foto e laudo;
+- Remoção do logo do login e substituído por textos;
 - Melhoria na usabilidade da tela de listagem de chamados: evento de clique expandido para todo o cartão do chamado;
 
 0.0.52 01/11/2019
-- Correcao camera Android 9.
+- Correcao aplicação da câmera Android 9 através do uso do aplicativo Open Camera.
 
 0.0.42 - 0.0.51
-- Tentativas de correcao camera Android 9.
+- Piloto de correção da câmera do SO Android 9, serviços de segundo plano e permissões.
 
 0.0.41 - 03/10/2019
-- Correções problemas de perimssão Android 9.0;
+- Correções problemas de perimssões Android 9.0;
 
 0.0.40 - 03/10/2019
-- Contagem cédulas mecanismo;
-- Novas mensagens laudo.
+- Formulário de contagem de cédulas do mecanismo;
+- Novas mensagens laudo: o sistema avisa com maior frequência e melhor transparêcia quando o chamado exige laudo.
 
 0.0.39 - 25/06/2019
 - Laudo técnico
