@@ -372,10 +372,12 @@ export class RatDetalhePage {
 
   public buscarDefeitosEAcoes(codCausa: number) {
     this.defeitoCausaService.buscarDefeitosPorCausa(codCausa).then((dCausas: DefeitoCausa[]) => { 
-      if (dCausas.length)
+      if (dCausas.length) {
         this.defeitos = dCausas[0].defeitos;
-      else
+      }
+      else {
         this.buscarDefeitos();
+      }
     }).catch();
 
     this.acaoCausaService.buscarAcoesPorCausa(codCausa).then((aCausas: AcaoCausa[]) => { 
