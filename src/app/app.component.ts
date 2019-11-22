@@ -1,16 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
-import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, 
+         BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 
+import moment from 'moment';
 import { Config } from "../models/config";
 import { Chamado } from '../models/chamado';
 import { Localizacao } from '../models/localizacao';
 
-import { LoginPage } from '../pages/login/login';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 import { HomePage } from '../pages/home/home';
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
@@ -20,14 +22,12 @@ import { GeolocationService } from '../services/geo-location';
 import { UsuarioService } from '../services/usuario';
 import { ChamadoService } from "../services/chamado";
 
-import moment from 'moment';
-
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  loginPage = LoginPage;
+  tutorialPage = TutorialPage;
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
   dataHoraUltAtualizacao: Date = new Date();
@@ -70,10 +70,10 @@ export class MyApp {
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
             } else {
-              this.nav.setRoot(this.loginPage);
+              this.nav.setRoot(this.tutorialPage);
             }
           } else {
-            this.nav.setRoot(this.loginPage);
+            this.nav.setRoot(this.tutorialPage);
           }
       }).catch();
     });
@@ -212,8 +212,6 @@ export class MyApp {
   }
 
   private iniciarColetaLocalizacaoSegundoPlano() {
-    this.exibirAlerta('Iniciou coleta de localização em Segundo Plano');
-
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 10,
       stationaryRadius: 15,
@@ -244,9 +242,7 @@ export class MyApp {
             }
           }
         }).catch((err) => this.exibirAlerta(err));
-      }, err => {
-        this.exibirAlerta(err);
-      });
+      }, err => { this.exibirAlerta(err) });
     }).catch((err) => this.exibirAlerta(err));
     
     this.bGeolocation.start().then().catch();
@@ -259,11 +255,11 @@ export class MyApp {
           this.nativeAudio.stop('audioPop').then(() => {
             this.nativeAudio.unload('audioPop').then(() => {
               this.vibration.vibrate(1500);
-            }, err => {});
-          }, err => {}); 
+            }, () => {});
+          }, () => {}); 
         }, 1000);
-      }, err => {});
-    }, err => {});
+      }, () => {});
+    }, () => {});
   }
 
   private exibirAlerta(msg: string) {
@@ -278,7 +274,7 @@ export class MyApp {
 
   public sair() {
     this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
-      this.nav.setRoot(this.loginPage);
+      this.nav.setRoot(this.tutorialPage);
     }).catch((err) => {});
   }
 }

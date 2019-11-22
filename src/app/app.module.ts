@@ -91,6 +91,7 @@ import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
 import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
 import { AcaoCausaService } from '../services/acao-causa';
 import { DefeitoCausaService } from '../services/defeito-causa';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 
 
 @NgModule({
@@ -130,6 +131,7 @@ import { DefeitoCausaService } from '../services/defeito-causa';
     EllipsisPipe,
     LowercasePipe,
     FerramentasTecnicoPage,
+    TutorialPage,
     TestePage,
   ],
   imports: [
@@ -184,6 +186,7 @@ import { DefeitoCausaService } from '../services/defeito-causa';
     MensagemPage,
     AssinaturaPage,
     FerramentasTecnicoPage,
+    TutorialPage,
     TestePage,
   ],
   providers: [

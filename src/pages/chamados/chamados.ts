@@ -22,7 +22,6 @@ import { DadosGlobais } from '../../models/dados-globais';
 })
 export class ChamadosPage {
   chamados: Chamado[];
-  dataHoraUltAtualizacao: Date = new Date();
   dg: DadosGlobais;
 
   constructor(
@@ -40,9 +39,15 @@ export class ChamadosPage {
   ) {}
 
   ionViewWillEnter() { 
-    this.carregarDadosGlobais().then(() => { this.carregarChamadosStorage().then(() => {
-      this.sincronizarChamados().catch(() => { this.exibirToast('Erro ao sincronizar com o servidor') });
-    }) }).catch();
+    this.carregarDadosGlobais().then(() => { 
+        this.carregarChamadosStorage().then(() => {
+          this.sincronizarChamados(false).then(() => {
+            this.carregarChamadosStorage();  
+          }).catch(() => { 
+            this.exibirToast('Erro ao sincronizar com o servidor');
+          }).catch((e) => console.log(e));
+        }).catch((e) => console.log(e));
+    }).catch((e) => console.log(e));
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -93,7 +98,7 @@ export class ChamadosPage {
     });
   }
 
-  private carregarChamadosStorage(): Promise<boolean> {
+  private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
         this.chamados = chamados.sort(function(a, b) { 
@@ -101,6 +106,7 @@ export class ChamadosPage {
         });
 
         this.atualizarBadge();
+        resolve();
       })  
       .catch(() => {
         reject(false);
@@ -172,34 +178,31 @@ export class ChamadosPage {
     const loading = this.loadingCtrl.create({ content: 'Sincronizando...' });
     loading.present();
 
-    this.sincronizarChamados().then(() => { loading.dismiss(); this.carregarChamadosStorage(); }).catch(() => { loading.dismiss() });
+    this.sincronizarChamados(true).then(() => { 
+      loading.dismiss(); 
+
+      this.carregarChamadosStorage();
+    }).catch(() => { loading.dismiss() });
   }
 
-  private sincronizarChamados(): Promise<any> {
+  private sincronizarChamados(verbose: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.dataHoraUltAtualizacao = new Date();
-
-      // console.log(this.dataHoraUltAtualizacao);
-
-      // return;
-      
-
       this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
-        this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
+        let chamadosFechados = chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) });
+
+        this.sincronizarChamadosFechados(chamadosFechados).then(() => {
+          if (chamadosFechados.length)
+            this.exibirToast('Chamado ' + chamadosFechados[0].codOs + ' fechado junto ao servidor');
+
           this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
             this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-              if (chamadosUnificados.length) {
-                this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-                  setTimeout(() => {
-                    this.chamadoService.buscarChamadosStorage().then(() => this.exibirToast('Chamados sincronizados com o servidor') ).catch();  
-                  }, 1500);
-                  resolve();
-                }).catch(() => {
-                  reject();
-                });
-              }
-            })
-            .catch(() => { reject() });
+              if (!chamadosUnificados.length) return;
+
+              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+                if (verbose) this.exibirToast('Chamados sincronizados junto ao servidor');
+                resolve();
+              }).catch(() => { reject()});
+            }).catch(() => { reject() });
           }, err => { reject() });
         }).catch(() => { reject() });
       }).catch(() => { reject() });

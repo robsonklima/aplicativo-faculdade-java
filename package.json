@@ -47,7 +47,7 @@
         "android-versions": "^1.5.0",
         "angular2-signaturepad": "^2.9.0",
         "chart.js": "^2.9.3",
-        "cordova-android": "7.0.0",
+        "cordova-android": "^7.0.0",
         "cordova-browser": "^4.1.0",
         "cordova-plugin-android-permissions": "^1.0.2",
         "cordova-plugin-app-version": "^0.1.9",
@@ -80,7 +80,8 @@
         "phonegap-plugin-local-notification": "^1.0.1",
         "rxjs": "5.5.2",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.18"
+        "zone.js": "0.8.18",
+        "cordova-plugin-background-geolocation": "@mauron85/cordova-plugin-background-geolocation@~3.1.0"
     },
     "devDependencies": {
         "@ionic/app-scripts": "^3.2.4",

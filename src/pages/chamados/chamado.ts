@@ -655,19 +655,13 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            //this.exibirToast('Chamado Fechado!!!')
-
             this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
             this.chamado.statusServico.abreviacao = "F";
             this.chamado.statusServico.nomeStatusServico = "FECHADO";
             this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.navCtrl.pop().then(() => {
-                this.exibirToast('Chamado fechado no seu smartphone. Aguarde a sincronização com o servidor').then(() => {
-                  this.events.publish('sincronizacao:solicitada');
-                }).catch();
-              }).catch();
+              this.navCtrl.pop();
             }).catch();
           }
         }
