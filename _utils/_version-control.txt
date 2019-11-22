@@ -8,7 +8,8 @@
 - Tela de chamados somente poderá ser acessada quando o banco de dados local estiver atualizado;
 - Reformulação da rotina de atualização dos dados locais;
 - Expansão do banco de dados local;
-
+- Tutorial ao iniciar o aplicativo;
+- Otimização da rotina de sincronização;
 
 0.0.53 - 23/12/19
 - Adição de Campos de preenchimento relativos ao POS/Banrisul;
