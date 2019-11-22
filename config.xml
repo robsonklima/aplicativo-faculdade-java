@@ -117,11 +117,13 @@
     <plugin name="cordova-plugin-background-mode" spec="https://github.com/katzer/cordova-plugin-background-mode" />
     <plugin name="cordova-plugin-appavailability" spec="^0.4.2" />
     <plugin name="cordova-plugin-market" spec="^1.2.0" />
-    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^3.0.1">
+    <plugin name="cordova-plugin-background-geolocation" spec="@mauron85/cordova-plugin-background-geolocation@~3.1.0">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
         <variable name="ICON" value="@mipmap/icon" />
         <variable name="SMALL_ICON" value="@mipmap/icon" />
+        <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking " />
+        <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" />
         <variable name="ACCOUNT_NAME" value="@string/app_name" />
         <variable name="ACCOUNT_LABEL" value="@string/app_name" />
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />

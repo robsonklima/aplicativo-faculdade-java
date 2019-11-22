@@ -66,9 +66,7 @@ export class MyApp {
           if (dados) {
             if (dados.usuario) {
               this.usuarioService.salvarCredenciais(dados.usuario);
-              
               this.iniciarSincronizacao();
-
               this.menuCtrl.enable(true);
               this.nav.setRoot(this.homePage);
             } else {
@@ -214,39 +212,42 @@ export class MyApp {
   }
 
   private iniciarColetaLocalizacaoSegundoPlano() {
+    this.exibirAlerta('Iniciou coleta de localização em Segundo Plano');
+
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 10,
       stationaryRadius: 15,
       distanceFilter: 30,
       debug: false,
       stopOnTerminate: false,
+      startForeground: true,
       interval: 5 * 60000,
       fastestInterval: 5 * 60000,
       activitiesInterval: 5 * 60000,
       notificationTitle: 'App Técnicos',
       notificationText: 'Sistema de Sincronização',
-      maxLocations: 1
+      maxLocations: 10
     };
 
     this.bGeolocation.configure(config).then(() => {
       this.bGeolocation.on(BackgroundGeolocationEvents.location).subscribe((res: BackgroundGeolocationResponse) => {
-          this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
-            if (dg) {
-              let loc = new Localizacao();
-              loc.latitude = res.latitude;
-              loc.longitude = res.longitude;
-              loc.codUsuario = dg.usuario.codUsuario;
-              loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
+        this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
+          if (dg) {
+            let loc = new Localizacao();
+            loc.latitude = res.latitude;
+            loc.longitude = res.longitude;
+            loc.codUsuario = dg.usuario.codUsuario;
+            loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
-              if (loc.codUsuario){
-                this.geolocation.enviarLocalizacao(loc).subscribe(() => { this.iniciarSincronizacao() }, err => {});
-              }
+            if (loc.codUsuario){
+              this.geolocation.enviarLocalizacao(loc).subscribe(() => { this.iniciarSincronizacao() }, err => {});
             }
-          }).catch();
-        }, err => {
-          this.exibirAlerta(err);
-        });
-    }).catch();
+          }
+        }).catch((err) => this.exibirAlerta(err));
+      }, err => {
+        this.exibirAlerta(err);
+      });
+    }).catch((err) => this.exibirAlerta(err));
     
     this.bGeolocation.start().then().catch();
   }

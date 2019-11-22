@@ -40,7 +40,9 @@ export class ChamadosPage {
   ) {}
 
   ionViewWillEnter() { 
-    this.carregarDadosGlobais().then(() => { this.carregarChamadosStorage() }).catch();
+    this.carregarDadosGlobais().then(() => { this.carregarChamadosStorage().then(() => {
+      this.sincronizarChamados().catch(() => { this.exibirToast('Erro ao sincronizar com o servidor') });
+    }) }).catch();
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -177,12 +179,20 @@ export class ChamadosPage {
     return new Promise((resolve, reject) => {
       this.dataHoraUltAtualizacao = new Date();
 
+      // console.log(this.dataHoraUltAtualizacao);
+
+      // return;
+      
+
       this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
         this.sincronizarChamadosFechados(chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) })).then(() => {
           this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
             this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
               if (chamadosUnificados.length) {
                 this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
+                  setTimeout(() => {
+                    this.chamadoService.buscarChamadosStorage().then(() => this.exibirToast('Chamados sincronizados com o servidor') ).catch();  
+                  }, 1500);
                   resolve();
                 }).catch(() => {
                   reject();

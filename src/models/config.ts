@@ -84,7 +84,6 @@ export class Config {
     ERRO_OBTER_ACOES: 'Não foi possível carregar as Ações',
     ERRO_OBTER_TIPOS_SERVICO: 'Não foi possível carregar os Tipos de Serviço',
     ATUALIZAR_DADOS_LOCAIS: 'É necessário atualizar os dados do aplicativo para prosseguir',
-
     CRIANDO_TAB_TIPOS_SERVICOS: "1/16: Configurando os Tipos de Serviço",
     CRIANDO_TAB_ACOES: "2/16: Configurando as Ações",
     CRIANDO_TAB_DEFEITOS: "3/16: Configurando os Defeitos",
@@ -101,7 +100,6 @@ export class Config {
     CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
-    
   }
   //public static API_URL = 'http://localhost:60687/api/';
   public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';

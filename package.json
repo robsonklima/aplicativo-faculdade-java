@@ -43,6 +43,7 @@
         "@ionic-native/vibration": "^4.20.0",
         "@ionic-native/zip": "^4.20.0",
         "@ionic/storage": "^2.2.0",
+        "@mauron85/cordova-plugin-background-geolocation": "^3.1.0",
         "android-versions": "^1.5.0",
         "angular2-signaturepad": "^2.9.0",
         "chart.js": "^2.9.3",
@@ -60,7 +61,6 @@
         "cordova-plugin-inappbrowser": "^2.0.2",
         "cordova-plugin-ionic-webview": "^1.2.1",
         "cordova-plugin-market": "^1.2.0",
-        "cordova-plugin-mauron85-background-geolocation": "^3.0.1",
         "cordova-plugin-nativeaudio": "^3.0.9",
         "cordova-plugin-network-information": "^2.0.2",
         "cordova-plugin-screen-orientation": "^3.0.2",
@@ -120,11 +120,13 @@
                 "ANDROID_SUPPORT_V4_VERSION": "27.+"
             },
             "cordova-plugin-background-mode": {},
-            "cordova-plugin-mauron85-background-geolocation": {
+            "cordova-plugin-background-geolocation": {
                 "GOOGLE_PLAY_SERVICES_VERSION": "11+",
                 "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
                 "ICON": "@mipmap/icon",
                 "SMALL_ICON": "@mipmap/icon",
+                "ALWAYS_USAGE_DESCRIPTION": "App requires background tracking ",
+                "MOTION_USAGE_DESCRIPTION": "App requires motion detection",
                 "ACCOUNT_NAME": "@string/app_name",
                 "ACCOUNT_LABEL": "@string/app_name",
                 "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
