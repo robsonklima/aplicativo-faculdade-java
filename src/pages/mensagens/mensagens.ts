@@ -36,7 +36,7 @@ export class MensagensPage {
     this.carregarDadosGlobais()
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => loading.dismiss())
-      .catch(() => {});
+      .catch(() => { loading.dismiss() });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {

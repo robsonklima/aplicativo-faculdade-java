@@ -50,6 +50,12 @@ import { MotivoComunicacaoService } from '../services/motivo-comunicacao';
 import { TipoComunicacaoService } from '../services/tipo-comunicacao';
 import { EquipamentoCausaService } from '../services/equipamento-causa';
 import { MotivoCancelamentoService } from '../services/motivo-cancelamento';
+import { StatusServicoService } from '../services/status-servico';
+import { DefeitoPOSService } from '../services/defeito-pos';
+import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
+import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
+import { AcaoCausaService } from '../services/acao-causa';
+import { DefeitoCausaService } from '../services/defeito-causa';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
@@ -76,7 +82,6 @@ import { IndicadorMenuPage } from '../pages/indicadores/indicador-menu';
 import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
-import { ChamadosMaisOpcoesPage } from '../pages/chamados/chamados-mais-opcoes';
 import { FotosPage } from '../pages/fotos/fotos';
 import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../pages/laudos/laudo';
@@ -84,14 +89,10 @@ import { SituacaoPage } from '../pages/laudos/situacao';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
-import { TestePage } from '../pages/teste/teste';
-import { StatusServicoService } from '../services/status-servico';
-import { DefeitoPOSService } from '../services/defeito-pos';
-import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
-import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
-import { AcaoCausaService } from '../services/acao-causa';
-import { DefeitoCausaService } from '../services/defeito-causa';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { MapaChamadosPage } from '../pages/chamados/mapa-chamados';
+import { MapaChamadoPage } from '../pages/chamados/mapa-chamado';
+import { TestePage } from '../pages/teste/teste';
 
 
 @NgModule({
@@ -103,7 +104,6 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
     HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
-    ChamadosMaisOpcoesPage,
     ChamadosFechadosPage,
     ChamadoFechadoPage,
     RatDetalhePage,
@@ -131,6 +131,8 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
     EllipsisPipe,
     LowercasePipe,
     FerramentasTecnicoPage,
+    MapaChamadosPage,
+    MapaChamadoPage,
     TutorialPage,
     TestePage,
   ],
@@ -161,7 +163,6 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
     HomeMaisOpcoesPage,
     ChamadosPage,
     ChamadoPage,
-    ChamadosMaisOpcoesPage,
     ChamadosFechadosPage,
     ChamadoFechadoPage,
     RatDetalhePage,
@@ -186,6 +187,8 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
     MensagemPage,
     AssinaturaPage,
     FerramentasTecnicoPage,
+    MapaChamadosPage,
+    MapaChamadoPage,
     TutorialPage,
     TestePage,
   ],

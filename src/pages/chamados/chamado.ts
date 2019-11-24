@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, Events, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -69,6 +69,7 @@ export class ChamadoPage {
   chamado: Chamado;
   foto: Foto;
   config: any;
+  mapaCheckin: any;
 
   constructor(
     private platform: Platform,
@@ -77,7 +78,6 @@ export class ChamadoPage {
     private diagnostic: Diagnostic,
     private androidPerm: AndroidPermissions,
     private market: Market,
-    private events: Events,
     private camera: Camera,
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
@@ -114,7 +114,6 @@ export class ChamadoPage {
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
-      
 
     if (this.chamado.rats.length == 0) {
       let rat = new Rat();

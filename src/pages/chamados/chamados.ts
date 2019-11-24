@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController, NavController, AlertController, ToastController,  PopoverController } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, ToastController, ModalController } from 'ionic-angular';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { Geolocation } from '@ionic-native/geolocation';
 import { Badge } from '@ionic-native/badge';
 
-import { Config } from "../../models/config";
+import moment from 'moment';
+import { DadosGlobais } from '../../models/dados-globais';
+import { Chamado } from '../../models/chamado';
+
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { ChamadoService } from "../../services/chamado";
 
 import { ChamadoPage } from "../chamados/chamado";
-import { Chamado } from '../../models/chamado';
-import { ChamadosMaisOpcoesPage } from './chamados-mais-opcoes';
-
-import { ChamadoService } from "../../services/chamado";
-import { DadosGlobais } from '../../models/dados-globais';
+import { MapaChamadoPage } from './mapa-chamado';
+import { ChamadoFechadoPage } from './chamado-fechado';
+import { MapaChamadosPage } from './mapa-chamados';
 
 
 @Component({
@@ -22,18 +22,18 @@ import { DadosGlobais } from '../../models/dados-globais';
 })
 export class ChamadosPage {
   chamados: Chamado[];
+  chamadosFechados: Chamado[];
+  qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
+  status: string = "abertos";
 
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
+    private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
-    private popoverCtrl: PopoverController,
     private toastCtrl: ToastController,
-    private platform: Platform,
     private badge: Badge,
-    private geolocation: Geolocation,
-    private inAppBrowser: InAppBrowser,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
   ) {}
@@ -42,7 +42,9 @@ export class ChamadosPage {
     this.carregarDadosGlobais().then(() => { 
         this.carregarChamadosStorage().then(() => {
           this.sincronizarChamados(false).then(() => {
-            this.carregarChamadosStorage();  
+            this.carregarChamadosStorage(); 
+
+            this,this.carregarChamadosFechadosApi();
           }).catch(() => { 
             this.exibirToast('Erro ao sincronizar com o servidor');
           }).catch((e) => console.log(e));
@@ -68,34 +70,12 @@ export class ChamadosPage {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
   }
 
-  public abrirMapaNavegador(chamado: Chamado) {
-    const loader = this.loadingCtrl.create({
-      content: 'Obtendo sua localização...',
-      enableBackdropDismiss: true,
-      dismissOnPageChange: true
-    });
-    loader.present();
+  public telaMapaChamado(chamado: Chamado) {
+    this.navCtrl.push(MapaChamadoPage, { chamado: chamado });
+  }
 
-    this.platform.ready().then(() => {
-      this.geolocation.getCurrentPosition(Config.POS_CONFIG)
-        .then((localizacao) => {
-          loader.dismiss().then(() => {
-            this.inAppBrowser.create('https://www.google.com.br/maps/dir/' 
-              + localizacao.coords.latitude + ',+' 
-              + localizacao.coords.longitude + '/' 
-              + chamado.localAtendimento.localizacao.latitude + ',+' 
-              + chamado.localAtendimento.localizacao.longitude);
-          }).catch();
-        })
-        .catch((err) => {
-          loader.dismiss().then(() => {
-            this.exibirToast("Não foi possível obter sua localização");
-          }).catch();
-        });
-    })
-    .catch(() => {
-      loader.dismiss();
-    });
+  public telaMapaChamados() {
+    this.navCtrl.push(MapaChamadosPage);
   }
 
   private carregarChamadosStorage(): Promise<any> {
@@ -160,15 +140,20 @@ export class ChamadosPage {
     confirmacao.present();
   } 
 
-  public abrirPopover(event: MouseEvent) {
-    const popover = this.popoverCtrl.create(ChamadosMaisOpcoesPage);
+  public telaChamadoFechado(chamado: Chamado) {
+    const modal = this.modalCtrl.create(ChamadoFechadoPage, { chamado: chamado });
+    modal.present();
+    modal.onDidDismiss(() => {});
+  }
 
-    popover.present({ev: event});
-
-    popover.onDidDismiss(data => {
-      if (!data)
-        return;
-    });
+  private carregarChamadosFechadosApi() {
+    this.chamadoService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico)
+      .subscribe((chamados: Chamado[]) => {
+        this.chamadosFechados = chamados.sort(function(a, b) { 
+          return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
+        });
+      },
+      err => {});
   }
 
 

@@ -66,7 +66,7 @@ export class Config {
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
     CONFIRMACAO: 'Confirmação',
-    OBTENDO_LOCALIZACAO: 'Obtendo sua localização...',
+    OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
     ERRO_OBTER_ACOES_CAUSAS: 'Não foi possível carregar as Ações e Causas',
     ERRO_OBTER_DEFEITOS_CAUSAS: 'Não foi possível carregar os Defeitos e Causas',
     ERRO_OBTER_EQUIPAMENTOS_CAUSAS: 'Não foi possível carregar os Equipamentos e Causas',
@@ -100,6 +100,13 @@ export class Config {
     CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
+  };
+  public static L = { 
+    ICONES: {
+      VERMELHO: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+      VERDE: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png'
+    },
+    SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
   }
   //public static API_URL = 'http://localhost:60687/api/';
   public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
