@@ -98,6 +98,8 @@ export class ChamadoPage {
     private statusServicoService: StatusServicoService,
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {
@@ -1188,16 +1190,6 @@ export class ChamadoPage {
     return ss1 && ss2 ? ss1.codStatusServico == ss2.codStatusServico : ss1 == ss2;
   }
 
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
-      });
-
-      resolve(toast.present());
-    });
-  }
-
   public buscarDefeitosPOS(): Promise<DefeitoPOS[]> {
     return new Promise((resolve, reject) => {
       this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitos: DefeitoPOS[]) => { 
@@ -1231,5 +1223,15 @@ export class ChamadoPage {
     });
 
     alerta.present();
+  }
+
+  private exibirToast(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem, duration: 3000, position: 'bottom'
+      });
+
+      resolve(toast.present());
+    });
   }
 }

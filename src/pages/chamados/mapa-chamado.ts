@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform, NavParams, NavController } from 'ionic-angular';
+import { LoadingController, Platform, NavParams, NavController, ModalController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { Config } from '../../models/config';
@@ -9,7 +9,8 @@ import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
-import { MapaMarkerPage } from './mapa-marker';
+import { MapaEnderecoCorrecaoPage } from './mapa-endereco-correcao';
+import { ChamadoService } from '../../services/chamado';
 
 declare var L: any;
 
@@ -27,11 +28,13 @@ declare var L: any;
 
     <ion-content>
       <div class="map-container"> 
-        <div id="mapId" style="width: 100%; height: 100%"> 
+        <div id="mapa-chamado" style="width: 100%; height: 100%"> 
         </div> 
       </div>
 
-      <button *ngIf='false' class="ion-button" ion-button color="dark" clear (click)='telaCorrecaoEndereco()'>Endereço Incorreto?</button>
+      <button *ngIf="!chamado?.localAtendimento?.localizacaoCorrigida?.latitude" class="ion-button" ion-button color="primary" (click)='telaCorrecaoEndereco()' clear small outline>
+        Endereço Incorreto?
+      </button>
     </ion-content>
   `
 })
@@ -48,24 +51,21 @@ export class MapaChamadoPage {
   constructor(
     private plt: Platform,
     private navCtrl: NavController,
+    private modalCtrl: ModalController,
     private navParams: NavParams,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
+    private chamadoService: ChamadoService,
     private geolocation: Geolocation,
   ) {
     this.chamado = this.navParams.get('chamado');
   }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => {
         this.plt.ready().then(() => {
-          const loader = this.loadingCtrl.create({ 
-            content: Config.MSG.OBTENDO_LOCALIZACAO,
-            enableBackdropDismiss: true, 
-            dismissOnPageChange: true 
-          });
-          
+          const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO });
           loader.present();
     
           this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((loc) => {
@@ -81,7 +81,19 @@ export class MapaChamadoPage {
   }
 
   public telaCorrecaoEndereco() {
-    this.navCtrl.push(MapaMarkerPage);
+    const modal = this.modalCtrl.create(MapaEnderecoCorrecaoPage, { chamado: this.chamado });
+
+    modal.present();
+    modal.onDidDismiss((chamado) => {
+      this.chamado = chamado;
+      
+      this.chamadoService.atualizarChamado(this.chamado).then(() => {
+        console.log(this.chamado);
+        
+      }).catch((e) => {
+        console.log(e);
+      });
+    });
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -90,6 +102,7 @@ export class MapaChamadoPage {
         .then((dados) => {
           if (dados)
             this.dg = dados;
+
             resolve(dados);
         })
         .catch((err) => {
@@ -99,7 +112,7 @@ export class MapaChamadoPage {
   }
 
   private carregarMapa() {
-    this.map = leaflet.map('mapId', {
+    this.map = leaflet.map('mapa-chamado', {
       center: this.minhaPosicao,
       zoom: 12
     });

@@ -94,7 +94,7 @@ import { MapaChamadosPage } from '../pages/chamados/mapa-chamados';
 import { MapaChamadoPage } from '../pages/chamados/mapa-chamado';
 import { TestePage } from '../pages/teste/teste';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
-import { MapaMarkerPage } from '../pages/chamados/mapa-marker';
+import { MapaEnderecoCorrecaoPage } from '../pages/chamados/mapa-endereco-correcao';
 
 
 @NgModule({
@@ -137,7 +137,7 @@ import { MapaMarkerPage } from '../pages/chamados/mapa-marker';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
-    MapaMarkerPage
+    MapaEnderecoCorrecaoPage
   ],
   imports: [
     BrowserModule,
@@ -194,7 +194,7 @@ import { MapaMarkerPage } from '../pages/chamados/mapa-marker';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
-    MapaMarkerPage
+    MapaEnderecoCorrecaoPage
   ],
   providers: [
     StatusBar,

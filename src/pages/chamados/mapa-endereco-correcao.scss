@@ -1,4 +1,4 @@
-mapa-marker {
+mapa-endereco-correcao {
   .map-container { 
     position: absolute; top: 0px; 
     bottom: 0px; 
@@ -13,8 +13,13 @@ mapa-marker {
 
   .ion-button {
     position: absolute;
-    bottom: 4px;
-    width: 100%;
+    bottom: -4px;
+    left: -2px;
     z-index: 999 !important;
+    width: 100%;
+  }
+
+  .leaflet-bottom {
+    display: none;
   }
 }

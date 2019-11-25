@@ -46,9 +46,9 @@ export class TutorialPage {
       },
       {
         title: "Detalhes do RAT!",
-        description: `A partir de agora, o algoritmo compreende quais <b>defeitos</b>, <b>ações</b> e <b>componentes</b> cada 
-                      equipamento possui! Deste modo, otimizaremos o seu tempo!`,
-        image: "assets/imgs/aim.png",
+        description: `A partir de agora, o algoritmo compreende quais causas cada equipamento possui e quais defeitos e ações cada causa contém! 
+                      Deste modo, otimizaremos o seu tempo!`,
+        image: "assets/imgs/atm.png",
       }
     ];
   }
