@@ -19,6 +19,7 @@ export class EquipamentoCausaService {
 
   buscarEquipamentosCausasApi(): Observable<EquipamentoCausa[]> {
     return this.http.get(Config.API_URL + 'EquipamentoCausa')
+      .timeout(120000)
       .map((res: Response) => { this.storage.set('EquipamentosCausas', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }

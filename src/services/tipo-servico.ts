@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Storage } from "@ionic/storage";
 import 'rxjs/Rx';
+import 'rxjs/add/operator/retry';
+import 'rxjs/add/operator/timeout';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/map';
 
 import { Config } from '../models/config';
 import { Observable } from "rxjs/Observable";
@@ -18,6 +22,7 @@ export class TipoServicoService {
 
   buscarTipoServicosApi(): Observable<TipoServico[]> {
     return this.http.get(Config.API_URL + 'TipoServico')
+      .timeout(15000)
       .map((res: Response) => {
         this.inseretipoServicosStorage(res.json());
       })
@@ -37,13 +42,10 @@ export class TipoServicoService {
   }
 
   buscarTipoServicosStorage() {
-    return this.storage.get('TipoServicos')
-      .then(
-      (causas: TipoServico[]) => {
-        this.tipoServicos = causas != null ? causas : [];
-        return this.tipoServicos.slice();
-      })
-      .catch();
+    return this.storage.get('TipoServicos').then((causas: TipoServico[]) => {
+      this.tipoServicos = causas != null ? causas : [];
+      return this.tipoServicos.slice();
+    }).catch();
   }
 
   tipoServicoEstaNoStorage(codTipoServico: number): boolean {

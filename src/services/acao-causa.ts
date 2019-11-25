@@ -19,6 +19,7 @@ export class AcaoCausaService {
 
   buscarAcoesCausasApi(): Observable<AcaoCausa[]> {
     return this.http.get(Config.API_URL + 'AcaoCausa')
+      .timeout(120000)
       .map((res: Response) => { this.storage.set('AcoesCausas', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }

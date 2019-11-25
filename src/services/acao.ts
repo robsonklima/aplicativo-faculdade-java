@@ -18,6 +18,7 @@ export class AcaoService {
 
   buscarAcoesApi(): Observable<Acao[]> {
     return this.http.get(Config.API_URL + 'Acao')
+      .timeout(30000)
       .map((res: Response) => { this.storage.set('Acoes', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }

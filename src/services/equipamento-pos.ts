@@ -19,6 +19,7 @@ export class EquipamentoPOSService {
 
   buscarEquipamentosPOSApi(): Observable<EquipamentoPOS[]> {
     return this.http.get(Config.API_URL + 'EquipamentoPOS')
+      .timeout(15000)
       .map((res: Response) => { this.storage.set('EquipamentosPOS', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }

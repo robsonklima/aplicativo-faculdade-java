@@ -18,6 +18,7 @@ export class DefeitoService {
 
   buscarDefeitosApi(): Observable<Defeito[]> {
     return this.http.get(Config.API_URL + 'Defeito')
+      .timeout(30000)
       .map((res: Response) => {
         this.insereDefeitosStorage(res.json());
       })

@@ -18,6 +18,7 @@ export class CausaService {
 
   buscarCausasApi(): Observable<Causa[]> {
     return this.http.get(Config.API_URL + 'Causa')
+      .timeout(30000)
       .map((res: Response) => {
         this.storage.set('Causas', res.json())
           .then()

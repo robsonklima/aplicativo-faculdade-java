@@ -18,6 +18,7 @@ export class PecaService {
 
   buscarPecasApi(): Observable<Peca[]> {
     return this.http.get(Config.API_URL + 'Peca')
+      .timeout(30000)
       .map((res: Response) => {
         this.inserePecasStorage(res.json());
       })
