@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="perto.sat.apptecnicos" version="0.0.54" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>App Técnicos</name>
-    <description>Aplicativo para automação dos atendimentos técnicos da equipe de assistência técnica da empresa Perto S.A.</description>
+    <description>Aplicativo para automação dos atendimentos técnicos da assistência técnica da empresa Perto S.A.</description>
     <author email="equipe.sat@perto.com.br" href="">Robson Lima</author>
     <content src="index.html" />
     <access origin="*" />
@@ -52,9 +52,6 @@
         <config-file parent="./" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
         </config-file>
-        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <application android:usesCleartextTraffic="true" />
-        </edit-config>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -117,28 +114,13 @@
     <plugin name="cordova-plugin-background-mode" spec="https://github.com/katzer/cordova-plugin-background-mode" />
     <plugin name="cordova-plugin-appavailability" spec="^0.4.2" />
     <plugin name="cordova-plugin-market" spec="^1.2.0" />
-    <plugin name="cordova-plugin-background-geolocation" spec="@mauron85/cordova-plugin-background-geolocation@~3.1.0">
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^3.0.0-alpha.50" />
+    <plugin name="cordova-plugin-mauron85-background-geolocation">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
-        <variable name="ICON" value="@mipmap/icon" />
-        <variable name="SMALL_ICON" value="@mipmap/icon" />
-        <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking " />
+        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="23+" />
+        <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking enabled" />
         <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" />
-        <variable name="ACCOUNT_NAME" value="@string/app_name" />
-        <variable name="ACCOUNT_LABEL" value="@string/app_name" />
-        <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
-        <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
-    </plugin>
-    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^3.0.1">
-        <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
-        <variable name="ICON" value="@mipmap/icon" />
-        <variable name="SMALL_ICON" value="@mipmap/icon" />
-        <variable name="ACCOUNT_NAME" value="@string/app_name" />
-        <variable name="ACCOUNT_LABEL" value="@string/app_name" />
-        <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
-        <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
     <engine name="browser" spec="^4.1.0" />
-    <engine name="android" spec="^7.0.0" />
+    <engine name="android" spec="7.0.0" />
 </widget>

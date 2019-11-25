@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { LoadingController, Platform } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 
 import { Config } from '../../models/config';
 
@@ -46,14 +45,11 @@ export class MapaChamadosPage {
     private plt: Platform,
     private geolocation: Geolocation,
     private loadingCtrl: LoadingController,
-    private launchNavigator: LaunchNavigator,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService
   ) {}
 
   ionViewDidEnter() {
-    //this.navigate();
-
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage())
       .then(() => {
@@ -168,17 +164,5 @@ export class MapaChamadosPage {
 
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
-  }
-
-  public navigate(){
-    let options: LaunchNavigatorOptions = {
-      start: 'London, ON',
-      app: 'com.google.android.apps.maps'
-    };
-    
-    this.launchNavigator.navigate('Toronto, ON', options).then(
-      success => console.log('Launched navigator'),
-      error => console.log('Error launching navigator', error)
-    );
   }
 }

@@ -93,7 +93,6 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
 import { MapaChamadosPage } from '../pages/chamados/mapa-chamados';
 import { MapaChamadoPage } from '../pages/chamados/mapa-chamado';
 import { TestePage } from '../pages/teste/teste';
-import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { MapaEnderecoCorrecaoPage } from '../pages/chamados/mapa-endereco-correcao';
 
 
@@ -202,7 +201,6 @@ import { MapaEnderecoCorrecaoPage } from '../pages/chamados/mapa-endereco-correc
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Diagnostic,
     Geolocation,
-    LaunchNavigator,
     BackgroundGeolocation,
     BackgroundMode,
     PhonegapLocalNotification,
