@@ -1,27 +1,25 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform } from 'ionic-angular';
+import { LoadingController, Platform, NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 
 import { Config } from '../../models/config';
+import { Chamado } from '../../models/chamado';
 
 import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
-import { DadosGlobais } from '../../models/dados-globais';
-import { Chamado } from '../../models/chamado';
-import { ChamadoService } from '../../services/chamado';
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { DadosGlobais } from '../../models/dados-globais';
 
 declare var L: any;
 
 
 @Component({
-  selector: 'mapa-chamados',
+  selector: 'mapa-marker',
   template: `
     <ion-header>
       <ion-navbar>
         <ion-title>
-            Mapa dos Chamados
+            Selecione no Mapa
         </ion-title>
       </ion-navbar>
     </ion-header>
@@ -31,31 +29,33 @@ declare var L: any;
         <div id="mapId" style="width: 100%; height: 100%"> 
         </div> 
       </div>
+
+      <button class="ion-button" ion-button color="dark" clear>Salvar</button>
     </ion-content>
   `
 })
 
-export class MapaChamadosPage {
-  chamados: Chamado[] = [];
+export class MapaMarkerPage {
   dg: DadosGlobais;
+  chamado: Chamado;
   map: any;
   minhaPosicao: leaflet.PointTuple;
   posicaoB: leaflet.PointTuple;
+  distancia: string;
+  tempo: string;
 
   constructor(
     private plt: Platform,
-    private geolocation: Geolocation,
+    private navParams: NavParams,
     private loadingCtrl: LoadingController,
-    private launchNavigator: LaunchNavigator,
     private dadosGlobaisService: DadosGlobaisService,
-    private chamadoService: ChamadoService
-  ) {}
+    private geolocation: Geolocation,
+  ) {
+    
+  }
 
   ionViewDidEnter() {
-    //this.navigate();
-
     this.carregarDadosGlobais()
-      .then(() => this.carregarChamadosStorage())
       .then(() => {
         this.plt.ready().then(() => {
           const loader = this.loadingCtrl.create({ 
@@ -92,28 +92,13 @@ export class MapaChamadosPage {
     });
   }
 
-  private carregarChamadosStorage(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
-        this.chamados = chamados.sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
-        });
-
-        resolve();
-      })  
-      .catch(() => {
-        reject(false);
-      });
-    });
-  }
-
   private carregarMapa() {
     this.map = leaflet.map('mapId', {
       center: this.minhaPosicao,
       zoom: 12
     });
 
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Nome da Aplicação' }).addTo(this.map);
+    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: Config.NOME_APP }).addTo(this.map);
 
     let popups: any = [];
     let icons: any = [];
@@ -130,20 +115,6 @@ export class MapaChamadosPage {
       popupAnchor: [0, -41]
     }));
     wps.push(L.latLng( this.minhaPosicao ));
-
-    this.chamados.forEach(c => {
-      popups.push(c.codOs.toString() + ' - ' + c.localAtendimento.nomeLocalAtendimento);
-      icons.push(L.icon({
-        iconUrl: Config.L.ICONES.VERMELHO,
-        shadowUrl: Config.L.SOMBRA,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        shadowSize: [41, 41],
-        shadowAnchor:  [12, 41],
-        popupAnchor: [0, -41]
-      }));
-      wps.push(L.latLng([ c.localAtendimento.localizacao.latitude, c.localAtendimento.localizacao.longitude ]));
-    });
 
     L.Routing.control({
       createMarker: function (i: number, waypoint: any) {
@@ -164,21 +135,21 @@ export class MapaChamadosPage {
       lineOptions: {
         styles: [{ color: 'green', opacity: 1, weight: 4 }]
       }
-    }).addTo(this.map);
+    }).addTo(this.map)
+    
+    let addedMarker = {};
+    this.map.on('click', (e) => {
+      let lat = e.latlng.lat;
+      let lon = e.latlng.lng;
+      console.log("You clicked the map at LAT: "+ lat+" and LONG: "+lon );
+      if (addedMarker != undefined) {
+        this.map.removeLayer(addedMarker);
+      };
+
+      addedMarker = L.marker([lat, lon]).addTo(this.map);  
+    });
 
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
-  }
-
-  public navigate(){
-    let options: LaunchNavigatorOptions = {
-      start: 'London, ON',
-      app: 'com.google.android.apps.maps'
-    };
-    
-    this.launchNavigator.navigate('Toronto, ON', options).then(
-      success => console.log('Launched navigator'),
-      error => console.log('Error launching navigator', error)
-    );
   }
 }

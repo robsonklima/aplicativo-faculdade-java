@@ -33,6 +33,7 @@
     "@ionic-native/file-transfer": "^4.20.0",
     "@ionic-native/geolocation": "^4.20.0",
     "@ionic-native/in-app-browser": "^4.20.0",
+    "@ionic-native/launch-navigator": "^4.20.0",
     "@ionic-native/market": "^4.20.0",
     "@ionic-native/native-audio": "^4.20.0",
     "@ionic-native/network": "^4.20.0",
@@ -81,6 +82,7 @@
     "phonegap-plugin-local-notification": "^1.0.1",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "^5.0.4",
     "zone.js": "0.8.18"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform, NavParams } from 'ionic-angular';
+import { LoadingController, Platform, NavParams, NavController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { Config } from '../../models/config';
@@ -9,6 +9,7 @@ import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
+import { MapaMarkerPage } from './mapa-marker';
 
 declare var L: any;
 
@@ -29,13 +30,9 @@ declare var L: any;
         <div id="mapId" style="width: 100%; height: 100%"> 
         </div> 
       </div>
-    </ion-content>
 
-    <ion-footer *ngIf="distancia && tempo">
-      <ion-toolbar color="light">
-        <ion-title><span class="footer">Distância: {{ distancia }} km &#8226; Tempo: {{ tempo }} min.</span></ion-title>
-      </ion-toolbar>
-    </ion-footer>
+      <button *ngIf='false' class="ion-button" ion-button color="dark" clear (click)='telaCorrecaoEndereco()'>Endereço Incorreto?</button>
+    </ion-content>
   `
 })
 
@@ -50,6 +47,7 @@ export class MapaChamadoPage {
 
   constructor(
     private plt: Platform,
+    private navCtrl: NavController,
     private navParams: NavParams,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
@@ -82,6 +80,10 @@ export class MapaChamadoPage {
       .catch(() => {});
   }
 
+  public telaCorrecaoEndereco() {
+    this.navCtrl.push(MapaMarkerPage);
+  }
+
   private carregarDadosGlobais(): Promise<DadosGlobais> {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage()
@@ -102,7 +104,7 @@ export class MapaChamadoPage {
       zoom: 12
     });
 
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Nome da Aplicação' }).addTo(this.map);
+    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: Config.NOME_APP }).addTo(this.map);
 
     let popups: any = [];
     let icons: any = [];
@@ -151,8 +153,8 @@ export class MapaChamadoPage {
       lineOptions: {
         styles: [{ color: 'green', opacity: 1, weight: 4 }]
       }
-    }).addTo(this.map);
-
+    }).addTo(this.map)
+    
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
   }

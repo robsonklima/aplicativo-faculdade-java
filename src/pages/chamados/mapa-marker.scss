@@ -1,4 +1,4 @@
-mapa-chamado {
+mapa-marker {
   .map-container { 
     position: absolute; top: 0px; 
     bottom: 0px; 
@@ -14,7 +14,7 @@ mapa-chamado {
   .ion-button {
     position: absolute;
     bottom: 4px;
-    left: 3px;
+    width: 100%;
     z-index: 999 !important;
   }
 }

@@ -93,6 +93,8 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
 import { MapaChamadosPage } from '../pages/chamados/mapa-chamados';
 import { MapaChamadoPage } from '../pages/chamados/mapa-chamado';
 import { TestePage } from '../pages/teste/teste';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { MapaMarkerPage } from '../pages/chamados/mapa-marker';
 
 
 @NgModule({
@@ -135,6 +137,7 @@ import { TestePage } from '../pages/teste/teste';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
+    MapaMarkerPage
   ],
   imports: [
     BrowserModule,
@@ -191,6 +194,7 @@ import { TestePage } from '../pages/teste/teste';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
+    MapaMarkerPage
   ],
   providers: [
     StatusBar,
@@ -198,6 +202,7 @@ import { TestePage } from '../pages/teste/teste';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Diagnostic,
     Geolocation,
+    LaunchNavigator,
     BackgroundGeolocation,
     BackgroundMode,
     PhonegapLocalNotification,
