@@ -90,10 +90,10 @@ import { AssinaturaPage } from '../pages/assinatura/assinatura';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
 import { TutorialPage } from '../pages/tutorial/tutorial';
-import { MapaChamadosPage } from '../pages/chamados/mapa-chamados';
-import { MapaChamadoPage } from '../pages/chamados/mapa-chamado';
+import { MapaChamadosPage } from '../pages/mapas/mapa-chamados';
+import { MapaChamadoPage } from '../pages/mapas/mapa-chamado';
+import { MapaEnderecoCorrecaoPage } from '../pages/mapas/mapa-endereco-correcao';
 import { TestePage } from '../pages/teste/teste';
-import { MapaEnderecoCorrecaoPage } from '../pages/chamados/mapa-endereco-correcao';
 
 
 @NgModule({

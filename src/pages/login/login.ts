@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController, MenuController, ToastController, AlertController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
+import { Config } from "../../models/config";
 import { AppVersion } from '@ionic-native/app-version';
 
 import { DadosGlobais } from '../../models/dados-globais';
@@ -10,9 +11,8 @@ import { Login } from '../../models/login';
 import { Usuario } from '../../models/usuario';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { ChamadoService } from '../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
-
-import { Config } from "../../models/config";
 
 
 @Component({
@@ -32,6 +32,7 @@ export class LoginPage implements OnInit {
     private menuCtrl: MenuController,
     private usuarioService: UsuarioService,
     private dadosGlobaisService: DadosGlobaisService,
+    private chamadoService: ChamadoService,
     private toastCtrl: ToastController,
     private events: Events,
     private appVersion: AppVersion
@@ -67,6 +68,7 @@ export class LoginPage implements OnInit {
           this.usuario = login.usuario;
           this.salvarDadosGlobais();
           this.usuarioService.salvarCredenciais(this.usuario);
+          this.chamadoService.apagarChamadosStorage();
           this.events.publish('login:efetuado', this.dadosGlobais);
           this.menuCtrl.enable(true);
           this.navCtrl.setRoot(HomePage);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform, NavParams, AlertController, ViewController } from 'ionic-angular';
+import { LoadingController, Platform, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { Config } from '../../models/config';
@@ -24,7 +24,7 @@ declare var L: any;
           </button>
         </ion-buttons>
 
-        <ion-title>Selecione no Mapa</ion-title>
+        <ion-title>Aponte o End. Correto no Mapa</ion-title>
       </ion-navbar>
     </ion-header>
 
@@ -52,7 +52,7 @@ export class MapaEnderecoCorrecaoPage {
 
   constructor(
     private plt: Platform,
-    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
     private loadingCtrl: LoadingController,
@@ -117,7 +117,8 @@ export class MapaEnderecoCorrecaoPage {
   }
 
   public salvar() {
-    this.exibirAlerta('Local atualizado com sucesso! O Pós Vendas deste cliente estará corrigindo o cadastro no SAT.');    
+    this.exibirToast(`Um e-mail foi enviado ao Pós-Vendas do cliente para tratativas.
+                      Agradecemos sua ajuda!`);    
 
     this.fecharModal();
   }
@@ -126,13 +127,13 @@ export class MapaEnderecoCorrecaoPage {
     this.viewCtrl.dismiss(this.chamado);
   }
 
-  private exibirAlerta(msg: string) {
-    const alerta = this.alertCtrl.create({
-      title: 'Obrigado',
-      subTitle: msg,
-      buttons: ['OK']
-    });
+  private exibirToast(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem, duration: 5500, position: 'bottom'
+      });
 
-    alerta.present();
+      resolve(toast.present());
+    });
   }
 }

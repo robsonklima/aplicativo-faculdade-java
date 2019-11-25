@@ -1,65 +1,74 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform } from 'ionic-angular';
+import { LoadingController, Platform, NavParams, ModalController, ActionSheetController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { Config } from '../../models/config';
+import { Chamado } from '../../models/chamado';
 
 import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
-import { DadosGlobais } from '../../models/dados-globais';
-import { Chamado } from '../../models/chamado';
-import { ChamadoService } from '../../services/chamado';
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { DadosGlobais } from '../../models/dados-globais';
+import { MapaEnderecoCorrecaoPage } from './mapa-endereco-correcao';
+import { ChamadoService } from '../../services/chamado';
 
 declare var L: any;
 
 
 @Component({
-  selector: 'mapa-chamados',
+  selector: 'mapa-chamado',
   template: `
     <ion-header>
       <ion-navbar>
-        <ion-title>
-            Mapa dos Chamados
-        </ion-title>
+        <ion-buttons end>
+          <button 
+            ion-button 
+            icon-only 
+            (click)="exibirActionSheet()">
+            <ion-icon name="options"></ion-icon>
+          </button>
+        </ion-buttons>   
+
+        <ion-title>Chamado {{ chamado?.codOs }}</ion-title>
       </ion-navbar>
     </ion-header>
 
     <ion-content>
       <div class="map-container"> 
-        <div id="mapId" style="width: 100%; height: 100%"> 
+        <div id="mapa-chamado" style="width: 100%; height: 100%"> 
         </div> 
       </div>
     </ion-content>
   `
 })
 
-export class MapaChamadosPage {
-  chamados: Chamado[] = [];
+export class MapaChamadoPage {
   dg: DadosGlobais;
+  chamado: Chamado;
   map: any;
   minhaPosicao: leaflet.PointTuple;
   posicaoB: leaflet.PointTuple;
+  distancia: string;
+  tempo: string;
 
   constructor(
     private plt: Platform,
-    private geolocation: Geolocation,
+    private modalCtrl: ModalController,
+    private actionSheetCtrl: ActionSheetController,
+    private navParams: NavParams,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
-    private chamadoService: ChamadoService
-  ) {}
+    private chamadoService: ChamadoService,
+    private geolocation: Geolocation,
+  ) {
+    this.chamado = this.navParams.get('chamado');
+  }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarChamadosStorage())
       .then(() => {
         this.plt.ready().then(() => {
-          const loader = this.loadingCtrl.create({ 
-            content: Config.MSG.OBTENDO_LOCALIZACAO,
-            enableBackdropDismiss: true, 
-            dismissOnPageChange: true 
-          });
-          
+          const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO });
           loader.present();
     
           this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((loc) => {
@@ -80,6 +89,7 @@ export class MapaChamadosPage {
         .then((dados) => {
           if (dados)
             this.dg = dados;
+
             resolve(dados);
         })
         .catch((err) => {
@@ -88,28 +98,13 @@ export class MapaChamadosPage {
     });
   }
 
-  private carregarChamadosStorage(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
-        this.chamados = chamados.sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
-        });
-
-        resolve();
-      })  
-      .catch(() => {
-        reject(false);
-      });
-    });
-  }
-
   private carregarMapa() {
-    this.map = leaflet.map('mapId', {
+    this.map = leaflet.map('mapa-chamado', {
       center: this.minhaPosicao,
       zoom: 12
     });
 
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Nome da Aplicação' }).addTo(this.map);
+    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: Config.NOME_APP }).addTo(this.map);
 
     let popups: any = [];
     let icons: any = [];
@@ -127,20 +122,18 @@ export class MapaChamadosPage {
     }));
     wps.push(L.latLng( this.minhaPosicao ));
 
-    this.chamados.forEach(c => {
-      popups.push(c.codOs.toString() + ' - ' + c.localAtendimento.nomeLocalAtendimento);
-      icons.push(L.icon({
-        iconUrl: Config.L.ICONES.VERMELHO,
-        shadowUrl: Config.L.SOMBRA,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        shadowSize: [41, 41],
-        shadowAnchor:  [12, 41],
-        popupAnchor: [0, -41]
-      }));
-      wps.push(L.latLng([ c.localAtendimento.localizacao.latitude, c.localAtendimento.localizacao.longitude ]));
-    });
-
+    popups.push(this.chamado.codOs.toString() + ' - ' + this.chamado.localAtendimento.nomeLocalAtendimento);
+    icons.push(L.icon({
+      iconUrl: Config.L.ICONES.VERMELHO,
+      shadowUrl: Config.L.SOMBRA,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      shadowSize: [41, 41],
+      shadowAnchor:  [12, 41],
+      popupAnchor: [0, -41]
+    }));
+    wps.push(L.latLng([ this.chamado.localAtendimento.localizacao.latitude, this.chamado.localAtendimento.localizacao.longitude ]));
+    
     L.Routing.control({
       createMarker: function (i: number, waypoint: any) {
         const marker = L.marker(waypoint.latLng, {
@@ -160,9 +153,42 @@ export class MapaChamadosPage {
       lineOptions: {
         styles: [{ color: 'green', opacity: 1, weight: 4 }]
       }
-    }).addTo(this.map);
-
+    }).addTo(this.map)
+    
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
+  }
+
+  public exibirActionSheet() {
+    const actionSheet = this.actionSheetCtrl.create({
+      title: 'Mais Opções',
+      buttons: [
+        {
+          text: 'Corrigir Endereço',
+          handler: () => {
+            const modal = this.modalCtrl.create(MapaEnderecoCorrecaoPage, { chamado: this.chamado });
+
+            modal.present();
+            modal.onDidDismiss((chamado) => {
+              this.chamado = chamado;
+              
+              this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                console.log(this.chamado);
+                
+              }).catch((e) => {
+                console.log(e);
+              });
+            }); 
+          }
+        }, {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 }

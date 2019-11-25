@@ -11,9 +11,9 @@ import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from "../../services/chamado";
 
 import { ChamadoPage } from "../chamados/chamado";
-import { MapaChamadoPage } from './mapa-chamado';
+import { MapaChamadoPage } from '../mapas/mapa-chamado';
+import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { ChamadoFechadoPage } from './chamado-fechado';
-import { MapaChamadosPage } from './mapa-chamados';
 
 
 @Component({
