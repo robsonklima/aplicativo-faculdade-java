@@ -214,7 +214,7 @@ export class MyApp {
   private iniciarColetaLocalizacaoSegundoPlano() {
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 10,
-      stationaryRadius: 15,
+      stationaryRadius: 0,
       distanceFilter: 0,
       debug: true,
       stopOnTerminate: false,

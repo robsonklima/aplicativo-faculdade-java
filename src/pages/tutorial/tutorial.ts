@@ -38,12 +38,12 @@ export class TutorialPage {
                       a <b>distância percorrida</b> e o <b>tempo de duração</b> do seu percurso!`,
         image: "assets/imgs/maps-icon-8223.png",
       },
-      {
-        title: "Ferramentas!",
-        description: `Agora você poderá informar ao seu coordenador as <b>ferramentas</b> que possui! 
-                      Assim, o seu líder o manterá sempre preparado! `,
-        image: "assets/imgs/briefcase.png",
-      },
+      // {
+      //   title: "Ferramentas!",
+      //   description: `Agora você poderá informar ao seu coordenador as <b>ferramentas</b> que possui! 
+      //                 Assim, o seu líder o manterá sempre preparado! `,
+      //   image: "assets/imgs/briefcase.png",
+      // },
       {
         title: "Detalhes do RAT!",
         description: `A partir de agora, o algoritmo compreende quais causas cada equipamento possui e quais defeitos e ações cada causa contém! 
