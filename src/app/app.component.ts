@@ -216,7 +216,7 @@ export class MyApp {
       desiredAccuracy: 10,
       stationaryRadius: 0,
       distanceFilter: 0,
-      debug: true,
+      debug: false,
       stopOnTerminate: false,
       startForeground: true,
       interval: 5 * 60000,
