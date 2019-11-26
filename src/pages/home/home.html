@@ -98,6 +98,17 @@
 
     <button
       ion-item
+      *ngIf="true"
+      (click)="telaMinhaRota()">
+      <ion-icon 
+        color="primary" 
+        name="map" 
+        item-start></ion-icon>
+      Minha Rota
+    </button>
+
+    <button
+      ion-item
       *ngIf="false"
       (click)="telaTeste()">
       <ion-icon 

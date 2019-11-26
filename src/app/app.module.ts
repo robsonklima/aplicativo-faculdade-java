@@ -94,6 +94,8 @@ import { MapaChamadosPage } from '../pages/mapas/mapa-chamados';
 import { MapaChamadoPage } from '../pages/mapas/mapa-chamado';
 import { MapaEnderecoCorrecaoPage } from '../pages/mapas/mapa-endereco-correcao';
 import { TestePage } from '../pages/teste/teste';
+import { MapaMinhaRotaPage } from '../pages/mapas/mapa-minha-rota';
+import { LocalizacaoService } from '../services/localizacao';
 
 
 @NgModule({
@@ -136,7 +138,8 @@ import { TestePage } from '../pages/teste/teste';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
-    MapaEnderecoCorrecaoPage
+    MapaEnderecoCorrecaoPage,
+    MapaMinhaRotaPage
   ],
   imports: [
     BrowserModule,
@@ -193,7 +196,8 @@ import { TestePage } from '../pages/teste/teste';
     MapaChamadoPage,
     TutorialPage,
     TestePage,
-    MapaEnderecoCorrecaoPage
+    MapaEnderecoCorrecaoPage,
+    MapaMinhaRotaPage
   ],
   providers: [
     StatusBar,
@@ -242,7 +246,8 @@ import { TestePage } from '../pages/teste/teste';
     DefeitoPOSService,
     FerramentaTecnicoService,
     AcaoCausaService,
-    DefeitoCausaService
+    DefeitoCausaService,
+    LocalizacaoService
   ]
 })
 export class AppModule {}
