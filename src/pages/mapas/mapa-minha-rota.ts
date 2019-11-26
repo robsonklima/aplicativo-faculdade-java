@@ -90,7 +90,7 @@ export class MapaMinhaRotaPage {
   }
 
   private carregarMapa() {
-    if (this.map != undefined) this.map.remove();
+    if (this.map) this.map.remove();
 
     this.map = leaflet.map('minha-rota', { zoom: 12 });
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Nome da Aplicação' }).addTo(this.map);
@@ -100,7 +100,7 @@ export class MapaMinhaRotaPage {
     let wps: any = [];
 
     this.localizacoes.forEach(loc => {
-      this.datasSelecao.push(moment(loc.dataHoraCad).format('DD/MM/YYYY'));
+      //this.datasSelecao.push(moment(loc.dataHoraCad).format('DD/MM/YYYY'));
 
       popups.push(loc.dataHoraCad.toString());
       icons.push(L.icon({

@@ -39,6 +39,12 @@ declare var L: any;
         </div> 
       </div>
     </ion-content>
+
+    <ion-footer *ngIf="distancia" color="light">
+      <ion-toolbar>
+        <ion-title><span class="footer">Distância: {{ distancia }} km</span></ion-title>
+      </ion-toolbar>
+    </ion-footer>
   `
 })
 
@@ -99,13 +105,8 @@ export class MapaChamadoPage {
   }
 
   private carregarMapa() {
-    this.map = leaflet.map('mapa-chamado', {
-      center: this.minhaPosicao,
-      zoom: 12
-    });
-
+    this.map = leaflet.map('mapa-chamado', { center: this.minhaPosicao, zoom: 12 });
     leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: Config.NOME_APP }).addTo(this.map);
-
     let popups: any = [];
     let icons: any = [];
     let wps: any = [];
@@ -132,9 +133,12 @@ export class MapaChamadoPage {
       shadowAnchor:  [12, 41],
       popupAnchor: [0, -41]
     }));
-    wps.push(L.latLng([ this.chamado.localAtendimento.localizacao.latitude, this.chamado.localAtendimento.localizacao.longitude ]));
+    wps.push(L.latLng([ 
+      this.chamado.localAtendimento.localizacao.latitude, 
+      this.chamado.localAtendimento.localizacao.longitude 
+    ]));
     
-    L.Routing.control({
+    let route = L.Routing.control({
       createMarker: function (i: number, waypoint: any) {
         const marker = L.marker(waypoint.latLng, {
           draggable: false,
@@ -151,12 +155,19 @@ export class MapaChamadoPage {
       show: false,
       language: 'pt-BR',
       lineOptions: {
-        styles: [{ color: 'green', opacity: 1, weight: 4 }]
+        styles: [{ color: 'green', opacity: 0.8, weight: 4 }]
       }
-    }).addTo(this.map)
+    }).addTo(this.map);
     
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
+
+    route.on('routesfound', (e) => {
+      var routes = e.routes;
+      var summary = routes[0].summary;
+      this.distancia = (summary.totalDistance / 1000).toFixed(2).replace('.', ',');
+      //this.tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+   });
   }
 
   public exibirActionSheet() {

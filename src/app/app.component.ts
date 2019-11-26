@@ -215,8 +215,8 @@ export class MyApp {
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 10,
       stationaryRadius: 15,
-      distanceFilter: 30,
-      debug: false,
+      distanceFilter: 0,
+      debug: true,
       stopOnTerminate: false,
       startForeground: true,
       interval: 5 * 60000,

@@ -39,6 +39,12 @@ declare var L: any;
         </div> 
       </div>
     </ion-content>
+
+    <ion-footer *ngIf="distancia" color="light">
+      <ion-toolbar>
+        <ion-title><span class="footer">Distância: {{ distancia }} km</span></ion-title>
+      </ion-toolbar>
+    </ion-footer>
   `
 })
 
@@ -48,6 +54,8 @@ export class MapaChamadosPage {
   map: any;
   minhaPosicao: leaflet.PointTuple;
   posicaoB: leaflet.PointTuple;
+  distancia: string;
+  tempo: string;
 
   constructor(
     private plt: Platform,
@@ -128,7 +136,7 @@ export class MapaChamadosPage {
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       shadowSize: [41, 41],
-      shadowAnchor:  [12, 41],
+      shadowAnchor: [12, 41],
       popupAnchor: [0, -41]
     }));
     wps.push(L.latLng( this.minhaPosicao ));
@@ -163,7 +171,7 @@ export class MapaChamadosPage {
       wps.push(L.latLng([ c.localAtendimento.localizacao.latitude, c.localAtendimento.localizacao.longitude ]));
     });
 
-    L.Routing.control({
+    const route = L.Routing.control({
       createMarker: function (i: number, waypoint: any) {
         const marker = L.marker(waypoint.latLng, {
           draggable: false,
@@ -183,6 +191,13 @@ export class MapaChamadosPage {
         styles: [{ color: 'green', opacity: 1, weight: 4 }]
       }
     }).addTo(this.map);
+
+    route.on('routesfound', (e) => {
+      var routes = e.routes;
+      var summary = routes[0].summary;
+      this.distancia = (summary.totalDistance / 1000).toFixed(2).replace('.', ',');
+      //this.tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+   });
 
     var bounds = L.latLngBounds(wps);
     this.map.fitBounds(bounds);
