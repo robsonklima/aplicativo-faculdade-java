@@ -87,7 +87,7 @@
 
     <button
       ion-item
-      *ngIf="false"
+      *ngIf="dg?.usuario?.codUsuario == 'dt'"
       (click)="telaFerramentasTecnico()">
       <ion-icon 
         color="primary" 
@@ -98,7 +98,7 @@
 
     <button
       ion-item
-      *ngIf="true"
+      *ngIf="dg?.usuario?.codUsuario == 'dt'"
       (click)="telaMinhaRota()">
       <ion-icon 
         color="primary" 
@@ -109,21 +109,13 @@
 
     <button
       ion-item
-      *ngIf="false"
+      *ngIf="dg?.usuario?.codUsuario == 'dt'"
       (click)="telaTeste()">
       <ion-icon 
         color="primary" 
-        name="close" 
+        name="apps" 
         item-start></ion-icon>
       Teste
-    </button>
-
-    <button
-      *ngIf="false"
-      ion-item
-      (click)="telaAssinatura()">
-        <ion-icon ios="ios-albums" md="md-albums" color="primary" item-start></ion-icon>
-        Assinatura Digital
     </button>
   </ion-list>
 </ion-content>

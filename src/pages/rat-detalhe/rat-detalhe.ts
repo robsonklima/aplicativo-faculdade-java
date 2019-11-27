@@ -391,7 +391,7 @@ export class RatDetalhePage {
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
-        this.tituloSlide = "6." + (i + 1) + ". " + "Inserindo Detalhe";
+        this.tituloSlide = "5." + (i + 1) + ". " + "Inserindo Detalhe";
         this.slides.lockSwipeToPrev(true);
         if (!this.ratDetalhe)
           this.slides.lockSwipeToNext(true);
@@ -399,7 +399,7 @@ export class RatDetalhePage {
             this.slides.lockSwipeToNext(false);
         break;
       case 1:
-        this.tituloSlide = "6." + (i + 1) + ". " + "Inserindo Peças";
+        this.tituloSlide = "5." + (i + 1) + ". " + "Inserindo Peças";
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(true);
         break;

@@ -96,6 +96,7 @@ import { MapaEnderecoCorrecaoPage } from '../pages/mapas/mapa-endereco-correcao'
 import { TestePage } from '../pages/teste/teste';
 import { MapaMinhaRotaPage } from '../pages/mapas/mapa-minha-rota';
 import { LocalizacaoService } from '../services/localizacao';
+import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
 
 
 @NgModule({
@@ -110,6 +111,7 @@ import { LocalizacaoService } from '../services/localizacao';
     ChamadosFechadosPage,
     ChamadoFechadoPage,
     RatDetalhePage,
+    RatDetalhePosPage,
     RatDetalhePecaPage,
     HistoricoListaPage,
     HistoricoDetalhePage,
@@ -171,6 +173,7 @@ import { LocalizacaoService } from '../services/localizacao';
     ChamadosFechadosPage,
     ChamadoFechadoPage,
     RatDetalhePage,
+    RatDetalhePosPage,
     RatDetalhePecaPage,
     HistoricoListaPage,
     HistoricoDetalhePage,

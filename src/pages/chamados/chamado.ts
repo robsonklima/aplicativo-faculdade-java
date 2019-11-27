@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, 
+  ModalController, NavController, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -18,32 +19,22 @@ import { Chamado } from "../../models/chamado";
 import { Rat } from "../../models/rat";
 import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Foto } from '../../models/foto';
-import { EquipamentoPOS } from '../../models/equipamentoPOS';
 import { RatDetalhe } from '../../models/rat-detalhe';
-import { TipoComunicacao } from '../../models/tipo-comunicacao';
-import { MotivoComunicacao } from '../../models/motivo-comunicacao';
-import { OperadoraTelefonia } from '../../models/operadora-telefonia';
-import { MotivoCancelamento } from '../../models/motivo-cancelamento';
+import { EquipamentoPOS } from '../../models/equipamentoPOS';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from './../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
-import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
-import { EquipamentoPOSService } from '../../services/equipamento-pos';
-import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
-import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
-
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
-import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
-import { StatusServicoService } from '../../services/status-servico';
 import { StatusServico } from '../../models/status-servico';
-import { DefeitoPOSService } from '../../services/defeito-pos';
 import { DefeitoPOS } from '../../models/defeito-pos';
+import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
+import { EquipamentoPOSService } from '../../services/equipamento-pos';
 
 
 @Component({
@@ -53,15 +44,9 @@ import { DefeitoPOS } from '../../models/defeito-pos';
 export class ChamadoPage {
   qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
   distanciaCercaEletronica: number = 0;
-  equipamentosPOS: EquipamentoPOS[] = [];
-  tiposComunicacao: TipoComunicacao[] = [];
-  operadoras: OperadoraTelefonia[] = [];
-  motivosComunicacao: MotivoComunicacao[] = [];
-  motivosCancelamento: MotivoCancelamento[] = [];
-  defeitosPOS: DefeitoPOS[] = [];
-  statusServicos: StatusServico[] = [];
   dataAtual: string = moment().format('YYYY-MM-DD');
   horaAtual: string = moment().format('HH:mm:ss');
+  equipamentosPOS: EquipamentoPOS[] = [];
   @ViewChild(Slides) slides: Slides;
   usuarioPonto: UsuarioPonto;
   tituloSlide: string;
@@ -86,20 +71,12 @@ export class ChamadoPage {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
-    private dadosGlobaisService: DadosGlobaisService,
     private equipamentoPOSService: EquipamentoPOSService,
-    private tipoComunicacaoService: TipoComunicacaoService,
-    private operadorasTelefoniaService: OperadoraTelefoniaService,
-    private motivoComunicacaoService: MotivoComunicacaoService,
-    private motivoCancelamentoService: MotivoCancelamentoService,
-    private defeitoPOSService: DefeitoPOSService,
+    private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
-    private usuarioService: UsuarioService,
-    private statusServicoService: StatusServicoService,
+    private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado);
-    
   }
 
   ionViewWillEnter() {
@@ -107,12 +84,6 @@ export class ChamadoPage {
 
     this.carregarDadosGlobais()
       .then(() => this.buscarEquipamentosPOS())
-      .then(() => this.buscarTiposComunicacao()) 
-      .then(() => this.buscarMotivosComunicacao()) 
-      .then(() => this.buscarMotivosCancelamento())
-      .then(() => this.buscarOperadoras())
-      .then(() => this.buscarStatusServicos())
-      .then(() => this.buscarDefeitosPOS())
       .then(() => this.obterRegistrosPonto())
       .then(() => this.registrarLeituraOs())
       .catch(() => {});
@@ -131,11 +102,19 @@ export class ChamadoPage {
   }
 
   public telaRatDetalhe(chamado: Chamado) {
-    const modal = this.modalCtrl.create(RatDetalhePage, { chamado: this.chamado });
-    modal.present();
-    modal.onDidDismiss(() => {
-      this.configurarSlide(this.slides.getActiveIndex());
-    });
+    if (this.verificarSeEquipamentoEPOS()) {
+      const modal = this.modalCtrl.create(RatDetalhePosPage, { chamado: this.chamado });
+      modal.present();
+      modal.onDidDismiss(() => {
+        this.configurarSlide(this.slides.getActiveIndex());
+      });
+    } else {
+      const modal = this.modalCtrl.create(RatDetalhePage, { chamado: this.chamado });
+      modal.present();
+      modal.onDidDismiss(() => {
+        this.configurarSlide(this.slides.getActiveIndex());
+      });
+    }
   }
 
   public telaRatDetalhePeca(chamado: Chamado, i: number) {
@@ -351,6 +330,18 @@ export class ChamadoPage {
     return false;
   }
 
+  public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
+    return new Promise((resolve, reject) => {
+      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => { 
+        this.equipamentosPOS = equips;
+
+        resolve(equips);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
   private verificarChamadoOrcamento(): boolean {
     if (typeof(this.chamado.rats) !== 'undefined') {
       if (this.chamado.rats.length > 0) {
@@ -512,38 +503,30 @@ export class ChamadoPage {
             loader.present();
 
             this.platform.ready().then(() => {
-              // this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
-              //   if (!gpsStatus) {
-              //     this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
-
-              //     return;
-              //   }
-
-                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                  loader.dismiss().then(() => {
-                    if (!this.chamado.indCercaEletronicaLiberada) {
-                      if ((this.obterDistanciaRaio(
-                        location.coords.latitude, 
-                        location.coords.longitude, 
-                        this.chamado.localAtendimento.localizacao.latitude, 
-                        this.chamado.localAtendimento.localizacao.longitude) 
-                        > Number(this.distanciaCercaEletronica))
-                      ) {
-                        this.exibirToast('Você está distante do local de atendimento');
-                      }
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                loader.dismiss().then(() => {
+                  if (!this.chamado.indCercaEletronicaLiberada) {
+                    if ((this.obterDistanciaRaio(
+                      location.coords.latitude, 
+                      location.coords.longitude, 
+                      this.chamado.localAtendimento.localizacao.latitude, 
+                      this.chamado.localAtendimento.localizacao.longitude) 
+                      > Number(this.distanciaCercaEletronica))
+                    ) {
+                      this.exibirToast('Você está distante do local de atendimento');
                     }
-                    
-                    this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                      this.configurarSlide(this.slides.getActiveIndex());
-                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                    }).catch(() => { loader.dismiss() });
+                  }
+                  
+                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
-              }).catch(() => {});
-            // }).catch(() => {});
+              }).catch(() => { loader.dismiss() });
+            }).catch(() => {});
           }
         }
       ]
@@ -619,29 +602,6 @@ export class ChamadoPage {
     this.slides.slideTo(4, 500);
   }
 
-  public salvarInformacoesPOS(form: NgForm) {
-    this.chamado.rats[0].statusServico = form.value.statusServico;
-    this.chamado.rats[0].equipamentoRetirado = form.value.equipamentoRetirado;
-    this.chamado.rats[0].numSerieRetirada = form.value.numSerieRetirada;
-    this.chamado.rats[0].equipamentoInstalado = form.value.equipamentoInstalado;
-    this.chamado.rats[0].numSerieInstalada = form.value.numSerieInstalada;
-    this.chamado.rats[0].rede = form.value.rede;
-    this.chamado.rats[0].tipoComunicacao = form.value.tipoComunicacao;
-    this.chamado.rats[0].operadoraChipRetirado = form.value.operadoraChipRetirado;
-    this.chamado.rats[0].nroChipRetirado = form.value.nroChipRetirado;
-    this.chamado.rats[0].operadoraChipInstalado = form.value.operadoraChipInstalado;
-    this.chamado.rats[0].nroChipInstalado = form.value.nroChipInstalado;
-    this.chamado.rats[0].motivoComunicacao = form.value.motivoComunicacao;
-    this.chamado.rats[0].motivoCancelamento = form.value.motivoCancelamento;
-    this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
-    this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
-    this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
-
-    this.chamadoService.atualizarChamado(this.chamado);    
-    this.configurarSlide(this.slides.getActiveIndex());
-    this.slides.slideTo(5, 500);
-  }
-
   public fecharChamado() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
@@ -673,7 +633,6 @@ export class ChamadoPage {
   }
 
   private validarCamposObrigatorios(): boolean {
-    // ATM
     if (this.chamado.rats.length == 0) {
       this.exibirToast("favor inserir a RAT");
 
@@ -707,173 +666,16 @@ export class ChamadoPage {
       return false;
     }
 
-    if (this.chamado.rats[0].ratDetalhes.length == 0) {
+    if (
+      (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
+      (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
+    ) {
       this.exibirToast('Favor inserir os detalhes da RAT');
 
       return false;
     }
 
-    // POS
-    if (!this.verificarSeEquipamentoEPOS()) return true;
-
-    if (!_.has(this.chamado.rats[0], 'statusServico') || !_.has(this.chamado.rats[0].statusServico, 'codStatusServico')) {
-      this.exibirToast("Informe o status de serviço do POS");
-
-      return false;
-    }
-
-    if (!_.has(this.chamado.rats[0], 'defeitoPOS') || !_.has(this.chamado.rats[0].defeitoPOS, 'codDefeitoPOS')) {
-      this.exibirToast("Informe o defeito apresentado pelo POS");
-
-      return false;
-    }
-
-    if (
-      this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO || 
-      this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO
-    ) {
-      if (!_.has(this.chamado.rats[0], 'motivoCancelamento') || !_.has(this.chamado.rats[0].motivoCancelamento, 'codMotivoCancelamento') || !this.chamado.rats[0].obsMotivoCancelamento) {
-        this.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação');
-
-        return false;
-      }
-    }
-
-    if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.FECHADO) {
-      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.INSTALAÇÃO) {
-        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
-
-          return false;
-        }
-
-        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
-
-          return false;
-        }
-
-        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
-
-          return false;
-        }
-      }
-
-      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.CORRETIVA) {
-        if (this.verificarSeDefeitoExigeTroca()) {
-          if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-            this.exibirToast('Favor inserir o equipamento POS instalado');
-  
-            return false;
-          }
-  
-          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado');
-  
-            return false;
-          }
-        }
-
-        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
-
-          return false;
-        }
-
-        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
-
-          return false;
-        }
-      }
-
-      if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.DESINSTALAÇÃO) {
-        if (this.verificarSeDefeitoExigeTroca()) {
-          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado e a série');
-  
-            return false;
-          }
-        }
-
-        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
-
-          return false;
-        }
-      }
-
-      if (
-        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.REMANEJAMENTO ||
-        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.TROCA_VELOHC
-      ) {
-        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
-  
-          return false;
-        }
-
-        if (this.verificarSeDefeitoExigeTroca()) {
-          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado');
-    
-            return false;
-          }
-        }
-  
-        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
-  
-          return false;
-        }
-  
-        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
-  
-          return false;
-        }
-      }
-  
-      if (
-        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ATUALIZACAO ||
-        this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ALTERAÇÃO_ENGENHARIA
-      ) {
-        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
-  
-          return false;
-        }
-  
-        if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
-  
-          return false;
-        }
-  
-        if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
-  
-          return false;
-        }
-      }
-    }
-
     return true;
-  }
-
-  public salvarStatusServico(statusServico: StatusServico) {
-    this.chamado.rats[0].statusServico = statusServico;
-
-    this.chamadoService.atualizarChamado(this.chamado);    
-  }
-
-  public salvarDefeitoPOS(defeitoPOS: DefeitoPOS) {
-    if (this.chamado.rats.length) {
-      this.chamado.rats[0].defeitoPOS = defeitoPOS;
-
-      this.chamadoService.atualizarChamado(this.chamado);
-    }
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -915,37 +717,6 @@ export class ChamadoPage {
 
       if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
         return true;
-      }
-    }
-    
-    return false;
-  }
-
-  public verificarEquipamentoPossuiChip(): boolean {
-    if (
-      (
-        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
-        this.chamado.codEquip === Config.EQUIPAMENTOS_POS.POS_VELOH_G
-      ) || (
-        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_3 ||
-        Number(this.chamado.equipamentoContrato.equipamento.codEEquip) === Config.EQUIPAMENTOS_POS.POS_VELOH_G
-      )
-    ) {
-      return true;
-    }
-        
-
-    return false;
-  }
-
-  public verificarSeDefeitoExigeTroca(): boolean {
-    var i;
-    
-    for (i = 0; i < this.defeitosPOS.length; i++) {
-      if (this.defeitosPOS[i].codDefeitoPOS === this.chamado.rats[0].defeitoPOS.codDefeitoPOS) {
-        if(this.defeitosPOS[i].exigeTrocaEquipamento) {
-          return true;
-        }
       }
     }
     
@@ -1016,22 +787,19 @@ export class ChamadoPage {
           }
         break;
       case 4:
-          this.tituloSlide = (i + 1) + ". " + "Informações do POS";
-
-          this.slides.lockSwipeToPrev(false);
-          this.slides.lockSwipeToNext(false);
-          break;
-      case 5:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
 
         this.slides.lockSwipeToPrev(false);
-        if (this.chamado.rats[0].ratDetalhes.length == 0)
+        if (
+            (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
+            (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
+          )
           this.slides.lockSwipeToNext(true);
           else {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 6:
+      case 5:
         this.tituloSlide = (i + 1) + ". " + "Checkout";
 
         this.slides.lockSwipeToPrev(false);
@@ -1042,13 +810,13 @@ export class ChamadoPage {
           this.slides.lockSwipeToNext(false);
         }
         break;
-      case 7:
+      case 6:
         this.tituloSlide = (i + 1) + ". " + "Conferência";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
-      case 8:
+      case 7:
         this.tituloSlide = (i + 1) + ". " + "Fechamento";
         
         this.slides.lockSwipeToPrev(false);
@@ -1092,127 +860,6 @@ export class ChamadoPage {
 
   private deg2rad(deg: number) {
     return deg * (Math.PI/180)
-  }
-
-  public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
-    return new Promise((resolve, reject) => {
-      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => { 
-        this.equipamentosPOS = equips;
-
-        resolve(equips);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararEquipamentosPOS(e1: EquipamentoPOS, e2: EquipamentoPOS): boolean {
-    return e1 && e2 ? e1.codEquip == e2.codEquip : e1 == e2;
-  }
-
-  public buscarTiposComunicacao(): Promise<TipoComunicacao[]> {
-    return new Promise((resolve, reject) => {
-      this.tipoComunicacaoService.buscarTiposComunicacaoStorage().then((tiposCom: TipoComunicacao[]) => { 
-        this.tiposComunicacao = tiposCom;
-
-        resolve(tiposCom);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararTiposComunicacao(t1: TipoComunicacao, t2: TipoComunicacao): boolean {
-    return t1 && t2 ? t1.codTipoComunicacao == t2.codTipoComunicacao : t1 == t2;
-  }
-
-  public buscarOperadoras(): Promise<OperadoraTelefonia[]> {
-    return new Promise((resolve, reject) => {
-      this.operadorasTelefoniaService.buscarOperadorasStorage().then((operadoras: OperadoraTelefonia[]) => { 
-        this.operadoras = operadoras;
-
-        resolve(operadoras);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararOperadoras(o1: OperadoraTelefonia, o2: OperadoraTelefonia): boolean {
-    return o1 && o2 ? o1.codOperadoraTelefonica == o2.codOperadoraTelefonica : o1 == o2;
-  }
-
-  public buscarMotivosComunicacao(): Promise<MotivoComunicacao[]> {
-    return new Promise((resolve, reject) => {
-      this.motivoComunicacaoService.buscarMotivosComunicacaoStorage().then((motivos: MotivoComunicacao[]) => { 
-        this.motivosComunicacao = motivos;
-
-        resolve(motivos);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararMotivosComunicacao(m1: MotivoComunicacao, m2: MotivoComunicacao): boolean {
-    return m1 && m2 ? m1.codMotivoComunicacao == m2.codMotivoComunicacao : m1 == m2;
-  }
-
-  public buscarMotivosCancelamento(): Promise<MotivoCancelamento[]> {
-    return new Promise((resolve, reject) => {
-      this.motivoCancelamentoService.buscarMotivosCancelamentoStorage().then((motivos: MotivoCancelamento[]) => { 
-        this.motivosCancelamento = motivos;
-        
-        resolve(motivos);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararMotivosCancelamento(m1: MotivoCancelamento, m2: MotivoCancelamento): boolean {
-    return m1 && m2 ? m1.codMotivoCancelamento == m2.codMotivoCancelamento : m1 == m2;
-  }
-
-  public buscarStatusServicos(): Promise<StatusServico[]> {
-    return new Promise((resolve, reject) => {
-      this.statusServicoService.buscarStatusServicosStorage().then((status: StatusServico[]) => { 
-        this.statusServicos = status;
-        
-        resolve(status);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararStatusServicos(ss1: StatusServico, ss2: StatusServico): boolean {
-    return ss1 && ss2 ? ss1.codStatusServico == ss2.codStatusServico : ss1 == ss2;
-  }
-
-  public buscarDefeitosPOS(): Promise<DefeitoPOS[]> {
-    return new Promise((resolve, reject) => {
-      this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitos: DefeitoPOS[]) => { 
-        this.defeitosPOS = defeitos;
-
-        resolve(defeitos);
-      }).catch(err => {
-        reject(err);
-      });
-    });
-  }
-
-  public compararDefeitosPOS(def1: DefeitoPOS, def2: DefeitoPOS): boolean {
-    return def1 && def2 ? def1.codDefeitoPOS == def2.codDefeitoPOS : def1 == def2;
-  }
-
-  public verificarDefeitoPOSExiteTrocaEquipamento(codDefeitoPOS: number): boolean {
-    this.defeitosPOS.forEach(defeito => {
-      if (defeito.codDefeitoPOS == codDefeitoPOS && defeito.exigeTrocaEquipamento) 
-        return true;
-    });
-
-    return false;
   }
 
   private exibirAlerta(msg: string) {
