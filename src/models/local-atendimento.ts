@@ -7,7 +7,6 @@ export class LocalAtendimento {
     nomeLocalAtendimento: string;
     endereco: string;
     localizacao: Localizacao;
-    localizacaoCorrigida: Localizacao;
     distancia: string;
     distanciaEmMetros: number;
     duracao: string;

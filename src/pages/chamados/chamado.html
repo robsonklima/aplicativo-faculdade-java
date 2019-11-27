@@ -207,7 +207,7 @@
     <!-- Informações -->
 
     <!-- Checkin -->
-    <ion-slide>
+    <ion-slide class="slide-checkin">
       <ion-list>
         <ion-card text-left
           class="card-chamado-bloqueado"
@@ -252,11 +252,6 @@
           </div>
         </ion-item>
       </ion-card>
-
-      <div class="map-container"> 
-        <div id="mapId" style="width: 100%; height: 100%"> 
-        </div> 
-      </div>
     </ion-slide>
     <!-- Checkin -->
 
@@ -580,10 +575,10 @@
     <!-- Detalhes da RAT -->
 
     <!-- Checkout -->
-    <ion-slide>
+    <ion-slide class="slide-checkout">
       <ion-list>
         <div padding *ngIf="!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude">
-          <button color="secondary" ion-button outline icon-start (click)="efetuarCheckout()" class="btn-checkout">
+          <button color="secondary" outline ion-button icon-start (click)="efetuarCheckout()" class="btn-checkout">
             <ion-icon name='ios-locate-outline' is-active="false"></ion-icon>
             
             {{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Checkout' : 'Checkout Efetuado' }}
@@ -750,14 +745,15 @@
     <!-- Conferência -->
 
     <!-- Fechamento -->
-    <ion-slide>
+    <ion-slide class="slide-fechar">
       <ion-list>
         <div padding>
           <button 
             color="secondary"
             ion-button 
-            block
-            (click)="fecharChamado()">
+            outline
+            (click)="fecharChamado()"
+            class="btn-fechar">
             Fechar o Chamado
           </button>
         </div>

@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, 
-  ModalController, NavController, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -31,8 +30,6 @@ import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
-import { StatusServico } from '../../models/status-servico';
-import { DefeitoPOS } from '../../models/defeito-pos';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
 
@@ -54,7 +51,6 @@ export class ChamadoPage {
   chamado: Chamado;
   foto: Foto;
   config: any;
-  mapaCheckin: any;
 
   constructor(
     private platform: Platform,
@@ -77,6 +73,8 @@ export class ChamadoPage {
     private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {
@@ -85,9 +83,18 @@ export class ChamadoPage {
     this.carregarDadosGlobais()
       .then(() => this.buscarEquipamentosPOS())
       .then(() => this.obterRegistrosPonto())
-      .then(() => this.registrarLeituraOs())
+      .then(() => {
+        this.criarRat();
+        this.registrarLeituraOs();
+      })
       .catch(() => {});
+  }
 
+  public alterarSlide() {
+    this.configurarSlide(this.slides.getActiveIndex());
+  }
+
+  private criarRat() {
     if (this.chamado.rats.length == 0) {
       let rat = new Rat();
       rat.fotos = [];
@@ -95,10 +102,6 @@ export class ChamadoPage {
       rat.laudos = [];
       this.chamado.rats.push(rat);
     }
-  }
-
-  public alterarSlide() {
-    this.configurarSlide(this.slides.getActiveIndex());
   }
 
   public telaRatDetalhe(chamado: Chamado) {
@@ -433,46 +436,38 @@ export class ChamadoPage {
             }
 
             this.platform.ready().then(() => {
-              // this.diagnostic.isGpsLocationAvailable().then((gpsStatus) => {
-              //   if (!this.platform.is('cordova') && !gpsStatus) {
-              //     this.exibirAlerta('Favor habilitar o gps do seu dispositivo');
+              const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
+                dismissOnPageChange: true });
+              loader.present();
 
-              //     return;
-              //   }
-
-                const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
-                  dismissOnPageChange: true });
-                loader.present();
-  
-                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                  loader.dismiss().then(() => {
-                    if (!this.chamado.indCercaEletronicaLiberada) {
-                      if ((this.obterDistanciaRaio(
-                        location.coords.latitude, 
-                        location.coords.longitude, 
-                        this.chamado.localAtendimento.localizacao.latitude, 
-                        this.chamado.localAtendimento.localizacao.longitude) 
-                        > Number(this.distanciaCercaEletronica))
-                      ) {
-                        this.exibirToast('Você está distante do local de atendimento');
-                      }
-  
-                      if (this.chamado.indOSIntervencaoEquipamento)
-                        this.exibirAlerta('Este chamado exige lançamento de laudo!');
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                loader.dismiss().then(() => {
+                  if (!this.chamado.indCercaEletronicaLiberada) {
+                    if ((this.obterDistanciaRaio(
+                      location.coords.latitude, 
+                      location.coords.longitude, 
+                      this.chamado.localAtendimento.localizacao.latitude, 
+                      this.chamado.localAtendimento.localizacao.longitude) 
+                      > Number(this.distanciaCercaEletronica))
+                    ) {
+                      this.exibirToast('Você está distante do local de atendimento');
                     }
-  
-                    this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                    this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                    this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                    
-                    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                      this.configurarSlide(this.slides.getActiveIndex());
-                      this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                    }).catch(() => { loader.dismiss() });
+
+                    if (this.chamado.indOSIntervencaoEquipamento)
+                      this.exibirAlerta('Este chamado exige lançamento de laudo!');
+                  }
+
+                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                  
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   }).catch(() => { loader.dismiss() });
                 }).catch(() => { loader.dismiss() });
-              }).catch(() => {});
-            // }).catch(() => {});
+              }).catch(() => { loader.dismiss() });
+            }).catch(() => {});
           }
         }
       ]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, PopoverController, Events, AlertController } from 'ionic-angular';
+import { LoadingController, NavController, PopoverController, Events, AlertController, Platform } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
@@ -61,6 +61,7 @@ export class HomePage {
   usuarioPonto: UsuarioPonto;
 
   constructor(
+    public platform: Platform,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,

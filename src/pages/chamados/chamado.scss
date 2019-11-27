@@ -13,6 +13,10 @@ chamado-page {
             border-color: transparent;
         }
 
+        .slide-checkin, .slide-checkout, .slide-fechar {
+            background-color: #f4f4f4;
+        }
+
         .slide-zoom {
             height: 100%;
         }
@@ -200,8 +204,17 @@ chamado-page {
             color: #BBB;
         }
 
-        .btn-checkin {
+        .btn-checkin, .btn-checkout {
             height: 40px !important;
+            background-color: white;
+        }
+
+        .btn-fechar {
+            background-color: white;
+        }
+
+        .leaflet-bottom {
+            display: none;
         }
     }
 }

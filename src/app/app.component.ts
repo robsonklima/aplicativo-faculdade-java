@@ -222,9 +222,10 @@ export class MyApp {
       interval: 5 * 60000,
       fastestInterval: 5 * 60000,
       activitiesInterval: 5 * 60000,
+      notificationsEnabled: false,
       notificationTitle: 'App Técnicos',
       notificationText: 'Sistema de Sincronização',
-      maxLocations: 10
+      maxLocations: 50
     };
 
     this.bGeolocation.configure(config).then(() => {

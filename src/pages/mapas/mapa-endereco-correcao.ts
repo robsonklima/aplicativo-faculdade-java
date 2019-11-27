@@ -9,6 +9,7 @@ import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
+import { ChamadoService } from '../../services/chamado';
 
 declare var L: any;
 
@@ -57,6 +58,7 @@ export class MapaEnderecoCorrecaoPage {
     private navParams: NavParams,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
+    private chamadoService: ChamadoService,
     private geolocation: Geolocation
   ) {
     this.chamado = this.navParams.get('chamado');
@@ -103,22 +105,18 @@ export class MapaEnderecoCorrecaoPage {
     addedMarker = L.marker(this.minhaPosicao).addTo(this.map); 
     
     this.map.on('click', (m) => {
-      if (addedMarker != undefined) {
-        this.map.removeLayer(addedMarker);
-      };
-
+      if (addedMarker != undefined) this.map.removeLayer(addedMarker);
       addedMarker = L.marker([m.latlng.lat, m.latlng.lng]).addTo(this.map);
 
-      this.chamado.localAtendimento.localizacaoCorrigida.codUsuario = this.dg.usuario.codUsuario;
-      this.chamado.localAtendimento.localizacaoCorrigida.dataHoraCad = new Date().toLocaleString('pt-BR');
-      this.chamado.localAtendimento.localizacaoCorrigida.latitude = m.latlng.lat.toString();
-      this.chamado.localAtendimento.localizacaoCorrigida.longitude = m.latlng.lng.toString();
+      // this.chamado.localAtendimento.localizacaoCorrigida.codUsuario = this.dg.usuario.codUsuario;
+      // this.chamado.localAtendimento.localizacaoCorrigida.dataHoraCad = new Date().toLocaleString('pt-BR');
+      // this.chamado.localAtendimento.localizacaoCorrigida.latitude = m.latlng.lat.toString();
+      // this.chamado.localAtendimento.localizacaoCorrigida.longitude = m.latlng.lng.toString();
     });
   }
 
   public salvar() {
-    this.exibirToast(`Um e-mail foi enviado ao Pós-Vendas do cliente para tratativas.
-                      Agradecemos sua ajuda!`);    
+    this.exibirToast(`Um email foi enviado aos responsáveis para ajustar este cadastro`);
 
     this.fecharModal();
   }

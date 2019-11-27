@@ -10,7 +10,6 @@ import 'leaflet-routing-machine';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
 import { MapaEnderecoCorrecaoPage } from './mapa-endereco-correcao';
-import { ChamadoService } from '../../services/chamado';
 
 declare var L: any;
 
@@ -64,7 +63,6 @@ export class MapaChamadoPage {
     private navParams: NavParams,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
-    private chamadoService: ChamadoService,
     private geolocation: Geolocation,
   ) {
     this.chamado = this.navParams.get('chamado');
@@ -111,7 +109,7 @@ export class MapaChamadoPage {
     let icons: any = [];
     let wps: any = [];
 
-    popups.push(this.dg.usuario.nome);
+    popups.push(this.dg.usuario.nome.replace(/ .*/,''));
     icons.push(L.icon({
       iconUrl: Config.L.ICONES.VERDE,
       shadowUrl: Config.L.SOMBRA,
@@ -123,7 +121,9 @@ export class MapaChamadoPage {
     }));
     wps.push(L.latLng( this.minhaPosicao ));
 
-    popups.push(this.chamado.codOs.toString() + ' - ' + this.chamado.localAtendimento.nomeLocalAtendimento);
+    popups.push('<b>' + this.chamado.codOs.toString() + '</b><br />' 
+      + this.chamado.localAtendimento.nomeLocalAtendimento + '<br />'
+      + this.chamado.cliente.nomeCliente);
     icons.push(L.icon({
       iconUrl: Config.L.ICONES.VERMELHO,
       shadowUrl: Config.L.SOMBRA,
@@ -148,7 +148,7 @@ export class MapaChamadoPage {
             height: 800
           },
           icon: icons[i]
-        }).bindPopup((i + 1) + ': ' + (popups[i] ? popups[i] : ''));
+        }).bindPopup((popups[i] ? popups[i] : ''));
         return marker;
       },
       waypoints: wps,
@@ -182,13 +182,6 @@ export class MapaChamadoPage {
             modal.present();
             modal.onDidDismiss((chamado) => {
               this.chamado = chamado;
-              
-              this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                console.log(this.chamado);
-                
-              }).catch((e) => {
-                console.log(e);
-              });
             }); 
           }
         }, {

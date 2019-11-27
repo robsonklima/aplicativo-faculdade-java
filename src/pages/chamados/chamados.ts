@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, AlertController, ToastController, ModalController } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, ToastController, ModalController, Events } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
@@ -34,22 +34,21 @@ export class ChamadosPage {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private badge: Badge,
+    private events: Events,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
   ) {}
 
-  ionViewWillEnter() { 
-    this.carregarDadosGlobais().then(() => { 
-        this.carregarChamadosStorage().then(() => {
-          this.sincronizarChamados(false).then(() => {
-            this.carregarChamadosStorage(); 
+  ionViewWillEnter() {
+    this.carregarDadosGlobais().then(() => {
+      this.carregarChamadosStorage();
+    });
 
-            this,this.carregarChamadosFechadosApi();
-          }).catch(() => { 
-            this.exibirToast('Erro ao sincronizar com o servidor');
-          }).catch((e) => console.log(e));
-        }).catch((e) => console.log(e));
-    }).catch((e) => console.log(e));
+    this.events.subscribe('sincronizacao:efetuada', () => {
+      setTimeout(() => {
+        this.carregarChamadosStorage();
+      }, 1000);
+    });
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {
@@ -181,6 +180,8 @@ export class ChamadosPage {
 
           this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
             this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+              this.events.publish('sincronizacao:efetuada');
+
               if (!chamadosUnificados.length) return;
 
               this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
