@@ -40,11 +40,11 @@ declare var L: any;
       </div>
     </ion-content>
 
-    <ion-footer *ngIf="distancia" color="light">
+    <!--<ion-footer *ngIf="distancia" color="light">
       <ion-toolbar>
         <ion-title><span class="footer">Distância: {{ distancia }} km</span></ion-title>
       </ion-toolbar>
-    </ion-footer>
+    </ion-footer>-->
   `
 })
 
