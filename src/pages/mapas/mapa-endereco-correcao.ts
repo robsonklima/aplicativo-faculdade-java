@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LoadingController, Platform, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import moment from 'moment';
 import { Config } from '../../models/config';
 import { Chamado } from '../../models/chamado';
 
@@ -108,10 +109,12 @@ export class MapaEnderecoCorrecaoPage {
       if (addedMarker != undefined) this.map.removeLayer(addedMarker);
       addedMarker = L.marker([m.latlng.lat, m.latlng.lng]).addTo(this.map);
 
-      // this.chamado.localAtendimento.localizacaoCorrigida.codUsuario = this.dg.usuario.codUsuario;
-      // this.chamado.localAtendimento.localizacaoCorrigida.dataHoraCad = new Date().toLocaleString('pt-BR');
-      // this.chamado.localAtendimento.localizacaoCorrigida.latitude = m.latlng.lat.toString();
-      // this.chamado.localAtendimento.localizacaoCorrigida.longitude = m.latlng.lng.toString();
+      this.chamado.localizacaoCorreta.latitude = m.latlng.lat.toString();
+      this.chamado.localizacaoCorreta.longitude = m.latlng.lng.toString();
+      this.chamado.localizacaoCorreta.codUsuario = this.dg.usuario.codUsuario;
+      this.chamado.localizacaoCorreta.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
+
+      this.chamadoService.atualizarChamado(this.chamado);
     });
   }
 

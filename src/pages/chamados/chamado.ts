@@ -76,6 +76,8 @@ export class ChamadoPage {
     private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
+    
   }
 
   ionViewWillEnter() {

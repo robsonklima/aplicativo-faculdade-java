@@ -20,6 +20,10 @@ export class Config {
     PEÇA_TRANSITO: 9, PECA_FALTANTE: 10, PECA_SEPARADA: 11, FECHADO_P_ANALISE: 12, ORCAMENTO_APROVADO: 13,
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
+  public static EQUIPAMENTO = { 
+    TPC_4110_290_01_969: 362,
+    TPC_4110: 90
+  };
   public static INT_SINC_BD_LOCAL_DIAS = 3;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
@@ -53,7 +57,8 @@ export class Config {
   };
   public static CLIENTE = {
     BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, 
-    METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2
+    METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2, BRB: 197,
+    SICREDI: 88, SAQUE_PAGUE: 434, PERTO_PARKING: 532
   };
   public static MSG = {
     ALERTA: 'Alerta!',
@@ -109,6 +114,6 @@ export class Config {
     },
     SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
   }
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }

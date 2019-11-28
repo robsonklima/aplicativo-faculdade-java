@@ -228,6 +228,7 @@ export class ChamadosPage {
                       && atributo !== 'checkin' 
                       && atributo !== 'checkout' 
                       && atributo !== 'rats'
+                      && atributo !== 'localizacaoCorreta'
                       && !cs.dataHoraFechamento) {
                     cs[atributo] = ca[atributo]; 
                   }

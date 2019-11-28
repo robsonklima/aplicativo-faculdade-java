@@ -7,6 +7,7 @@ import { LocalAtendimento } from './local-atendimento';
 import { EquipamentoContrato } from './equipamento-contrato';
 import { TipoIntervencao } from './tipo-intervencao';
 import { Rat } from './rat';
+import { Localizacao } from './localizacao';
 
 export class Chamado {
 	codOs: number;
@@ -43,4 +44,5 @@ export class Chamado {
     qtdCedulasRejeitadas: number;
 	justificativaCedulas: number;
 	codDefeitoPOS: number;
+	localizacaoCorreta: Localizacao;
 }

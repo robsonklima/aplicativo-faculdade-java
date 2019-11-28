@@ -180,7 +180,22 @@ export class RatDetalhePage {
       this.configurarSlide(this.slides.getActiveIndex());
       this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
   
-      if (this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO) {
+      if (
+          this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.BB ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.BRB ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.SICREDI ||
+          this.chamado.cliente.codCliente == Config.CLIENTE.SAQUE_PAGUE ||
+          (
+            this.chamado.cliente.codCliente == Config.CLIENTE.PERTO_PARKING &&
+            (
+              this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110 ||
+              this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110_290_01_969
+            )
+          )
+        ) {
         this.apresentarCampoProtocoloStn();
       }
 
@@ -373,7 +388,9 @@ export class RatDetalhePage {
   public buscarDefeitosEAcoes(codCausa: number) {
     this.defeitoCausaService.buscarDefeitosPorCausa(codCausa).then((dCausas: DefeitoCausa[]) => { 
       if (dCausas.length) {
-        this.defeitos = dCausas[0].defeitos;
+        this.defeitos = dCausas[0].defeitos.sort(function(a, b) { 
+          return ((a.codEDefeito < b.codEDefeito) ? -1 : ((a.codEDefeito > b.codEDefeito) ? 1 : 0));
+        });
       }
       else {
         this.buscarDefeitos();
@@ -382,7 +399,9 @@ export class RatDetalhePage {
 
     this.acaoCausaService.buscarAcoesPorCausa(codCausa).then((aCausas: AcaoCausa[]) => { 
       if (aCausas.length)
-        this.acoes = aCausas[0].acoes;
+        this.acoes = aCausas[0].acoes.sort(function(a, b) { 
+          return ((a.codEAcao < b.codEAcao) ? -1 : ((a.codEAcao > b.codEAcao) ? 1 : 0));
+        });
       else
         this.buscarAcoes();
     }).catch();
