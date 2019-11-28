@@ -41,7 +41,9 @@ export class ChamadosPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
-      this.carregarChamadosStorage();
+      this.carregarChamadosStorage().then(() => {
+        this.carregarChamadosFechadosApi();
+      });
     });
 
     this.events.subscribe('sincronizacao:efetuada', () => {

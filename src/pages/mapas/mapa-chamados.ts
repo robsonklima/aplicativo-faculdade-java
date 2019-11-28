@@ -39,12 +39,6 @@ declare var L: any;
         </div>
       </div>
     </ion-content>
-
-    <!--<ion-footer *ngIf="distancia" color="light">
-      <ion-toolbar>
-        <ion-title><span class="footer">Distância: {{ distancia }} km</span></ion-title>
-      </ion-toolbar>
-    </ion-footer>-->
   `
 })
 
@@ -117,12 +111,8 @@ export class MapaChamadosPage {
   private carregarMapa(ordem: string = null) {
     if (this.map != undefined) this.map.remove();
 
-    this.map = leaflet.map('mapId', {
-      center: this.minhaPosicao,
-      zoom: 12
-    });
-
-    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Nome da Aplicação' }).addTo(this.map);
+    this.map = leaflet.map('mapId', { center: this.minhaPosicao, zoom: 12 });
+    leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
 
     let popups: any = [];
     let icons: any = [];
@@ -153,7 +143,8 @@ export class MapaChamadosPage {
     this.chamados.forEach(c => {
       popups.push('<b>' + c.codOs.toString() + '</b><br />' 
         + c.localAtendimento.nomeLocalAtendimento + '<br />'
-        + c.cliente.nomeCliente);
+        + c.cliente.nomeCliente + '<br />'
+        + '<a class="rota" href="https://maps.google.com/?q=' + c.localAtendimento.localizacao.latitude + ',' + c.localAtendimento.localizacao.longitude + '"><b>Traçar Rota</b></a>');
       icons.push(L.icon({
         iconUrl: Config.L.ICONES.VERMELHO,
         shadowUrl: Config.L.SOMBRA,

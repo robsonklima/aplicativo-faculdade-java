@@ -117,25 +117,15 @@ export class ChamadoService {
   }
 
   atualizarChamado(chamado: Chamado): Promise<boolean> {
-
-    console.log(this.chamados);
-
     this.chamados = this.chamados.filter((c) => {
       return (c.codOs.toString().indexOf(chamado.codOs.toString()) < 0);
     });
 
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
-        console.log(chamado);
-
         this.chamados.push(chamado);
-        console.log(this.chamados);
 
-        this.storage.set('Chamados', this.chamados).then(() => {
-          resolve(true);
-        }).catch(() => {
-          reject(false);
-        });
+        this.storage.set('Chamados', this.chamados).then(() => { resolve(true) }).catch(() => { reject(false) });
       })
       .catch(() => {
         reject(false);

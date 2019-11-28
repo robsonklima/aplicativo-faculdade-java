@@ -216,6 +216,14 @@ chamado-page {
         .leaflet-bottom {
             display: none;
         }
+
+        .card-map p {
+            padding-left: 0px !important;
+        }
+
+        ion-card-content img {
+            margin-bottom: -10px !important;
+        }
     }
 }
 

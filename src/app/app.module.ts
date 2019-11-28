@@ -97,6 +97,7 @@ import { TestePage } from '../pages/teste/teste';
 import { MapaMinhaRotaPage } from '../pages/mapas/mapa-minha-rota';
 import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
+import { MapaPage } from '../pages/mapas/mapa';
 
 
 @NgModule({
@@ -138,6 +139,7 @@ import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
     FerramentasTecnicoPage,
     MapaChamadosPage,
     MapaChamadoPage,
+    MapaPage,
     TutorialPage,
     TestePage,
     MapaEnderecoCorrecaoPage,
@@ -197,6 +199,7 @@ import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
     FerramentasTecnicoPage,
     MapaChamadosPage,
     MapaChamadoPage,
+    MapaPage,
     TutorialPage,
     TestePage,
     MapaEnderecoCorrecaoPage,

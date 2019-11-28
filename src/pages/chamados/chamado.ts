@@ -20,10 +20,13 @@ import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Foto } from '../../models/foto';
 import { RatDetalhe } from '../../models/rat-detalhe';
 import { EquipamentoPOS } from '../../models/equipamentoPOS';
+import { Localizacao } from '../../models/localizacao';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { ChamadoService } from './../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
+
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
@@ -31,7 +34,7 @@ import { FotosPage } from '../fotos/fotos';
 import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
-import { EquipamentoPOSService } from '../../services/equipamento-pos';
+import { MapaPage } from '../mapas/mapa';
 
 
 @Component({
@@ -73,8 +76,6 @@ export class ChamadoPage {
     private usuarioService: UsuarioService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado);
-    
   }
 
   ionViewWillEnter() {
@@ -118,6 +119,11 @@ export class ChamadoPage {
         this.configurarSlide(this.slides.getActiveIndex());
       });
     }
+  }
+
+  public telaMapa(popup: string, localizacao: Localizacao) {
+    const modal = this.modalCtrl.create(MapaPage, { popup: popup, localizacao: localizacao });
+    modal.present();
   }
 
   public telaRatDetalhePeca(chamado: Chamado, i: number) {
