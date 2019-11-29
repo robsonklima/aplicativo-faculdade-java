@@ -21,7 +21,7 @@ v<ion-header>
 
         <ion-select placeholder="Selecione o Status do Serviço" name="statusServico"
           [ngModel]="chamado?.rats[0]?.statusServico" [compareWith]="compararStatusServicos"
-          (ionChange)="salvarStatusServico($event)">
+          (ionChange)="salvarStatusServico($event)" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let statusServico of statusServicos" [value]="statusServico">
             {{ statusServico?.nomeStatusServico }}
           </ion-option>
@@ -33,7 +33,7 @@ v<ion-header>
 
         <ion-select placeholder="Selecione o Defeito do POS" name="defeitoPOS"
           [ngModel]="chamado?.rats[0]?.defeitoPOS" [compareWith]="compararDefeitosPOS"
-          (ionChange)="salvarDefeitoPOS($event)">
+          (ionChange)="salvarDefeitoPOS($event)" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let defeitoPOS of defeitosPOS" [value]="defeitoPOS">
             {{ defeitoPOS?.nomeDefeitoPOS }}
           </ion-option>
@@ -43,8 +43,8 @@ v<ion-header>
       <ion-item col-12>
         <ion-label stacked>Motivo Cancelamento</ion-label>
 
-        <ion-select placeholder="Selecione o Motivo do Cancelamento" name="motivoCancelamento"
-          [ngModel]="chamado?.rats[0]?.motivoCancelamento" [compareWith]="compararMotivosCancelamento"
+        <ion-select placeholder="Selecione o Motivo do Cancelamento" name="motivoCancelamento" interface="action-sheet"
+          [ngModel]="chamado?.rats[0]?.motivoCancelamento" [compareWith]="compararMotivosCancelamento" cancelText="Cancelar"
           [disabled]="this.chamado?.rats[0]?.statusServico?.codStatusServico != 2 && this.chamado?.rats[0]?.statusServico?.codStatusServico != 16">
           <ion-option *ngFor="let motivoCancelamento of motivosCancelamento" [value]="motivoCancelamento">
             {{ motivoCancelamento?.nomeMotivoCancelamento }}
@@ -64,8 +64,8 @@ v<ion-header>
       <ion-item col-12>
         <ion-label stacked>Equipamento Instalado</ion-label>
 
-        <ion-select placeholder="Selecione o Equipamento Instalado" name="equipamentoInstalado"
-          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS">
+        <ion-select placeholder="Selecione o Equipamento Instalado" name="equipamentoInstalado" interface="action-sheet"
+          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
@@ -82,8 +82,8 @@ v<ion-header>
       <ion-item col-12>
         <ion-label stacked>Equipamento Retirado</ion-label>
 
-        <ion-select placeholder="Selecione o Equipamento Retirado" name="equipamentoRetirado"
-          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS">
+        <ion-select placeholder="Selecione o Equipamento Retirado" name="equipamentoRetirado" interface="action-sheet"
+          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
@@ -107,8 +107,8 @@ v<ion-header>
       <ion-item col-12>
         <ion-label stacked>Tipo de Comunicacão</ion-label>
 
-        <ion-select placeholder="Selecione o Tipo de Comunicacão" name="tipoComunicacao"
-          [ngModel]="chamado?.rats[0]?.tipoComunicacao" [compareWith]="compararTiposComunicacao">
+        <ion-select placeholder="Selecione o Tipo de Comunicacão" name="tipoComunicacao" interface="action-sheet"
+          [ngModel]="chamado?.rats[0]?.tipoComunicacao" [compareWith]="compararTiposComunicacao" cancelText="Cancelar">
           <ion-option *ngFor="let tipoComunicacao of tiposComunicacao" [value]="tipoComunicacao">
             {{ tipoComunicacao?.nomeTipoComunicacao }}
           </ion-option>
@@ -128,7 +128,7 @@ v<ion-header>
 
         <ion-select placeholder="Selecione a Operadora do Chip Instalado" name="operadoraChipInstalado"
           [ngModel]="chamado?.rats[0]?.operadoraChipInstalado" [compareWith]="compararOperadoras"
-          [disabled]="!this.verificarEquipamentoPossuiChip()">
+          [disabled]="!this.verificarEquipamentoPossuiChip()" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let operadora of operadoras" [value]="operadora">
             {{ operadora?.nomeOperadoraTelefonica }}
           </ion-option>
@@ -148,7 +148,7 @@ v<ion-header>
 
         <ion-select placeholder="Selecione a Operadora do Chip Retirado" name="operadoraChipRetirado"
           [ngModel]="chamado?.rats[0]?.operadoraChipRetirado" [compareWith]="compararOperadoras"
-          [disabled]="!this.verificarEquipamentoPossuiChip()">
+          [disabled]="!this.verificarEquipamentoPossuiChip()" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let operadora of operadoras" [value]="operadora">
             {{ operadora?.nomeOperadoraTelefonica }}
           </ion-option>

@@ -52,9 +52,11 @@ v<ion-header>
             <ion-label>Tipo de Serviço</ion-label>
             <ion-select 
               name="tipoCausa" 
+              cancelText="Cancelar"
               placeholder="Selecione..." 
               (ionChange)="buscarTipoServicos($event.codTipoCausa)"
               [ngModel]="ratDetalhe?.tipoCausa" 
+              interface="action-sheet"
               required>
               <ion-option 
                 *ngFor="let tipoCausa of tipoCausas" 
@@ -71,6 +73,8 @@ v<ion-header>
               name="tipoServico" 
               [disabled]="!tipoServicos"
               [ngModel]="ratDetalhe?.tipoServico" 
+              interface="action-sheet"
+              cancelText="Cancelar"
               required>
               <ion-option 
                 *ngFor="let tipoServico of tipoServicos" 
@@ -86,6 +90,8 @@ v<ion-header>
               placeholder="Selecione..." 
               name="modulo" 
               [disabled]="modulos?.length == 0"
+              interface="action-sheet"
+              cancelText="Cancelar"
               (ionChange)="buscarSubModulos($event.codECausa)"
               required>
               <ion-option 
@@ -102,6 +108,8 @@ v<ion-header>
             <ion-select 
               placeholder="Selecione..."
               name="subModulo" 
+              interface="action-sheet"
+              cancelText="Cancelar"
               [disabled]="subModulos?.length == 0"
               (ionChange)="buscarComponentes($event.codECausa)"
               required>
@@ -121,6 +129,8 @@ v<ion-header>
               name="causa" 
               [disabled]="componentes?.length == 0"
               [ngModel]="ratDetalhe?.causa" 
+              interface="action-sheet"
+              cancelText="Cancelar"
               (ionChange)="buscarDefeitosEAcoes($event.codCausa)"
               required>
               <ion-option 
@@ -138,6 +148,8 @@ v<ion-header>
               placeholder="Selecione..." 
               name="defeito" 
               [ngModel]="ratDetalhe?.defeito" 
+              interface="action-sheet"
+              cancelText="Cancelar"
               [disabled]="defeitos?.length == 0"
               required>
               <ion-option 
@@ -154,6 +166,8 @@ v<ion-header>
             <ion-select 
               placeholder="Selecione..." 
               name="acao" 
+              interface="action-sheet"
+              cancelText="Cancelar"
               [ngModel]="ratDetalhe?.acao"
               [disabled]="acoes?.length == 0"
               required>
