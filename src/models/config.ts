@@ -107,6 +107,7 @@ export class Config {
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
   };
+  public static FOTO = {  WIDTH: 720, HEIGHT: 480, QUALITY: 100 };
   public static L = { 
     ICONES: {
       VERMELHO: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',

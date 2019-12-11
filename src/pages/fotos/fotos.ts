@@ -33,13 +33,13 @@ export class FotosPage {
   
   public tirarFoto() {
     this.camera.getPicture({
-      quality: 80,
+      quality: Config.FOTO.QUALITY,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       correctOrientation: true,
-      targetWidth: 720,
-      targetHeight: 480,
+      targetWidth: Config.FOTO.WIDTH,
+      targetHeight: Config.FOTO.HEIGHT,
       allowEdit: true
     }).then(imageData => {
       this.foto = new Foto();
