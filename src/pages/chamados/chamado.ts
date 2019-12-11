@@ -35,6 +35,7 @@ import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
+import { FotoPage } from '../fotos/foto';
 
 
 @Component({
@@ -136,6 +137,14 @@ export class ChamadoPage {
 
   public telaLaudo(chamado: Chamado) {
     const modal = this.modalCtrl.create(LaudoPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
+  public telaFoto(modalidade: string) {
+    const modal = this.modalCtrl.create(FotoPage, { foto: this.carregarFoto(modalidade) });
     modal.present();
     modal.onDidDismiss(() => {
       this.configurarSlide(this.slides.getActiveIndex());

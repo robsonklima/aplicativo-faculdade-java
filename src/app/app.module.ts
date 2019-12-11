@@ -98,6 +98,7 @@ import { MapaMinhaRotaPage } from '../pages/mapas/mapa-minha-rota';
 import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../pages/mapas/mapa';
+import { FotoPage } from '../pages/fotos/foto';
 
 
 @NgModule({
@@ -123,6 +124,7 @@ import { MapaPage } from '../pages/mapas/mapa';
     ProblemaPage,
     SobrePage,
     FotosPage,
+    FotoPage,
     IndicadorMenuPage,
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
@@ -186,6 +188,7 @@ import { MapaPage } from '../pages/mapas/mapa';
     ProblemaPage,
     SobrePage,
     FotosPage,
+    FotoPage,
     IndicadorMenuPage,
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
