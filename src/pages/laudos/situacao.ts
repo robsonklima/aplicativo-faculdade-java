@@ -71,7 +71,8 @@ export class SituacaoPage {
             mediaType: this.camera.MediaType.PICTURE,
             saveToPhotoAlbum: false,
             allowEdit: true,
-            sourceType: 1
+            sourceType: 1,
+            correctOrientation: true
           }).then(imageData => {
             this.foto = new Foto();
               this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';

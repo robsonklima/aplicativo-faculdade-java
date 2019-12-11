@@ -38,7 +38,6 @@
     "@ionic-native/native-audio": "^4.20.0",
     "@ionic-native/network": "^4.20.0",
     "@ionic-native/phonegap-local-notification": "^4.20.0",
-    "@ionic-native/photo-viewer": "^5.18.0",
     "@ionic-native/screen-orientation": "^4.20.0",
     "@ionic-native/splash-screen": "4.3.0",
     "@ionic-native/status-bar": "4.3.0",
@@ -48,7 +47,6 @@
     "android-versions": "^1.5.0",
     "angular2-signaturepad": "^2.9.0",
     "chart.js": "^2.9.3",
-    "com-sarriaroman-photoviewer": "^1.2.4",
     "cordova-android": "7.0.0",
     "cordova-browser": "^4.1.0",
     "cordova-plugin-android-permissions": "^1.0.2",
@@ -125,8 +123,7 @@
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-background-mode": {},
-      "cordova-plugin-mauron85-background-geolocation": {},
-      "com-sarriaroman-photoviewer": {}
+      "cordova-plugin-mauron85-background-geolocation": {}
     },
     "platforms": [
       "browser",

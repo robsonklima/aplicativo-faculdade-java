@@ -40,7 +40,7 @@ export class FotosPage {
       correctOrientation: true,
       targetWidth: Config.FOTO.WIDTH,
       targetHeight: Config.FOTO.HEIGHT,
-      allowEdit: true
+      allowEdit: true,
     }).then(imageData => {
       this.foto = new Foto();
       this.foto.nome = this.chamado.codOs.toString() + '_' + this.chamado.rats[0].numRat + '_' + new Date().getUTCMilliseconds().toString();
