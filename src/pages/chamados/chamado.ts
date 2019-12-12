@@ -166,40 +166,39 @@ export class ChamadoPage {
         return;
       }
 
-      this.appAvailability.check(Config.OPEN_CAMERA).then(
-        (yes: boolean) => {
-          this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
-            this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
-              this.camera.getPicture({
-                quality: Config.FOTO.QUALITY, 
-                targetWidth: Config.FOTO.WIDTH,
-                targetHeight: Config.FOTO.HEIGHT,
-                destinationType: this.camera.DestinationType.DATA_URL,
-                encodingType: this.camera.EncodingType.JPEG,
-                mediaType: this.camera.MediaType.PICTURE,
-                saveToPhotoAlbum: false,
-                allowEdit: true,
-                sourceType: 1,
-                correctOrientation: true
-              }).then(imageData => {
-                this.foto = new Foto();
-                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
-                this.foto.str = 'data:image/jpeg;base64,' + imageData;
-                this.foto.modalidade = modalidade;
-                this.chamado.rats[0].fotos.push(this.foto);
-                this.chamadoService.atualizarChamado(this.chamado).catch();
-                this.camera.cleanup().catch();
-              }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+      this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
+        this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
+          this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
+            this.camera.getPicture({
+              quality: Config.FOTO.QUALITY,
+              // targetWidth: Config.FOTO.WIDTH,
+              // targetHeight: Config.FOTO.HEIGHT,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              saveToPhotoAlbum: false,
+              allowEdit: true,
+              sourceType: 1,
+              correctOrientation: true
+            }).then(imageData => {
+              this.foto = new Foto();
+              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
+              this.foto.str = 'data:image/jpeg;base64,' + imageData;
+              this.foto.modalidade = modalidade;
+              this.chamado.rats[0].fotos.push(this.foto);
+              this.chamadoService.atualizarChamado(this.chamado).catch();
+              this.camera.cleanup().catch();
             }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
-          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
-        },
-        (no: boolean) => {
-          this.exibirToast('Favor instalar o aplicativo Open Camera').then(() => { 
-            setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
-          });
-          
-          return;
-        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
+      },
+      (no: boolean) => {
+        this.exibirToast('Favor instalar o aplicativo Open Camera').then(() => {
+          setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
+        });
+
+        return;
+      }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
     }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
   }
 
@@ -211,7 +210,7 @@ export class ChamadoPage {
       });
 
       if (fotos.length > 0) {
-        return fotos[0].str;  
+        return fotos[0].str;
       }
     }
 
@@ -252,9 +251,9 @@ export class ChamadoPage {
         let fotos = this.chamado.rats[0].fotos.filter((foto) => {
           return (foto.modalidade == modalidade);
         });
-  
+
         if (fotos.length > 0) {
-          return true;  
+          return true;
         }
       }
     }
@@ -267,7 +266,7 @@ export class ChamadoPage {
       if (this.chamado.rats.length > 0) {
         if (typeof(this.chamado.rats[0].laudos) !== 'undefined') {
           if (this.chamado.rats[0].laudos.length > 0) {
-              return true;  
+              return true;
           }
         }
       }
@@ -301,17 +300,17 @@ export class ChamadoPage {
   private verificarLaudoObrigatorio(): boolean {
     if (
       (
-        this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO   || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD    || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA || 
-        this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS      || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.METRO_RIO   ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.RIO_CARD    ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.VLT_CARIOCA ||
+        this.chamado.cliente.codCliente == Config.CLIENTE.BRINKS      ||
         this.chamado.cliente.codCliente == Config.CLIENTE.BVA_BRINKS  ||
-        this.chamado.cliente.codCliente == Config.CLIENTE.CEF         || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.CEF         ||
         this.chamado.cliente.codCliente == Config.CLIENTE.BNB         ||
         this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE     ||
-        this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL    || 
+        this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL    ||
         (
-          this.chamado.cliente.codCliente == Config.CLIENTE.BB && 
+          this.chamado.cliente.codCliente == Config.CLIENTE.BB &&
           this.chamado.equipamentoContrato.indGarantia == 1
         )
       ) && this.verificarChamadoOrcamento()
@@ -341,7 +340,7 @@ export class ChamadoPage {
           rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
             if (ratDetalhe.causa.codCausa == 526) {
               return true;
-            }  
+            }
           });
         });
       }
@@ -352,7 +351,7 @@ export class ChamadoPage {
 
   public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
     return new Promise((resolve, reject) => {
-      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => { 
+      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => {
         this.equipamentosPOS = equips;
 
         resolve(equips);
@@ -369,7 +368,7 @@ export class ChamadoPage {
           rat.ratDetalhes.forEach((ratDetalhe: RatDetalhe) => {
             if (ratDetalhe.acao.codAcao == 17) {
               return true;
-            }  
+            }
           });
         });
       }
@@ -379,7 +378,7 @@ export class ChamadoPage {
   }
 
   public verificarChamadoExtraMaquina(): boolean {
-    let retorno: boolean = false; 
+    let retorno: boolean = false;
 
     if (this.chamado.rats.length > 0) {
       if (this.chamado.rats[0].ratDetalhes.length > 0) {
@@ -453,7 +452,7 @@ export class ChamadoPage {
             }
 
             this.platform.ready().then(() => {
-              const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
+              const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true,
                 dismissOnPageChange: true });
               loader.present();
 
@@ -461,10 +460,10 @@ export class ChamadoPage {
                 loader.dismiss().then(() => {
                   if (!this.chamado.indCercaEletronicaLiberada) {
                     if ((this.obterDistanciaRaio(
-                      location.coords.latitude, 
-                      location.coords.longitude, 
-                      this.chamado.localAtendimento.localizacao.latitude, 
-                      this.chamado.localAtendimento.localizacao.longitude) 
+                      location.coords.latitude,
+                      location.coords.longitude,
+                      this.chamado.localAtendimento.localizacao.latitude,
+                      this.chamado.localAtendimento.localizacao.longitude)
                       > Number(this.distanciaCercaEletronica))
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
@@ -477,7 +476,7 @@ export class ChamadoPage {
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                   this.chamado.checkin.localizacao.latitude = location.coords.latitude;
                   this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                  
+
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {
                     this.configurarSlide(this.slides.getActiveIndex());
                     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
@@ -510,7 +509,7 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true, 
+            const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true,
               dismissOnPageChange: true });
             loader.present();
 
@@ -519,16 +518,16 @@ export class ChamadoPage {
                 loader.dismiss().then(() => {
                   if (!this.chamado.indCercaEletronicaLiberada) {
                     if ((this.obterDistanciaRaio(
-                      location.coords.latitude, 
-                      location.coords.longitude, 
-                      this.chamado.localAtendimento.localizacao.latitude, 
-                      this.chamado.localAtendimento.localizacao.longitude) 
+                      location.coords.latitude,
+                      location.coords.longitude,
+                      this.chamado.localAtendimento.localizacao.latitude,
+                      this.chamado.localAtendimento.localizacao.longitude)
                       > Number(this.distanciaCercaEletronica))
                     ) {
                       this.exibirToast('Você está distante do local de atendimento');
                     }
                   }
-                  
+
                   this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                   this.chamado.checkout.localizacao.latitude = location.coords.latitude;
                   this.chamado.checkout.localizacao.longitude = location.coords.longitude;
@@ -602,14 +601,14 @@ export class ChamadoPage {
       this.chamado.rats[0].nomeAcompanhante = form.value.nomeAcompanhante;
       this.chamado.rats[0].obsRAT = form.value.obsRAT;
       this.chamado.rats[0].codUsuarioCad = this.dg.usuario.codUsuario;
-      
+
       if (this.usuarioPonto) {
         this.chamado.rats[0].horarioInicioIntervalo = this.usuarioPonto.registros[1];
         this.chamado.rats[0].horarioTerminoIntervalo = this.usuarioPonto.registros[2];
       }
     }
 
-    this.chamadoService.atualizarChamado(this.chamado);    
+    this.chamadoService.atualizarChamado(this.chamado);
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(4, 500);
   }
@@ -656,8 +655,8 @@ export class ChamadoPage {
         this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
 
         return;
-      } 
-      
+      }
+
       if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
         this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
 
@@ -671,7 +670,7 @@ export class ChamadoPage {
       return;
     }
 
-    if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
+    if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
       this.exibirToast('Favor informar os dados da RAT');
 
@@ -710,7 +709,7 @@ export class ChamadoPage {
         this.dg.usuario.codUsuario)
         .subscribe(res => {
           this.usuarioPonto = res;
-          
+
           resolve(this.usuarioPonto);
         },
         err => {
@@ -721,7 +720,7 @@ export class ChamadoPage {
 
   public verificarSeEquipamentoEPOS(): boolean {
     var i;
-    
+
     for (i = 0; i < this.equipamentosPOS.length; i++) {
       if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
           return true;
@@ -731,7 +730,7 @@ export class ChamadoPage {
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -773,8 +772,8 @@ export class ChamadoPage {
         this.tituloSlide = (i + 1) + ". " + "Checkin";
 
         this.slides.lockSwipeToPrev(false);
-        if (!this.chamado.checkin.localizacao.latitude 
-          || !this.chamado.checkin.localizacao.longitude 
+        if (!this.chamado.checkin.localizacao.latitude
+          || !this.chamado.checkin.localizacao.longitude
           || this.chamado.indBloqueioReincidencia)
           this.slides.lockSwipeToNext(true);
           else
@@ -790,7 +789,7 @@ export class ChamadoPage {
         this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
 
         this.slides.lockSwipeToPrev(false);
-        if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
+        if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
           || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
           || !this.chamado.rats[0].nomeAcompanhante) {
           this.slides.lockSwipeToNext(true);
@@ -816,7 +815,7 @@ export class ChamadoPage {
 
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkout.localizacao.latitude || !this.chamado.checkout.localizacao.longitude) {
-          this.slides.lockSwipeToNext(true); 
+          this.slides.lockSwipeToNext(true);
         }
         else {
           this.slides.lockSwipeToNext(false);
@@ -830,7 +829,7 @@ export class ChamadoPage {
         break;
       case 7:
         this.tituloSlide = (i + 1) + ". " + "Fechamento";
-        
+
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(true);
         break;
@@ -841,7 +840,7 @@ export class ChamadoPage {
     return new Promise((resolve, reject) => {
       if (!this.chamado.dataHoraOSMobileLida) {
         this.chamado.dataHoraOSMobileLida = new Date().toLocaleString('pt-BR');
-  
+
         this.chamadoService.registrarLeituraChamadoApi(this.chamado)
           .subscribe((r) => {
             this.chamadoService.atualizarChamado(this.chamado);
@@ -859,14 +858,14 @@ export class ChamadoPage {
   private obterDistanciaRaio(latA, lonA, latB, lonB) {
     var raioTerrestre = 6371;
     var dLat = this.deg2rad(latB-latA);
-    var dLon = this.deg2rad(lonB-lonA); 
-    var a = 
+    var dLon = this.deg2rad(lonB-lonA);
+    var a =
       Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(this.deg2rad(latA)) * Math.cos(this.deg2rad(latB)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      Math.cos(this.deg2rad(latA)) * Math.cos(this.deg2rad(latB)) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var distanciaEmKm = raioTerrestre * c;
-    
+
     return distanciaEmKm;
   }
 
