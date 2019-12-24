@@ -24,6 +24,7 @@ import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOS } from '../../models/defeito-pos';
 import { ChamadoService } from '../../services/chamado';
 import { NgForm } from '@angular/forms';
+import { RatDetalhe } from '../../models/rat-detalhe';
 
 
 @Component({
@@ -130,6 +131,19 @@ export class RatDetalhePosPage {
     this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
     this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
+
+    if (this.chamado.rats[0].ratDetalhes.length == 0) {
+      let ratDetalhe = new RatDetalhe();
+
+      ratDetalhe.acao.codAcao = 13;
+      ratDetalhe.defeito.codDefeito = 84;
+      ratDetalhe.causa.codCausa = 897;
+      ratDetalhe.grupoCausa.codGrupoCausa = 320;
+      ratDetalhe.tipoCausa.codTipoCausa = 55;
+      ratDetalhe.tipoServico.codTipoServico = 17;
+
+      this.chamado.rats[0].ratDetalhes.push(ratDetalhe);
+    }
 
     if (!this.validarCamposObrigatorios()) return;
 

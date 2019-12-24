@@ -459,18 +459,9 @@ export class ChamadoPage {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
                   if (!this.chamado.indCercaEletronicaLiberada) {
-                    if ((this.obterDistanciaRaio(
-                      location.coords.latitude,
-                      location.coords.longitude,
-                      this.chamado.localAtendimento.localizacao.latitude,
-                      this.chamado.localAtendimento.localizacao.longitude)
-                      > Number(this.distanciaCercaEletronica))
-                    ) {
-                      this.exibirToast('Você está distante do local de atendimento');
+                    if (this.chamado.indOSIntervencaoEquipamento) {
+                      this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
                     }
-
-                    if (this.chamado.indOSIntervencaoEquipamento)
-                      this.exibirAlerta('Este chamado exige lançamento de laudo!');
                   }
 
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
@@ -516,18 +507,6 @@ export class ChamadoPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  if (!this.chamado.indCercaEletronicaLiberada) {
-                    if ((this.obterDistanciaRaio(
-                      location.coords.latitude,
-                      location.coords.longitude,
-                      this.chamado.localAtendimento.localizacao.latitude,
-                      this.chamado.localAtendimento.localizacao.longitude)
-                      > Number(this.distanciaCercaEletronica))
-                    ) {
-                      this.exibirToast('Você está distante do local de atendimento');
-                    }
-                  }
-
                   this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                   this.chamado.checkout.localizacao.latitude = location.coords.latitude;
                   this.chamado.checkout.localizacao.longitude = location.coords.longitude;

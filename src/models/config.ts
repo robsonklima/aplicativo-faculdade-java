@@ -1,6 +1,6 @@
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.56";
+  public static VERSAO_APP = "0.0.57";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -20,10 +20,7 @@ export class Config {
     PEÇA_TRANSITO: 9, PECA_FALTANTE: 10, PECA_SEPARADA: 11, FECHADO_P_ANALISE: 12, ORCAMENTO_APROVADO: 13,
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
-  public static EQUIPAMENTO = { 
-    TPC_4110_290_01_969: 362,
-    TPC_4110: 90
-  };
+  public static EQUIPAMENTO = { TPC_4110_290_01_969: 362, TPC_4110: 90 };
   public static INT_SINC_BD_LOCAL_DIAS = 3;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
@@ -48,8 +45,8 @@ export class Config {
     LARANJA: '#FFC107',
     AZUL: '#00BCD4'
   };
-  public static CHAMADO = { TRANSFERIDO: 8, FECHADO: 3 };
-  public static ACAO = { PENDENCIA_PECA: { CODACAO: 19 } };
+  public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
+  public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
   public static USUARIO_PERFIL = {
     ADMINISTRADOR_SISTEMA: 1, FILIAL_SUPORTE_TECNICO: 32,
     FILIAL_TECNICO_DE_CAMPO: 35, FILIAL_SUPORTE_TECNICO_DE_CAMPO: 79,
@@ -106,6 +103,7 @@ export class Config {
     CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
+    CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!'
   };
   public static FOTO = {  WIDTH: 720, HEIGHT: 480, QUALITY: 100 };
   public static L = { 
