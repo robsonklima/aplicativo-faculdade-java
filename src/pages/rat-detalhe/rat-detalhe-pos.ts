@@ -25,6 +25,12 @@ import { DefeitoPOS } from '../../models/defeito-pos';
 import { ChamadoService } from '../../services/chamado';
 import { NgForm } from '@angular/forms';
 import { RatDetalhe } from '../../models/rat-detalhe';
+import { Acao } from '../../models/acao';
+import { Causa } from '../../models/causa';
+import { GrupoCausa } from '../../models/grupo-causa';
+import { TipoCausa } from '../../models/tipo-causa';
+import { TipoServico } from '../../models/tipo-servico';
+import { Defeito } from '../../models/defeito';
 
 
 @Component({
@@ -58,6 +64,9 @@ export class RatDetalhePosPage {
     private dadosGlobaisService: DadosGlobaisService
   ) {
     this.chamado = this.navParams.get('chamado');
+
+    console.log(this.chamado.rats[0].ratDetalhes.length);
+    
   }
 
   ionViewWillEnter() {
@@ -132,18 +141,30 @@ export class RatDetalhePosPage {
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
     this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
 
-    if (this.chamado.rats[0].ratDetalhes.length == 0) {
-      let ratDetalhe = new RatDetalhe();
+    // if (this.chamado.rats[0].ratDetalhes.length == 0) {
+    //   let acao = new Acao();
+    //   acao.codAcao = 13;
+    //   let defeito = new Defeito();
+    //   defeito.codDefeito = 84;
+    //   let causa = new Causa();
+    //   causa.codCausa = 897;
+    //   let grupoCausa = new GrupoCausa();
+    //   grupoCausa.codGrupoCausa = 320;
+    //   let tipoCausa = new TipoCausa();
+    //   tipoCausa.codTipoCausa = 55;
+    //   let tipoServico = new TipoServico();
+    //   tipoServico.codTipoServico = 17;
+    //   let ratDetalhe = new RatDetalhe();
 
-      ratDetalhe.acao.codAcao = 13;
-      ratDetalhe.defeito.codDefeito = 84;
-      ratDetalhe.causa.codCausa = 897;
-      ratDetalhe.grupoCausa.codGrupoCausa = 320;
-      ratDetalhe.tipoCausa.codTipoCausa = 55;
-      ratDetalhe.tipoServico.codTipoServico = 17;
+    //   ratDetalhe.acao = acao;
+    //   ratDetalhe.defeito = defeito;
+    //   ratDetalhe.causa = causa;
+    //   ratDetalhe.grupoCausa = grupoCausa
+    //   ratDetalhe.tipoCausa = tipoCausa;
+    //   ratDetalhe.tipoServico = tipoServico;
 
-      this.chamado.rats[0].ratDetalhes.push(ratDetalhe);
-    }
+    //   this.chamado.rats[0].ratDetalhes.push(ratDetalhe);
+    // }
 
     if (!this.validarCamposObrigatorios()) return;
 
