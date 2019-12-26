@@ -216,7 +216,9 @@ export class HomePage {
   }
 
   private verificarNecessidadeAtualizacao(): boolean {
-    if ((this.dg.dataHoraCadastro > moment().add(Config.INT_SINC_BD_LOCAL_DIAS, "day").toDate()) || !this.dg.dataHoraCadastro) return true;
+    let limiteAtualizacao = new Date();
+    limiteAtualizacao.setDate(limiteAtualizacao.getDate() - Config.INT_SINC_BD_LOCAL_DIAS);
+    if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao) return true;
 
     this.tipoServicoService.buscarTipoServicosStorage().then((tiposServicos) => {
       this.acaoService.buscarAcoesStorage().then((acoes) => {
