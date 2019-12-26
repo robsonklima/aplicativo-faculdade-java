@@ -458,10 +458,8 @@ export class ChamadoPage {
 
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 loader.dismiss().then(() => {
-                  if (!this.chamado.indCercaEletronicaLiberada) {
-                    if (this.chamado.indOSIntervencaoEquipamento) {
-                      this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
-                    }
+                  if (this.chamado.indOSIntervencaoEquipamento) {
+                    this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
                   }
 
                   this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');

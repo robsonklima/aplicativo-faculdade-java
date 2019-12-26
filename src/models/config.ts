@@ -1,6 +1,6 @@
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.58";
+  public static VERSAO_APP = "0.0.59";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -21,7 +21,7 @@ export class Config {
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
   public static EQUIPAMENTO = { TPC_4110_290_01_969: 362, TPC_4110: 90 };
-  public static INT_SINC_BD_LOCAL_DIAS = 3;
+  public static INT_SINC_BD_LOCAL_DIAS = 7;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
   public static CERCA_ELETRONICA = [
@@ -45,6 +45,7 @@ export class Config {
     LARANJA: '#FFC107',
     AZUL: '#00BCD4'
   };
+  public static FOTO = {  WIDTH: 1280, HEIGHT: 720, QUALITY: 100 };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
   public static USUARIO_PERFIL = {
@@ -105,7 +106,6 @@ export class Config {
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!'
   };
-  public static FOTO = {  WIDTH: 720, HEIGHT: 480, QUALITY: 90 };
   public static L = { 
     ICONES: {
       VERMELHO: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',

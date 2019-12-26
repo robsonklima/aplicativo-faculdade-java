@@ -216,9 +216,6 @@ export class HomePage {
   }
 
   private verificarNecessidadeAtualizacao(): boolean {
-    console.log(this.dg.dataHoraCadastro);
-    
-
     let limiteAtualizacao = new Date();
     limiteAtualizacao.setDate(limiteAtualizacao.getDate() - Config.INT_SINC_BD_LOCAL_DIAS);
     if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao || !this.dg.dataHoraCadastro) return true;
