@@ -40,6 +40,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(false);
+    this.dadosGlobaisService.apagarDadosGlobaisStorage();
 
     this.appVersion.getVersionNumber().then((versaoApp) => {
       this.versaoApp = versaoApp;

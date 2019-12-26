@@ -1,6 +1,6 @@
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.57";
+  public static VERSAO_APP = "0.0.58";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -105,7 +105,7 @@ export class Config {
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!'
   };
-  public static FOTO = {  WIDTH: 720, HEIGHT: 480, QUALITY: 100 };
+  public static FOTO = {  WIDTH: 720, HEIGHT: 480, QUALITY: 90 };
   public static L = { 
     ICONES: {
       VERMELHO: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',

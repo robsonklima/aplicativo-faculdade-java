@@ -29,9 +29,9 @@ export class DadosGlobaisService {
 
   buscarDadosGlobaisStorage(): Promise<DadosGlobais> {
     return new Promise((resolve, reject) => {
-      this.storage.get('DadosGlobais')
-      .then((dg: DadosGlobais) => {
+      this.storage.get('DadosGlobais').then((dg: DadosGlobais) => {
         this.dadosGlobais = dg != null ? dg : null;
+
         resolve(this.dadosGlobais);
       }).catch(err => reject());
     });
@@ -39,11 +39,9 @@ export class DadosGlobaisService {
 
   apagarDadosGlobaisStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storage.set('DadosGlobais', null)
-        .then((res) => {
-          resolve(res);
-        })
-        .catch();
+      this.storage.clear().then(() => {resolve()} ).catch();
+
+      //this.storage.set('DadosGlobais', null).then((res) => { resolve(res) }).catch(() => { reject() });
     });
   }
 

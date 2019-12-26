@@ -181,23 +181,26 @@ export class RatDetalhePage {
       this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
   
       if (
-          this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.BB ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.BRB ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.SICREDI ||
-          this.chamado.cliente.codCliente == Config.CLIENTE.SAQUE_PAGUE ||
+          this.ratDetalhe.acao.codAcao == Config.ACAO.PENDENCIA_PECA.CODACAO &&
           (
-            this.chamado.cliente.codCliente == Config.CLIENTE.PERTO_PARKING &&
+            this.chamado.cliente.codCliente == Config.CLIENTE.BB ||
+            this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL ||
+            this.chamado.cliente.codCliente == Config.CLIENTE.BRB ||
+            this.chamado.cliente.codCliente == Config.CLIENTE.PROTEGE ||
+            this.chamado.cliente.codCliente == Config.CLIENTE.SICREDI ||
+            this.chamado.cliente.codCliente == Config.CLIENTE.SAQUE_PAGUE ||
             (
-              this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110 ||
-              this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110_290_01_969
+              this.chamado.cliente.codCliente == Config.CLIENTE.PERTO_PARKING &&
+              (
+                this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110 ||
+                this.chamado.equipamentoContrato.equipamento.codEquip == Config.EQUIPAMENTO.TPC_4110_290_01_969
+              )
             )
           )
-        ) {
-        this.apresentarCampoProtocoloStn();
-      }
+        ) 
+        {
+          this.apresentarCampoProtocoloStn();
+        }
 
       if (causa.codECausa.substring(0, 2) == "08") {
         this.exibirAlerta("Este chamado exige lançamento de laudo!");
