@@ -64,9 +64,6 @@ export class RatDetalhePosPage {
     private dadosGlobaisService: DadosGlobaisService
   ) {
     this.chamado = this.navParams.get('chamado');
-
-    console.log(this.chamado.rats[0].ratDetalhes.length);
-    
   }
 
   ionViewWillEnter() {

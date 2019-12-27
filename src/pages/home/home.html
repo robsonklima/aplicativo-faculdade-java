@@ -98,7 +98,7 @@
 
     <button
       ion-item
-      *ngIf="false"
+      *ngIf="!platform.is('cordova')"
       (click)="telaMinhaRota()">
       <ion-icon 
         color="primary" 
@@ -109,7 +109,7 @@
 
     <button
       ion-item
-      *ngIf="false"
+      *ngIf="!platform.is('cordova')"
       (click)="telaTeste()">
       <ion-icon 
         color="primary" 
