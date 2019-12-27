@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events, AlertController, ToastController } from 'ionic-angular';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, 
          BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -44,6 +44,7 @@ export class MyApp {
     private bGeolocation: BackgroundGeolocation,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
+    private toastCtrl: ToastController,
     private dadosGlobaisService: DadosGlobaisService,
     private geolocation: GeolocationService,
     private usuarioService: UsuarioService,
@@ -57,7 +58,7 @@ export class MyApp {
       
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
       this.events.subscribe('login:efetuado', (dg: DadosGlobais) => { this.dadosGlobais = dg });
-      this.events.subscribe('sincronizacao:solicitada', () => { this.iniciarSincronizacao() });
+      this.events.subscribe('sincronizacao:solicitada', () => { this.sincronizarChamados() });
       
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         if (dados) 
@@ -179,31 +180,28 @@ export class MyApp {
 
   private sincronizarChamadosFechados(chamados: Chamado[]): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      chamados.forEach((chamado) => {
-        this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
-          if (res) {
-            if (res.indexOf('00 - ') > -1) {
-              this.chamadoService.apagarChamadoStorage(chamado).then(() => {
-                this.dispararSinalSonoroComVibracao();
+      if (!chamados.length) resolve();
 
-                resolve(true);
-              }).catch(() => {
-                reject(false);
-              });
-            } else {
-              this.dispararSinalSonoroComVibracao();
-
+      this.chamadoService.fecharChamadoApi(chamados[0]).subscribe(res => {
+        if (res) {
+          if (res.indexOf('00 - ') > -1) {
+            this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor');
+            
+            this.chamadoService.apagarChamadoStorage(chamados[0]).then(() => { 
+              resolve(true);
+            }).catch(() => { 
               reject(false);
-            }
-          }
-        },
-        err => {
-          this.dispararSinalSonoroComVibracao();
-          reject(false);
-        });
-      });
+            });
+          } else {
+            this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '');
 
-      resolve(true);
+            reject(false);
+          }
+        }
+      },
+      err => {
+        reject(false);
+      });
     });
   }
 
@@ -272,6 +270,16 @@ export class MyApp {
     });
 
     alerta.present();
+  }
+
+  private exibirToast(mensagem: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const toast = this.toastCtrl.create({
+        message: mensagem, duration: 4500, position: 'bottom'
+      });
+
+      resolve(toast.present());
+    });
   }
 
   public sair() {

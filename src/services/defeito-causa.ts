@@ -19,7 +19,7 @@ export class DefeitoCausaService {
 
   buscarDefeitosCausasApi(): Observable<DefeitoCausa[]> {
     return this.http.get(Config.API_URL + 'DefeitoCausa')
-      .timeout(120000)
+      .timeout(180000)
       .map((res: Response) => { this.storage.set('DefeitosCausas', res.json()).catch() })
       .catch((error: any) => Observable.throw(error.json()));
   }

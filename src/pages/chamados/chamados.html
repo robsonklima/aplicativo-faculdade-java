@@ -40,7 +40,7 @@
       </ion-segment-button>
 
       <ion-segment-button value="sincronizando">
-        Sincronizando ({{ chamadosSincronizando?.length }})
+        Sinc. ({{ chamadosSincronizando?.length }})
       </ion-segment-button>
 
       <ion-segment-button value="fechados">
@@ -53,11 +53,8 @@
 <ion-content class="cards-bg">
   <div [ngSwitch]="status">
     <ion-list *ngSwitchCase="'abertos'">
-        <ion-card 
-        *ngFor="let chamado of chamados; let i = index"
-        [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
-        <ion-item
-          [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }">
+      <ion-card *ngFor="let chamado of chamados; let i = index">
+        <ion-item>
           <ion-icon
             *ngIf="chamado.indBloqueioReincidencia"
             name="lock" 
@@ -128,12 +125,12 @@
                 clear
                 [disabled]="true"
                 color="subtle">
-                 <ion-icon 
+                  <ion-icon 
                   *ngIf="!chamado.dataHoraOSMobileLida" 
                   name="checkmark" 
                   class="checkmark">
                 </ion-icon>
-                 <ion-icon 
+                  <ion-icon 
                   *ngIf="chamado.dataHoraOSMobileLida" 
                   name="done-all" 
                   class="done-all"
@@ -214,60 +211,29 @@
 
     <ion-list *ngSwitchCase="'sincronizando'">
       <ion-card 
-      *ngFor="let chamado of chamadosSincronizando; let i = index">
+      *ngFor="let chamadoSinc of chamadosSincronizando; let i = index">
       <ion-item>
-        <ion-icon
-          *ngIf="chamado.indBloqueioReincidencia"
-          name="lock" 
-          color="danger" 
-          class="title-icon" 
-          item-start>
-        </ion-icon>
-  
-        <ion-icon
-          *ngIf="chamado.indOSIntervencaoEquipamento"
-          name="clipboard" 
-          color="danger" 
-          class="title-icon" 
-          item-start>
-        </ion-icon>
-  
-        <h2 class="cod-os">{{ chamado.codOs }}</h2>
+        <h2 class="cod-os">{{ chamadoSinc.codOs }}</h2>
         
         <ion-badge  
           item-end 
           color="light" 
           class="inherit">
-            {{ chamado.dataHoraAgendamento ? 'Agend' : 'Aberto' }}
-            {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) 
-              | date: 'dd/MM HH:mm' }}
+            Fechado
         </ion-badge>
       </ion-item>
       
       <ion-card-content>
         <p class="nome-cliente-local">
           <b>
-            {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
-            {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }}
+            Chamado fechado aguardando sincronização
           </b>
         </p>
   
         <p class="endereco">
           <span class="font-silver-light-hard">
-            {{ chamado.localAtendimento.endereco.toUpperCase() }}, 
-            {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }},
-            {{ chamado.equipamentoContrato.numSerie }}
+            Aguarde a sincronização automática ou clique em "Atualizar" para enviar o chamado agora mesmo.
           </span>
-        </p>
-        <p
-          *ngIf="chamado.dataFimSLA"
-          class="font-red sla">
-          SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
-        </p>
-        <p 
-          *ngIf="chamado.indOSIntervencaoEquipamento"
-          class="font-red" >
-          Este chamado exige lançamento de laudo!
         </p>
       </ion-card-content>
     </ion-card>

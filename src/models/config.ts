@@ -45,7 +45,7 @@ export class Config {
     LARANJA: '#FFC107',
     AZUL: '#00BCD4'
   };
-  public static FOTO = {  WIDTH: 1280, HEIGHT: 720, QUALITY: 100 };
+  public static FOTO = {  WIDTH: 720, HEIGHT: 1280, QUALITY: 90 };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
   public static USUARIO_PERFIL = {

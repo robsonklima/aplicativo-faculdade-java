@@ -248,10 +248,6 @@
         <ion-card-header class="card-map">
           <h2>Checkin Efetuado</h2>
         </ion-card-header>
-
-        <ion-card-content>
-          <img src="assets/imgs/abstract-map-b.jpg">
-        </ion-card-content>
     
         <ion-item>
           <button ion-button color="silver-light" clear item-start>{{ chamado?.checkin?.dataHoraCadastro }}</button>
@@ -391,24 +387,24 @@
 
         <ion-item *ngIf="verificarSeEquipamentoEPOS()">
           <ion-avatar item-start>
-            <img src="{{ carregarFoto('COMPROVANTEINICIALIZACAO') }}">
+            <img src="{{ carregarFoto('COMPINICIALIZACAO') }}">
           </ion-avatar>
-          <h2>Comprovante de Inicialização</h2>
+          <h2>Comprovante Inicialização</h2>
           <button ion-button clear item-end 
-            (click)="tirarFoto('COMPROVANTEINICIALIZACAO')" 
-            *ngIf="!verificarExistenciaFoto('VERIFICACAOVERSAO')">
+            (click)="tirarFoto('COMPINICIALIZACAO')" 
+            *ngIf="!verificarExistenciaFoto('COMPINICIALIZACAO')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
 
           <button ion-button clear item-end 
-            (click)="removerFoto('COMPROVANTEINICIALIZACAO')"
-            *ngIf="verificarExistenciaFoto('COMPROVANTEINICIALIZACAO')">
+            (click)="removerFoto('COMPINICIALIZACAO')"
+            *ngIf="verificarExistenciaFoto('COMPINICIALIZACAO')">
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
           </button>
 
           <button ion-button clear item-end 
-            (click)="telaFoto('COMPROVANTEINICIALIZACAO')"
-            *ngIf="verificarExistenciaFoto('COMPROVANTEINICIALIZACAO')">
+            (click)="telaFoto('COMPINICIALIZACAO')"
+            *ngIf="verificarExistenciaFoto('COMPINICIALIZACAO')">
             <ion-icon name="image" color="secondary"></ion-icon>
           </button>
         </ion-item>
@@ -698,10 +694,6 @@
         <ion-card-header class="card-map">
           <h2>Checkout Efetuado</h2>
         </ion-card-header>
-
-        <ion-card-content>
-          <img src="assets/imgs/abstract-map-b.jpg">
-        </ion-card-content>
     
         <ion-item>
           <button ion-button color="silver-light" clear item-start>{{ chamado?.checkin?.dataHoraCadastro }}</button>

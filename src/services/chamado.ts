@@ -38,7 +38,7 @@ export class ChamadoService {
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
-      .timeout(20000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

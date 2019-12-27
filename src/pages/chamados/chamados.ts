@@ -49,9 +49,7 @@ export class ChamadosPage {
     });
 
     this.events.subscribe('sincronizacao:efetuada', () => { 
-      setTimeout(() => {
-        this.carregarChamadosStorage();
-      }, 10000);
+      this.carregarChamadosStorage();
     });
   }
 
@@ -181,22 +179,17 @@ export class ChamadosPage {
         let chamadosFechados = chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) });
 
         this.sincronizarChamadosFechados(chamadosFechados).then((res) => {
-          if (chamadosFechados.length) {
-            this.exibirToast('Chamado ' + chamadosFechados[0].codOs + ' fechado junto ao servidor');
-          }
+          this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
+            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+              if (!chamadosUnificados.length) return;
 
-          setTimeout(() => {
-            this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
-              this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-                if (!chamadosUnificados.length) return;
-  
-                this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-
-                  resolve();
-                }).catch(() => { reject()});
-              }).catch(() => { reject() });
-            }, err => { reject() });
-          }, 10000);
+              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => { 
+                this.carregarChamadosStorage();
+                
+                resolve(); 
+              }).catch(() => { reject()});
+            }).catch(() => { reject() });
+          }, err => { reject() });
         }).catch(() => { reject() });
       }).catch(() => { reject() });
     });
@@ -255,25 +248,26 @@ export class ChamadosPage {
 
   private sincronizarChamadosFechados(chamados: Chamado[]): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      chamados.forEach((chamado) => {
-        this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
-          
-          console.log(res);
+      if (!chamados.length) resolve();
 
-          if (res) {
-            if (res.indexOf('00 - ') > -1) {
-              this.chamadoService.apagarChamadoStorage(chamado).then(() => { resolve(true) }).catch(() => { reject(false) });
-            } else {
-              reject(false);
-            }
+      this.chamadoService.fecharChamadoApi(chamados[0]).subscribe(res => {
+        if (res) {
+          if (res.indexOf('00 - ') > -1) {
+            this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor');
+            
+            this.chamadoService.apagarChamadoStorage(chamados[0]).then(() => { 
+              resolve(true);
+            }).catch(() => { reject(false) });
+          } else {
+            this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '');
+
+            reject(false);
           }
-        },
-        err => {
-          reject(false);
-        });
+        }
+      },
+      err => {
+        reject(false);
       });
-
-      resolve(true);
     });
   }
 
