@@ -14,6 +14,7 @@ import { ChamadoPage } from "../chamados/chamado";
 import { MapaChamadoPage } from '../mapas/mapa-chamado';
 import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { ChamadoFechadoPage } from './chamado-fechado';
+import { Config } from '../../models/config';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { ChamadoFechadoPage } from './chamado-fechado';
 export class ChamadosPage {
   chamados: Chamado[];
   chamadosFechados: Chamado[];
+  chamadosSincronizando: Chamado[];
   qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
   status: string = "abertos";
@@ -46,10 +48,10 @@ export class ChamadosPage {
       });
     });
 
-    this.events.subscribe('sincronizacao:efetuada', () => {
+    this.events.subscribe('sincronizacao:efetuada', () => { 
       setTimeout(() => {
         this.carregarChamadosStorage();
-      }, 1000);
+      }, 10000);
     });
   }
 
@@ -82,7 +84,9 @@ export class ChamadosPage {
   private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
-        this.chamados = chamados.sort(function(a, b) { 
+        this.chamadosSincronizando = chamados.filter((c) => { return (c.dataHoraFechamento) });
+        
+        this.chamados = chamados.filter((c) => { return (!c.dataHoraFechamento) }).sort(function(a, b) { 
           return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
         });
 
@@ -122,12 +126,13 @@ export class ChamadosPage {
             });
             loading.present();
         
-            this.chamadoService.apagarChamadosStorage()
-              .then((res) => {
+            this.chamadoService.apagarChamadosStorage().then((res) => {
                 loading.dismiss();
 
                 this.chamadoService.buscarChamadosStorage().then((chamados) => {
                   this.chamados = chamados;
+
+                  this.chamadosSincronizando = [];
                 }).catch();
               })
               .catch(() => {
@@ -157,41 +162,41 @@ export class ChamadosPage {
       err => {});
   }
 
-
   public sincronizar() {
     if (!this.dg.usuario.codTecnico) return;
 
     const loading = this.loadingCtrl.create({ content: 'Sincronizando...' });
     loading.present();
 
-    this.sincronizarChamados(true).then(() => { 
+    this.sincronizarChamados().then(() => { 
       loading.dismiss(); 
 
       this.carregarChamadosStorage();
     }).catch(() => { loading.dismiss() });
   }
 
-  private sincronizarChamados(verbose: boolean): Promise<any> {
+  private sincronizarChamados(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
         let chamadosFechados = chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) });
 
-        this.sincronizarChamadosFechados(chamadosFechados).then(() => {
-          if (chamadosFechados.length)
+        this.sincronizarChamadosFechados(chamadosFechados).then((res) => {
+          if (chamadosFechados.length) {
             this.exibirToast('Chamado ' + chamadosFechados[0].codOs + ' fechado junto ao servidor');
+          }
 
-          this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
-            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-              this.events.publish('sincronizacao:efetuada');
+          setTimeout(() => {
+            this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
+              this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
+                if (!chamadosUnificados.length) return;
+  
+                this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
 
-              if (!chamadosUnificados.length) return;
-
-              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => {
-                if (verbose) this.exibirToast('Chamados sincronizados junto ao servidor');
-                resolve();
-              }).catch(() => { reject()});
-            }).catch(() => { reject() });
-          }, err => { reject() });
+                  resolve();
+                }).catch(() => { reject()});
+              }).catch(() => { reject() });
+            }, err => { reject() });
+          }, 10000);
         }).catch(() => { reject() });
       }).catch(() => { reject() });
     });
@@ -252,13 +257,12 @@ export class ChamadosPage {
     return new Promise((resolve, reject) => {
       chamados.forEach((chamado) => {
         this.chamadoService.fecharChamadoApi(chamado).subscribe(res => {
+          
+          console.log(res);
+
           if (res) {
             if (res.indexOf('00 - ') > -1) {
-              this.chamadoService.apagarChamadoStorage(chamado).then(() => {
-                resolve(true);
-              }).catch(() => {
-                reject(false);
-              });
+              this.chamadoService.apagarChamadoStorage(chamado).then(() => { resolve(true) }).catch(() => { reject(false) });
             } else {
               reject(false);
             }
@@ -273,11 +277,10 @@ export class ChamadosPage {
     });
   }
 
-
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
+        message: mensagem, duration: 4500, position: 'bottom'
       });
 
       resolve(toast.present());

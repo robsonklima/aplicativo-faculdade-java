@@ -25,19 +25,24 @@
         class="btn-refresh"
         ion-button 
         icon-only 
-        (click)="sincronizar()">
-        <ion-icon name="cloud-download" ></ion-icon>
+        (click)="sincronizar(true)">
+        <ion-icon name="refresh"></ion-icon>
       </button>
     </ion-buttons>
     
-    <ion-title>Chamados ({{ chamados?.length }})</ion-title>
+    <ion-title>Chamados</ion-title>
   </ion-navbar>
 
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="status">
       <ion-segment-button value="abertos">
-        Abertos
+        Abertos ({{ chamados?.length }})
       </ion-segment-button>
+
+      <ion-segment-button value="sincronizando">
+        Sincronizando ({{ chamadosSincronizando?.length }})
+      </ion-segment-button>
+
       <ion-segment-button value="fechados">
         Fechados
       </ion-segment-button>
@@ -206,6 +211,71 @@
         <p>Nenhum chamado encontrado</p>
       </ion-card>
     </ion-list>
+
+    <ion-list *ngSwitchCase="'sincronizando'">
+      <ion-card 
+      *ngFor="let chamado of chamadosSincronizando; let i = index">
+      <ion-item>
+        <ion-icon
+          *ngIf="chamado.indBloqueioReincidencia"
+          name="lock" 
+          color="danger" 
+          class="title-icon" 
+          item-start>
+        </ion-icon>
+  
+        <ion-icon
+          *ngIf="chamado.indOSIntervencaoEquipamento"
+          name="clipboard" 
+          color="danger" 
+          class="title-icon" 
+          item-start>
+        </ion-icon>
+  
+        <h2 class="cod-os">{{ chamado.codOs }}</h2>
+        
+        <ion-badge  
+          item-end 
+          color="light" 
+          class="inherit">
+            {{ chamado.dataHoraAgendamento ? 'Agend' : 'Aberto' }}
+            {{ (chamado.dataHoraAgendamento || chamado.dataHoraAberturaOS) 
+              | date: 'dd/MM HH:mm' }}
+        </ion-badge>
+      </ion-item>
+      
+      <ion-card-content>
+        <p class="nome-cliente-local">
+          <b>
+            {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
+            {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }}
+          </b>
+        </p>
+  
+        <p class="endereco">
+          <span class="font-silver-light-hard">
+            {{ chamado.localAtendimento.endereco.toUpperCase() }}, 
+            {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }},
+            {{ chamado.equipamentoContrato.numSerie }}
+          </span>
+        </p>
+        <p
+          *ngIf="chamado.dataFimSLA"
+          class="font-red sla">
+          SLA: {{ chamado.dataFimSLA | date:'dd/MM HH:mm' }}
+        </p>
+        <p 
+          *ngIf="chamado.indOSIntervencaoEquipamento"
+          class="font-red" >
+          Este chamado exige lançamento de laudo!
+        </p>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-card padding text-center *ngIf="!chamadosSincronizando?.length">
+      <p>Nenhum chamado encontrado para sincronizar</p>
+    </ion-card>
+  </ion-list>
   
     <ion-list *ngSwitchCase="'fechados'">
       <ion-item>

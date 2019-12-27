@@ -1,6 +1,6 @@
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.60";
+  public static VERSAO_APP = "0.0.61";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -104,7 +104,9 @@ export class Config {
     CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
-    CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!'
+    CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
+    CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
+    AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização'
   };
   public static L = { 
     ICONES: {

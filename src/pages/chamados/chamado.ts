@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -67,6 +67,7 @@ export class ChamadoPage {
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
+    private events: Events,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
@@ -610,7 +611,11 @@ export class ChamadoPage {
             this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.navCtrl.pop();
+              this.navCtrl.pop().then(() => {
+                this.exibirToast(Config.MSG.AGUARDE_SINCRONIZACAO);
+
+                this.events.publish('sincronizacao:solicitada');
+              }).catch();
             }).catch();
           }
         }
@@ -832,20 +837,6 @@ export class ChamadoPage {
     });
   }
 
-  private obterDistanciaRaio(latA, lonA, latB, lonB) {
-    var raioTerrestre = 6371;
-    var dLat = this.deg2rad(latB-latA);
-    var dLon = this.deg2rad(lonB-lonA);
-    var a =
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(this.deg2rad(latA)) * Math.cos(this.deg2rad(latB)) *
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    var distanciaEmKm = raioTerrestre * c;
-
-    return distanciaEmKm;
-  }
-
   private deg2rad(deg: number) {
     return deg * (Math.PI/180)
   }
@@ -863,7 +854,7 @@ export class ChamadoPage {
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
+        message: mensagem, duration: 4000, position: 'bottom'
       });
 
       resolve(toast.present());

@@ -317,7 +317,7 @@
           </button>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           <ion-avatar item-start>
             <img src="{{ carregarFoto('EQUIPAMENTOOPERACIONAL') }}">
           </ion-avatar>
@@ -341,7 +341,7 @@
           </button>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           <ion-avatar item-start>
             <img src="{{ carregarFoto('PARTEINTERNA') }}">
           </ion-avatar>
@@ -361,6 +361,78 @@
           <button ion-button clear item-end 
             (click)="telaFoto('PARTEINTERNA')"
             *ngIf="verificarExistenciaFoto('PARTEINTERNA')">
+            <ion-icon name="image" color="secondary"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS()">
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('VERIFICACAOVERSAO') }}">
+          </ion-avatar>
+          <h2>Verificação da Versão</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('VERIFICACAOVERSAO')" 
+            *ngIf="!verificarExistenciaFoto('VERIFICACAOVERSAO')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('VERIFICACAOVERSAO')"
+            *ngIf="verificarExistenciaFoto('VERIFICACAOVERSAO')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="telaFoto('VERIFICACAOVERSAO')"
+            *ngIf="verificarExistenciaFoto('VERIFICACAOVERSAO')">
+            <ion-icon name="image" color="secondary"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS()">
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('COMPROVANTEINICIALIZACAO') }}">
+          </ion-avatar>
+          <h2>Comprovante de Inicialização</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('COMPROVANTEINICIALIZACAO')" 
+            *ngIf="!verificarExistenciaFoto('VERIFICACAOVERSAO')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('COMPROVANTEINICIALIZACAO')"
+            *ngIf="verificarExistenciaFoto('COMPROVANTEINICIALIZACAO')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="telaFoto('COMPROVANTEINICIALIZACAO')"
+            *ngIf="verificarExistenciaFoto('COMPROVANTEINICIALIZACAO')">
+            <ion-icon name="image" color="secondary"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS()">
+          <ion-avatar item-start>
+            <img src="{{ carregarFoto('PROTOCOLOVISITATECNICA') }}">
+          </ion-avatar>
+          <h2>Protocolo da Visita Técnica</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('PROTOCOLOVISITATECNICA')" 
+            *ngIf="!verificarExistenciaFoto('PROTOCOLOVISITATECNICA')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('PROTOCOLOVISITATECNICA')"
+            *ngIf="verificarExistenciaFoto('PROTOCOLOVISITATECNICA')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="telaFoto('PROTOCOLOVISITATECNICA')"
+            *ngIf="verificarExistenciaFoto('PROTOCOLOVISITATECNICA')">
             <ion-icon name="image" color="secondary"></ion-icon>
           </button>
         </ion-item>
