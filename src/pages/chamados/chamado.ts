@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, ModalController, NavController, ViewController, Events } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, Toast, ModalController, NavController, ViewController, Events } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -44,6 +44,7 @@ import { GeolocationService } from '../../services/geo-location';
   templateUrl: 'chamado.html'
 })
 export class ChamadoPage {
+  toast: Toast;
   qtdMaximaFotos: number = Config.QTD_MAX_FOTOS_POR_ATENDIMENTO;
   distanciaCercaEletronica: number = 0;
   dataAtual: string = moment().format('YYYY-MM-DD');
@@ -167,7 +168,7 @@ export class ChamadoPage {
   public tirarFoto(modalidade: string) {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) {
-        this.exibirToast(Config.MSG.RECURSO_NATIVO);
+        this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
         return;
       }
 
@@ -198,10 +199,8 @@ export class ChamadoPage {
         }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
       },
       (no: boolean) => {
-        this.exibirToast('Favor instalar o aplicativo Open Camera').then(() => {
-          setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
-        });
-
+        this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.WARNING);
+        setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
         return;
       }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
     }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
@@ -431,7 +430,7 @@ export class ChamadoPage {
       })
       .catch((err) => {
         loader.dismiss(() => {
-          this.exibirToast('Não foi possível obter sua localização!');
+          this.exibirToast('Não foi possível obter sua localização!', Config.TOAST.ERROR);
         });
       });
     })
@@ -451,7 +450,7 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO);
+              this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
 
               return
             }
@@ -548,27 +547,27 @@ export class ChamadoPage {
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAgendamento, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado');
+      this.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAberturaOS, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado');
+      this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
-      this.exibirToast('O período mínimo de atendimento é de 20 minutos');
+      this.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A solução deve ocorrer após o início');
+      this.exibirToast('A solução deve ocorrer após o início', Config.TOAST.ERROR);
       return
     }
 
     if (moment().isBefore(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A solução não pode ocorrer no futuro');
+      this.exibirToast('A solução não pode ocorrer no futuro', Config.TOAST.ERROR);
       return
     }
 
@@ -616,9 +615,7 @@ export class ChamadoPage {
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
               this.navCtrl.pop().then(() => {
-                this.exibirToast(Config.MSG.AGUARDE_SINCRONIZACAO);
-
-                this.events.publish('sincronizacao:solicitada');
+                this.exibirToast(Config.MSG.AGUARDE_SINCRONIZACAO, Config.TOAST.INFO);
               }).catch();
             }).catch();
           }
@@ -631,20 +628,20 @@ export class ChamadoPage {
 
   private validarCamposObrigatorios(): boolean {
     if (this.chamado.rats.length == 0) {
-      this.exibirToast("favor inserir a RAT");
+      this.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
 
       return;
     }
 
     if (this.platform.is('cordova')) {
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-        this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
+        this.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
 
         return;
       }
 
       if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-        this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
+        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
 
         return;
       }
@@ -652,7 +649,7 @@ export class ChamadoPage {
 
     if(_.has(this.chamado.rats[0], 'laudos')) {
       if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
-        this.exibirToast("Este chamado deve possuir um laudo");
+        this.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
   
         return;
       }
@@ -660,7 +657,7 @@ export class ChamadoPage {
     
     if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
-      this.exibirToast('Favor informar os dados da RAT');
+      this.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
 
       return false;
     }
@@ -670,7 +667,7 @@ export class ChamadoPage {
         (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
         (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
       ) {
-        this.exibirToast('Favor inserir os detalhes da RAT');
+        this.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
 
         return false;
       }
@@ -737,11 +734,8 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             this.chamado.rats[0].ratDetalhes.splice(i, 1);
-            this.exibirToast('Detalhe excluído com sucesso')
-              .then(() => {
-                this.chamadoService.atualizarChamado(this.chamado);
-              })
-              .catch();
+            this.chamadoService.atualizarChamado(this.chamado);
+            this.exibirToast('Detalhe excluído com sucesso', Config.TOAST.SUCCESS)
           }
         }
       ]
@@ -855,13 +849,19 @@ export class ChamadoPage {
     alerta.present();
   }
 
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 4000, position: 'bottom'
-      });
+  private exibirToast(mensagem: string, tipo: string) {
+    try {
+        this.toast.dismiss();
+    } catch(e) {}
 
-      resolve(toast.present());
+
+    this.toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: 'bottom', 
+      cssClass: 'toast-' + tipo
     });
+    
+    this.toast.present();
   }
 }
