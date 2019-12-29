@@ -5,7 +5,7 @@ import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
-import moment from 'moment';
+
 import 'rxjs/Rx';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/timeout';
@@ -19,6 +19,7 @@ import { ToastController, Toast, LoadingController, Events } from 'ionic-angular
 @Injectable()
 export class ChamadoService {
   toast: Toast;
+  public onlineOffline: boolean = navigator.onLine;
   private executando: boolean = false;
   private chamados: Chamado[] = [];
 
@@ -107,13 +108,19 @@ export class ChamadoService {
   sincronizarChamados(verbose: boolean=false, codTecnico: number): Promise<any[]> {
     return new Promise((resolve, reject) => {
       if (!codTecnico) {
-        if (verbose) this.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, 'info');
+        if (verbose) this.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, Config.TOAST.ERROR);
         resolve();
         return;
       }
 
       if (this.executando) {
-        if (verbose) this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, 'info');
+        if (verbose) this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        resolve();
+        return;
+      }
+
+      if (!navigator.onLine) {
+        if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
         resolve();
         return;
       }
@@ -138,8 +145,8 @@ export class ChamadoService {
             this.unificarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosUnificados) => {
               if (!chamadosUnificados.length) return;
 
-              if (verbose) loading.setContent(Config.MSG.ATUALIAR_CHAMADOS_STORAGE);
-              this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => { 
+              if (verbose) loading.setContent(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
+              this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => {
                 this.events.publish('sincronizacao:efetuada');
                 if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
                 this.executando = false;
@@ -148,19 +155,19 @@ export class ChamadoService {
               }).catch(() => { 
                 this.executando = false;
                 loading.dismiss();
-                if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+                if (verbose) this.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                 reject();
               });
             }).catch(() => {
               this.executando = false;
               loading.dismiss();
-              if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+              if (verbose) this.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
               reject();
             });
           }, () => { 
             this.executando = false;
             loading.dismiss();
-            if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+            if (verbose) this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
             reject();
           });
         }).catch(() => { 

@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
-import { BackgroundGeolocation, BackgroundGeolocationResponse, 
-         BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
+import { Platform, NavController, MenuController, Events, ToastController, Toast } from 'ionic-angular';
+import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -25,6 +24,7 @@ import { Config } from '../models/config';
   templateUrl: 'app.html'
 })
 export class MyApp {
+  toast: Toast;
   tutorialPage = TutorialPage;
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
@@ -38,7 +38,7 @@ export class MyApp {
     splashScreen: SplashScreen,
     platform: Platform,
     private events: Events,
-    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
     private bGeolocation: BackgroundGeolocation,
     private dadosGlobaisService: DadosGlobaisService,
     private geolocation: GeolocationService,
@@ -50,6 +50,14 @@ export class MyApp {
       statusBar.overlaysWebView(false);
       statusBar.backgroundColorByHexString('#488aff');
       splashScreen.hide();
+
+      window.addEventListener('offline', () => {
+        this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
+      });
+
+      window.addEventListener('online', () => {
+        this.exibirToast(Config.MSG.INTERNET_ONLINE, Config.TOAST.SUCCESS);
+      });
       
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
       this.events.subscribe('sincronizacao:solicitada', () => {
@@ -102,6 +110,19 @@ export class MyApp {
     }).catch();
     
     this.bGeolocation.start().then().catch();
+  }
+
+  private exibirToast(mensagem: string, tipo: string) {
+    try { this.toast.dismiss() } catch(e) {};
+
+    this.toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    this.toast.present();
   }
 
   public sair() {
