@@ -25,7 +25,7 @@
         class="btn-refresh"
         ion-button 
         icon-only 
-        (click)="sincronizar(true)">
+        (click)="sincronizarChamados(true)">
         <ion-icon name="refresh"></ion-icon>
       </button>
     </ion-buttons>
@@ -39,21 +39,25 @@
         Abertos ({{ chamados?.length }})
       </ion-segment-button>
 
-      <ion-segment-button value="sincronizando">
-        Sinc. ({{ chamadosSincronizando?.length }})
-      </ion-segment-button>
-
       <ion-segment-button value="fechados">
         Fechados
       </ion-segment-button>
+
+      <ion-segment-button value="sinc">
+        Lista Sinc ({{ chamadosListaSinc?.length }})
+      </ion-segment-button>  
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="cards-bg">
+  <ion-refresher (ionRefresh)="pushAtualizarChamados($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div [ngSwitch]="status">
     <ion-list *ngSwitchCase="'abertos'">
-      <ion-card *ngFor="let chamado of chamados; let i = index">
+      <ion-card *ngFor="let chamado of chamadosAbertos; let i = index">
         <ion-item>
           <ion-icon
             *ngIf="chamado.indBloqueioReincidencia"
@@ -209,40 +213,6 @@
       </ion-card>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'sincronizando'">
-      <ion-card 
-      *ngFor="let chamadoSinc of chamadosSincronizando; let i = index">
-      <ion-item>
-        <h2 class="cod-os">{{ chamadoSinc.codOs }}</h2>
-        
-        <ion-badge  
-          item-end 
-          color="light" 
-          class="inherit">
-            Fechado
-        </ion-badge>
-      </ion-item>
-      
-      <ion-card-content>
-        <p class="nome-cliente-local">
-          <b>
-            Chamado fechado aguardando sincronização
-          </b>
-        </p>
-  
-        <p class="endereco">
-          <span class="font-silver-light-hard">
-            Aguarde a sincronização automática ou clique em "Atualizar" para enviar o chamado agora mesmo.
-          </span>
-        </p>
-      </ion-card-content>
-    </ion-card>
-  
-    <ion-card padding text-center *ngIf="!chamadosSincronizando?.length">
-      <p>Nenhum chamado encontrado para sincronizar</p>
-    </ion-card>
-  </ion-list>
-  
     <ion-list *ngSwitchCase="'fechados'">
       <ion-item>
         <ion-label>Mostrar Últimos</ion-label>
@@ -271,9 +241,43 @@
         </ion-note>
       </ion-item>
 
-      <p padding text-center *ngIf="!chamadosFechados?.length">
-        Nenhum chamado encontrado.
-      </p>
+      <ion-card padding text-center *ngIf="!chamadosFechados?.length">
+        <p>Nenhum chamado fechado encontrado.</p>
+      </ion-card>
     </ion-list>
+
+    <ion-list *ngSwitchCase="'sinc'">
+      <ion-card 
+      *ngFor="let chamadoSinc of chamadosListaSinc; let i = index">
+      <ion-item>
+        <h2 class="cod-os">{{ chamadoSinc.codOs }}</h2>
+        
+        <ion-badge  
+          item-end 
+          color="light" 
+          class="inherit">
+            Fechado
+        </ion-badge>
+      </ion-item>
+      
+      <ion-card-content>
+        <p class="nome-cliente-local">
+          <b>
+            Chamado fechado aguardando sincronização
+          </b>
+        </p>
+  
+        <p class="endereco">
+          <span class="font-silver-light-hard">
+            Aguarde a sincronização automática ou clique em "Atualizar" para enviar o chamado agora mesmo.
+          </span>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-card padding text-center *ngIf="!chamadosSincronizando?.length">
+      <p>Nenhum chamado fechado na lista de sincronização. Tudo em ordem!</p>
+    </ion-card>
+    </ion-list>  
   </div>
 </ion-content>

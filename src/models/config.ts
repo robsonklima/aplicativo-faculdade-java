@@ -1,3 +1,5 @@
+import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
+
 export class Config {
   public static NOME_APP = "App Técnicos";
   public static VERSAO_APP = "0.0.62";
@@ -23,7 +25,7 @@ export class Config {
   public static EQUIPAMENTO = { TPC_4110_290_01_969: 362, TPC_4110: 90 };
   public static INT_SINC_BD_LOCAL_DIAS = 7;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
-  public static INT_MIN_SINC_CHAMADOS_SEG = 10.0;
+  public static INT_MIN_SINC_CHAMADOS_SEG = 10;
   public static CERCA_ELETRONICA = [
     { filial: 'FPR', distancia: 2.00 }, { filial: 'FRS', distancia: 2.55 },
     { filial: 'FDF', distancia: 5.65 }, { filial: 'FES', distancia: 3.43 },
@@ -37,6 +39,21 @@ export class Config {
     { filial: 'FBA', distancia: 4.56 }, { filial: 'FCE', distancia: 2.35 },
     { filial: 'FRJ', distancia: 4.44 }, { filial: 'FAM', distancia: 4.78 }
   ];
+  public static MAURON_85_CONFIG: BackgroundGeolocationConfig = {
+    desiredAccuracy: 7,
+    stationaryRadius: 0,
+    distanceFilter: 0,
+    debug: false,
+    stopOnTerminate: false,
+    startForeground: true,
+    interval: 5 * 60000,
+    fastestInterval: 5 * 60000,
+    activitiesInterval: 5 * 60000,
+    notificationsEnabled: true,
+    notificationTitle: 'App Técnicos - Meus Chamados',
+    notificationText: 'Sincronizando Chamados da sua Filial',
+    maxLocations: 50
+  };
   public static EQUIPAMENTOS_POS = { POS_VELOH_3: 289, POS_VELOH_G: 172 };
   public static COR_RGB = { 
     CINZA: '#9E9E9E',
@@ -66,10 +83,16 @@ export class Config {
     ERRO_PERMISSAO_CAMERA: 'Erro ao obter permissões para acessar a câmera',
     ERRO_RESPOSTA_DISPOSITIVO: 'O dispositivo não respondeu',
     ERRO_FOTO: 'Erro ao tirar a foto. Favor tentar novamente',
+    ERRO_AO_SINCRONIZAR: 'Erro ao sincronizar junto ao servidor',
+    ERRO_TECNICO_NAO_ENCONTRADO: 'Favor realizar o login novamente',
+    ERRO_AO_ENVIAR_CHAMADO_FECHADO: 'Erro ao enviar chamado para o servidor',
     CHECKIN_EM_ABERTO: 'Você possui checkin aberto em outro chamado',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
     CONFIRMACAO: 'Confirmação',
+    CONFIRMAR: 'Confirmar',
+    AGUARDE: 'Aguarde',
+    REMOVER_OS_CHAMADOS: 'Deseja remover os chamados do dispositivo?',
     OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
     ERRO_OBTER_ACOES_CAUSAS: 'Não foi possível carregar as Ações e Causas',
     ERRO_OBTER_DEFEITOS_CAUSAS: 'Não foi possível carregar os Defeitos e Causas',
@@ -105,16 +128,24 @@ export class Config {
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
-    CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
-    AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização'
+    CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados com o servidor',
+    SINCRONIZANDO_CHAMDOS: 'Sincronizando chamados junto ao servidor',
+    AGUARDE_ALGUNS_INSTANTES: 'Aguarde alguns instantes para tentar novamente',
+    AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
   };
+  public static TOAST = { 
+    INFO: 'info', 
+    WARNING: 'warning',
+    ERROR: 'error',
+    SUCCESS: 'success'
+  }
   public static L = { 
     ICONES: {
       VERMELHO: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
       VERDE: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png'
     },
     SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
-  }
+  };
   //public static API_URL = 'http://localhost:60687/api/';
   public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }

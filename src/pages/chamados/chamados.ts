@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { LoadingController, NavController, AlertController, ToastController, ModalController, Events } from 'ionic-angular';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { LoadingController, NavController, AlertController, ModalController, Events, ToastController } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
@@ -15,6 +15,8 @@ import { MapaChamadoPage } from '../mapas/mapa-chamado';
 import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { ChamadoFechadoPage } from './chamado-fechado';
 import { Config } from '../../models/config';
+import { GeolocationService } from '../../services/geo-location';
+import { ChamadosFechadosPage } from './chamados-fechados';
 
 
 @Component({
@@ -23,8 +25,9 @@ import { Config } from '../../models/config';
 })
 export class ChamadosPage {
   chamados: Chamado[];
+  chamadosAbertos: Chamado[];
+  chamadosListaSinc: Chamado[];
   chamadosFechados: Chamado[];
-  chamadosSincronizando: Chamado[];
   qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
   status: string = "abertos";
@@ -32,23 +35,27 @@ export class ChamadosPage {
   constructor(
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private modalCtrl: ModalController,
+    private changeDetector: ChangeDetectorRef,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
     private badge: Badge,
     private events: Events,
+    private geolocationService: GeolocationService,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
   ) {}
 
+  
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
-      this.carregarChamadosStorage().then(() => {
-        this.carregarChamadosFechadosApi();
-      });
+      this.carregarChamadosStorage();
+      this.carregarChamadosFechadosApi();
     });
+   
+    this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
+  }
 
-    this.events.subscribe('sincronizacao:efetuada', () => { 
+  ionViewDidLoad() {
+    this.events.subscribe('sincronizacao:efetuada', () => {
       this.carregarChamadosStorage();
     });
   }
@@ -67,27 +74,24 @@ export class ChamadosPage {
     });
   }
 
-  public telaChamado(chamado: Chamado) {
-    this.navCtrl.push(ChamadoPage, { chamado: chamado });
-  }
-
-  public telaMapaChamado(chamado: Chamado) {
-    this.navCtrl.push(MapaChamadoPage, { chamado: chamado });
-  }
-
-  public telaMapaChamados() {
-    this.navCtrl.push(MapaChamadosPage);
-  }
-
   private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
-        this.chamadosSincronizando = chamados.filter((c) => { return (c.dataHoraFechamento) });
-        
-        this.chamados = chamados.filter((c) => { return (!c.dataHoraFechamento) }).sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
+        this.chamados = chamados.sort(function(a, b) { 
+          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
         });
 
+        this.chamadosAbertos = chamados
+          .filter((c) => { return (!c.dataHoraFechamento) })
+          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
+        });
+
+        this.chamadosListaSinc = chamados
+          .filter((c) => { return (c.dataHoraFechamento) })
+          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
+        });
+
+        this.changeDetector.markForCheck();
         this.atualizarBadge();
         resolve();
       })  
@@ -97,40 +101,62 @@ export class ChamadosPage {
     });
   }
 
-  private atualizarBadge() {
-    this.badge.set(
-      this.chamados.filter((c) => {
-        return (!c.dataHoraFechamento);
-      }).filter((c) => {
-        return (!c.dataHoraOSMobileLida);
-      }).length
-    );
+  private carregarChamadosFechadosApi() {
+    this.chamadoService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico).subscribe((cs: Chamado[]) => {
+      this.chamadosFechados = cs.sort(function(a, b) { 
+        return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
+      });
+    },
+    err => {});
+  }
+
+  public telaChamado(chamado: Chamado) {
+    this.navCtrl.push(ChamadoPage, { chamado: chamado });
+  }
+
+  public telaMapaChamado(chamado: Chamado) {
+    this.navCtrl.push(MapaChamadoPage, { chamado: chamado });
+  }
+
+  public telaChamadosFechados() {
+    this.navCtrl.push(ChamadosFechadosPage);
+  }
+
+  public telaMapaChamados() {
+    this.navCtrl.push(MapaChamadosPage);
+  }
+
+  public pushAtualizarChamados(refresher) {
+    this.sincronizarChamados().then(() => {
+      refresher.complete();
+    }).catch(() => {
+      setTimeout(() => { refresher.complete() }, 2000);
+    });
   }
 
   public limparChamadosDispositivo() {
     const confirmacao = this.alertCtrl.create({
-      title: 'Confirmação',
-      message: 'Deseja remover os chamados do dispositivo?',
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.REMOVER_OS_CHAMADOS,
       buttons: [
         {
-          text: 'Cancelar',
+          text: Config.MSG.CANCELAR,
           handler: () => { }
         },
         {
-          text: 'Confirmar',
+          text: Config.MSG.CONFIRMAR,
           handler: () => {
-            const loading = this.loadingCtrl.create({ 
-              content: 'Removendo chamados do banco de dados do dispositivo...' 
-            });
+            const loading = this.loadingCtrl.create({ content: Config.MSG.AGUARDE });
             loading.present();
         
             this.chamadoService.apagarChamadosStorage().then((res) => {
+                this.chamadosAbertos = [];
+                this.chamadosListaSinc = [];
+
                 loading.dismiss();
 
                 this.chamadoService.buscarChamadosStorage().then((chamados) => {
                   this.chamados = chamados;
-
-                  this.chamadosSincronizando = [];
                 }).catch();
               })
               .catch(() => {
@@ -144,140 +170,19 @@ export class ChamadosPage {
     confirmacao.present();
   } 
 
-  public telaChamadoFechado(chamado: Chamado) {
-    const modal = this.modalCtrl.create(ChamadoFechadoPage, { chamado: chamado });
-    modal.present();
-    modal.onDidDismiss(() => {});
-  }
-
-  private carregarChamadosFechadosApi() {
-    this.chamadoService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico)
-      .subscribe((chamados: Chamado[]) => {
-        this.chamadosFechados = chamados.sort(function(a, b) { 
-          return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
-        });
-      },
-      err => {});
-  }
-
-  public sincronizar() {
-    if (!this.dg.usuario.codTecnico) return;
-
-    const loading = this.loadingCtrl.create({ content: 'Sincronizando...' });
-    loading.present();
-
-    this.sincronizarChamados().then(() => { 
-      loading.dismiss(); 
-
-      this.carregarChamadosStorage();
-    }).catch(() => { loading.dismiss() });
-  }
-
-  private sincronizarChamados(): Promise<any> {
+  public sincronizarChamados(verbose: boolean=false): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage().then((chamadosStorage) => {
-        let chamadosFechados = chamadosStorage.filter((c) => { return (c.dataHoraFechamento !== null) });
+      this.chamadoService.sincronizarChamados(verbose, this.dg.usuario.codTecnico).then((cs) => {
+        this.chamados = cs.sort(function(a, b) { 
+          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
+        });
 
-        this.sincronizarChamadosFechados(chamadosFechados).then((res) => {
-          this.chamadoService.buscarChamadosApi(this.dg.usuario.codTecnico).subscribe((chamadosApi) => {
-            this.unificarChamadosApiStorage(chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-              if (!chamadosUnificados.length) return;
-
-              this.chamadoService.atualizarChamadosStorage(chamadosUnificados).then(() => { 
-                this.carregarChamadosStorage();
-                
-                resolve(); 
-              }).catch(() => { reject()});
-            }).catch(() => { reject() });
-          }, err => { reject() });
-        }).catch(() => { reject() });
+        resolve();
       }).catch(() => { reject() });
     });
   }
 
-  private unificarChamadosApiStorage(chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
-    return new Promise((resolve, reject) => {
-      if (chamadosApi.length == 0) {
-        reject();
-        return
-      }
-
-      let chamados: Chamado[] = [];
-      
-      // Chamados adicionados
-      chamadosApi.forEach((ca) => {
-        if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
-          chamados.push(ca);
-        }
-      });
-
-      // Chamados atualizados
-      if (chamadosStorage.length > 0) {
-        chamadosStorage.forEach((cs) => {
-          let chamadoEncontrado: boolean = false;
-
-          chamadosApi.forEach((ca) => {
-            if (cs.codOs == ca.codOs) {
-              chamadoEncontrado = true;
-
-              if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
-                Object.keys(ca).forEach((atributo) => {
-                  if (atributo !== 'codOs' 
-                      && atributo !== 'checkin' 
-                      && atributo !== 'checkout' 
-                      && atributo !== 'rats'
-                      && atributo !== 'localizacaoCorreta'
-                      && !cs.dataHoraFechamento) {
-                    cs[atributo] = ca[atributo]; 
-                  }
-                });
-              }
-            }
-          });
-          
-          // Chamados removidos
-          if (chamadoEncontrado) {
-            chamados.push(cs);
-          }
-        });
-      }
-    
-      resolve(chamados);
-    });
-  }
-
-  private sincronizarChamadosFechados(chamados: Chamado[]): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (!chamados.length) resolve();
-
-      this.chamadoService.fecharChamadoApi(chamados[0]).subscribe(res => {
-        if (res) {
-          if (res.indexOf('00 - ') > -1) {
-            this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor');
-            
-            this.chamadoService.apagarChamadoStorage(chamados[0]).then(() => { 
-              resolve(true);
-            }).catch(() => { reject(false) });
-          } else {
-            this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '');
-
-            reject(false);
-          }
-        }
-      },
-      err => {
-        reject(false);
-      });
-    });
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 4500, position: 'bottom'
-      });
-
-      resolve(toast.present());
-    });
+  private atualizarBadge() {
+    this.badge.set( this.chamados.filter((c) => { return (!c.dataHoraFechamento) }).length );
   }
 }

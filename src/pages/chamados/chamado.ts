@@ -36,6 +36,7 @@ import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
 import { FotoPage } from '../fotos/foto';
+import { GeolocationService } from '../../services/geo-location';
 
 
 @Component({
@@ -72,6 +73,7 @@ export class ChamadoPage {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
+    private geolocationService: GeolocationService,
     private equipamentoPOSService: EquipamentoPOSService,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
@@ -91,6 +93,8 @@ export class ChamadoPage {
         this.registrarLeituraOs();
       })
       .catch(() => {});
+
+    this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
   }
 
   public alterarSlide() {
@@ -492,7 +496,7 @@ export class ChamadoPage {
       buttons: [
         {
           text: 'Cancelar',
-          handler: () => { }
+          handler: () => {}
         },
         {
           text: 'Confirmar',
@@ -646,12 +650,14 @@ export class ChamadoPage {
       }
     }
 
-    if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
-      this.exibirToast("Este chamado deve possuir um laudo");
-
-      return;
+    if(_.has(this.chamado.rats[0], 'laudos')) {
+      if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
+        this.exibirToast("Este chamado deve possuir um laudo");
+  
+        return;
+      }
     }
-
+    
     if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
       this.exibirToast('Favor informar os dados da RAT');
@@ -659,13 +665,15 @@ export class ChamadoPage {
       return false;
     }
 
-    if (
-      (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
-      (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
-    ) {
-      this.exibirToast('Favor inserir os detalhes da RAT');
+    if(!_.has(this.chamado.rats[0], 'ratDetalhes')) {
+      if (
+        (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
+        (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
+      ) {
+        this.exibirToast('Favor inserir os detalhes da RAT');
 
-      return false;
+        return false;
+      }
     }
 
     return true;
@@ -835,10 +843,6 @@ export class ChamadoPage {
           });
       }
     });
-  }
-
-  private deg2rad(deg: number) {
-    return deg * (Math.PI/180)
   }
 
   private exibirAlerta(msg: string) {

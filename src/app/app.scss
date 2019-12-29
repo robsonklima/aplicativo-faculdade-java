@@ -41,3 +41,59 @@
 .first-divider, .first-item {
     padding-top: 4px !important;
 }
+
+.toast-info {
+    .toast-container {
+        background-color: #488aff !important;
+    }
+
+    .toast-info .toast-message {
+        background-color: #488aff !important;
+    }
+    
+    .toast-info .toast-button {
+        background-color: #488aff !important;
+    }
+}
+
+.toast-error {
+    .toast-container {
+        background-color: #f53d3d !important;
+    }
+
+    .toast-info .toast-message {
+        background-color: #f53d3d !important;
+    }
+    
+    .toast-info .toast-button {
+        background-color: #f53d3d !important;
+    }
+}
+
+.toast-success {
+    .toast-container {
+        background-color: #32db64 !important;
+    }
+
+    .toast-info .toast-message {
+        background-color: #32db64 !important;
+    }
+    
+    .toast-info .toast-button {
+        background-color: #32db64 !important;
+    }
+}
+
+.toast-warning {
+    .toast-container {
+        background-color: #FFA000 !important;
+    }
+
+    .toast-info .toast-message {
+        background-color: #FFA000 !important;
+    }
+    
+    .toast-info .toast-button {
+        background-color: #FFA000 !important;
+    }
+}

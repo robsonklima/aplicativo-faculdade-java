@@ -42,6 +42,7 @@ import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
 import { MapaMinhaRotaPage } from '../mapas/mapa-minha-rota';
+import { GeolocationService } from '../../services/geo-location';
 
 
 @Component({
@@ -78,6 +79,7 @@ export class HomePage {
     private pecaService: PecaService,
     private tipoServicoService: TipoServicoService,
     private nav: NavController,
+    private geolocationService: GeolocationService,
     private mensagemTecnicoService: MensagemTecnicoService,
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
@@ -104,6 +106,14 @@ export class HomePage {
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
       .then(() => this.carregarVersaoApp().catch(() => {}))
       .catch(() => {});
+
+    this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
+  }
+
+  ionViewDidLoad() {
+    this.events.subscribe('sincronizacao:efetuada', () => {
+      this.carregarChamadosStorage();
+    });
   }
 
   public telaChamados() {
@@ -176,8 +186,6 @@ export class HomePage {
       this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => {
         this.chamados = chamados.filter((c) => {
           return (!c.dataHoraFechamento);
-        }).filter((c) => {
-          return (!c.dataHoraOSMobileLida);
         });
 
         resolve(chamados);

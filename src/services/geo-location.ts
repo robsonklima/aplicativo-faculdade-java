@@ -4,13 +4,17 @@ import { Http, Response } from '@angular/http';
 import { Localizacao } from '../models/localizacao';
 import { Config } from '../models/config';
 import { Observable } from "rxjs/Observable";
+import { Platform } from 'ionic-angular';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 
 @Injectable()
 export class GeolocationService {
 
   constructor(
-    private http: Http
+    private http: Http,
+    private platform: Platform,
+    private diagnostic: Diagnostic
   ) { }
 
   buscarCoordenadasPorEndereco(endereco: string): Observable<any> {
@@ -39,5 +43,15 @@ export class GeolocationService {
       .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes() {
+    if (!this.platform.is('cordova')) return;
+
+    this.diagnostic.isLocationEnabled().then((isEnabled) => {
+      if(!isEnabled){
+        this.diagnostic.switchToLocationSettings();
+      }
+    })
   }
 }
