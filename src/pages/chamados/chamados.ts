@@ -127,7 +127,7 @@ export class ChamadosPage {
   }
 
   public pushAtualizarChamados(refresher) {
-    this.sincronizarChamados().then(() => {
+    this.sincronizarChamados(true).then(() => {
       refresher.complete();
     }).catch(() => {
       setTimeout(() => { refresher.complete() }, 2000);

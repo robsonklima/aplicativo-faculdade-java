@@ -1,10 +1,10 @@
 import { Component, ViewChild, OnInit  } from '@angular/core';
-import { NavParams, Slides, ToastController, AlertController, 
-  ViewController, ModalController } from 'ionic-angular';
+import { NavParams, Slides, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 import { Laudo } from '../../models/laudo';
 import { Chamado } from '../../models/chamado';
 import { NgForm } from '@angular/forms';
 import { Foto } from '../../models/foto';
+import { Config } from '../../models/config';
 
 import { SituacaoPage } from './situacao';
 import { ChamadoService } from '../../services/chamado';
@@ -328,7 +328,7 @@ export class LaudoPage {
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
+        message: mensagem, duration: Config.TOAST.DURACAO, position: 'bottom'
       });
 
       resolve(toast.present());

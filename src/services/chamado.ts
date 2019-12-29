@@ -107,19 +107,19 @@ export class ChamadoService {
   sincronizarChamados(verbose: boolean=false, codTecnico: number): Promise<any[]> {
     return new Promise((resolve, reject) => {
       if (!codTecnico) {
-        this.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, 'info');
+        if (verbose) this.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, 'info');
         resolve();
         return;
       }
 
       if (this.executando) {
-        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, 'info');
+        if (verbose) this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, 'info');
         resolve();
         return;
       }
       
       this.executando = true;
-      const loading = this.loadingCtrl.create({ content: Config.MSG.SINCRONIZANDO_CHAMDOS });
+      const loading = this.loadingCtrl.create({ content: Config.MSG.SINCRONIZANDO_CHAMADOS });
       if (verbose) loading.present();
         
       this.buscarChamadosStorage().then((chamadosStorage) => {
@@ -134,32 +134,32 @@ export class ChamadoService {
 
               this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => { 
                 this.events.publish('sincronizacao:efetuada');
-                this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
                 this.executando = false;
                 loading.dismiss();
                 resolve(chamadosStorageRes);
               }).catch(() => { 
                 this.executando = false;
                 loading.dismiss();
-                this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+                if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
                 reject();
               });
             }).catch(() => {
               this.executando = false;
               loading.dismiss();
-              this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+              if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
               reject();
             });
           }, () => { 
             this.executando = false;
             loading.dismiss();
-            this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
+            if (verbose) this.exibirToast(Config.MSG.ERRO_AO_SINCRONIZAR, Config.TOAST.ERROR);
             reject();
           });
         }).catch(() => { 
           this.executando = false;
           loading.dismiss();
-          this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
+          if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
           reject();
         });
       });
@@ -231,17 +231,13 @@ export class ChamadoService {
       this.fecharChamadoApi(chamados[0]).subscribe(res => {
         if (res) {
           if (res.indexOf('00 - ') > -1) {
-            if (verbose) {
-              this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor', Config.TOAST.SUCCESS);
-            }
+            if (verbose) this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor', Config.TOAST.SUCCESS);
             
             this.apagarChamadoStorage(chamados[0]).then(() => { 
               resolve(true);
             }).catch(() => { reject(false) });
           } else {
-            if (verbose) {
-              this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '', Config.TOAST.ERROR);
-            }
+            if (verbose) this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '', Config.TOAST.ERROR);
             
             reject(false);
           }
@@ -314,11 +310,11 @@ export class ChamadoService {
 
     this.toast = this.toastCtrl.create({
       message: mensagem, 
-      duration: 5000, 
+      duration: Config.TOAST.DURACAO, 
       position: 'bottom', 
       cssClass: 'toast-' + tipo, 
-      showCloseButton: true, 
-      closeButtonText: 'Ok'
+      //showCloseButton: true, 
+      //closeButtonText: 'Ok'
     });
     
     this.toast.present();

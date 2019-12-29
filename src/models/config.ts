@@ -46,9 +46,9 @@ export class Config {
     debug: false,
     stopOnTerminate: false,
     startForeground: true,
-    interval: 5 * 60000,
-    fastestInterval: 5 * 60000,
-    activitiesInterval: 5 * 60000,
+    interval: 1 * 60000,
+    fastestInterval: 1 * 60000,
+    activitiesInterval: 1 * 60000,
     notificationsEnabled: true,
     notificationTitle: 'App Técnicos - Meus Chamados',
     notificationText: 'Sincronizando Chamados da sua Filial',
@@ -128,8 +128,8 @@ export class Config {
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
-    CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados com o servidor',
-    SINCRONIZANDO_CHAMDOS: 'Sincronizando chamados junto ao servidor',
+    CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
+    SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_ALGUNS_INSTANTES: 'Aguarde alguns instantes para tentar novamente',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
   };
@@ -137,7 +137,8 @@ export class Config {
     INFO: 'info', 
     WARNING: 'warning',
     ERROR: 'error',
-    SUCCESS: 'success'
+    SUCCESS: 'success',
+    DURACAO: 5000
   }
   public static L = { 
     ICONES: {

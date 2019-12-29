@@ -10,6 +10,7 @@ import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from '../../services/chamado';
 
 import moment from 'moment';
+import { Config } from '../../models/config';
 
 @Component({
   selector: 'chamados-fechados-page',
@@ -83,7 +84,7 @@ export class ChamadosFechadosPage {
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
+        message: mensagem, duration: Config.TOAST.DURACAO, position: 'bottom'
       });
 
       resolve(toast.present());

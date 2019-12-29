@@ -86,7 +86,7 @@ export class LocalizacaoEnvioPage {
   private exibirToast(mensagem: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
+        message: mensagem, duration: 5000, position: 'bottom'
       });
 
       resolve(toast.present());
