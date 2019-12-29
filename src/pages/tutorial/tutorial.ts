@@ -22,9 +22,17 @@ export class TutorialPage {
     this.versao = Config.VERSAO_APP;
     this.slides = [
       {
-        title: "Bem-vindo!",
-        description: `Apresentamos as <b>novas funcionalidades</b> do nosso aplicativo! Estamos na versão <b>` + this.versao + '</b>.',
-        image: "assets/imgs/ica-slidebox-img-1.png",
+        title: "Sincronização",
+        description: `Criamos um novo sistema de sincronização de chamados na versão 
+        <b>` + this.versao + `</b>. Agora o sistema está muito mais preciso durante o processo 
+        de envio e recebimento de chamados.`,
+        image: "assets/imgs/refresh.png",
+      },
+      {
+        title: "Lista de Chamados",
+        description: `A tela de listagem de chamados mudou! Adicionamos os chamados fechados,
+        e agora você poderá acompanhar os chamados que estão na lista de sincronização.`,
+        image: "assets/imgs/list.png",
       },
       {
         title: "Equipamentos POS",
@@ -33,7 +41,7 @@ export class TutorialPage {
         image: "assets/imgs/mcom.png",
       },
       {
-        title: "Novos Mapas!",
+        title: "Novos Mapas",
         description: `Adicionamos novos mapas para você! Visualize seus <b>chamados no mapa</b>, verifique
                       a <b>distância percorrida</b> e o <b>tempo de duração</b> do seu percurso!`,
         image: "assets/imgs/maps-icon-8223.png",
@@ -45,7 +53,7 @@ export class TutorialPage {
       //   image: "assets/imgs/briefcase.png",
       // },
       {
-        title: "Detalhes do RAT!",
+        title: "Detalhes do RAT",
         description: `A partir de agora, o algoritmo compreende quais causas cada equipamento possui e quais defeitos e ações cada causa contém! 
                       Deste modo, otimizaremos o seu tempo!`,
         image: "assets/imgs/atm.png",
