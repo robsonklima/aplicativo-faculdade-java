@@ -127,11 +127,19 @@ export class Config {
     CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
     CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
+
+    BUSCANDO_CHAMADOS_BASE_LOCAL: "Buscando chamados armazenados do smartphone",
+    ENVIANDO_CHAMADOS_FECHADOS: "Enviando chamados para o servidor",
+    BUSCANDO_CHAMADOS_SERVIDOR: "Buscando chamados do servidor",
+    COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE: "Consistindo chamados do servidor no smartphone",
+    ATUALIAR_CHAMADOS_STORAGE: "Atualizando chamados armazenados do smartphone",
+
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
     CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
     SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_ALGUNS_INSTANTES: 'Aguarde alguns instantes para tentar novamente',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
+    CHAMADO_FECHADO_COM_SUCESSO: 'Chamado fechado com sucesso! Aguarde a sincronização ou clique em atualizar',
   };
   public static TOAST = { 
     INFO: 'info', 

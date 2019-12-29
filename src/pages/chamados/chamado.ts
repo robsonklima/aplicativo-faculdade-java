@@ -615,7 +615,7 @@ export class ChamadoPage {
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
               this.navCtrl.pop().then(() => {
-                this.exibirToast(Config.MSG.AGUARDE_SINCRONIZACAO, Config.TOAST.INFO);
+                this.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
               }).catch();
             }).catch();
           }

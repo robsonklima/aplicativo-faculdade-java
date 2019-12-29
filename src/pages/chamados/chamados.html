@@ -36,7 +36,7 @@
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="status">
       <ion-segment-button value="abertos">
-        Abertos ({{ chamados?.length }})
+        Abertos ({{ chamadosAbertos?.length }})
       </ion-segment-button>
 
       <ion-segment-button value="fechados">
@@ -275,7 +275,7 @@
       </ion-card-content>
     </ion-card>
   
-    <ion-card padding text-center *ngIf="!chamadosSincronizando?.length">
+    <ion-card padding text-center *ngIf="!chamadosListaSinc?.length">
       <p>Nenhum chamado fechado na lista de sincronização. Tudo em ordem!</p>
     </ion-card>
     </ion-list>  

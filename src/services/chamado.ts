@@ -121,17 +121,24 @@ export class ChamadoService {
       this.executando = true;
       const loading = this.loadingCtrl.create({ content: Config.MSG.SINCRONIZANDO_CHAMADOS });
       if (verbose) loading.present();
-        
+      
+      if (verbose) loading.setContent(Config.MSG.BUSCANDO_CHAMADOS_BASE_LOCAL);
       this.buscarChamadosStorage().then((chamadosStorage) => {
         let chamadosFechados = chamadosStorage.filter((c) => { 
           return (c.dataHoraFechamento !== null);
         });
 
+        if (verbose) loading.setContent(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
         this.sincronizarChamadosFechados(verbose, chamadosFechados).then((res) => {
+
+          if (verbose) loading.setContent(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
           this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
+
+            if (verbose) loading.setContent(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
             this.unificarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosUnificados) => {
               if (!chamadosUnificados.length) return;
 
+              if (verbose) loading.setContent(Config.MSG.ATUALIAR_CHAMADOS_STORAGE);
               this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => { 
                 this.events.publish('sincronizacao:efetuada');
                 if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
@@ -303,18 +310,13 @@ export class ChamadoService {
   }
 
   private exibirToast(mensagem: string, tipo: string) {
-    try {
-        this.toast.dismiss();
-    } catch(e) {}
-
+    try { this.toast.dismiss() } catch(e) {};
 
     this.toast = this.toastCtrl.create({
       message: mensagem, 
       duration: Config.TOAST.DURACAO, 
       position: 'bottom', 
-      cssClass: 'toast-' + tipo, 
-      //showCloseButton: true, 
-      //closeButtonText: 'Ok'
+      cssClass: 'toast-' + tipo
     });
     
     this.toast.present();

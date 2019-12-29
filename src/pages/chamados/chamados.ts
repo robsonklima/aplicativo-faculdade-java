@@ -86,10 +86,7 @@ export class ChamadosPage {
           .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
         });
 
-        this.chamadosListaSinc = chamados
-          .filter((c) => { return (c.dataHoraFechamento) })
-          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
-        });
+        this.chamadosListaSinc = chamados.filter((c) => { return (c.dataHoraFechamento) });
 
         this.changeDetector.markForCheck();
         this.atualizarBadge();
