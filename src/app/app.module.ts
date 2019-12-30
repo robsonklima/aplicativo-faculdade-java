@@ -57,6 +57,9 @@ import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas
 import { AcaoCausaService } from '../services/acao-causa';
 import { DefeitoCausaService } from '../services/defeito-causa';
 
+import { ToastFactory } from '../factories/toast-factory';
+import { LoadingFactory } from '../factories/loading-factory';
+
 import { CapitalizePipe } from '../pipes/capitalize';
 import { EllipsisPipe } from '../pipes/ellipsis';
 import { LowercasePipe } from '../pipes/lowercase';
@@ -256,7 +259,9 @@ import { FotoPage } from '../pages/fotos/foto';
     FerramentaTecnicoService,
     AcaoCausaService,
     DefeitoCausaService,
-    LocalizacaoService
+    LocalizacaoService,
+    ToastFactory,
+    LoadingFactory
   ]
 })
 export class AppModule {}

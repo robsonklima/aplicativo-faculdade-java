@@ -26,6 +26,10 @@ import { DadosGlobaisService } from '../../services/dados-globais';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { ChamadoService } from './../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
+import { GeolocationService } from '../../services/geo-location';
+
+import { LoadingFactory } from '../../factories/loading-factory';
+import { ToastFactory } from '../../factories/toast-factory';
 
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
@@ -36,7 +40,6 @@ import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
 import { FotoPage } from '../fotos/foto';
-import { GeolocationService } from '../../services/geo-location';
 
 
 @Component({
@@ -69,10 +72,10 @@ export class ChamadoPage {
     private modalCtrl: ModalController,
     private viewCtrl: ViewController,
     private navParams: NavParams,
-    private events: Events,
+    private loadingFactory: LoadingFactory,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
+    private toastFactory: ToastFactory,
     private navCtrl: NavController,
     private geolocationService: GeolocationService,
     private equipamentoPOSService: EquipamentoPOSService,
@@ -168,7 +171,7 @@ export class ChamadoPage {
   public tirarFoto(modalidade: string) {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) {
-        this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
+        this.toastFactory.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
         return;
       }
 
@@ -200,7 +203,7 @@ export class ChamadoPage {
         }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
       },
       (no: boolean) => {
-        this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.WARNING);
+        this.toastFactory.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
         setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
         return;
       }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
@@ -431,7 +434,7 @@ export class ChamadoPage {
       })
       .catch((err) => {
         loader.dismiss(() => {
-          this.exibirToast('Não foi possível obter sua localização!', Config.TOAST.ERROR);
+          this.toastFactory.exibirToast('Não foi possível obter sua localização!', Config.TOAST.ERROR);
         });
       });
     })
@@ -445,38 +448,35 @@ export class ChamadoPage {
       buttons: [
         {
           text: 'Cancelar',
-          handler: () => { }
+          handler: () => {}
         },
         {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
+              this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
 
               return
             }
 
             this.platform.ready().then(() => {
-              const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true,
-                dismissOnPageChange: true });
-              loader.present();
-
+              this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+              
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                loader.dismiss().then(() => {
-                  if (this.chamado.indOSIntervencaoEquipamento) {
-                    this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
-                  }
+                this.loadingFactory.encerrar();
+                if (this.chamado.indOSIntervencaoEquipamento) {
+                  this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
+                }
 
-                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                this.chamado.checkin.localizacao.longitude = location.coords.longitude;
 
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                  }).catch(() => { loader.dismiss() });
-                }).catch(() => { loader.dismiss() });
-              }).catch(() => { loader.dismiss() });
+                this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                  this.configurarSlide(this.slides.getActiveIndex());
+                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                }).catch(() => { this.loadingFactory.encerrar() });
+              }).catch(() => { this.loadingFactory.encerrar() });
             }).catch(() => {});
           }
         }
@@ -503,22 +503,19 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            const loader = this.loadingCtrl.create({ content: Config.MSG.OBTENDO_LOCALIZACAO, enableBackdropDismiss: true,
-              dismissOnPageChange: true });
-            loader.present();
+            this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
 
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                loader.dismiss().then(() => {
-                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-                  }).catch(() => { loader.dismiss() });
-                }).catch(() => { loader.dismiss() });
-              }).catch(() => { loader.dismiss() });
+                this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                this.loadingFactory.encerrar();
+                this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                  this.configurarSlide(this.slides.getActiveIndex());
+                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                }).catch(() => { this.loadingFactory.encerrar() });
+              }).catch(() => { this.loadingFactory.encerrar() });
             }).catch(() => {});
           }
         }
@@ -548,27 +545,27 @@ export class ChamadoPage {
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAgendamento, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAberturaOS, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
-      this.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A solução deve ocorrer após o início', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('A solução deve ocorrer após o início', Config.TOAST.ERROR);
       return
     }
 
     if (moment().isBefore(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm'))) {
-      this.exibirToast('A solução não pode ocorrer no futuro', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('A solução não pode ocorrer no futuro', Config.TOAST.ERROR);
       return
     }
 
@@ -615,9 +612,11 @@ export class ChamadoPage {
             this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.navCtrl.pop().then(() => {
-                this.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
-              }).catch();
+              this.chamadoService.sincronizarChamados(true, this.dg.usuario.codTecnico).then(() => {
+                this.navCtrl.pop().then(() => {
+                  this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+                });
+              }).catch(() => {});
             }).catch();
           }
         }
@@ -629,20 +628,20 @@ export class ChamadoPage {
 
   private validarCamposObrigatorios(): boolean {
     if (this.chamado.rats.length == 0) {
-      this.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
+      this.toastFactory.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
 
       return;
     }
 
     if (this.platform.is('cordova')) {
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-        this.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
+        this.toastFactory.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
 
         return;
       }
 
       if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
+        this.toastFactory.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
 
         return;
       }
@@ -650,7 +649,7 @@ export class ChamadoPage {
 
     if(_.has(this.chamado.rats[0], 'laudos')) {
       if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
-        this.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
+        this.toastFactory.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
   
         return;
       }
@@ -658,7 +657,7 @@ export class ChamadoPage {
     
     if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
-      this.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
+      this.toastFactory.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
 
       return false;
     }
@@ -668,7 +667,7 @@ export class ChamadoPage {
         (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
         (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
       ) {
-        this.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
+        this.toastFactory.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
 
         return false;
       }
@@ -736,7 +735,7 @@ export class ChamadoPage {
           handler: () => {
             this.chamado.rats[0].ratDetalhes.splice(i, 1);
             this.chamadoService.atualizarChamado(this.chamado);
-            this.exibirToast('Detalhe excluído com sucesso', Config.TOAST.SUCCESS)
+            this.toastFactory.exibirToast('Detalhe excluído com sucesso', Config.TOAST.SUCCESS)
           }
         }
       ]
@@ -848,21 +847,5 @@ export class ChamadoPage {
     });
 
     alerta.present();
-  }
-
-  private exibirToast(mensagem: string, tipo: string) {
-    try {
-        this.toast.dismiss();
-    } catch(e) {}
-
-
-    this.toast = this.toastCtrl.create({
-      message: mensagem, 
-      duration: Config.TOAST.DURACAO, 
-      position: 'bottom', 
-      cssClass: 'toast-' + tipo
-    });
-    
-    this.toast.present();
   }
 }
