@@ -97,3 +97,10 @@
         background-color: #FFA000 !important;
     }
 }
+
+body {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}

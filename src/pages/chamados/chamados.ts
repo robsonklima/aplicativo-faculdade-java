@@ -16,6 +16,7 @@ import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { Config } from '../../models/config';
 import { GeolocationService } from '../../services/geo-location';
 import { ChamadosFechadosPage } from './chamados-fechados';
+import { ChamadoFechadoPage } from './chamado-fechado';
 
 
 @Component({
@@ -112,6 +113,10 @@ export class ChamadosPage {
 
   public telaMapaChamado(chamado: Chamado) {
     this.navCtrl.push(MapaChamadoPage, { chamado: chamado });
+  }
+
+  public telaChamadoFechado(chamado: Chamado) {
+    this.navCtrl.push(ChamadoFechadoPage, { chamado: chamado });
   }
 
   public telaChamadosFechados() {
