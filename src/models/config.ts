@@ -152,6 +152,7 @@ export class Config {
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
     CHAMADO_FECHADO_COM_SUCESSO: 'Chamado fechado com sucesso! Aguarde a sincronização ou clique em atualizar',
     ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando as fotos para o servidor',
+    ERRO_ENVIAR_FOTOS_PARA_SERVIDOR: 'Erro ao enviar fotos para o servidor',
     ERRO_ENVIAR_FOTO: 'Erro ao enviar foto para o servidor',
   };
   public static TOAST = { 

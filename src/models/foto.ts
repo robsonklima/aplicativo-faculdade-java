@@ -3,4 +3,5 @@ export class Foto {
   modalidade: string;
   str: string;
   status: string;
+  codOS: number;
 }

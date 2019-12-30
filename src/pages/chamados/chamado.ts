@@ -188,6 +188,7 @@ export class ChamadoPage {
               correctOrientation: true
             }).then(imageData => {
               this.foto = new Foto();
+              this.foto.codOS = this.chamado.codOs;
               this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
               this.foto.str = 'data:image/jpeg;base64,' + imageData;
               this.foto.modalidade = modalidade;
