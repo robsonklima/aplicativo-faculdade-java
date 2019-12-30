@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { ToastController, Toast, LoadingController, Events, Platform } from 'ionic-angular';
 
 import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
+import { Config } from '../models/config';
+import _ from 'lodash';
 
 import 'rxjs/Rx';
 import 'rxjs/add/operator/retry';
@@ -12,9 +15,8 @@ import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
 
-import { Config } from '../models/config';
 import { Chamado } from "../models/chamado";
-import { ToastController, Toast, LoadingController, Events } from 'ionic-angular';
+import { Foto } from '../models/foto';
 
 @Injectable()
 export class ChamadoService {
@@ -24,6 +26,7 @@ export class ChamadoService {
   private chamados: Chamado[] = [];
 
   constructor(
+    private platform: Platform,
     private http: Http,
     private storage: Storage,
     private events: Events,
@@ -46,6 +49,12 @@ export class ChamadoService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
+  }
+
+  enviarFotoApi(foto: Foto): Observable<any> {
+    return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
   }
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
@@ -72,7 +81,8 @@ export class ChamadoService {
   buscarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
-        this.chamados = chamados != null ? chamados : [];
+        this.chamados = chamados != null ? chamados .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs ))
+      ) : [];
 
         resolve (this.chamados.slice());
       })
@@ -131,12 +141,9 @@ export class ChamadoService {
       
       if (verbose) loading.setContent(Config.MSG.BUSCANDO_CHAMADOS_BASE_LOCAL);
       this.buscarChamadosStorage().then((chamadosStorage) => {
-        let chamadosFechados = chamadosStorage.filter((c) => { 
-          return (c.dataHoraFechamento !== null);
-        });
-
+       
         if (verbose) loading.setContent(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
-        this.sincronizarChamadosFechados(verbose, chamadosFechados).then((res) => {
+        this.sincronizarChamadosFechados(verbose, chamadosStorage).then(() => {
 
           if (verbose) loading.setContent(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
           this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
@@ -147,10 +154,10 @@ export class ChamadoService {
 
               if (verbose) loading.setContent(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
               this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => {
-                this.events.publish('sincronizacao:efetuada');
-                if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
                 this.executando = false;
                 loading.dismiss();
+                if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                this.events.publish('sincronizacao:efetuada');
                 resolve(chamadosStorageRes);
               }).catch(() => { 
                 this.executando = false;
@@ -175,7 +182,7 @@ export class ChamadoService {
           loading.dismiss();
           if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
           reject();
-        });
+        });      
       });
     });
   }
@@ -235,31 +242,33 @@ export class ChamadoService {
     });
   }
 
-  sincronizarChamadosFechados(verbose: boolean=false, chamados: Chamado[]): Promise<boolean> {
+  sincronizarChamadosFechados(verbose: boolean=false, chamados: Chamado[]): Promise<any> {
+    let chamadosFechados = chamados.filter((c) => { return (c.dataHoraFechamento !== null) });
+
     return new Promise((resolve, reject) => {
-      if (!chamados.length) {
+      if (!chamadosFechados.length) {
         resolve();
         return
       }
 
-      this.fecharChamadoApi(chamados[0]).subscribe(res => {
+      this.fecharChamadoApi(chamadosFechados[0]).subscribe(res => {
         if (res) {
           if (res.indexOf('00 - ') > -1) {
-            if (verbose) this.exibirToast('Chamado ' + chamados[0].codOs + ' fechado junto ao servidor', Config.TOAST.SUCCESS);
+            if (verbose) this.exibirToast('Chamado ' + chamadosFechados[0].codOs + ' fechado junto ao servidor', Config.TOAST.SUCCESS);
             
-            this.apagarChamadoStorage(chamados[0]).then(() => { 
-              resolve(true);
+            this.apagarChamadoStorage(chamadosFechados[0]).then(() => { 
+              resolve();
             }).catch(() => { reject(false) });
           } else {
-            if (verbose) this.exibirToast('Não foi possível sincronizar o chamado ' + chamados[0].codOs + '', Config.TOAST.ERROR);
+            if (verbose) this.exibirToast('Não foi possível sincronizar o chamado ' + chamadosFechados[0].codOs + '', Config.TOAST.ERROR);
             
-            reject(false);
+            reject();
           }
         }
       },
       err => {
-        reject(false);
-      });
+        reject();
+      }); 
     });
   }
 

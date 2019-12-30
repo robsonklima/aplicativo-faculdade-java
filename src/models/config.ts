@@ -62,7 +62,15 @@ export class Config {
     LARANJA: '#FFC107',
     AZUL: '#00BCD4'
   };
-  public static FOTO = {  WIDTH: 720, HEIGHT: 1280, QUALITY: 90 };
+  public static FOTO = { 
+    WIDTH: 720, 
+    HEIGHT: 1280, 
+    QUALITY: 90, 
+    STATUS: { 
+      ENVIADA: 'ENVIADA', 
+      PENDENTE_ENVIO: 'PENDENTE_ENVIO' 
+    }
+  };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
   public static USUARIO_PERFIL = {
@@ -143,6 +151,8 @@ export class Config {
     AGUARDE_ALGUNS_INSTANTES: 'Aguarde alguns instantes para tentar novamente',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
     CHAMADO_FECHADO_COM_SUCESSO: 'Chamado fechado com sucesso! Aguarde a sincronização ou clique em atualizar',
+    ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando as fotos para o servidor',
+    ERRO_ENVIAR_FOTO: 'Erro ao enviar foto para o servidor',
   };
   public static TOAST = { 
     INFO: 'info', 

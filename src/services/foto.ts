@@ -17,7 +17,6 @@ export class FotoService {
   
   public cadastrarFoto(foto: Foto): Observable<any> {
     return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
-      .timeout(20000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

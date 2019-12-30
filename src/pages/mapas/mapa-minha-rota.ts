@@ -3,7 +3,7 @@ import { LoadingController, Platform, ActionSheetController } from 'ionic-angula
 
 import moment from 'moment';
 
-import { Map, latLng, tileLayer, Layer, marker } from 'leaflet';
+import { Map, tileLayer, marker } from 'leaflet';
 import { DadosGlobais } from '../../models/dados-globais';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { LocalizacaoService } from '../../services/localizacao';
