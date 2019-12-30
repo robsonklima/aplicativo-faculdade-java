@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoadingController, Platform, ActionSheetController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import moment from 'moment';
 
@@ -34,8 +34,6 @@ export class MapaMinhaRotaPage {
   map: any;
 
   constructor(
-    private plt: Platform,
-    private actionSheetCtrl: ActionSheetController,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
     private localizacaoService: LocalizacaoService

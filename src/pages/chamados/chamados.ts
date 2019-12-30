@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, NavController, AlertController, ModalController, Events, ToastController } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
@@ -13,7 +13,6 @@ import { ChamadoService } from "../../services/chamado";
 import { ChamadoPage } from "../chamados/chamado";
 import { MapaChamadoPage } from '../mapas/mapa-chamado';
 import { MapaChamadosPage } from '../mapas/mapa-chamados';
-import { ChamadoFechadoPage } from './chamado-fechado';
 import { Config } from '../../models/config';
 import { GeolocationService } from '../../services/geo-location';
 import { ChamadosFechadosPage } from './chamados-fechados';

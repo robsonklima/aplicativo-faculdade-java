@@ -6,4 +6,4 @@ ionic cordova run android -l -c --address
 
 ionic cordova build --release android
 "C:\Program Files\Java\jdk1.8.0_144\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\test-projects\ionic3-at\_utils\app-tecnicos-key.keystore" "D:\test-projects\ionic3-at\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk" sat_mobile
-"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.62.apk"
+"D:\test-projects\ionic3-at\_utils\zipalign" -v 4 "D:\test-projects\ionic3-at\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk" "D:\test-projects\ionic3-at\_utils\app-tecnicos-release-0.0.64.apk"
