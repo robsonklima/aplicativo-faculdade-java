@@ -612,11 +612,15 @@ export class ChamadoPage {
             this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.chamadoService.sincronizarChamados(true, this.dg.usuario.codTecnico).then(() => {
-                this.navCtrl.pop().then(() => {
-                  this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+              this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+
+              setTimeout(() => {
+                this.chamadoService.sincronizarChamados(false, this.dg.usuario.codTecnico).then(() => {
+                  this.navCtrl.pop();
+                }).catch(() => { 
+                  this.navCtrl.pop();
                 });
-              }).catch(() => {});
+              }, 2000);
             }).catch();
           }
         }

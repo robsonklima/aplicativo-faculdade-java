@@ -55,17 +55,17 @@ export class MyApp {
         this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
       });
 
-      window.addEventListener('online', () => {
-        this.exibirToast(Config.MSG.INTERNET_ONLINE, Config.TOAST.SUCCESS);
-      });
-      
+      // window.addEventListener('online', () => {
+      //   this.exibirToast(Config.MSG.INTERNET_ONLINE, Config.TOAST.SUCCESS);
+      // });
+
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
       this.events.subscribe('sincronizacao:solicitada', () => {
         this.chamadoService.sincronizarChamados(false, this.dadosGlobais.usuario.codTecnico).catch();
       });
       this.events.subscribe('login:efetuado', (dg: DadosGlobais) => { this.dadosGlobais = dg });
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
-        if (dados) 
+        if (dados)
           this.dadosGlobais = dados;
 
           if (dados) {
@@ -85,7 +85,7 @@ export class MyApp {
 
   public telaSenhaAlteracao() {
     this.menuCtrl.close().then(() => {
-      this.nav.push(SenhaAlteracaoPage);  
+      this.nav.push(SenhaAlteracaoPage);
     })
   }
 
@@ -108,7 +108,7 @@ export class MyApp {
         }).catch();
       }, err => {});
     }).catch();
-    
+
     this.bGeolocation.start().then().catch();
   }
 
@@ -116,12 +116,12 @@ export class MyApp {
     try { this.toast.dismiss() } catch(e) {};
 
     this.toast = this.toastCtrl.create({
-      message: mensagem, 
-      duration: Config.TOAST.DURACAO, 
-      position: 'bottom', 
+      message: mensagem,
+      duration: Config.TOAST.DURACAO,
+      position: 'bottom',
       cssClass: 'toast-' + tipo
     });
-    
+
     this.toast.present();
   }
 

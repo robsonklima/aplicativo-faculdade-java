@@ -90,6 +90,7 @@ export class Config {
     AGUARDE: 'Aguarde',
     CONFIRMAR: 'Confirmar',
     CONFIRMACAO: 'Confirmação',
+    INICIANDO_SINCRONIZACAO: 'Preparando sincronização de chamados junto ao servidor',
     RECURSO_NATIVO: 'Este recurso deve ser acessado no dispositivo',
     ERRO_PERMISSAO_CAMERA: 'Erro ao obter permissões para acessar a câmera',
     ERRO_RESPOSTA_DISPOSITIVO: 'O dispositivo não respondeu',

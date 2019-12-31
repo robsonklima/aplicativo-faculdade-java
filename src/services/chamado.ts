@@ -55,7 +55,7 @@ export class ChamadoService {
 
   enviarFotoApi(foto: Foto): Observable<any> {
     return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
-      .timeout(30000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
@@ -258,8 +258,13 @@ export class ChamadoService {
       const enviarFoto = (foto: Foto, i: number) => {
         return new Promise((resolve, reject) => {
           if (verbose) {
-            let qtdFotosAEnviar = fotos.filter((f) => { return (f.status != Config.FOTO.STATUS.ENVIADA) }).length;
-            this.loadingFactory.alterar(`Enviando: ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'}`);
+            let qtdFotosAEnviar = fotos.filter((f) => { 
+              return (f.status != Config.FOTO.STATUS.ENVIADA) 
+            }).length;
+            
+            this.loadingFactory.alterar(
+              `Enviando: ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'}. 
+               Este processo pode demorar alguns minutos`);
           }
             
           this.enviarFotoApi(foto).subscribe(() => {
