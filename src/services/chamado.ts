@@ -144,7 +144,7 @@ export class ChamadoService {
         this.enviarFotos(verbose, chamadosStorage).then(() => {
 
           if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
-          this.sincronizarChamadosFechados(verbose, chamadosStorage).then(() => {
+          this.enviarChamadosFechados(verbose, chamadosStorage).then(() => {
 
             if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
             this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
@@ -283,40 +283,53 @@ export class ChamadoService {
     });
   }
 
-  sincronizarChamadosFechados(verbose: boolean=false, chamados: Chamado[]): Promise<any> {
-    let chamadosFechados = chamados.filter((c) => { return (c.dataHoraFechamento !== null) });
-
+  enviarChamadosFechados(verbose: boolean=false, chamados: Chamado[]): Promise<any> {
     return new Promise((resolve, reject) => {
+      let chamadosFechados = chamados.filter((c) => { return (c.dataHoraFechamento !== null) });
+
       if (!chamadosFechados.length) {
         resolve();
         return
       }
 
-      let chamadoAFechar = chamadosFechados[0];
-      chamadoAFechar.rats.forEach((rat, ratIndex) => {
-        rat.fotos.forEach((foto, fotoIndex) => {
-          chamadoAFechar.rats[ratIndex].fotos[fotoIndex].str = "";
-        });
-      });
-
-      this.fecharChamadoApi(chamadoAFechar).subscribe(res => {
-        if (res) {
-          if (res.indexOf('00 - ') > -1) {
-            if (verbose) this.toastFactory.exibirToast('Chamado ' + chamadoAFechar.codOs + ' fechado junto ao servidor', Config.TOAST.SUCCESS);
-            
-            this.apagarChamadoStorage(chamadoAFechar).then(() => { 
-              resolve();
-            }).catch(() => { reject(false) });
-          } else {
-            if (verbose) this.toastFactory.exibirToast('Não foi possível sincronizar o chamado ' + chamadoAFechar.codOs + '', Config.TOAST.ERROR);
-            
-            reject();
+      const enviarChamado = (chamado: Chamado, i: number) => {
+        return new Promise((resolve, reject) => {
+          if (verbose) {
+            this.loadingFactory.alterar(
+              `Enviando ${chamadosFechados.length} ${chamadosFechados.length == 1 ? 'chamado' : 'chamados'} 
+              para o servidor`);
           }
-        }
-      },
-      err => {
-        reject();
-      }); 
+            
+          this.fecharChamadoApi(chamado).subscribe((res) => {
+            if (res) {
+              if (res.indexOf('00 - ') > -1) {
+                resolve(`Chamado ${chamado.codOs} enviado com sucesso`);
+              } else {
+                reject(`Não foi possível enviar o chamado ${chamado.codOs}`);
+              }
+            }
+          }, err => {
+            reject(`Não foi possível enviar o chamado ${chamado.codOs}`);
+          });
+        })
+      }
+      
+      const promises = []
+      chamadosFechados.map((chamado, chamadoIndex) => {
+        promises.push(enviarChamado(chamado, chamadoIndex));
+      })
+  
+      Promise.all(promises).then(response => {
+        if (verbose) this.toastFactory.exibirToast(
+          `${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso 
+          para o servidor`, Config.TOAST.SUCCESS);
+        resolve();
+      }).catch(error => {
+        if (verbose) this.toastFactory.exibirToast(
+          `Não foi possível enviar ${chamadosFechados.length == 1 ? 'o chamado' : 'os chamados'} 
+          para o servidor`, Config.TOAST.ERROR);
+        reject(`Erro: ${error}`);
+      });
     });
   }
 
