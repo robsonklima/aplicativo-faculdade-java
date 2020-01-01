@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { FotoService } from '../../services/foto';
-import { Config } from '../../models/config';
 
 
 @Component({
@@ -9,10 +7,10 @@ import { Config } from '../../models/config';
 })
 export class TestePage {
   constructor(
-    private fotoService: FotoService    
+    
   ) {}
 
   ionViewWillEnter() {
-    console.log('ENVIADA' == Config.FOTO.STATUS.ENVIADA)
+    
   }
 }

@@ -1,6 +1,6 @@
 import { RatDetalhe } from '../../models/rat-detalhe';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, NavParams, Slides, ToastController, ViewController } from 'ionic-angular';
+import { AlertController, NavParams, Slides, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Config } from '../../models/config';
@@ -12,6 +12,8 @@ import { Acao } from "../../models/acao";
 import { TipoCausa } from "../../models/tipo-causa";
 import { Causa } from "../../models/causa";
 import { Defeito } from "../../models/defeito";
+
+import { ToastFactory } from '../../factories/toast-factory';
 
 import { TipoServicoService } from "../../services/tipo-servico";
 import { AcaoService } from "../../services/acao";
@@ -55,7 +57,7 @@ export class RatDetalhePage {
   constructor(
     private navParams: NavParams,
     private viewCtrl: ViewController,
-    private toastCtrl: ToastController,
+    private toastFactory: ToastFactory,
     private alertCtrl: AlertController,
     private acaoService: AcaoService,
     private causaService: CausaService,
@@ -161,12 +163,9 @@ export class RatDetalhePage {
     let pecas: Peca[] = [];
 
     if (!tipoCausa.codTipoCausa  || !tipoServico.codTipoServico || !defeito.codDefeito || !causa.codCausa || !acao.codAcao ) {
-      this.exibirToast('Erro ao salvar detalhe! Tente novamente').then(() => {
-        this.fecharModal();
-        
-        return
-      })
-      .catch(() => {});
+      this.toastFactory.exibirToast('Erro ao salvar detalhe! Tente novamente', Config.TOAST.ERROR);
+      this.fecharModal();
+      return
     } else {
       this.ratDetalhe = {
         tipoCausa: tipoCausa,
@@ -209,13 +208,10 @@ export class RatDetalhePage {
   }
 
   public salvarRatDetalheNoChamadoESair() {
-    this.exibirToast('Detalhe adicionado com sucesso')
-      .then(() => {
-        this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
-        this.chamadoService.atualizarChamado(this.chamado);
-        this.fecharModal();
-      })
-      .catch();
+    this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
+    this.chamadoService.atualizarChamado(this.chamado);
+    this.toastFactory.exibirToast('Detalhe adicionado com sucesso', Config.TOAST.SUCCESS);
+    this.fecharModal();
   }
 
   public filtrarPecas(ev: any) {
@@ -256,7 +252,7 @@ export class RatDetalhePage {
       });
       this.limparPesquisa();
     } else {
-      this.exibirToast("Esta peça já foi adicionada");
+      this.toastFactory.exibirToast("Esta peça já foi adicionada", Config.TOAST.ERROR);
     }
   }
 
@@ -281,7 +277,7 @@ export class RatDetalhePage {
 
             if (i > -1) {
               this.ratDetalhe.pecas.splice(i, 1);
-              this.exibirToast("Peça removida com sucesso");
+              this.toastFactory.exibirToast("Peça removida com sucesso", Config.TOAST.SUCCESS);
               this.chamadoService.atualizarChamado(this.chamado);
             }
           }
@@ -354,16 +350,6 @@ export class RatDetalhePage {
       ]
     });
     prompt.present();
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 2500, position: 'bottom'
-      });
-
-      resolve(toast.present());
-    });
   }
 
   private carregarPecasStorage(): Promise<any> {

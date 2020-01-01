@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, ToastController, AlertController } from 'ionic-angular';
+import { NavParams, ViewController, AlertController } from 'ionic-angular';
 
 import { Chamado } from './../../models/chamado';
 import { Config } from '../../models/config';
@@ -24,13 +24,7 @@ import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOS } from '../../models/defeito-pos';
 import { ChamadoService } from '../../services/chamado';
 import { NgForm } from '@angular/forms';
-import { RatDetalhe } from '../../models/rat-detalhe';
-import { Acao } from '../../models/acao';
-import { Causa } from '../../models/causa';
-import { GrupoCausa } from '../../models/grupo-causa';
-import { TipoCausa } from '../../models/tipo-causa';
-import { TipoServico } from '../../models/tipo-servico';
-import { Defeito } from '../../models/defeito';
+import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({
@@ -51,7 +45,7 @@ export class RatDetalhePosPage {
   constructor(
     private navParams: NavParams,
     private viewCtrl: ViewController,
-    private toastCtrl: ToastController,
+    private toastFactory: ToastFactory,
     private alertCtrl: AlertController,
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
@@ -138,49 +132,23 @@ export class RatDetalhePosPage {
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
     this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
 
-    // if (this.chamado.rats[0].ratDetalhes.length == 0) {
-    //   let acao = new Acao();
-    //   acao.codAcao = 13;
-    //   let defeito = new Defeito();
-    //   defeito.codDefeito = 84;
-    //   let causa = new Causa();
-    //   causa.codCausa = 897;
-    //   let grupoCausa = new GrupoCausa();
-    //   grupoCausa.codGrupoCausa = 320;
-    //   let tipoCausa = new TipoCausa();
-    //   tipoCausa.codTipoCausa = 55;
-    //   let tipoServico = new TipoServico();
-    //   tipoServico.codTipoServico = 17;
-    //   let ratDetalhe = new RatDetalhe();
-
-    //   ratDetalhe.acao = acao;
-    //   ratDetalhe.defeito = defeito;
-    //   ratDetalhe.causa = causa;
-    //   ratDetalhe.grupoCausa = grupoCausa
-    //   ratDetalhe.tipoCausa = tipoCausa;
-    //   ratDetalhe.tipoServico = tipoServico;
-
-    //   this.chamado.rats[0].ratDetalhes.push(ratDetalhe);
-    // }
-
     if (!this.validarCamposObrigatorios()) return;
 
-    this.chamadoService.atualizarChamado(this.chamado).then(() => { 
-      this.exibirToast('Informações do POS salvas com sucesso').then(() => {
-        this.fecharModal() 
-      });
+    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+      this.toastFactory.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS);
+      this.fecharModal() 
     });
   }
 
   private validarCamposObrigatorios(): boolean {
     if (!_.has(this.chamado.rats[0], 'statusServico') || !_.has(this.chamado.rats[0].statusServico, 'codStatusServico')) {
-      this.exibirToast("Informe o status de serviço do POS");
+      this.toastFactory.exibirToast("Informe o status de serviço do POS", Config.TOAST.ERROR);
 
       return false;
     }
 
     if (!_.has(this.chamado.rats[0], 'defeitoPOS') || !_.has(this.chamado.rats[0].defeitoPOS, 'codDefeitoPOS')) {
-      this.exibirToast("Informe o defeito apresentado pelo POS");
+      this.toastFactory.exibirToast("Informe o defeito apresentado pelo POS", Config.TOAST.ERROR);
 
       return false;
     }
@@ -190,7 +158,7 @@ export class RatDetalhePosPage {
       this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO
     ) {
       if (!_.has(this.chamado.rats[0], 'motivoCancelamento') || !_.has(this.chamado.rats[0].motivoCancelamento, 'codMotivoCancelamento') || !this.chamado.rats[0].obsMotivoCancelamento) {
-        this.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação');
+        this.toastFactory.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação', Config.TOAST.ERROR);
 
         return false;
       }
@@ -199,19 +167,19 @@ export class RatDetalhePosPage {
     if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.FECHADO) {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.INSTALAÇÃO) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
+          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -220,26 +188,26 @@ export class RatDetalhePosPage {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.CORRETIVA) {
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-            this.exibirToast('Favor inserir o equipamento POS instalado');
+            this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado', Config.TOAST.ERROR);
   
             return false;
           }
   
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado');
+            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
   
             return false;
           }
         }
 
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
+          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -248,14 +216,14 @@ export class RatDetalhePosPage {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.DESINSTALAÇÃO) {
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado e a série');
+            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado e a série', Config.TOAST.ERROR);
   
             return false;
           }
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
+          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -266,27 +234,27 @@ export class RatDetalhePosPage {
         this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.TROCA_VELOHC
       ) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
   
           return false;
         }
 
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado');
+            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
     
             return false;
           }
         }
   
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
+          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
   
           return false;
         }
@@ -297,19 +265,19 @@ export class RatDetalhePosPage {
         this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ALTERAÇÃO_ENGENHARIA
       ) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.exibirToast('Favor inserir o equipamento POS instalado e a série');
+          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.exibirToast('Favor inserir o tipo de comunicação do POS');
+          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.exibirToast('Favor inserir a rede do equipamento POS');
+          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
   
           return false;
         }
@@ -477,16 +445,6 @@ export class RatDetalhePosPage {
     });
 
     confirmacao.present();
-  }
-
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: 3000, position: 'bottom'
-      });
-
-      resolve(toast.present());
-    });
   }
 
   private fecharModal() {

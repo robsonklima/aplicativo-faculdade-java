@@ -81,10 +81,23 @@ export class ChamadoService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
+  buscarChamados(): Promise<Chamado[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.chamados = this.chamados != null ? this.chamados
+          .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs ))) : [];
+
+        resolve(this.chamados);  
+      } catch (error) {
+        reject();
+      }
+    });
+  }
+
   buscarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
-        this.chamados = chamados != null ? chamados .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs ))
+        this.chamados = chamados != null ? chamados.filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs ))
       ) : [];
 
         resolve (this.chamados.slice());
@@ -99,23 +112,6 @@ export class ChamadoService {
     return (this.chamados.filter((c) => {
       return ((c.checkin.localizacao.latitude || c.checkin.localizacao.longitude) && !c.dataHoraFechamento);
     }).length > 0);
-  }
-  
-  atualizarChamado(chamado: Chamado): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storage.get('Chamados').then((chamados: Chamado[]) => {
-        let objIndex = chamados.findIndex((c => c.codOs == chamado.codOs));
-        chamados[objIndex] = chamado;
-        this.storage.set('Chamados', chamados).then(() => { 
-          resolve();
-        }).catch(() => { 
-          reject();
-        });
-      })
-      .catch(() => {
-        reject();
-      })
-    });
   }
 
   sincronizarChamados(verbose: boolean=false, codTecnico: number): Promise<any[]> {
@@ -200,56 +196,30 @@ export class ChamadoService {
 
   unificarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      if (chamadosApi.length == 0) {
-        reject();
-        return
-      }
-
-      let chamados: Chamado[] = [];
-      
-      // Chamados adicionados
-      chamadosApi.forEach((ca) => {
-        if (chamadosStorage.filter((cs) => { return ( cs.codOs.toString().indexOf( ca.codOs.toString() ) > -1) }).length == 0) {
-          chamados.push(ca);
-
-          if (!verbose) {
-            this.dispararSinalSonoroComVibracao();
-          }
+      setTimeout(() => {
+        if (chamadosStorage.length == 0) chamadosStorage = chamadosApi;
+        
+        if (chamadosStorage.length == 0) {
+          resolve();
+          return
         }
-      });
 
-      // Chamados atualizados
-      if (chamadosStorage.length > 0) {
-        chamadosStorage.forEach((cs) => {
-          let chamadoEncontrado: boolean = false;
+        chamadosStorage.forEach((cStorage, cStorageIndex) => {
+          chamadosApi.forEach((cAPI, cAPIIndex) => {
+            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) {
+              chamadosStorage.splice(cStorageIndex, 1);
+            }
 
-          chamadosApi.forEach((ca) => {
-            if (cs.codOs == ca.codOs) {
-              chamadoEncontrado = true;
-
-              if ((JSON.stringify(ca) !== JSON.stringify(cs))) {
-                Object.keys(ca).forEach((atributo) => {
-                  if (atributo !== 'codOs' 
-                      && atributo !== 'checkin' 
-                      && atributo !== 'checkout' 
-                      && atributo !== 'rats'
-                      && atributo !== 'localizacaoCorreta'
-                      && !cs.dataHoraFechamento) {
-                    cs[atributo] = ca[atributo]; 
-                  }
-                });
-              }
+            if (cStorage.codOs === cAPI.codOs) {
+              // Editar
+            } else {
+              chamadosStorage.push(cAPI);
             }
           });
-          
-          // Chamados removidos
-          if (chamadoEncontrado) {
-            chamados.push(cs);
-          }
         });
-      }
-    
-      resolve(chamados);
+
+        resolve(chamadosStorage);
+      }, Math.floor(Math.random() * (2000 - 500 + 1) + 500));
     });
   }
 
@@ -263,7 +233,7 @@ export class ChamadoService {
             }).length;
             
             this.loadingFactory.alterar(
-              `Enviando: ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'}. 
+              `Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'}. 
                Este processo pode demorar alguns minutos`);
           }
             
@@ -347,15 +317,38 @@ export class ChamadoService {
     });
   }
 
-  atualizarChamadosStorage(chamados: Chamado[]): Promise<Chamado[]> {
-    this.chamados = chamados;
-
+  atualizarChamado(novoChamado: Chamado): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storage.set('Chamados', this.chamados).then((res) => {
-        resolve(this.chamados);
+      this.storage.get('Chamados').then((chamadosStorage: Chamado[]) => {
+        this.chamados = chamadosStorage;
+
+        chamadosStorage = chamadosStorage.filter((c) => {
+          return (c.codOs.toString().indexOf(novoChamado.codOs.toString()) < 0);
+        });
+
+        chamadosStorage.push(novoChamado);
+
+        this.storage.set('Chamados', chamadosStorage).then(() => {
+          resolve();
+        }).catch(() => {
+          reject();
+        });
       })
       .catch(() => {
-        reject(false);
+        reject();
+      })
+    });
+  }
+
+  atualizarChamadosStorage(novosChamados: Chamado[]): Promise<Chamado[]> {
+    this.chamados = novosChamados;
+
+    return new Promise((resolve, reject) => {
+      this.storage.set('Chamados', novosChamados).then((res) => {
+        resolve(novosChamados);
+      })
+      .catch(() => {
+        reject();
       });
     });
   }

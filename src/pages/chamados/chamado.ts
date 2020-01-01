@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, ToastController, Toast, ModalController, NavController, ViewController, Events } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, LoadingController, Toast, ModalController, NavController, ViewController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -611,17 +611,20 @@ export class ChamadoPage {
             this.chamado.statusServico.nomeStatusServico = "FECHADO";
             this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-            this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+            this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
+
+            setTimeout(() => {
+              this.chamadoService.atualizarChamado(this.chamado);
+              this.loadingFactory.alterar(Config.MSG.SALVANDO_CHAMADO_BASE_LOCAL);
 
               setTimeout(() => {
-                this.chamadoService.sincronizarChamados(false, this.dg.usuario.codTecnico).then(() => {
-                  this.navCtrl.pop();
-                }).catch(() => { 
-                  this.navCtrl.pop();
-                });
+                this.loadingFactory.encerrar();
+
+                this.navCtrl.pop().then(() => {
+                  this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+                }).catch();
               }, 2000);
-            }).catch();
+            }, 3000);
           }
         }
       ]

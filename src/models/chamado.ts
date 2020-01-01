@@ -41,7 +41,7 @@ export class Chamado {
 	numReincidencias: number;
 	indOSIntervencaoEquipamento: number;
 	qtdCedulasPagas: number;
-    qtdCedulasRejeitadas: number;
+	qtdCedulasRejeitadas: number;
 	justificativaCedulas: number;
 	codDefeitoPOS: number;
 	localizacaoCorreta: Localizacao;

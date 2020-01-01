@@ -26,7 +26,6 @@ import { ChamadoFechadoPage } from './chamado-fechado';
 export class ChamadosPage {
   chamados: Chamado[];
   chamadosAbertos: Chamado[];
-  chamadosListaSinc: Chamado[];
   chamadosFechados: Chamado[];
   qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
@@ -47,8 +46,9 @@ export class ChamadosPage {
   
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
-      this.carregarChamadosStorage();
-      this.carregarChamadosFechadosApi();
+      this.carregarChamadosStorage().then(() => {
+        this.carregarChamadosFechadosApi();
+      });
     });
    
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
@@ -58,53 +58,6 @@ export class ChamadosPage {
     this.events.subscribe('sincronizacao:efetuada', () => {
       this.carregarChamadosStorage();
     });
-  }
-
-  private carregarDadosGlobais(): Promise<DadosGlobais> {
-    return new Promise((resolve, reject) => {
-      this.dadosGlobaisService.buscarDadosGlobaisStorage()
-        .then((dados) => {
-          if (dados)
-            this.dg = dados;
-            resolve(dados);
-        })
-        .catch((err) => {
-          reject(new Error(err.message))
-        });
-    });
-  }
-
-  private carregarChamadosStorage(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.chamadoService.buscarChamadosStorage().then((chamados: Chamado[]) => { 
-        this.chamados = chamados.sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
-        });
-
-        this.chamadosAbertos = chamados
-          .filter((c) => { return (!c.dataHoraFechamento) })
-          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
-        });
-
-        this.chamadosListaSinc = chamados.filter((c) => { return (c.dataHoraFechamento) });
-
-        this.changeDetector.markForCheck();
-        this.atualizarBadge();
-        resolve();
-      })  
-      .catch(() => {
-        reject(false);
-      });
-    });
-  }
-
-  private carregarChamadosFechadosApi() {
-    this.chamadoService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico).subscribe((cs: Chamado[]) => {
-      this.chamadosFechados = cs.sort(function(a, b) { 
-        return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
-      });
-    },
-    err => {});
   }
 
   public telaChamado(chamado: Chamado) {
@@ -142,7 +95,7 @@ export class ChamadosPage {
       buttons: [
         {
           text: Config.MSG.CANCELAR,
-          handler: () => { }
+          handler: () => {}
         },
         {
           text: Config.MSG.CONFIRMAR,
@@ -152,8 +105,6 @@ export class ChamadosPage {
         
             this.chamadoService.apagarChamadosStorage().then((res) => {
                 this.chamadosAbertos = [];
-                this.chamadosListaSinc = [];
-
                 loading.dismiss();
 
                 this.chamadoService.buscarChamadosStorage().then((chamados) => {
@@ -181,6 +132,48 @@ export class ChamadosPage {
         resolve();
       }).catch(() => { reject() });
     });
+  }
+
+  private carregarDadosGlobais(): Promise<DadosGlobais> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage()
+        .then((dados) => {
+          if (dados)
+            this.dg = dados;
+            resolve(dados);
+        })
+        .catch((err) => {
+          reject(new Error(err.message))
+        });
+    });
+  }
+
+  private carregarChamadosStorage(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.chamadoService.buscarChamadosStorage().then((chamados) => {
+        this.chamados = chamados.sort(function(a, b) { 
+          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
+        });
+  
+        this.chamadosAbertos = chamados
+          .filter((c) => { return (!c.dataHoraFechamento) })
+          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
+        });
+  
+        this.changeDetector.markForCheck();
+        this.atualizarBadge();
+        resolve();
+      }).catch();
+    });
+  }
+
+  private carregarChamadosFechadosApi() {
+    this.chamadoService.buscarChamadosFechadosApi(this.dg.usuario.codTecnico).subscribe((cs: Chamado[]) => {
+      this.chamadosFechados = cs.sort(function(a, b) { 
+        return (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isBefore(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? -1 : (moment(a.dataHoraFechamento, 'YYYY-MM-DD HH:mm').isAfter(moment(b.dataHoraFechamento, 'YYYY-MM-DD HH:mm')) ? 1 : 0));
+      });
+    },
+    err => {});
   }
 
   private atualizarBadge() {
