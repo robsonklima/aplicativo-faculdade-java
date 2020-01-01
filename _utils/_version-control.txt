@@ -25,6 +25,7 @@
 - Adicionada possibilidade de correção do endereço, onde o sistema envia um email para o POS-Vendas corrigir a localização com base na informação inserida pelo técnico;
 - Alterados ícones da lâmina de fotos (material design);
 - O sistema passa a exibir diferentes telas para preenchimento dos detalhes para modelos diferentes de equipamentos (POS e ATM);
+- O sistema agora notifica o usuário sobre as mudanças de status de sua rede de internet (Online e Offline);
 - Sistema passa a solicitar diferentes tipos de fotos para modelos diferentes de equipamentos (POS e ATM);
 - Detalhe do chamado é exibibido de maneira dinâmica (diferentes informações) para modelos diferentes de equipamentos (POS e ATM);
 - Nova tela para lançamentos de detalhes de atendimento para equipamentos modelo POS;
