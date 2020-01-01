@@ -5,14 +5,13 @@ import { Loading, LoadingController } from 'ionic-angular';
 @Injectable()
 export class LoadingFactory {
   loading: Loading;
-
+  
   constructor(
     private loadingCtrl: LoadingController
   ) {}
 
   exibir(conteudo: string='Aguarde') {
     this.loading = this.loadingCtrl.create({ content: conteudo });
-
     this.loading.present();
   }
 
@@ -21,6 +20,10 @@ export class LoadingFactory {
   }
 
   encerrar() {
-    this.loading.dismiss();
+    try {
+      this.loading.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));  
+    } catch (e) {
+      
+    }
   }
 }
