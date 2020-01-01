@@ -134,6 +134,9 @@ export class RatDetalhePage {
   public buscarDefeitos() {
     this.defeitoService.buscarDefeitosStorage()
       .then((defeitos: Defeito[]) => {
+        if (!defeitos.length) 
+          this.exibirAlerta(Config.MSG.DEFEITOS_NAO_ENCONTRADOS_COMPONENTE);
+        
         this.defeitos = defeitos.sort((a, b) => 
           Number(a.codEDefeito) - Number(b.codEDefeito));
       })
@@ -143,6 +146,9 @@ export class RatDetalhePage {
   public buscarAcoes() {
     this.acaoService.buscarAcoesStorage()
       .then((acoes: Acao[]) => {
+        if (!acoes.length)
+          this.exibirAlerta(Config.MSG.ACOES_NAO_ENCONTRADAS_COMPONENTE);
+        
         this.acoes = acoes.sort((a, b) => 
           Number(a.codEAcao) - Number(b.codEAcao));
       })

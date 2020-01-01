@@ -111,6 +111,8 @@ export class Config {
     GPS_DESATIVADO_ORIENTACAO: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
     INTERNET_OFFLINE: "Verifique sua conexão com a internet",
     INTERNET_ONLINE: "Online",
+    DEFEITOS_NAO_ENCONTRADOS_COMPONENTE: 'Não foi possível encontrar os defeitos deste componente',
+    ACOES_NAO_ENCONTRADAS_COMPONENTE: 'Não foi possível encontrar as ações deste componente',
     NENHUM_CHAMADO_ENCONTRADO: 'Nenhum chamado novo encontrado no servidor',
     REMOVER_OS_CHAMADOS: 'Deseja remover os chamados do dispositivo?',
     OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
