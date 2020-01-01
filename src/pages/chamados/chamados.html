@@ -95,15 +95,18 @@
         <ion-card-content *ngIf="!chamado.dataHoraFechamento">
           <p class="nome-cliente-local">
             <b>
-              {{ chamado.cliente.nomeCliente.toUpperCase() }}, 
+              {{ chamado.cliente.nomeCliente.toUpperCase() }} 
+              {{ chamado.localAtendimento.nomeLocalAtendimento ? ', ' : '' }} 
               {{ chamado.localAtendimento.nomeLocalAtendimento.toUpperCase() }}
             </b>
           </p>
     
           <p class="endereco">
             <span class="font-silver-light-hard">
-              {{ chamado.localAtendimento.endereco.toUpperCase() }}, 
-              {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }},
+              {{ chamado.localAtendimento.endereco.toUpperCase() }}
+              {{ chamado.equipamentoContrato.equipamento.codEEquip ? ', ' : '' }} 
+              {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
+              {{ chamado.equipamentoContrato.numSerie ? ', ' : '' }} 
               {{ chamado.equipamentoContrato.numSerie }}
             </span>
           </p>

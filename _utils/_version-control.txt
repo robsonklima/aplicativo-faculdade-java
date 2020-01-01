@@ -10,6 +10,7 @@
 - Corrigido problema de concorrência onde o smartphone podia disparar mais de um pedido de sincronização junto ao servidor ao mesmo tempo;
 - Corrigido problema onde o usuário visualizava chamados antigos ao logar.
 - Corrigido problema de sobreposição de notificações (tipo toast);
+- Corrigido problema onde espaços em branco (com vírgulas) eram exibidos na listagem de chamados;
 - Adicionado recurso de ampliação da foto para conferência do técnico;
 - Adicionado novo mapa de rota entre minha localização e chamado (leaflet);
 - Adicionado novo mapa de rota entre minha localização e todos os chamados (leaflet);
