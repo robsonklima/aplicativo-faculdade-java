@@ -157,7 +157,7 @@ export class ChamadosPage {
   
         this.chamadosAbertos = chamados
           .filter((c) => { return (!c.dataHoraFechamento) })
-          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
+          .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
         });
   
         this.changeDetector.markForCheck();

@@ -150,11 +150,11 @@ export class ChamadoService {
             this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
 
               if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
-              this.unificarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosUnificados) => {
-                if (!chamadosUnificados.length) return;
+              this.combinarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosCombinados) => {
+                if (!chamadosCombinados.length) return;
 
                 if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
-                this.atualizarChamadosStorage(chamadosUnificados).then((chamadosStorageRes) => {
+                this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
                   this.executando = false;
                   this.loadingFactory.encerrar();
                   if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
@@ -194,7 +194,7 @@ export class ChamadoService {
     });
   }
 
-  unificarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
+  combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (chamadosStorage.length == 0) chamadosStorage = chamadosApi;
@@ -206,18 +206,22 @@ export class ChamadoService {
 
         chamadosStorage.forEach((cStorage, cStorageIndex) => {
           chamadosApi.forEach((cAPI, cAPIIndex) => {
-            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) {
-              chamadosStorage.splice(cStorageIndex, 1);
-            }
-
-            if (cStorage.codOs === cAPI.codOs) {
-              // Editar
+            if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { //verifica se storage contem chamado api
+              /* vendors contains the element we're looking for */
             } else {
               chamadosStorage.push(cAPI);
+            }
+
+            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { //verifica se api contem chamado storage
+              chamadosStorage.splice(cStorageIndex, 1);
             }
           });
         });
 
+        chamadosStorage = chamadosStorage
+          .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs)))
+          .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))});
+        
         resolve(chamadosStorage);
       }, Math.floor(Math.random() * (2000 - 500 + 1) + 500));
     });
@@ -228,13 +232,12 @@ export class ChamadoService {
       const enviarFoto = (foto: Foto, i: number) => {
         return new Promise((resolve, reject) => {
           if (verbose) {
-            let qtdFotosAEnviar = fotos.filter((f) => { 
-              return (f.status != Config.FOTO.STATUS.ENVIADA) 
-            }).length;
+            let qtdFotosAEnviar = fotos
+              .filter((f) => { return (f.status != Config.FOTO.STATUS.ENVIADA) }).length;
             
             this.loadingFactory.alterar(
-              `Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'}. 
-               Este processo pode demorar alguns minutos`);
+              `Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} para o servidor.
+              Isso pode demorar alguns minutos`);
           }
             
           this.enviarFotoApi(foto).subscribe(() => {
