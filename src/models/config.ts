@@ -84,6 +84,7 @@ export class Config {
     SICREDI: 88, SAQUE_PAGUE: 434, PERTO_PARKING: 532
   };
   public static MSG = {
+    OK: 'Ok',
     ALERTA: 'Alerta!',
     CANCELAR: 'Cancelar',
     ATUALIZAR: 'Atualizar',
@@ -106,6 +107,8 @@ export class Config {
     CHECKIN_EM_ABERTO: 'Você possui checkin aberto em outro chamado',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
+    GPS_DESATIVADO: 'GPS Desativado',
+    GPS_DESATIVADO_ORIENTACAO: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
     INTERNET_OFFLINE: "Verifique sua conexão com a internet",
     INTERNET_ONLINE: "Online",
     NENHUM_CHAMADO_ENCONTRADO: 'Nenhum chamado novo encontrado no servidor',

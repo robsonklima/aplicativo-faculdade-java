@@ -52,11 +52,11 @@ export class GeolocationService {
     this.diagnostic.isLocationEnabled().then((isEnabled) => {
       if(!isEnabled){
         const confirmacao = this.alertCtrl.create({
-          title: 'GPS Desativado',
-          message: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
+          title: Config.MSG.GPS_DESATIVADO,
+          message: Config.MSG.GPS_DESATIVADO_ORIENTACAO,
           buttons: [
             {
-              text: 'Ok',
+              text: Config.MSG.OK,
               handler: () => {
                 this.diagnostic.switchToLocationSettings();
               }
