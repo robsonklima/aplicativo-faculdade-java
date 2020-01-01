@@ -4,4 +4,5 @@ export class Checkin {
     dataHoraCadastro: string;
     localizacao: Localizacao;
     tentativas: string[];
+    status: string;
 }

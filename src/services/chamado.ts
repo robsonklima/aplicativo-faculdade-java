@@ -20,6 +20,8 @@ import 'rxjs/add/operator/map';
 
 import { Chamado } from "../models/chamado";
 import { Foto } from '../models/foto';
+import { Checkin } from '../models/checkin';
+import { Checkout } from '../models/checkout';
 
 @Injectable()
 export class ChamadoService {
@@ -51,6 +53,13 @@ export class ChamadoService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
+  }
+
+  enviarCheckinApi(checkin: Checkin): Observable<any> {
+    return this.http.post(Config.API_URL + 'Checkin', checkin)
+      .timeout(20000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
   }
 
   enviarFotoApi(foto: Foto): Observable<any> {
@@ -140,54 +149,63 @@ export class ChamadoService {
       if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_BASE_LOCAL);
       this.buscarChamadosStorage().then((chamadosStorage) => {
 
-        if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_FOTOS_PARA_SERVIDOR);
-        this.enviarFotos(verbose, chamadosStorage).then(() => {
+        if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHECKINS);
+        this.enviarCheckins(verbose, chamadosStorage).then(() => {
 
-          if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
-          this.enviarChamadosFechados(verbose, chamadosStorage).then(() => {
+          if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_FOTOS_PARA_SERVIDOR);
+          this.enviarFotos(verbose, chamadosStorage).then(() => {
 
-            if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
-            this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
+            if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
+            this.enviarChamadosFechados(verbose, chamadosStorage).then(() => {
 
-              if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
-              this.combinarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosCombinados) => {
-                if (!chamadosCombinados.length) return;
+              if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
+              this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
 
-                if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
-                this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
+                if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
+                this.combinarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosCombinados) => {
+                  if (!chamadosCombinados.length) return;
+
+                  if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
+                  this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
+                    this.executando = false;
+                    this.loadingFactory.encerrar();
+                    if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                    this.events.publish('sincronizacao:efetuada');
+                    resolve(chamadosStorageRes);
+                  }).catch(() => { 
+                    this.executando = false;
+                    this.loadingFactory.encerrar();
+                    if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                    reject();
+                  });
+                }).catch(() => {
                   this.executando = false;
                   this.loadingFactory.encerrar();
-                  if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
-                  this.events.publish('sincronizacao:efetuada');
-                  resolve(chamadosStorageRes);
-                }).catch(() => { 
-                  this.executando = false;
-                  this.loadingFactory.encerrar();
-                  if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                  if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                   reject();
                 });
-              }).catch(() => {
+              }, () => { 
                 this.executando = false;
                 this.loadingFactory.encerrar();
-                if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
                 reject();
               });
-            }, () => { 
+            }).catch(() => { 
               this.executando = false;
               this.loadingFactory.encerrar();
-              if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
+              if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
               reject();
-            });
+            }); 
           }).catch(() => { 
             this.executando = false;
             this.loadingFactory.encerrar();
-            if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
+            if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
             reject();
-          }); 
+          });
         }).catch(() => { 
           this.executando = false;
           this.loadingFactory.encerrar();
-          if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
+          if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHECKINS, Config.TOAST.ERROR);
           reject();
         });
       });
@@ -205,14 +223,15 @@ export class ChamadoService {
         }
 
         chamadosStorage.forEach((cStorage, cStorageIndex) => {
-          chamadosApi.forEach((cAPI, cAPIIndex) => {
-            if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { //verifica se storage contem chamado api
-              /* vendors contains the element we're looking for */
+          chamadosApi.forEach((cAPI) => {
+            if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage contem chamado api
+              
             } else {
+              if (!verbose) this.dispararSinalSonoroComVibracao();
               chamadosStorage.push(cAPI);
             }
 
-            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { //verifica se api contem chamado storage
+            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { // verifica se api contem chamado storage
               chamadosStorage.splice(cStorageIndex, 1);
             }
           });
@@ -224,6 +243,57 @@ export class ChamadoService {
         
         resolve(chamadosStorage);
       }, Math.floor(Math.random() * (2000 - 500 + 1) + 500));
+    });
+  }
+
+  enviarCheckins(verbose: boolean=false, chamadosStorage: Chamado[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      
+      resolve();
+      return
+      
+      // const enviarCheckin = (checkin: Checkin, i: number) => {
+      //   return new Promise((resolve, reject) => {
+      //     if (verbose) this.loadingFactory.alterar(`Enviando checkins para o servidor`);
+          
+      //     this.enviarCheckinApi(checkin).subscribe(() => {
+      //       resolve(`Checkin enviado com sucesso`);
+      //     }, err => {
+      //       reject(`Não foi possível enviar o checkin`);
+      //     });
+      //   })
+      // }
+  
+      // const checkins = []
+      // chamadosStorage.forEach(chamado => { 
+      //   if (chamado.checkin.localizacao.latitude && chamado.checkin.localizacao.longitude)
+      //     checkins.push(chamado.checkin)
+      // });
+
+      // if (checkins.length == 0) {
+      //   resolve();
+      //   return
+      // }
+
+      // const promises = []
+      // checkins.map((checkin, checkinIndex) => {
+      //   if (checkin.status != Config.CHECKIN.STATUS.ENVIADO) {
+      //     promises.push(enviarCheckin(checkin, checkinIndex));
+      //   }
+      // });
+  
+      // Promise.all(promises)
+      //   .then(() => {
+      //     chamadosStorage.forEach((chamado, i) => { 
+      //       chamado.checkin.status = Config.CHECKIN.STATUS.ENVIADO;
+      //       this.atualizarChamado(chamado);
+      //     });
+
+      //     resolve();
+      //   })
+      //   .catch(error => {
+      //     reject(`Erro: ${error}`);
+      //   });
     });
   }
 

@@ -71,6 +71,12 @@ export class Config {
       PENDENTE_ENVIO: 'PENDENTE_ENVIO' 
     }
   };
+  public static CHECKIN = { 
+    STATUS: { 
+      ENVIADO: 'ENVIADO', 
+      PENDENTE_ENVIO: 'PENDENTE_ENVIO' 
+    }
+  };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
   public static USUARIO_PERFIL = {
@@ -104,6 +110,7 @@ export class Config {
     ERRO_GRAVAR_CHAMADOS_API_STORAGE: 'Erro ao gravar chamados no smartphone',
     ERRO_TECNICO_NAO_ENCONTRADO: 'Favor realizar o login novamente',
     ERRO_AO_ENVIAR_CHAMADO_FECHADO: 'Erro ao enviar chamado para o servidor',
+    ERRO_AO_ENVIAR_CHECKINS: 'Erro ao enviar os checkins para o servidor',
     CHECKIN_EM_ABERTO: 'Você possui checkin aberto em outro chamado',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
@@ -153,6 +160,7 @@ export class Config {
     CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     BUSCANDO_CHAMADOS_BASE_LOCAL: "Buscando chamados armazenados do smartphone",
     ENVIANDO_CHAMADOS_FECHADOS: "Enviando chamados para o servidor",
+    ENVIANDO_CHECKINS: "Enviando checkins para o servidor",
     BUSCANDO_CHAMADOS_SERVIDOR: "Buscando chamados junto ao servidor",
     COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE: "Armazenando chamados do servidor no smartphone",
     CHAMADO_FECHADO_COM_SUCESSO: 'Chamado fechado! Aguarde a sincronização ou clique em atualizar',
