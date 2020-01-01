@@ -19,11 +19,14 @@
 - Adicionado botão alernativo de atualização no topo da tela de listagem de chamados (alguns usuários não sabem sobre a função push-refresh);
 - Adicionada opção de selecionar e copiar os textos exibidos dentro do aplicativo;
 - Adicionadas quebras de linha nas mensagens;
-- Reinserida possibilidade de recorte de imagens ao tirar foto;
+- Reinserida possibilidade de recorte de imagens no momento de tirar fotos;
 - Adicionada opção de visualizar o checkin realizado pelo técnico no mapa;
 - Adicionada possibilidade de correção do endereço, onde o sistema envia um email para o POS-Vendas corrigir a localização com base na informação inserida pelo técnico;
 - Alterados ícones da lâmina de fotos (material design);
 - O sistema passa a exibir diferentes telas para preenchimento dos detalhes para modelos diferentes de equipamentos (POS e ATM);
+- Sistema passa a solicitar diferentes tipos de fotos para modelos diferentes de equipamentos (POS e ATM);
+- Detalhe do chamado é exibibido de maneira dinâmica (diferentes informações) para modelos diferentes de equipamentos (POS e ATM);
+- Nova tela para lançamentos de detalhes de atendimento para equipamentos modelo POS;
 - Adicionados novos temas para as mensagens de notificação do aplicativo (verde: sucesso, azul: informativos, vermelho: erro e laranja: alerta);
 - Adicionados loadings dinâmicos, onde o sistema informa passo a passo o tipo do processamento que está realizando;
 - Sistema passa a emitir alerta ao técnicos quando defeito ou causa não estão presentes em determinado componente;
