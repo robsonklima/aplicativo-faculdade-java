@@ -10,8 +10,8 @@
 - Corrigido problema onde o usuário visualizava chamados antigos ao logar.
 - Corrigido problema de sobreposição de notificações (tipo toast);
 - Adicionado recurso de ampliação da foto para conferência do técnico;
-- Adicionado novo mapa de rota entre minha localização e chamado;
-- Adicionado novo mapa de rota entre minha localização e todos os chamados;
+- Adicionado novo mapa de rota entre minha localização e chamado (leaflet);
+- Adicionado novo mapa de rota entre minha localização e todos os chamados (leaflet);
 - Adicionada funcionalidade onde o técnico pode exportar a rota para o Google Maps;
 - Tempo de processamento da sincronização entre cliente e servidor aprimorado significativamente;
 - Re-adicionada funcionalidade de push-refresh na listagem de chamados;
