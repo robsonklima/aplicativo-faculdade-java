@@ -122,7 +122,6 @@ export class HomePage {
 
       return;
     }
-      
 
     const confirmacao = this.alertCtrl.create({
       title: Config.MSG.ALERTA,

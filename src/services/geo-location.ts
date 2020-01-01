@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { Platform, AlertController } from 'ionic-angular';
 
 import { Localizacao } from '../models/localizacao';
 import { Config } from '../models/config';
 import { Observable } from "rxjs/Observable";
-import { Platform } from 'ionic-angular';
 import { Diagnostic } from '@ionic-native/diagnostic';
 
 
@@ -14,7 +14,8 @@ export class GeolocationService {
   constructor(
     private http: Http,
     private platform: Platform,
-    private diagnostic: Diagnostic
+    private diagnostic: Diagnostic,
+    private alertCtrl: AlertController
   ) { }
 
   buscarCoordenadasPorEndereco(endereco: string): Observable<any> {
@@ -50,7 +51,20 @@ export class GeolocationService {
 
     this.diagnostic.isLocationEnabled().then((isEnabled) => {
       if(!isEnabled){
-        this.diagnostic.switchToLocationSettings();
+        const confirmacao = this.alertCtrl.create({
+          title: 'GPS Desativado',
+          message: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
+          buttons: [
+            {
+              text: 'Ok',
+              handler: () => {
+                this.diagnostic.switchToLocationSettings();
+              }
+            }
+          ]
+        });
+    
+        confirmacao.present();
       }
     })
   }
