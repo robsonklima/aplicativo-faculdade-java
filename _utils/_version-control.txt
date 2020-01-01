@@ -2,6 +2,7 @@
 - Criado novo sistema de sincronização cliente servidor;
 - Fotos, Checkins e Chamados Fechados são enviadas separadamente ao servidor (agora é possivel visualizar no SATWeb o checkin mesmo antes do fechamento do chamado);
 - Adicionada funcionalidade de ativação automática do GPS quando este estiver inativo;
+- Adicionada funcionalidade de informação das ferramentas de posse do técnico (aguar aprovação da gerência para ser ativada nas próximas versões);
 - Corrigido problema de baixa resolução das imagens da RAT;
 - Corrigido problema onde o chamado após ser fechado retornava para o smartphone (casos raros);
 - Corrigido problema onde o chamado aparecia de modo duplicado na lista de chamados (casos raros);
