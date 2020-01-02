@@ -164,7 +164,6 @@ export class ChamadoService {
 
                 if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
                 this.combinarChamadosApiStorage(verbose, chamadosStorage, chamadosApi).then((chamadosCombinados) => {
-                  if (!chamadosCombinados.length) return;
 
                   if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
                   this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
@@ -216,12 +215,14 @@ export class ChamadoService {
   combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (chamadosStorage.length == 0) chamadosStorage = chamadosApi;
-        
-        if (chamadosStorage.length == 0) {
-          resolve();
+        if (chamadosApi.length == 0) {
+          resolve([]);
           return
         }
+
+        if (chamadosStorage.length == 0) {
+          chamadosStorage = chamadosApi;
+        } 
 
         chamadosStorage.forEach((cStorage, cStorageIndex) => {
           chamadosApi.forEach((cAPI) => {
