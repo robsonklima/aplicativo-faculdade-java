@@ -28,6 +28,7 @@
     <preference name="FadeSplashScreen" value="true" />
     <preference name="SplashStatusBarBackgroundColor" value="#488aff" />
     <preference name="SplashNavigationBarBackgroundColor" value="#488aff" />
+    <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
