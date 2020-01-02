@@ -49,8 +49,7 @@ export class MyApp {
     private chamadoService: ChamadoService
   ) {
     platform.ready().then(() => {
-      statusBar.overlaysWebView(false);
-      statusBar.backgroundColorByHexString('#488aff');
+      statusBar.backgroundColorByHexString('#244681');
       splashScreen.hide();
 
       window.addEventListener('offline', () => { // offline or online

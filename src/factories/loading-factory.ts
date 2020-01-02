@@ -14,7 +14,7 @@ export class LoadingFactory {
 
   exibir(conteudo: string='Aguarde') {
     this.loading = this.loadingCtrl.create({ content: conteudo });
-    this.statusBar.backgroundColorByHexString('#3F51B5');
+    
     this.loading.present();
   }
 
@@ -24,10 +24,7 @@ export class LoadingFactory {
 
   encerrar() {
     try {
-      this.statusBar.backgroundColorByHexString('#488aff');
       this.loading.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));  
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 }
