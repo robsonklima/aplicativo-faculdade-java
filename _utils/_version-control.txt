@@ -1,7 +1,7 @@
 0.0.65 - 02/01/20
 - Criado novo sistema de sincronização cliente servidor;
 - Fotos, Checkins e Chamados Fechados são enviadas separadamente ao servidor (agora é possivel visualizar no SATWeb o checkin mesmo antes do fechamento do chamado);
-- Adicionada funcionalidade de ativação automática do GPS quando este estiver inativo;
+- Adicionada funcionalidade de ativação automática do GPS quando o mesmo estiver inativo;
 - Adicionada funcionalidade de informação das ferramentas de posse do técnico (aguar aprovação da gerência para ser ativada nas próximas versões);
 - Adicionada mensagem de confirmação quando o usuário clicar no botão voltar (página inicial), prevenindo o fechamento do aplicativo;
 - Corrigido problema de baixa resolução das imagens da RAT;
@@ -15,7 +15,7 @@
 - Adicionado recurso de ampliação da foto para conferência do técnico;
 - Adicionado novo mapa de rota entre minha localização e chamado (leaflet);
 - Adicionado novo mapa de rota entre minha localização e todos os chamados (leaflet);
-- Adicionada funcionalidade onde o técnico pode exportar a rota para o Google Maps;
+- Adicionada funcionalidade onde o técnico pode exportar a rota para o Google Maps e Waze;
 - Tempo de processamento da sincronização entre cliente e servidor aprimorado significativamente;
 - Re-adicionada funcionalidade de push-refresh na listagem de chamados;
 - Adicionado botão alernativo de atualização no topo da tela de listagem de chamados (alguns usuários não sabem sobre a função push-refresh);
