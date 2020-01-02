@@ -73,7 +73,7 @@ export class PecasPage {
   }
 
   public atualizarBDLocal() {
-    const loading = this.loadingCtrl.create({ content: 'Aguarde, sincronizando dados offline...' });
+    const loading = this.loadingCtrl.create({ content: 'Atualizando a listagem de peças junto ao servidor' });
     loading.present();
 
      this.pecaService.buscarPecasApi()
