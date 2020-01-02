@@ -5,4 +5,6 @@ export class Checkout {
     localizacao: Localizacao;
     tentativas: string[];
     status: string;
+    codOS: number;
+    codUsuario: string;
 }

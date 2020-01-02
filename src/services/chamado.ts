@@ -250,52 +250,48 @@ export class ChamadoService {
 
   enviarCheckins(verbose: boolean=false, chamadosStorage: Chamado[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      
-      resolve();
-      return
-      
-      // const enviarCheckin = (checkin: Checkin, i: number) => {
-      //   return new Promise((resolve, reject) => {
-      //     if (verbose) this.loadingFactory.alterar(`Enviando checkins para o servidor`);
+      const enviarCheckin = (checkin: Checkin, i: number) => {
+        return new Promise((resolve, reject) => {
+          if (verbose) this.loadingFactory.alterar(`Enviando checkins para o servidor`);
           
-      //     this.enviarCheckinApi(checkin).subscribe(() => {
-      //       resolve(`Checkin enviado com sucesso`);
-      //     }, err => {
-      //       reject(`Não foi possível enviar o checkin`);
-      //     });
-      //   })
-      // }
+          this.enviarCheckinApi(checkin).subscribe(() => {
+            resolve(`Checkin enviado com sucesso`);
+          }, err => {
+            reject(`Não foi possível enviar o checkin`);
+          });
+        })
+      }
   
-      // const checkins = []
-      // chamadosStorage.forEach(chamado => { 
-      //   if (chamado.checkin.localizacao.latitude && chamado.checkin.localizacao.longitude)
-      //     checkins.push(chamado.checkin)
-      // });
+      const checkins = []
+      chamadosStorage.forEach(chamado => { 
+        if (chamado.checkin.localizacao.latitude && chamado.checkin.localizacao.longitude)
+          checkins.push(chamado.checkin)
+      });
 
-      // if (checkins.length == 0) {
-      //   resolve();
-      //   return
-      // }
+      if (checkins.length == 0) {
+        resolve();
+        return
+      }
 
-      // const promises = []
-      // checkins.map((checkin, checkinIndex) => {
-      //   if (checkin.status != Config.CHECKIN.STATUS.ENVIADO) {
-      //     promises.push(enviarCheckin(checkin, checkinIndex));
-      //   }
-      // });
+      const promises = []
+      checkins.map((checkin, checkinIndex) => {
+        if (checkin.status != Config.CHECKIN.STATUS.ENVIADO) {
+          promises.push(enviarCheckin(checkin, checkinIndex));
+        }
+      });
   
-      // Promise.all(promises)
-      //   .then(() => {
-      //     chamadosStorage.forEach((chamado, i) => { 
-      //       chamado.checkin.status = Config.CHECKIN.STATUS.ENVIADO;
-      //       this.atualizarChamado(chamado);
-      //     });
+      Promise.all(promises)
+        .then(() => {
+          chamadosStorage.forEach((chamado, i) => { 
+            chamado.checkin.status = Config.CHECKIN.STATUS.ENVIADO;
+            this.atualizarChamado(chamado);
+          });
 
-      //     resolve();
-      //   })
-      //   .catch(error => {
-      //     reject(`Erro: ${error}`);
-      //   });
+          resolve();
+        })
+        .catch(error => {
+          reject(`Erro: ${error}`);
+        });
     });
   }
 

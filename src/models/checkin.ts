@@ -5,4 +5,6 @@ export class Checkin {
     localizacao: Localizacao;
     tentativas: string[];
     status: string;
+    codOS: number;
+    codUsuario: string;
 }

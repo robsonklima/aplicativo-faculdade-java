@@ -471,6 +471,8 @@ export class ChamadoPage {
                 this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                 this.chamado.checkin.localizacao.latitude = location.coords.latitude;
                 this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                this.chamado.checkin.codUsuario = this.dg.usuario.codUsuario;
+                this.chamado.checkin.codOS = this.chamado.codOs;
 
                 this.chamadoService.atualizarChamado(this.chamado).then(() => {
                   this.configurarSlide(this.slides.getActiveIndex());
@@ -507,9 +509,13 @@ export class ChamadoPage {
 
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+
                 this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
                 this.chamado.checkout.localizacao.latitude = location.coords.latitude;
                 this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                this.chamado.checkout.codUsuario = this.dg.usuario.codUsuario;
+                this.chamado.checkout.codOS = this.chamado.codOs;
+
                 this.loadingFactory.encerrar();
                 this.chamadoService.atualizarChamado(this.chamado).then(() => {
                   this.configurarSlide(this.slides.getActiveIndex());
