@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Loading, LoadingController, Platform } from 'ionic-angular';
+import { Loading, LoadingController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
 
@@ -8,7 +8,6 @@ export class LoadingFactory {
   loading: Loading;
   
   constructor(
-    private platform: Platform,
     private loadingCtrl: LoadingController,
     private statusBar: StatusBar
   ) {}
