@@ -230,7 +230,7 @@ export class ChamadoService {
               
             } else {
               if (!verbose) this.dispararSinalSonoroComVibracao();
-              this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');
+              if (!verbose) this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');
               chamadosStorage.push(cAPI);
             }
 
