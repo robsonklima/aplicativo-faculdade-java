@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events, ToastController, Toast } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events, ToastController, Toast, App, AlertController } from 'ionic-angular';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -36,9 +36,11 @@ export class MyApp {
   constructor(
     statusBar: StatusBar,
     splashScreen: SplashScreen,
-    platform: Platform,
+    private platform: Platform,
+    public app: App,
     private events: Events,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private bGeolocation: BackgroundGeolocation,
     private dadosGlobaisService: DadosGlobaisService,
     private geolocation: GeolocationService,
@@ -76,6 +78,39 @@ export class MyApp {
             this.nav.setRoot(this.tutorialPage);
           }
       }).catch();
+
+      this.platform.registerBackButtonAction(() => {
+        let nav = this.app.getActiveNavs()[0];
+        let activeView = nav.getActive();                
+        
+        if(activeView.name === 'HomePage') {
+          if (nav.canGoBack()){
+            nav.pop();
+          } else {
+            const alert = this.alertCtrl.create({
+                title: 'Fechar o App',
+                message: 'Você tem certeza?',
+                buttons: [{
+                    text: 'Cancelar',
+                    role: 'cancel',
+                    handler: () => {
+                      //this.nav.setRoot('HomePage');
+                    }
+                },{
+                    text: 'Fechar o App',
+                    handler: () => {
+                      this.sair();
+                      this.platform.exitApp();
+                    }
+                }]
+            });
+
+            alert.present();
+          }
+        } else {
+          nav.pop();
+        }
+      });
     });
   }
 
