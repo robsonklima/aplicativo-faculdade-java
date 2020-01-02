@@ -38,6 +38,7 @@
 - Adicionados métodos de programação orientados a eventos para propagar as mudanças aplicadas no banco de dados do smartphones para todas as interfaces do sistema;
 - Adicionado Badge (notificação) junto ao ícone do aplicativo quando houver chamados ainda não finalizados pelo técnico;
 - Aprimorado sistema de sincronização em segundo plano, evitando falhas de sincronização;
+- Restrição de uso do aplicativo em modo retrato (portrait), não permitindo girar a tela;
 - Localizacões não enviadas por falha de internet são agora armazenadas no dispositivo e enviadas em lote para o servidor.
 
 0.0.54 - 23/12/19
