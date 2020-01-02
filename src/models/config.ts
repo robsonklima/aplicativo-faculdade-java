@@ -1,3 +1,5 @@
+import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
+
 export class Config {
   public static NOME_APP = "App Técnicos";
   public static VERSAO_APP = "0.0.65";
@@ -59,6 +61,21 @@ export class Config {
       ENVIADO: 'ENVIADO', 
       PENDENTE_ENVIO: 'PENDENTE_ENVIO' 
     }
+  };
+  public static MAURON_85_CONFIG: BackgroundGeolocationConfig = {
+    desiredAccuracy: 7,
+    stationaryRadius: 0,
+    distanceFilter: 0,
+    debug: false,
+    stopOnTerminate: false,
+    startForeground: true,
+    interval: 1 * 60000,
+    fastestInterval: 1 * 60000,
+    activitiesInterval: 1 * 60000,
+    notificationsEnabled: true,
+    notificationTitle: 'App Técnicos - Meus Chamados',
+    notificationText: 'Sincronizando Chamados da sua Filial',
+    maxLocations: 50
   };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};

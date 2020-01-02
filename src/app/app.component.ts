@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events, ToastController, Toast } from 'ionic-angular';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
-import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -87,23 +86,7 @@ export class MyApp {
   }
 
   private iniciarColetaLocalizacaoSegundoPlano() {
-    let config: BackgroundGeolocationConfig = {
-      desiredAccuracy: 7,
-      stationaryRadius: 0,
-      distanceFilter: 0,
-      debug: false,
-      stopOnTerminate: false,
-      startForeground: true,
-      interval: 1 * 60000,
-      fastestInterval: 1 * 60000,
-      activitiesInterval: 1 * 60000,
-      notificationsEnabled: true,
-      notificationTitle: `App Técnicos - ${this.dadosGlobais.usuario.nome}`,
-      notificationText: `Sincronizando Chamados da Filial ${this.dadosGlobais.usuario.filial.nomeFilial}`,
-      maxLocations: 50
-    };
-
-    this.bGeolocation.configure(config).then(() => {
+    this.bGeolocation.configure(Config.MAURON_85_CONFIG).then(() => {
       this.bGeolocation.on(BackgroundGeolocationEvents.location).subscribe((res: BackgroundGeolocationResponse) => {
         this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dg) => {
           if (dg) {
