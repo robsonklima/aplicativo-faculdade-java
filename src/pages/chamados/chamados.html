@@ -86,9 +86,9 @@
             item-end 
             color="light" 
             class="inherit"
-            [ngClass]="{ 'bg-silver': chamado.dataHoraFechamento }"
+            class="ion-bage-chamado-fechado"
             *ngIf="chamado.dataHoraFechamento">
-              Fechado
+              <ion-spinner></ion-spinner>
           </ion-badge>
         </ion-item>
         

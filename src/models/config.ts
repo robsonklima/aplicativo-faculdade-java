@@ -1,5 +1,3 @@
-import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
-
 export class Config {
   public static NOME_APP = "App Técnicos";
   public static VERSAO_APP = "0.0.65";
@@ -39,21 +37,6 @@ export class Config {
     { filial: 'FBA', distancia: 4.56 }, { filial: 'FCE', distancia: 2.35 },
     { filial: 'FRJ', distancia: 4.44 }, { filial: 'FAM', distancia: 4.78 }
   ];
-  public static MAURON_85_CONFIG: BackgroundGeolocationConfig = {
-    desiredAccuracy: 7,
-    stationaryRadius: 0,
-    distanceFilter: 0,
-    debug: false,
-    stopOnTerminate: false,
-    startForeground: true,
-    interval: 1 * 60000,
-    fastestInterval: 1 * 60000,
-    activitiesInterval: 1 * 60000,
-    notificationsEnabled: true,
-    notificationTitle: 'App Técnicos - Meus Chamados',
-    notificationText: 'Sincronizando Chamados da sua Filial',
-    maxLocations: 50
-  };
   public static EQUIPAMENTOS_POS = { POS_VELOH_3: 289, POS_VELOH_G: 172 };
   public static COR_RGB = { 
     CINZA: '#9E9E9E',
