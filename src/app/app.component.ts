@@ -51,13 +51,9 @@ export class MyApp {
       statusBar.backgroundColorByHexString('#488aff');
       splashScreen.hide();
 
-      window.addEventListener('offline', () => {
+      window.addEventListener('offline', () => { // offline or online
         this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
       });
-
-      // window.addEventListener('online', () => {
-      //   this.exibirToast(Config.MSG.INTERNET_ONLINE, Config.TOAST.SUCCESS);
-      // });
 
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
       this.events.subscribe('sincronizacao:solicitada', () => {

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { ToastController, Toast, LoadingController, Events, Platform, Loading } from 'ionic-angular';
+import { Toast, Events } from 'ionic-angular';
 
 import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
 import { NativeAudio } from '@ionic-native/native-audio';
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { Vibration } from '@ionic-native/vibration';
 import { Config } from '../models/config';
 import _ from 'lodash';
@@ -21,7 +22,6 @@ import 'rxjs/add/operator/map';
 import { Chamado } from "../models/chamado";
 import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
-import { Checkout } from '../models/checkout';
 
 @Injectable()
 export class ChamadoService {
@@ -34,6 +34,7 @@ export class ChamadoService {
     private http: Http,
     private storage: Storage,
     private events: Events,
+    private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
@@ -228,6 +229,7 @@ export class ChamadoService {
               
             } else {
               if (!verbose) this.dispararSinalSonoroComVibracao();
+              this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');
               chamadosStorage.push(cAPI);
             }
 
@@ -462,6 +464,25 @@ export class ChamadoService {
       this.storage.set('Chamados', this.chamados)
         .then(() => { resolve(true) })
         .catch(() => { reject(false) });
+    });
+  }
+
+  private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
+    return new Promise((resolve, reject) => {resolve(
+      this.localNotification.requestPermission()
+        .then((permission) => {
+          if (permission === 'granted') {
+            this.localNotification.create(
+              titulo, 
+              {
+                tag: titulo,
+                body: corpo,
+                icon: 'assets/icon/favicon.ico'
+              }
+            );
+          }
+        }).catch()
+      );
     });
   }
 
