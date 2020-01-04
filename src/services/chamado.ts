@@ -222,11 +222,12 @@ export class ChamadoService {
 
         if (chamadosStorage.length == 0) {
           chamadosStorage = chamadosApi;
-        } 
+        }
+
         chamadosStorage.forEach((cStorage, cStorageIndex) => {
           chamadosApi.forEach((cAPI) => {
             if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage contem chamado api
-              
+              // atualizar     
             } else {
               if (!verbose) this.dispararSinalSonoroComVibracao();
               if (!verbose) this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');

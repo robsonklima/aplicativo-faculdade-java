@@ -131,8 +131,11 @@ export class MyApp {
             loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
 
             if (loc.codUsuario){
-              this.geolocation.enviarLocalizacao(loc);
-              this.chamadoService.sincronizarChamados(false, this.dadosGlobais.usuario.codTecnico).catch();
+              this.geolocation.atualizarMinhaLocalizacao(loc).then(() => {
+                this.geolocation.enviarLocalizacao(loc);
+                
+                this.chamadoService.sincronizarChamados(false, this.dadosGlobais.usuario.codTecnico).catch();
+              }).catch();
             }
           }
         }).catch();
