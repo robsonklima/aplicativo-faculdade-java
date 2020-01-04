@@ -629,8 +629,8 @@ export class ChamadoPage {
                 this.navCtrl.pop().then(() => {
                   this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
                 }).catch();
-              }, 2000);
-            }, 3000);
+              }, 1000);
+            }, 1500);
           }
         }
       ]
