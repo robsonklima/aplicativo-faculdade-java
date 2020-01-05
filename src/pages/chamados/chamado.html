@@ -18,7 +18,11 @@
   <ion-slides pager (ionSlideDidChange)="alterarSlide()" >
     <!-- Informações -->
     <ion-slide>
-      <ion-list>
+      <ion-list class="informacoes-os">
+        <ion-list-header text-left>
+          <ion-label>Informações Básicas</ion-label>
+        </ion-list-header>
+
         <ion-item
           class="first-item">
           Data Abertura
@@ -39,6 +43,40 @@
           <ion-note item-end>
             {{ chamado?.cliente?.numBanco }}
             - {{ chamado?.cliente?.nomeCliente }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item 
+          *ngIf="chamado?.dataFimSLA">
+          Fim SLA
+          <ion-note item-end>
+            {{ chamado?.dataFimSLA 
+              | date: 'dd/MM HH:mm' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item 
+          *ngIf="chamado?.dataHoraAgendamento">
+          Agendado
+          <ion-note item-end>
+            {{ chamado?.dataHoraAgendamento 
+              | date: 'dd/MM HH:mm' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Status
+          <ion-note item-end>
+            {{ chamado?.statusServico?.nomeStatusServico 
+              || 'Não Informado' | lowercase | capitalize }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Intervenção
+          <ion-note item-end>
+            {{ chamado?.tipoIntervencao?.nomeTipoIntervencao
+              || 'Não Informado' | lowercase | capitalize }}
           </ion-note>
         </ion-item>
 
@@ -122,40 +160,6 @@
           </ion-note>
         </ion-item>
 
-        <ion-item 
-          *ngIf="chamado?.dataFimSLA">
-          Fim SLA
-          <ion-note item-end>
-            {{ chamado?.dataFimSLA 
-              | date: 'dd/MM HH:mm' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item 
-          *ngIf="chamado?.dataHoraAgendamento">
-          Agendado
-          <ion-note item-end>
-            {{ chamado?.dataHoraAgendamento 
-              | date: 'dd/MM HH:mm' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Status
-          <ion-note item-end>
-            {{ chamado?.statusServico?.nomeStatusServico 
-              || 'Não Informado' | lowercase | capitalize }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Intervenção
-          <ion-note item-end>
-            {{ chamado?.tipoIntervencao?.nomeTipoIntervencao
-              || 'Não Informado' | lowercase | capitalize }}
-          </ion-note>
-        </ion-item>
-
         <ion-item>
           Reincidências
           <ion-note item-end>
@@ -163,46 +167,40 @@
           </ion-note>
         </ion-item>
 
-        <ion-item-divider 
-          text-left 
-          color="light">
-          Defeito
-        </ion-item-divider>
+        <ion-list-header text-left>
+          <ion-label>Endereço do Local</ion-label>
+        </ion-list-header>
 
-        <ion-item text-wrap>
-          <span class="text-wrap-content">
-            {{ chamado?.defeitoRelatado || 'Não Informado' 
-              | lowercase | capitalize }}</span>
+        <ion-item class="text-wrap" text-wrap>
+          <span class="text-wrap-content">{{ chamado?.localAtendimento.endereco || 'Não Informado' | lowercase | capitalize }}</span>
         </ion-item>
 
-        <ion-item-divider 
-          text-left 
-          color="light">
-          Observação
-        </ion-item-divider>
+        <ion-list-header text-left>
+          <ion-label>Defeito Relatado</ion-label>
+        </ion-list-header>
 
-        <ion-item 
-          text-wrap>
-          <span class="text-wrap-content">
-            {{ chamado?.observacao || 'Não Informado' 
-              | lowercase | capitalize }}</span>
+        <ion-item class="text-wrap" text-wrap>
+          <span class="text-wrap-content">{{ chamado?.defeitoRelatado || 'Não Informado' | lowercase | capitalize }}</span>
         </ion-item>
 
-        <ion-item-divider 
-          text-left 
-          color="light">
-          Marcação Especial
-        </ion-item-divider>
+        <ion-list-header text-left>
+          <ion-label>Observações</ion-label>
+        </ion-list-header>
 
-        <ion-item 
-          text-wrap>
-          <span class="text-wrap-content">
-            {{ chamado?.descMotivoMarcaEspecial || 'Não Informado' 
-              | lowercase | capitalize }}</span>
+        <ion-item class="text-wrap" text-wrap>
+          <span class="text-wrap-content">{{ chamado?.observacao || 'Não Informado' | lowercase | capitalize }}</span>
+        </ion-item>
+
+        <ion-list-header text-left>
+          <ion-label>Marcações Especiais</ion-label>
+        </ion-list-header>
+
+        <ion-item class="text-wrap" text-wrap>
+          <span class="text-wrap-content">{{ chamado?.descMotivoMarcaEspecial || 'Não Informado' | lowercase | capitalize }}</span>
         </ion-item>
       </ion-list>
 
-      <p class="slide-msg">Deslize a tela para prosseguir</p>
+      <span class="slide-msg">Deslize para prosseguir</span>
     </ion-slide>
     <!-- Informações -->
 

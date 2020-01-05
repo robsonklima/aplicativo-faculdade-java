@@ -31,18 +31,6 @@ export class GeolocationService {
     });
   }
 
-  atualizarMinhaLocalizacao(localizacao: Localizacao): Promise<Localizacao> {
-    return new Promise((resolve, reject) => {
-      if (localizacao.latitude && localizacao.longitude) {
-        this.localizacao = localizacao;
-
-        resolve(localizacao);
-      } else {
-        reject();
-      }
-    });
-  }
-
   buscarMinhaLocalizacao(): Promise<Localizacao> {
     return new Promise((resolve, reject) => {
       this.platform.ready().then(() => {
@@ -64,23 +52,26 @@ export class GeolocationService {
     });
   }
 
-  buscarCoordenadasPorEndereco(endereco: string): Observable<any> {
-    return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' 
-      + endereco + '&key=' + Config.GOOGLE_KEY)
+  atualizarMinhaLocalizacao(localizacao: Localizacao): Promise<Localizacao> {
+    return new Promise((resolve, reject) => {
+      if (localizacao.latitude && localizacao.longitude) {
+        this.localizacao = localizacao;
+
+        resolve(localizacao);
+      } else {
+        reject();
+      }
+    });
+  }
+
+  buscarDetalhesPorEnderecoApi(endereco: string): Observable<any> {
+    return this.http.get(`https://nominatim.openstreetmap.org/search?q=${endereco}&format=json&polygon=1&addressdetails=1=`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarDistanciaDuracao(latOrigem, lngOrigem, latDestino, lngDestino): Observable<any> {
-    return this.http.get('https://maps.googleapis.com/maps/api/distancematrix/json?'
-      + 'origins=' + latOrigem + ',' + lngOrigem + '&destinations=' + latDestino + ',' + lngDestino
-      + '&mode=driving&language=en-EN&key=' + Config.GOOGLE_KEY)
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
-  }
-
-  buscarCoordenadasPorIp(): Observable<any> {
-    return this.http.get('http://ip-api.com/json/')
+  buscarDetalhesLocalPorCoordenadasApi(localizacao: Localizacao): Observable<any> {
+    return this.http.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${localizacao.latitude}&lon=${localizacao.longitude}&addressdetails=1`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

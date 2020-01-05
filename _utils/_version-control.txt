@@ -1,4 +1,10 @@
-0.0.65 - 02/01/20
+0.0.68 - 10/01/20
+- Armazenada última localização do usuário em memória a cada sincronização;
+- Adicionadas novas APIs de consulta de mapas (nominatim.openstreetmap);
+- Adicionadas informações do endereço do local nos detalhes do chamado;
+- Reduzido tamanho da fonte das informações de detalhes do chamado.
+
+0.0.65 até 0.0.67 - 02/01/20
 - Criado novo sistema de sincronização cliente servidor;
 - Fotos, Checkins e Chamados Fechados são enviadas separadamente ao servidor (agora é possivel visualizar no SATWeb o checkin mesmo antes do fechamento do chamado);
 - Adicionada funcionalidade de ativação automática do GPS quando o mesmo estiver inativo;
@@ -125,7 +131,7 @@
 
 0.0.30 - 30/01/2018
 - Correção do bug que apresentava o número incorreto da versão na página Sobre;
-- Ajuste no fluxo de sincronização para remover o chamado da imediatamente após a sincrinização;
+- Ajuste no fluxo de sincronização para remover o chamado da imediatamente após a sincronização;
 
 0.0.29 - 30/01/2018
 - Aumentado de 6 para 10 segundos o intervalo mínimo de sincronizações;

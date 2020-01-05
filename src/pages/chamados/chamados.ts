@@ -82,9 +82,9 @@ export class ChamadosPage {
 
   public pushAtualizarChamados(refresher) {
     this.sincronizarChamados(true).then(() => {
-      refresher.complete();
+      if (refresher) refresher.complete();
     }).catch(() => {
-      setTimeout(() => { refresher.complete() }, 2000);
+      setTimeout(() => { if (refresher) refresher.complete() }, 2000);
     });
   }
 

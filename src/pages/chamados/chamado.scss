@@ -61,10 +61,10 @@ chamado-page {
         }
 
         .slide-msg {
-            font-size: 10pt !important;
+            font-size: 9pt !important;
             color: #9E9E9E;
             margin-top: 0px;
-            margin-bottom: 40px;
+            padding-bottom: 12px;
         }
 
         .swiper-slide {
@@ -82,9 +82,14 @@ chamado-page {
             color: black;
         }
 
-        .texto-direita, .text-wrap-content {
+        .texto-direita {
             color: #BBBBBB;
             font-size: 12pt;
+        }
+
+        .text-wrap-content {
+            color: #BBBBBB;
+            border-bottom: none !important;
         }
 
         .checkin-button, .fechamento-button, 
@@ -223,6 +228,30 @@ chamado-page {
 
         ion-card-content img {
             margin-bottom: -10px !important;
+        }
+
+        .informacoes-os {
+            border-bottom: 0px !important;
+
+            ion-list-header {
+                border: 0px;
+                margin-bottom: -6px !important;
+                font-size: 11pt;
+            }
+
+            ion-item, ion-item-divider {
+                min-height: 0.5rem;
+                max-height: 3.25rem;
+                font-size: 11pt;
+            }
+
+            ion-note {
+                font-size: 11pt;
+            }
+        }
+
+        .text-wrap {
+            max-height: 11.0rem !important;
         }
     }
 }
