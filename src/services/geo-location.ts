@@ -22,7 +22,7 @@ export class GeolocationService {
     private geolocation: Geolocation,
     private loadingFactory: LoadingFactory,
     private alertCtrl: AlertController
-  ) { }
+  ) {}
 
 
   buscarUltimaLocalizacao(): Promise<Localizacao> {
@@ -31,19 +31,19 @@ export class GeolocationService {
     });
   }
 
-  buscarMinhaLocalizacao(): Promise<Localizacao> {
+  buscarMinhaLocalizacao(verbose: boolean=false): Promise<Localizacao> {
     return new Promise((resolve, reject) => {
       this.platform.ready().then(() => {
-        this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+        if(verbose) this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
         
         this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-          this.loadingFactory.encerrar();
+          if(verbose) this.loadingFactory.encerrar();
           this.localizacao.dataHoraCad = new Date().toLocaleString();
           this.localizacao.latitude = location.coords.latitude;
           this.localizacao.longitude = location.coords.longitude;
           resolve(this.localizacao);
         }).catch(() => { 
-          this.loadingFactory.encerrar();
+          if(verbose) this.loadingFactory.encerrar();
           reject();
         });
       }).catch(() => {

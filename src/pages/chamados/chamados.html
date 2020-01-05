@@ -110,6 +110,11 @@
               {{ chamado.equipamentoContrato.numSerie }}
             </span>
           </p>
+          <p>
+            <sub ion-text color="primary">
+              {{ chamado.localAtendimento.distancia }}
+            </sub>
+          </p>
           <p
             *ngIf="chamado.dataFimSLA"
             class="font-red sla">
@@ -253,4 +258,6 @@
       </ion-card>
     </ion-list>
   </div>
+
+  <div id="mapa"></div> 
 </ion-content>

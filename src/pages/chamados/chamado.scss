@@ -2,6 +2,10 @@ chamado-page {
     .chamado-content-page {
         overflow-y: hidden;
 
+        .mapa { 
+            display: none;
+        }
+
         ion-slides {
             margin-top: 0px;
             height: 100%; width:100%;

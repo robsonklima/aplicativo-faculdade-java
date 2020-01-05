@@ -161,7 +161,7 @@ export class MapaChamadoPage {
       var routes = e.routes;
       var summary = routes[0].summary;
       this.distancia = (summary.totalDistance / 1000).toFixed(2).replace('.', ',');
-      //this.tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+      this.tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
    });
   }
 

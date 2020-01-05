@@ -1,4 +1,5 @@
 0.0.68 - 10/01/20
+- Adicionadas informações de distância e tempo do percurso na tela de listagem de chamados;
 - Armazenada última localização do usuário em memória a cada sincronização;
 - Adicionadas novas APIs de consulta de mapas (nominatim.openstreetmap);
 - Adicionadas informações do endereço do local nos detalhes do chamado;

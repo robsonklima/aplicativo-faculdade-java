@@ -69,13 +69,13 @@ export class Config {
     debug: false,
     stopOnTerminate: false,
     startForeground: true,
-    interval: 1 * 60000,
-    fastestInterval: 1 * 60000,
-    activitiesInterval: 1 * 60000,
+    interval: 5 * 60000,
+    fastestInterval: 5 * 60000,
+    activitiesInterval: 5 * 60000,
     notificationsEnabled: true,
     notificationTitle: 'App Técnicos - Meus Chamados',
     notificationText: 'Sincronizando Chamados da sua Filial',
-    maxLocations: 50
+    maxLocations: 10
   };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};

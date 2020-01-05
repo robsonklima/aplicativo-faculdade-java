@@ -57,10 +57,13 @@ export class MyApp {
       });
 
       if (platform.is('cordova')) { this.iniciarColetaLocalizacaoSegundoPlano() }
+
       this.events.subscribe('sincronizacao:solicitada', () => {
         this.chamadoService.sincronizarChamados(false, this.dadosGlobais.usuario.codTecnico).catch();
       });
+
       this.events.subscribe('login:efetuado', (dg: DadosGlobais) => { this.dadosGlobais = dg });
+      
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         if (dados)
           this.dadosGlobais = dados;

@@ -1,10 +1,15 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, NavController, AlertController, Events } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, Events, Platform } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
 import moment from 'moment';
+import leaflet from 'leaflet';
+import 'leaflet-routing-machine';
+declare var L: any;
+
 import { DadosGlobais } from '../../models/dados-globais';
+import { Localizacao } from '../../models/localizacao';
 import { Chamado } from '../../models/chamado';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -30,8 +35,11 @@ export class ChamadosPage {
   qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
   status: string = "abertos";
+  minhaLocalizacao: Localizacao;
+  mapa: any;
 
   constructor(
+    private platform: Platform,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private changeDetector: ChangeDetectorRef,
@@ -46,9 +54,13 @@ export class ChamadosPage {
   
   ionViewWillEnter() {
     this.carregarDadosGlobais().then(() => {
-      this.carregarChamadosStorage().then(() => {
-        this.carregarChamadosFechadosApi();
-      });
+      this.geolocationService.buscarUltimaLocalizacao().then((minhaLocalizacao) => {
+        this.minhaLocalizacao = minhaLocalizacao;
+
+        this.carregarChamadosStorage().then(() => {
+          this.carregarChamadosFechadosApi();
+        }).catch();
+      }).catch();
     });
    
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
@@ -159,7 +171,11 @@ export class ChamadosPage {
           .filter((c) => { return (!c.dataHoraFechamento) })
           .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
         });
-  
+
+        this.chamados.map((chamado, chamadoIndex) => {
+          this.obterDistanciaETempoDoDestino(chamado, chamadoIndex);
+        });
+        
         this.changeDetector.markForCheck();
         this.atualizarBadge();
         resolve();
@@ -174,6 +190,31 @@ export class ChamadosPage {
       });
     },
     err => {});
+  }
+
+  private obterDistanciaETempoDoDestino(chamado: Chamado, chamadoIndex: number): string {
+    if (!this.minhaLocalizacao || !this.platform.is('cordova')) return;
+
+    if (this.mapa != undefined) this.mapa.remove();  
+
+    this.mapa = leaflet.map('mapa');
+    let wps: any = [];
+    
+    wps.push(L.latLng([this.minhaLocalizacao.latitude, this.minhaLocalizacao.longitude]));
+    wps.push(L.latLng([chamado.localAtendimento.localizacao.latitude, chamado.localAtendimento.localizacao.longitude]));
+    
+    let route = L.Routing.control({ waypoints: wps }).addTo(this.mapa);
+    var bounds = L.latLngBounds(wps);
+    this.mapa.fitBounds(bounds);
+
+    route.on('routesfound', (e) => {
+      var routes = e.routes;
+      var summary = routes[0].summary;
+      let distancia = (summary.totalDistance / 1000).toFixed(0);
+      let tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+
+      this.chamados[chamadoIndex].localAtendimento.distancia = `Distância: ${distancia} km, tempo: ${tempo} min`;
+    });
   }
 
   private atualizarBadge() {

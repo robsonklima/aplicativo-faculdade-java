@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { GeolocationService } from '../../services/geo-location';
-import { ToastFactory } from '../../factories/toast-factory';
 
-declare var L: any;
-import { Map, tileLayer, marker, GeometryUtil } from 'leaflet';
+import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
-import { Localizacao } from '../../models/localizacao';
+declare var L: any;
 
 
 @Component({
@@ -13,24 +11,44 @@ import { Localizacao } from '../../models/localizacao';
   templateUrl: 'teste.html'
 })
 export class TestePage {
-  wps: any = [];
+  mapa: any;
   
   constructor(
-    private geolocation: GeolocationService,
-    private toast: ToastFactory
+    private geolocation: GeolocationService
   ) {}
 
   ionViewWillEnter() {
-    this.wps.push([-29.955013, -51.034679]);
-    this.wps.push([-29.952476, -51.102448]);
+    this.atualizarMapa([-29.952476, -51.102448]).then(r => { console.log(r) });
+  }
 
+  private atualizarMapa(destino: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.geolocation.buscarUltimaLocalizacao().then((loc) => {
+        if (!loc) return;
 
-    let localizacao = new Localizacao();
-    localizacao.latitude = -29.952476;
-    localizacao.longitude = -51.102448;
-    
-    this.geolocation.buscarDetalhesLocalPorCoordenadasApi(localizacao).subscribe((r) => { 
-      console.log(r);
-    }, e => {});
+        if (this.mapa != undefined) this.mapa.remove();
+      
+        this.mapa = leaflet.map('mapa');
+        let wps: any = [];
+        
+        wps.push(L.latLng([loc.latitude, loc.longitude]));
+        wps.push(L.latLng(destino));
+        
+        let route = L.Routing.control({ waypoints: wps }).addTo(this.mapa);
+        var bounds = L.latLngBounds(wps);
+        this.mapa.fitBounds(bounds);
+
+        route.on('routesfound', (e) => {
+          var routes = e.routes;
+          var summary = routes[0].summary;
+          let distancia = (summary.totalDistance / 1000).toFixed(2);
+          let tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+
+          resolve(`Distância: ${distancia} km, tempo: ${tempo} min`);
+        });
+      }).catch(() => {
+        reject();
+      });
+   });
   }
 }

@@ -109,7 +109,7 @@
 
     <button
       ion-item
-      *ngIf="true"
+      *ngIf="!platform.is('cordova')"
       (click)="telaTeste()">
       <ion-icon 
         color="primary" 
