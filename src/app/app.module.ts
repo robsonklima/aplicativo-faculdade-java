@@ -86,7 +86,6 @@ import { IndicadorFiliaisPage } from '../pages/indicadores/indicador-filiais';
 import { IndicadorTecnicoPage } from '../pages/indicadores/indicador-tecnico';
 import { IndicadorPerformanceTecnicoPage } from '../pages/indicadores/indicador-performance-tecnico';
 import { FotosPage } from '../pages/fotos/fotos';
-import { LocalizacaoEnvioPage } from '../pages/localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../pages/laudos/laudo';
 import { SituacaoPage } from '../pages/laudos/situacao';
 import { AssinaturaPage } from '../pages/assinatura/assinatura';
@@ -132,7 +131,6 @@ import { FotoPage } from '../pages/fotos/foto';
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
-    LocalizacaoEnvioPage,
     LaudoPage,
     SituacaoPage,
     MensagensPage,
@@ -196,7 +194,6 @@ import { FotoPage } from '../pages/fotos/foto';
     IndicadorFiliaisPage,
     IndicadorTecnicoPage,
     IndicadorPerformanceTecnicoPage,
-    LocalizacaoEnvioPage,
     LaudoPage,
     SituacaoPage,
     MensagensPage,

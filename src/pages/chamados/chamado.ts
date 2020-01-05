@@ -35,7 +35,6 @@ import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
-import { LocalizacaoEnvioPage } from '../localizacao-envio/localizacao-envio';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
@@ -413,32 +412,6 @@ export class ChamadoPage {
     const modal = this.modalCtrl.create(HistoricoListaPage, { chamado: this.chamado });
     modal.present();
     modal.onDidDismiss(() => {});
-  }
-
-  public telaLocalizacaoEnvio() {
-    const loader = this.loadingCtrl.create({
-      content: 'Obtendo sua localização...'
-    });
-    loader.present();
-
-    this.platform.ready().then(() => {
-      this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-        loader.dismiss().then(() => {
-          const modal = this.modalCtrl.create(
-            LocalizacaoEnvioPage, { lat: location.coords.latitude, lng: location.coords.longitude, chamado: this.chamado }
-          );
-          this.viewCtrl.dismiss().then(() => { modal.present(); }).catch();
-          modal.onDidDismiss(() => {});
-        })
-        .catch();
-      })
-      .catch((err) => {
-        loader.dismiss(() => {
-          this.toastFactory.exibirToast('Não foi possível obter sua localização!', Config.TOAST.ERROR);
-        });
-      });
-    })
-    .catch(() => {});
   }
 
   public efetuarCheckin() {
