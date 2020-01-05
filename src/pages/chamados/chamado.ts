@@ -617,7 +617,7 @@ export class ChamadoPage {
       return;
     }
 
-    if (this.platform.is('cordova')) {
+    if (this.platform.is('cordova') && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
         this.toastFactory.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
 
@@ -632,7 +632,7 @@ export class ChamadoPage {
     }
 
     if(_.has(this.chamado.rats[0], 'laudos')) {
-      if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
+      if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio() && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
         this.toastFactory.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
   
         return;

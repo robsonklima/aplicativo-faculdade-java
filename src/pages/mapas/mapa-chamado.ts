@@ -118,7 +118,8 @@ export class MapaChamadoPage {
     popups.push('<b>' + this.chamado.codOs.toString() + '</b><br />' 
       + this.chamado.localAtendimento.nomeLocalAtendimento + '<br />'
       + this.chamado.cliente.nomeCliente + '<br />'
-      + '<a class="rota" href="https://maps.google.com/?q=' + this.chamado.localAtendimento.localizacao.latitude + ',' + this.chamado.localAtendimento.localizacao.longitude + '"><b>Traçar Rota</b></a>');
+      + `<a class="rota" href="https://maps.google.com/?q=${this.chamado.localAtendimento.localizacao.latitude}, ${this.chamado.localAtendimento.localizacao.longitude}"><b>Maps</b></a> | `
+      + `<a class="rota" href="https://www.waze.com/pt-BR/livemap/directions?latlng=${this.chamado.localAtendimento.localizacao.latitude}%2C${this.chamado.localAtendimento.localizacao.longitude}/"><b>Waze</b></a>`);
     icons.push(L.icon({
       iconUrl: Config.L.ICONES.VERMELHO,
       shadowUrl: Config.L.SOMBRA,

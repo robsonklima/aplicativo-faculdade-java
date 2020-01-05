@@ -268,7 +268,7 @@
           <button ion-button clear item-end 
             (click)="tirarFoto('RAT')"
             *ngIf="!verificarExistenciaFoto('RAT')"
-            [disabled]="chamado?.indRatEletronica">
+            [disabled]="chamado?.indRatEletronica || chamado?.tipoIntervencao?.codTipoIntervencao == 14">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
 
@@ -294,6 +294,7 @@
           <h2>Etiqueta Número de Série</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('ETIQUETANUMSERIE')" 
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="!verificarExistenciaFoto('ETIQUETANUMSERIE')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -317,6 +318,7 @@
           </ion-avatar>
           <h2>Equipamento Operacional</h2>
           <button ion-button clear item-end 
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             (click)="tirarFoto('EQUIPAMENTOOPERACIONAL')" 
             *ngIf="!verificarExistenciaFoto('EQUIPAMENTOOPERACIONAL')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
@@ -342,6 +344,7 @@
           <h2>Parte Interna</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('PARTEINTERNA')"
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="!verificarExistenciaFoto('PARTEINTERNA')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -366,6 +369,7 @@
           <h2>Verificação da Versão</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('VERIFICACAOVERSAO')" 
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="!verificarExistenciaFoto('VERIFICACAOVERSAO')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -378,6 +382,7 @@
 
           <button ion-button clear item-end 
             (click)="telaFoto('VERIFICACAOVERSAO')"
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="verificarExistenciaFoto('VERIFICACAOVERSAO')">
             <ion-icon name="image" color="secondary"></ion-icon>
           </button>
@@ -390,6 +395,7 @@
           <h2>Comprovante Inicialização</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('COMPINICIALIZACAO')" 
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="!verificarExistenciaFoto('COMPINICIALIZACAO')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -414,6 +420,7 @@
           <h2>Protocolo da Visita Técnica</h2>
           <button ion-button clear item-end 
             (click)="tirarFoto('PROTOCOLOVISITATECNICA')" 
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="!verificarExistenciaFoto('PROTOCOLOVISITATECNICA')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
@@ -426,6 +433,7 @@
 
           <button ion-button clear item-end 
             (click)="telaFoto('PROTOCOLOVISITATECNICA')"
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14"
             *ngIf="verificarExistenciaFoto('PROTOCOLOVISITATECNICA')">
             <ion-icon name="image" color="secondary"></ion-icon>
           </button>
@@ -440,7 +448,8 @@
           <h2>Laudo</h2>
        
           <button ion-button clear item-end (click)="telaLaudo(chamado)"
-            *ngIf="!verificarExistenciaLaudo()">
+            *ngIf="!verificarExistenciaLaudo()"
+            [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 14">
             <ion-icon name="add-circle" color="primary"></ion-icon>
           </button>
 

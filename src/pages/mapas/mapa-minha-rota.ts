@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 
 import moment from 'moment';
-
 import { Map, tileLayer, marker } from 'leaflet';
 import { DadosGlobais } from '../../models/dados-globais';
+import { Localizacao } from '../../models/localizacao';
+
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { LocalizacaoService } from '../../services/localizacao';
-import { Localizacao } from '../../models/localizacao';
+import { GeolocationService } from '../../services/geo-location';
+import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({
@@ -35,6 +37,7 @@ export class MapaMinhaRotaPage {
 
   constructor(
     private loadingCtrl: LoadingController,
+    private geolocationService: GeolocationService,
     private dadosGlobaisService: DadosGlobaisService,
     private localizacaoService: LocalizacaoService
   ) {}
@@ -48,8 +51,11 @@ export class MapaMinhaRotaPage {
         this.localizacaoService.buscarLocalizacoesApi(this.dg.usuario.codUsuario).subscribe((localizacoes) => {
           this.localizacoes = localizacoes;
 
-          this.carregarMapa();
-
+          this.geolocationService.buscarUltimaLocalizacao().then((minhaLocalizacao) => {
+            if (minhaLocalizacao.latitude && minhaLocalizacao.longitude)
+              this.carregarMapa(minhaLocalizacao);
+          }).catch();
+          
           loader.dismiss();
         }, err => { loader.dismiss() });
       })
@@ -71,14 +77,9 @@ export class MapaMinhaRotaPage {
     });
   }
 
-  private carregarMapa() {
-    let minhaLat = this.localizacoes[this.localizacoes.length-1].latitude;
-    let minhaLng = this.localizacoes[this.localizacoes.length-1].longitude;
-
-    this.map = new Map('minha-rota').setView([minhaLat, minhaLng], 10);
-    tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'edupala.com © ionic LeafLet',
-    }).addTo(this.map);
+  private carregarMapa(minhaLocalizacao: Localizacao) {
+    this.map = new Map('minha-rota').setView([minhaLocalizacao.latitude, minhaLocalizacao.longitude], 10);
+    tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'App Tecnicos' }).addTo(this.map);
 
     this.localizacoes.forEach(loc => {
       marker([ loc.latitude, loc.longitude ]).addTo(this.map)
