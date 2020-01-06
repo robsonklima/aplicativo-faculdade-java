@@ -14,6 +14,7 @@ import { Network } from '@ionic-native/network';
 import { AppVersion } from '@ionic-native/app-version';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Market } from '@ionic-native/market';
+import { AppPreferences } from '@ionic-native/app-preferences';
 import { AppAvailability } from '@ionic-native/app-availability';
 import { Device } from '@ionic-native/device';
 import { BackgroundMode } from '@ionic-native/background-mode';
@@ -223,6 +224,7 @@ import { FotoPage } from '../pages/fotos/foto';
     Vibration,
     Network,
     AppVersion,
+    AppPreferences,
     InAppBrowser,
     Market,
     AppAvailability,

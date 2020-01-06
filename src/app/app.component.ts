@@ -52,7 +52,7 @@ export class MyApp {
       statusBar.backgroundColorByHexString('#244681');
       splashScreen.hide();
 
-      window.addEventListener('offline', () => { // offline or online
+      window.addEventListener('offline', () => { // offline - online
         this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
       });
 
