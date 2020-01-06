@@ -162,6 +162,8 @@ export class ChamadoService {
               if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
               this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
 
+                if (chamadosApi.length !== chamadosStorage.length && !verbose) this.dispararSinalSonoroComVibracao();
+
                 if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
                 this.combinarChamadosApiStorage(verbose, chamadosAbertos, chamadosApi).then((chamadosCombinados) => {
 
@@ -229,7 +231,6 @@ export class ChamadoService {
             if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage contem chamado api
               // atualizar     
             } else {
-              if (!verbose) this.dispararSinalSonoroComVibracao();
               if (!verbose) this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');
               chamadosStorage.push(cAPI);
             }

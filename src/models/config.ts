@@ -67,7 +67,7 @@ export class Config {
     stationaryRadius: 0,
     distanceFilter: 0,
     debug: false,
-    stopOnTerminate: false,
+    stopOnTerminate: true,
     startForeground: true,
     interval: 5 * 60000,
     fastestInterval: 5 * 60000,
