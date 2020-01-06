@@ -211,9 +211,9 @@ export class ChamadosPage {
       var routes = e.routes;
       var summary = routes[0].summary;
       let distancia = (summary.totalDistance / 1000).toFixed(0);
-      let tempo = Math.round(summary.totalTime % 3600 / 60).toFixed(0);
+      var tempo = moment().startOf('day').seconds(summary.totalTime).format('H:mm')
 
-      this.chamados[chamadoIndex].localAtendimento.distancia = `Distância: ${distancia} km, tempo: ${tempo} min`;
+      this.chamados[chamadoIndex].localAtendimento.distancia = `${distancia} km (${tempo})`;
     });
   }
 
