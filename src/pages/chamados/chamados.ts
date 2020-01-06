@@ -211,9 +211,10 @@ export class ChamadosPage {
       var routes = e.routes;
       var summary = routes[0].summary;
       let distancia = (summary.totalDistance / 1000).toFixed(0);
-      var tempo = moment().startOf('day').seconds(summary.totalTime).format('H:mm')
+      var tempoHoras = moment().startOf('day').seconds(summary.totalTime).format('H');
+      var tempoMinutos = moment().startOf('day').seconds(summary.totalTime).format('mm');
 
-      this.chamados[chamadoIndex].localAtendimento.distancia = `${distancia} km (${tempo})`;
+      this.chamados[chamadoIndex].localAtendimento.distancia = `${distancia}km, ${tempoHoras}h ${tempoMinutos}min`;
     });
   }
 
