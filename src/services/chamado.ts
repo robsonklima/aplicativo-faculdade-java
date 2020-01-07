@@ -460,6 +460,12 @@ export class ChamadoService {
     });
   }
 
+  buscarStatusExecucao(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      resolve(this.executando);
+    });
+  }
+
   private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
     return new Promise((resolve, reject) => {resolve(
       this.localNotification.requestPermission()

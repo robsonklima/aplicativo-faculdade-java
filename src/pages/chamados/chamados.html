@@ -108,12 +108,12 @@
               {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
               {{ chamado.equipamentoContrato.numSerie ? ', ' : '' }} 
               {{ chamado.equipamentoContrato.numSerie }}
+              
+              {{ chamado.equipamentoContrato.distancia ? ', ' : '' }} 
+              <span class="small" *ngIf="chamado?.localAtendimento?.distancia">
+                {{ chamado?.localAtendimento?.distancia }}
+              </span>
             </span>
-          </p>
-          <p>
-            <sub ion-text color="primary">
-              {{ chamado.localAtendimento.distancia }}
-            </sub>
           </p>
           <p
             *ngIf="chamado.dataFimSLA"

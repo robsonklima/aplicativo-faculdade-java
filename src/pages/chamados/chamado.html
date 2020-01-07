@@ -103,14 +103,14 @@
           </ion-note>
         </ion-item>
 
-        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+        <ion-item>
           Num. Agência
           <ion-note item-end>
               {{ chamado?.localAtendimento?.numAgencia || '--' }} / {{ chamado?.localAtendimento?.dcPosto || '--' }}
           </ion-note>
         </ion-item>
 
-        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+        <ion-item>
           Nome Agência
           <ion-note item-end>
             {{ chamado?.localAtendimento?.nomeLocalAtendimento || 'Não Informado' | ellipsis: 28 }}

@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.69";
+  public static VERSAO_APP = "0.0.70";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -167,7 +167,7 @@ export class Config {
     ATUALIZAR_CHAMADOS_STORAGE: "Atualizando chamados armazenados do smartphone",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
     CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
-    AGUARDE_ALGUNS_INSTANTES: 'Sincronização junto ao servidor em andamento',
+    AGUARDE_ALGUNS_INSTANTES: 'Sincronização junto ao servidor em andamento. Aguarde alguns instantes',
     ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando as fotos para o servidor',
     SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',

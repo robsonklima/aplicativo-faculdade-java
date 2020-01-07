@@ -571,7 +571,7 @@ export class ChamadoPage {
 
   public fecharChamado() {
     const confirmacao = this.alertCtrl.create({
-      title: 'Confirmação',
+      title: 'Fechar',
       message: 'Deseja fechar este chamado?',
       buttons: [
         {
@@ -581,27 +581,34 @@ export class ChamadoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            if (!this.validarCamposObrigatorios()) return;
+            this.chamadoService.buscarStatusExecucao().then(executando => {
+              if (!this.validarCamposObrigatorios()) return;
 
-            this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
-            this.chamado.statusServico.abreviacao = "F";
-            this.chamado.statusServico.nomeStatusServico = "FECHADO";
-            this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+              if (executando) {
+                this.toastFactory.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                return;
+              }
 
-            this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
+              this.chamado.statusServico.codStatusServico = Config.CHAMADO.FECHADO;
+              this.chamado.statusServico.abreviacao = "F";
+              this.chamado.statusServico.nomeStatusServico = "FECHADO";
+              this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
 
-            setTimeout(() => {
-              this.chamadoService.atualizarChamado(this.chamado);
-              this.loadingFactory.alterar(Config.MSG.SALVANDO_CHAMADO_BASE_LOCAL);
+              this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
 
               setTimeout(() => {
-                this.loadingFactory.encerrar();
+                this.chamadoService.atualizarChamado(this.chamado);
+                this.loadingFactory.alterar(Config.MSG.SALVANDO_CHAMADO_BASE_LOCAL);
 
-                this.navCtrl.pop().then(() => {
-                  this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
-                }).catch();
+                setTimeout(() => {
+                  this.loadingFactory.encerrar();
+
+                  this.navCtrl.pop().then(() => {
+                    this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+                  }).catch();
+                }, 500);
               }, 1000);
-            }, 1500);
+            }).catch();
           }
         }
       ]
