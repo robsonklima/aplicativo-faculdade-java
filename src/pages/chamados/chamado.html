@@ -16,7 +16,7 @@
 </ion-header>
 <ion-content class="chamado-content-page outer-content">
   <ion-slides pager (ionSlideDidChange)="alterarSlide()" >
-    <!-- Informações -->
+    <!-- Informações da OS -->
     <ion-slide>
       <ion-list class="informacoes-os">
         <ion-list-header text-left>
@@ -32,17 +32,44 @@
         </ion-item>
 
         <ion-item>
-          OS Cliente
+          Cliente
+          <ion-note item-end>
+            {{ chamado?.cliente?.numBanco }} - {{ chamado?.cliente?.nomeCliente }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          OS do Cliente
           <ion-note item-end>
             {{ chamado?.numOsCliente || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
-          Cliente
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Estabelecimento
           <ion-note item-end>
-            {{ chamado?.cliente?.numBanco }}
-            - {{ chamado?.cliente?.nomeCliente }}
+            {{ chamado?.numEstabelecimentoCliente || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Terminal
+          <ion-note item-end>
+            {{ chamado?.numTerminal || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Rede
+          <ion-note item-end>
+            {{ chamado?.redeEquipamento || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Operadora
+          <ion-note item-end>
+            {{ chamado?.nomeOperadoraTelefonia || 'Não Informada' }}
           </ion-note>
         </ion-item>
 
@@ -50,55 +77,57 @@
           *ngIf="chamado?.dataFimSLA">
           Fim SLA
           <ion-note item-end>
-            {{ chamado?.dataFimSLA 
-              | date: 'dd/MM HH:mm' }}
+            {{ chamado?.dataFimSLA | date: 'dd/MM HH:mm' }}
           </ion-note>
         </ion-item>
 
         <ion-item 
-          *ngIf="chamado?.dataHoraAgendamento">
+          *ngIf="chamado?.dataHoraAgendamento && !verificarSeEquipamentoEPOS()">
           Agendado
           <ion-note item-end>
-            {{ chamado?.dataHoraAgendamento 
-              | date: 'dd/MM HH:mm' }}
+            {{ chamado?.dataHoraAgendamento | date: 'dd/MM HH:mm' }}
           </ion-note>
         </ion-item>
 
         <ion-item>
           Status
           <ion-note item-end>
-            {{ chamado?.statusServico?.nomeStatusServico 
-              || 'Não Informado' | lowercase | capitalize }}
+            {{ chamado?.statusServico?.nomeStatusServico || 'Não Informado' | lowercase | capitalize }}
           </ion-note>
         </ion-item>
 
         <ion-item>
           Intervenção
           <ion-note item-end>
-            {{ chamado?.tipoIntervencao?.nomeTipoIntervencao
-              || 'Não Informado' | lowercase | capitalize }}
+            {{ chamado?.tipoIntervencao?.nomeTipoIntervencao || 'Não Informado' | lowercase | capitalize }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Num. Agência
           <ion-note item-end>
               {{ chamado?.localAtendimento?.numAgencia || '--' }} / {{ chamado?.localAtendimento?.dcPosto || '--' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Nome Agência
           <ion-note item-end>
-            {{ chamado?.localAtendimento?.nomeLocalAtendimento 
-              || 'Não Informado' | ellipsis: 28 }}
+            {{ chamado?.localAtendimento?.nomeLocalAtendimento || 'Não Informado' | ellipsis: 28 }}
           </ion-note>
         </ion-item>
 
         <ion-item>
           Solicitante
           <ion-note item-end>
-            {{ chamado?.nomeSolicitante || 'Não Informado'  | ellipsis: 28 }}
+            {{ chamado?.nomeSolicitante || 'Não Informado' | ellipsis: 28 }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          Telefone do Solicitante
+          <ion-note item-end>
+            {{ chamado?.telefoneSolicitante || 'Não Informado' | ellipsis: 28 }}
           </ion-note>
         </ion-item>
 
@@ -109,31 +138,28 @@
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Código Pai
           <ion-note item-end>
-            {{ chamado?.equipamentoContrato?.contrato?.codPai
-              || 'Não Informado' }}
+            {{ chamado?.equipamentoContrato?.contrato?.codPai || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
         <ion-item>
-          Num Série
+          Numero de Série
           <ion-note item-end>
-            {{ chamado?.equipamentoContrato?.numSerie
-              || 'Não Informado' }}
+            {{ chamado?.equipamentoContrato?.numSerie || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Nº do ATM
           <ion-note item-end>
-            {{ chamado?.equipamentoContrato?.numSerieCliente
-              || 'Não Informado' }}
+            {{ chamado?.equipamentoContrato?.numSerieCliente || 'Não Informado' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Nro. Contrato
           <ion-note item-end>
             {{ chamado?.equipamentoContrato?.contrato?.nroContrato
@@ -141,7 +167,7 @@
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Nome Contrato
           <ion-note item-end>
             {{ chamado?.equipamentoContrato?.contrato?.nomeContrato
@@ -149,21 +175,24 @@
           </ion-note>
         </ion-item>
 
-        <ion-item 
-          *ngIf="chamado?.dataHoraSolicitacaoOS 
-            && chamado?.dataHoraAberturaOS 
-            != chamado?.dataHoraSolicitacaoOS">
+        <ion-item *ngIf="chamado?.dataHoraSolicitacaoOS && chamado?.dataHoraAberturaOS != chamado?.dataHoraSolicitacaoOS && !verificarSeEquipamentoEPOS()">
           Data Solicitação
           <ion-note item-end>
-            {{ chamado?.dataHoraSolicitacaoOS 
-              | date: 'dd/MM HH:mm' }}
+            {{ chamado?.dataHoraSolicitacaoOS | date: 'dd/MM HH:mm' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Reincidências
           <ion-note item-end>
             {{ chamado?.numReincidencias || 'Nenhuma' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+          Pendências
+          <ion-note item-end>
+            {{ chamado?.qtdRatsPendentes || 'Nenhuma' }}
           </ion-note>
         </ion-item>
 

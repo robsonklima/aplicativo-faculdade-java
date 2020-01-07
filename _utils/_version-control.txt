@@ -1,5 +1,7 @@
 0.0.69 - ??/01/20
 - Correcao exibição do tempo do percurso na tela de listagem de chamados (não estava exibindo as horas);
+- Adicionada quantidade de pendências do chamado nos detalhes do chamado;
+- Aplicativo carrega dinamicamente os campos de detalhes do chamado de acordo com o modelo do equipamento;
 
 0.0.68 - 06/01/20
 - Possibilidade de escolha de aplicativo ao traçar a rota (Google Maps e Waze);

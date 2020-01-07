@@ -15,6 +15,7 @@ export class Chamado {
 	dataHoraAberturaOS: string;
 	dataHoraSolicitacaoOS: string;
 	nomeSolicitante: string;
+	telefoneSolicitante: string;
 	numOsCliente: string;
 	codTecnico: number;
 	tecnico: Tecnico;
@@ -45,4 +46,9 @@ export class Chamado {
 	justificativaCedulas: number;
 	codDefeitoPOS: number;
 	localizacaoCorreta: Localizacao;
+	numTerminal: string;
+	redeEquipamento: string;
+	numEstabelecimentoCliente: string;
+	nomeOperadoraTelefonia: string;
+	qtdRatsPendentes: number;
 }
