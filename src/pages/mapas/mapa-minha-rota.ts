@@ -51,10 +51,7 @@ export class MapaMinhaRotaPage {
         this.localizacaoService.buscarLocalizacoesApi(this.dg.usuario.codUsuario).subscribe((localizacoes) => {
           this.localizacoes = localizacoes;
 
-          this.geolocationService.buscarUltimaLocalizacao().then((minhaLocalizacao) => {
-            if (minhaLocalizacao.latitude && minhaLocalizacao.longitude)
-              this.carregarMapa(minhaLocalizacao);
-          }).catch();
+          this.carregarMapa(this.geolocationService.buscarUltimaLocalizacao());
           
           loader.dismiss();
         }, err => { loader.dismiss() });
@@ -78,6 +75,8 @@ export class MapaMinhaRotaPage {
   }
 
   private carregarMapa(minhaLocalizacao: Localizacao) {
+    if (minhaLocalizacao.latitude && minhaLocalizacao.longitude) return;
+
     this.map = new Map('minha-rota').setView([minhaLocalizacao.latitude, minhaLocalizacao.longitude], 10);
     tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'App Tecnicos' }).addTo(this.map);
 

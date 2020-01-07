@@ -1,3 +1,6 @@
+0.0.71 - 08/01/20
+- Técnico pode informar intenção de atendimento antecipadamente (A caminho do chamado);
+
 0.0.70 - 07/01/20
 - Correção do problema onde o usuário necessitava refazer o checkin ou checkout;
 

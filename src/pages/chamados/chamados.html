@@ -163,7 +163,7 @@
                 [disabled]="true"
                 color="subtle">
                 <div>
-                  &nbsp;&nbsp;{{ chamado.statusServico.abreviacao }}
+                  {{ chamado.numReincidencias }}R
                 </div>
               </button>
             </ion-col>
@@ -174,7 +174,8 @@
                 small
                 clear 
                 [disabled]="true"
-                color="subtle">
+                color="subtle"
+                class="t-int">
                 <div>
                   {{ chamado.tipoIntervencao.abrevTipoIntervencao }}
                 </div>
@@ -183,12 +184,13 @@
             <ion-col col-2>
               <button 
                 ion-button 
-                icon-left 
-                small
+                icon-only
                 clear 
-                [disabled]="true"
-                color="subtle">
-                <div>R.{{ chamado.numReincidencias }}</div>
+                small
+                color="primary"
+                (click)="informarEstouACaminho(i)">
+                <ion-icon name="navigate" class="mark" *ngIf="!chamado.indEstouACaminho"></ion-icon>
+                <ion-icon name="md-radio-button-on" color="secondary" class="mark" *ngIf="chamado.indEstouACaminho"></ion-icon>
               </button>
             </ion-col>
             <ion-col col-2>

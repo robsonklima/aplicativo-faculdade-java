@@ -25,10 +25,8 @@ export class GeolocationService {
   ) {}
 
 
-  buscarUltimaLocalizacao(): Promise<Localizacao> {
-    return new Promise((resolve) => {
-      resolve(this.localizacao);
-    });
+  buscarUltimaLocalizacao(): Localizacao {
+    return this.localizacao;
   }
 
   buscarMinhaLocalizacao(verbose: boolean=false): Promise<Localizacao> {

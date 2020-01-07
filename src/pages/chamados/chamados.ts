@@ -22,6 +22,7 @@ import { Config } from '../../models/config';
 import { GeolocationService } from '../../services/geo-location';
 import { ChamadosFechadosPage } from './chamados-fechados';
 import { ChamadoFechadoPage } from './chamado-fechado';
+import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({
@@ -42,10 +43,11 @@ export class ChamadosPage {
     private platform: Platform,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private changeDetector: ChangeDetectorRef,
-    private loadingCtrl: LoadingController,
     private badge: Badge,
     private events: Events,
+    private changeDetector: ChangeDetectorRef,
+    private loadingCtrl: LoadingController,
+    private toastFactory: ToastFactory,
     private geolocationService: GeolocationService,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
@@ -53,13 +55,11 @@ export class ChamadosPage {
 
   
   ionViewWillEnter() {
-    this.carregarDadosGlobais().then(() => {
-      this.geolocationService.buscarUltimaLocalizacao().then((minhaLocalizacao) => {
-        this.minhaLocalizacao = minhaLocalizacao;
+    this.minhaLocalizacao = this.geolocationService.buscarUltimaLocalizacao();
 
-        this.carregarChamadosStorage().then(() => {
-          this.carregarChamadosFechadosApi();
-        }).catch();
+    this.carregarDadosGlobais().then(() => {
+      this.carregarChamadosStorage().then(() => {
+        this.carregarChamadosFechadosApi();
       }).catch();
     });
    
@@ -144,6 +144,19 @@ export class ChamadosPage {
         resolve();
       }).catch(() => { reject() });
     });
+  }
+
+  public informarEstouACaminho(i: number) {
+    this.chamados.forEach((c, i) => {
+      this.chamados[i].indEstouACaminho = false;
+      this.chamados[i].dataHoraEstouACaminho = null;
+    });
+
+    this.chamados[i].indEstouACaminho = true;
+    this.chamados[i].dataHoraEstouACaminho = new Date().toLocaleString('pt-BR');;
+
+    this.toastFactory.exibirToast(`Estou a caminho do chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+    this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
   private carregarDadosGlobais(): Promise<DadosGlobais> {

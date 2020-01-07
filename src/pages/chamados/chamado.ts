@@ -426,7 +426,11 @@ export class ChamadoPage {
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
               this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
+              return
+            }
 
+            if (!this.chamado.indEstouACaminho) {
+              this.toastFactory.exibirToast(`Favor informar que está a caminho da OS ${this.chamado.codOs} antes de efetuar o checkin`, Config.TOAST.ERROR);
               return
             }
 

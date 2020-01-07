@@ -51,4 +51,6 @@ export class Chamado {
 	numEstabelecimentoCliente: string;
 	nomeOperadoraTelefonia: string;
 	qtdRatsPendentes: number;
+	indEstouACaminho: boolean;
+	dataHoraEstouACaminho: string;
 }

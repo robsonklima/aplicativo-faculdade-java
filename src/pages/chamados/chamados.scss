@@ -55,9 +55,18 @@ chamados-page {
         margin-top: 4px !important;
     }
 
-    .refresh, .pin, .open, .checkmark, .done-all, .create {
+    .refresh, .pin, .open, .checkmark, .done-all, .create, .mark {
         font-size: 21px !important;
         padding-left: 12px;
+    }
+
+    .pin {
+        margin-left: 2px;
+    }
+
+    .t-int {
+        margin-left: -8px !important;
+        text-align: center;
     }
 
     .data-hora-leitura {

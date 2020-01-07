@@ -22,6 +22,8 @@ import 'rxjs/add/operator/map';
 import { Chamado } from "../models/chamado";
 import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
+import { ChamadoIntencao } from '../models/chamado-intencao';
+import { GeolocationService } from './geo-location';
 
 @Injectable()
 export class ChamadoService {
@@ -38,7 +40,8 @@ export class ChamadoService {
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
-    private toastFactory: ToastFactory
+    private toastFactory: ToastFactory,
+    private geolocationService: GeolocationService
   ) { }
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
@@ -66,6 +69,16 @@ export class ChamadoService {
   enviarFotoApi(foto: Foto): Observable<any> {
     return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
       .timeout(60000)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  enviarChamadoIntencao(chamado: Chamado): Observable<any> {
+    let intencao = new ChamadoIntencao();
+    intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
+    intencao.codOS = chamado.codOs;
+
+    return this.http.post(Config.API_URL + 'OsIntencao', intencao)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
