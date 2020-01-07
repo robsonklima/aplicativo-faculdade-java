@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController} from 'ionic-angular';
 import { Map, tileLayer, marker } from 'leaflet';
-import { DadosGlobais } from '../../models/dados-globais';
 import { Localizacao } from '../../models/localizacao';
 
 

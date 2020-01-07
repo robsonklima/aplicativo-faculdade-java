@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, LoadingController, Toast, ModalController, NavController, ViewController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, Toast, ModalController, NavController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
