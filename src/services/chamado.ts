@@ -319,7 +319,7 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       chamadosStorage = chamadosStorage.filter((c) => { return (c.indIntencaoAtendimento) });
 
-      if (!chamadosStorage.length) {
+      if (!chamadosStorage.length || !this.geolocationService.buscarUltimaLocalizacao()) {
         resolve();
         return
       }
@@ -328,13 +328,9 @@ export class ChamadoService {
       intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
       intencao.codOS = chamadosStorage[0].codOs;
       intencao.dataHoraCadastro = chamadosStorage[0].dataHoraIntencaoAtendimento;
-      intencao.codTecnico = chamadosStorage[0].codTecnico;
+      intencao.codTecnico = chamadosStorage[0].tecnico.codTecnico;
 
-      // comentar
-      resolve();
-      return;
-
-      //this.enviarIntencaoApi(intencao).subscribe(() => { resolve() }, e => { reject() });
+      this.enviarIntencaoApi(intencao).subscribe(() => { resolve() }, e => { reject() });
     });
   }
 
