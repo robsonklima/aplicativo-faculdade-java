@@ -187,6 +187,17 @@
                 icon-only
                 clear 
                 small
+                [disabled]="chamado.dataHoraFechamento"
+                (click)="telaMapaChamado(chamado)">
+                <ion-icon name="pin" class="pin"></ion-icon>
+              </button>
+            </ion-col>
+            <ion-col col-2>
+              <button 
+                ion-button 
+                icon-only
+                clear 
+                small
                 color="primary"
                 (click)="informarIntencaoAtendimento(i)"
                 *ngIf="!chamado.indIntencaoAtendimento">
@@ -205,24 +216,13 @@
               </button>
             </ion-col>
             <ion-col col-2>
-              <button 
-                ion-button 
-                icon-only
-                clear 
-                small
-                [disabled]="chamado.dataHoraFechamento"
-                (click)="telaMapaChamado(chamado)">
-                <ion-icon name="pin" class="pin"></ion-icon>
-              </button>
-            </ion-col>
-            <ion-col col-2>
               <button
                 ion-button 
                 icon-only
                 clear
                 small
                 (click)="telaChamado(chamado)"
-                [disabled]="chamado.dataHoraFechamento">
+                [disabled]="chamado.dataHoraFechamento || !chamado.indIntencaoAtendimento">
                 <ion-icon *ngIf="chamado.checkin.localizacao.latitude 
                   || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
                 <ion-icon *ngIf="!chamado.checkin.localizacao.latitude 

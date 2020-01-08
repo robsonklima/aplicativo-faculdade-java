@@ -165,6 +165,11 @@ export class ChamadosPage {
   }
 
   public cancelarIntencaoAtendimento(i: number) {
+    if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
+      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      return
+    }
+
     this.chamados.forEach((c, i) => {
       this.chamados[i].indIntencaoAtendimento = false;
       this.chamados[i].dataHoraIntencaoAtendimento = null;

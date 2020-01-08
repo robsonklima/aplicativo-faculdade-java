@@ -112,7 +112,7 @@ export class Config {
     ERRO_AO_ENVIAR_CHAMADO_FECHADO: 'Erro ao enviar chamado para o servidor',
     ERRO_AO_ENVIAR_CHECKINS: 'Erro ao enviar os checkins para o servidor',
     ERRO_AO_ENVIAR_INTENCOES: 'Erro ao enviar as intenções de atendimento para o servidor',
-    CHECKIN_EM_ABERTO: 'Você possui checkin aberto em outro chamado',
+    CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
     GPS_DESATIVADO: 'GPS Desativado',

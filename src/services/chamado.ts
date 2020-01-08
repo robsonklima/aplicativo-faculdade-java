@@ -328,6 +328,7 @@ export class ChamadoService {
       intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
       intencao.codOS = chamadosStorage[0].codOs;
       intencao.dataHoraCadastro = chamadosStorage[0].dataHoraIntencaoAtendimento;
+      intencao.codTecnico = chamadosStorage[0].codTecnico;
 
       // comentar
       resolve();
