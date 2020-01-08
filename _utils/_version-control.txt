@@ -1,5 +1,6 @@
 0.0.71 - 08/01/20
-- Técnico pode informar intenção de atendimento antecipadamente (A caminho do chamado);
+- Técnico pode informar intenção de atendimento antecipadamente (a caminho do chamado);
+- Corrigida cor de fundo das notificações de sucesso para verde no padrão material design (#388E3C);
 
 0.0.70 - 07/01/20
 - Correção do problema onde o usuário necessitava refazer o checkin ou checkout;
