@@ -170,7 +170,7 @@ export class ChamadosPage {
       this.chamados[i].dataHoraIntencaoAtendimento = null;
     });
 
-    this.toastFactory.exibirToast(`Intenção de atendimento cancelada ao chamado ${this.chamados[i].codOs}`, Config.TOAST.INFO)
+    this.toastFactory.exibirToast(`Intenção de atendimento cancelada`, Config.TOAST.INFO)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 

@@ -1,7 +1,7 @@
 import { Localizacao } from './localizacao';
 
-export class ChamadoIntencao {
+export class Intencao {
+    codOS: number;
     dataHoraCadastro: string;
     localizacao: Localizacao;
-    codOS: number;
 }

@@ -22,7 +22,7 @@ import 'rxjs/add/operator/map';
 import { Chamado } from "../models/chamado";
 import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
-import { ChamadoIntencao } from '../models/chamado-intencao';
+import { Intencao } from '../models/intencao';
 import { GeolocationService } from './geo-location';
 
 @Injectable()
@@ -73,8 +73,8 @@ export class ChamadoService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarIntencao(chamado: Chamado): Observable<any> {
-    let intencao = new ChamadoIntencao();
+  enviarIntencaoApi(chamado: Chamado): Observable<any> {
+    let intencao = new Intencao();
     intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
     intencao.codOS = chamado.codOs;
 
