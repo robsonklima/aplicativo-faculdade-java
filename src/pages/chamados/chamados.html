@@ -222,7 +222,7 @@
                 clear
                 small
                 (click)="telaChamado(chamado)"
-                [disabled]="chamado.dataHoraFechamento || !chamado.indIntencaoAtendimento">
+                [disabled]="chamado.dataHoraFechamento">
                 <ion-icon *ngIf="chamado.checkin.localizacao.latitude 
                   || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
                 <ion-icon *ngIf="!chamado.checkin.localizacao.latitude 
