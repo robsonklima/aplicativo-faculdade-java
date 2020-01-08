@@ -73,7 +73,7 @@ export class ChamadoService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarChamadoIntencao(chamado: Chamado): Observable<any> {
+  enviarIntencao(chamado: Chamado): Observable<any> {
     let intencao = new ChamadoIntencao();
     intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
     intencao.codOS = chamado.codOs;

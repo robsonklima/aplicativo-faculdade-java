@@ -188,9 +188,9 @@
                 clear 
                 small
                 color="primary"
-                (click)="informarEstouACaminho(i)"
-                *ngIf="!chamado.indEstouACaminho">
-                <ion-icon name="navigate" class="mark" *ngIf="!chamado.indEstouACaminho"></ion-icon>
+                (click)="informarIntencaoAtendimento(i)"
+                *ngIf="!chamado.indIntencaoAtendimento">
+                <ion-icon name="md-hand" class="mark"></ion-icon>
               </button>
 
               <button 
@@ -199,9 +199,9 @@
                 clear 
                 small
                 color="primary"
-                (click)="cancelarEstouACaminho(i)"
-                *ngIf="chamado.indEstouACaminho">
-                <ion-icon name="md-radio-button-on" color="secondary" class="mark" *ngIf="chamado.indEstouACaminho"></ion-icon>
+                (click)="cancelarIntencaoAtendimento(i)"
+                *ngIf="chamado.indIntencaoAtendimento">
+                <ion-icon name="hand" color="secondary" class="mark"></ion-icon>
               </button>
             </ion-col>
             <ion-col col-2>

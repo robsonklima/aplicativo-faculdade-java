@@ -429,7 +429,7 @@ export class ChamadoPage {
               return
             }
 
-            if (!this.chamado.indEstouACaminho) {
+            if (!this.chamado.indIntencaoAtendimento) {
               this.toastFactory.exibirToast(`Favor informar que está a caminho da OS ${this.chamado.codOs} antes de efetuar o checkin`, Config.TOAST.ERROR);
               return
             }

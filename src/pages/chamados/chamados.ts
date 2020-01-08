@@ -146,26 +146,31 @@ export class ChamadosPage {
     });
   }
 
-  public informarEstouACaminho(i: number) {
+  public informarIntencaoAtendimento(i: number) {
+    if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
+      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      return
+    }
+
     this.chamados.forEach((c, i) => {
-      this.chamados[i].indEstouACaminho = false;
-      this.chamados[i].dataHoraEstouACaminho = null;
+      this.chamados[i].indIntencaoAtendimento = false;
+      this.chamados[i].dataHoraIntencaoAtendimento = null;
     });
 
-    this.chamados[i].indEstouACaminho = true;
-    this.chamados[i].dataHoraEstouACaminho = new Date().toLocaleString('pt-BR');;
+    this.chamados[i].indIntencaoAtendimento = true;
+    this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');;
 
     this.toastFactory.exibirToast(`Estou a caminho do chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
-  public cancelarEstouACaminho(i: number) {
+  public cancelarIntencaoAtendimento(i: number) {
     this.chamados.forEach((c, i) => {
-      this.chamados[i].indEstouACaminho = false;
-      this.chamados[i].dataHoraEstouACaminho = null;
+      this.chamados[i].indIntencaoAtendimento = false;
+      this.chamados[i].dataHoraIntencaoAtendimento = null;
     });
 
-    this.toastFactory.exibirToast(`Cancelei que estou a caminho do chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+    this.toastFactory.exibirToast(`Intenção de atendimento cancelada ao chamado ${this.chamados[i].codOs}`, Config.TOAST.INFO)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
