@@ -159,6 +159,16 @@ export class ChamadosPage {
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
+  public cancelarEstouACaminho(i: number) {
+    this.chamados.forEach((c, i) => {
+      this.chamados[i].indEstouACaminho = false;
+      this.chamados[i].dataHoraEstouACaminho = null;
+    });
+
+    this.toastFactory.exibirToast(`Cancelei que estou a caminho do chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+    this.chamadoService.atualizarChamadosStorage(this.chamados);
+  }
+
   private carregarDadosGlobais(): Promise<DadosGlobais> {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage()
