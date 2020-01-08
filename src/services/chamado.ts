@@ -73,11 +73,7 @@ export class ChamadoService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarIntencaoApi(chamado: Chamado): Observable<any> {
-    let intencao = new Intencao();
-    intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
-    intencao.codOS = chamado.codOs;
-
+  enviarIntencaoApi(intencao: Intencao): Observable<any> {
     return this.http.post(Config.API_URL + 'OsIntencao', intencao)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
@@ -166,55 +162,64 @@ export class ChamadoService {
         if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHECKINS);
         this.enviarCheckins(verbose, chamadosStorage).then(() => {
 
-          if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_FOTOS_PARA_SERVIDOR);
-          this.enviarFotos(verbose, chamadosStorage).then(() => {
+          if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_INTENCOES);
+          this.enviarIntencao(verbose, chamadosStorage).then(() => {
 
-            if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
-            this.enviarChamadosFechados(verbose, chamadosStorage).then((chamadosAbertos) => {
+            if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_FOTOS_PARA_SERVIDOR);
+            this.enviarFotos(verbose, chamadosStorage).then(() => {
 
-              if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
-              this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
+              if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
+              this.enviarChamadosFechados(verbose, chamadosStorage).then((chamadosAbertos) => {
 
-                if (chamadosApi.length !== chamadosStorage.length && !verbose) this.dispararSinalSonoroComVibracao();
+                if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
+                this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
 
-                if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
-                this.combinarChamadosApiStorage(verbose, chamadosAbertos, chamadosApi).then((chamadosCombinados) => {
+                  if (chamadosApi.length !== chamadosStorage.length && !verbose) this.dispararSinalSonoroComVibracao();
 
-                  if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
-                  this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
+                  if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
+                  this.combinarChamadosApiStorage(verbose, chamadosAbertos, chamadosApi).then((chamadosCombinados) => {
+
+                    if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
+                    this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
+                      this.executando = false;
+                      this.loadingFactory.encerrar();
+                      if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                      this.events.publish('sincronizacao:efetuada');
+                      resolve(chamadosStorageRes);
+                    }).catch(() => { 
+                      this.executando = false;
+                      this.loadingFactory.encerrar();
+                      if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                      reject();
+                    });
+                  }).catch(() => {
                     this.executando = false;
                     this.loadingFactory.encerrar();
-                    if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
-                    this.events.publish('sincronizacao:efetuada');
-                    resolve(chamadosStorageRes);
-                  }).catch(() => { 
-                    this.executando = false;
-                    this.loadingFactory.encerrar();
-                    if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                    if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                     reject();
                   });
-                }).catch(() => {
+                }, () => { 
                   this.executando = false;
                   this.loadingFactory.encerrar();
-                  if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                  if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
                   reject();
                 });
-              }, () => { 
+              }).catch(() => { 
                 this.executando = false;
                 this.loadingFactory.encerrar();
-                if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
+                if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
                 reject();
-              });
+              }); 
             }).catch(() => { 
               this.executando = false;
               this.loadingFactory.encerrar();
-              if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
+              if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
               reject();
-            }); 
+            });
           }).catch(() => { 
             this.executando = false;
             this.loadingFactory.encerrar();
-            if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
+            if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_INTENCOES, Config.TOAST.ERROR);
             reject();
           });
         }).catch(() => { 
@@ -307,6 +312,28 @@ export class ChamadoService {
         .catch(error => {
           reject(`Erro: ${error}`);
         });
+    });
+  }
+
+  enviarIntencao(verbose: boolean=false, chamadosStorage: Chamado[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      chamadosStorage = chamadosStorage.filter((c) => { return (c.indIntencaoAtendimento) });
+
+      if (!chamadosStorage.length) {
+        resolve();
+        return
+      }
+
+      let intencao = new Intencao();
+      intencao.localizacao = this.geolocationService.buscarUltimaLocalizacao();
+      intencao.codOS = chamadosStorage[0].codOs;
+      intencao.dataHoraCadastro = chamadosStorage[0].dataHoraIntencaoAtendimento;
+
+      // comentar
+      resolve();
+      return;
+
+      //this.enviarIntencaoApi(intencao).subscribe(() => { resolve() }, e => { reject() });
     });
   }
 
