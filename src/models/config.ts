@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.71";
+  public static VERSAO_APP = "0.0.0";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -143,22 +143,22 @@ export class Config {
     ERRO_ENVIAR_FOTOS_PARA_SERVIDOR: 'Erro ao enviar fotos para o servidor',
     ERRO_ENVIAR_FOTO: 'Erro ao enviar foto para o servidor',
     ATUALIZAR_DADOS_LOCAIS: 'É necessário atualizar os dados do aplicativo para prosseguir',
-    CRIANDO_TAB_TIPOS_SERVICOS: "1/16: Configurando os Tipos de Serviço",
-    CRIANDO_TAB_ACOES: "2/16: Configurando as Ações",
-    CRIANDO_TAB_DEFEITOS: "3/16: Configurando os Defeitos",
-    CRIANDO_TAB_CAUSAS: "4/16: Configurando as Causas",
-    CRIANDO_TAB_PECAS: "5/16: Configurando as Peças",
-    CRIANDO_TAB_EQUIPAMENTOS_POS: "6/16: Configurando os Equipamentos POS",
-    CRIANDO_TAB_OPERADORAS: "7/16: Configurando as Operadoras",
-    CRIANDO_TAB_TIPOS_COMUNICACAO: "8/16: Configurando os Tipos de Comunicação",
-    CRIANDO_TAB_MOTIVOS_COMUNICACAO: "9/16: Configurando os Motivos de Comunicação",
-    CRIANDO_TAB_MOTIVOS_CANCELAMENTO: "10/16: Configurando os Motivos de Cancelamento",
-    CRIANDO_TAB_STATUS_SERVICO: "11/16: Configurando os Status de Serviços",
-    CRIANDO_TAB_DEFEITOS_POS: "12/16: Configurando os Defeitos do POS",
-    CRIANDO_TAB_FERRAMENTAS: "13/16: Configurando as Ferramentas dos Técnicos",
-    CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
-    CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
-    CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
+    CRIANDO_TAB_TIPOS_SERVICOS: "1/13: Configurando os Tipos de Serviço",
+    CRIANDO_TAB_ACOES: "2/13: Configurando as Ações",
+    CRIANDO_TAB_DEFEITOS: "3/13: Configurando os Defeitos",
+    CRIANDO_TAB_CAUSAS: "4/13: Configurando as Causas",
+    CRIANDO_TAB_PECAS: "5/13: Configurando as Peças",
+    CRIANDO_TAB_EQUIPAMENTOS_POS: "6/13: Configurando os Equipamentos POS",
+    CRIANDO_TAB_OPERADORAS: "7/13: Configurando as Operadoras",
+    CRIANDO_TAB_TIPOS_COMUNICACAO: "8/13: Configurando os Tipos de Comunicação",
+    CRIANDO_TAB_MOTIVOS_COMUNICACAO: "9/13: Configurando os Motivos de Comunicação",
+    CRIANDO_TAB_MOTIVOS_CANCELAMENTO: "10/13: Configurando os Motivos de Cancelamento",
+    CRIANDO_TAB_STATUS_SERVICO: "11/13: Configurando os Status de Serviços",
+    CRIANDO_TAB_DEFEITOS_POS: "12/13: Configurando os Defeitos do POS",
+    CRIANDO_TAB_FERRAMENTAS: "13/13: Configurando as Ferramentas dos Técnicos",
+    CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/13: Configurando os Equipamentos e Causas",
+    CRIANDO_TAB_DEFEITOS_CAUSAS: "15/13: Configurando os Defeitos e Causas",
+    CRIANDO_TAB_ACOES_CAUSAS: "16/13: Configurando as Ações e Causas",
     BUSCANDO_CHAMADOS_BASE_LOCAL: "Buscando chamados armazenados do smartphone",
     ENVIANDO_CHAMADOS_FECHADOS: "Enviando chamados para o servidor",
     ENVIANDO_CHECKINS: "Enviando checkins para o servidor",
@@ -173,13 +173,18 @@ export class Config {
     ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando as fotos para o servidor',
     SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
+    DETALHE_ADICIONADO: 'Detalhe adicionado com sucesso'
   };
   public static TOAST = { 
     INFO: 'info', 
     WARNING: 'warning',
     ERROR: 'error',
     SUCCESS: 'success',
-    DURACAO: 5000
+    DURACAO: 5000,
+    POSITION: {
+      TOP: 'top', 
+      MIDDLE: 'middle'
+    }
   }
   public static L = { 
     ICONES: {

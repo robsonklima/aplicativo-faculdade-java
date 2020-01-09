@@ -131,7 +131,6 @@ v<ion-header>
               [ngModel]="ratDetalhe?.causa" 
               interface="action-sheet"
               cancelText="Cancelar"
-              (ionChange)="buscarDefeitosEAcoes($event.codCausa)"
               required>
               <ion-option 
                 *ngFor="let causa of componentes" 

@@ -11,7 +11,7 @@ export class ToastFactory {
     private toastCtrl: ToastController
   ) {}
 
-  exibirToast(mensagem: string, tipo: string='info') {
+  exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
     try {
       this.toast.dismiss();
     } catch(e) {}
@@ -19,7 +19,7 @@ export class ToastFactory {
     this.toast = this.toastCtrl.create({
       message: mensagem, 
       duration: Config.TOAST.DURACAO, 
-      position: 'bottom', 
+      position: posicao || 'bottom', 
       cssClass: 'toast-' + tipo
     });
     

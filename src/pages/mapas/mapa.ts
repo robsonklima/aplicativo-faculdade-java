@@ -45,6 +45,8 @@ export class MapaPage {
   }
 
   private carregarMapa() {
+    if (this.map != undefined) this.map.remove();
+
     this.map = new Map('mapa').setView([this.localizacao.latitude, this.localizacao.longitude], 10);
     tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
     marker([ this.localizacao.latitude, this.localizacao.longitude ]).addTo(this.map).bindPopup(this.popup).openPopup();

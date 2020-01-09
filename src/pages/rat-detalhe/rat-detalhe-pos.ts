@@ -135,7 +135,7 @@ export class RatDetalhePosPage {
     if (!this.validarCamposObrigatorios()) return;
 
     this.chamadoService.atualizarChamado(this.chamado).then(() => {
-      this.toastFactory.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS);
+      this.toastFactory.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
       this.fecharModal() 
     });
   }

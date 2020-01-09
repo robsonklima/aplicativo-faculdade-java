@@ -240,20 +240,21 @@ export class HomePage {
                         this.statusServicoService.buscarStatusServicosStorage().then((statusServicos) => {
                           this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitosPOS) => {
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
-                              this.equipamentoCausaService.buscarEquipamentosCausasStorage().then((equipCausas) => {
-                                this.defeitoCausaService.buscarDefeitosCausasStorage().then((defeitosCausas) => {
-                                  this.acaoCausaService.buscarAcoesCausasStorage().then((acoesCausas) => {
+                              //this.equipamentoCausaService.buscarEquipamentosCausasStorage().then((equipCausas) => {
+                                //this.defeitoCausaService.buscarDefeitosCausasStorage().then((defeitosCausas) => {
+                                  //this.acaoCausaService.buscarAcoesCausasStorage().then((acoesCausas) => {
                                     if (
                                       !tiposServicos.length || !acoes.length || !defeitos.length || !causas.length || 
                                       !pecas.length || !equipamentos.length || !operadoras.length || !tiposComunicacao.length ||
                                       !motivosComuni.length || !motivosCancel.length || !statusServicos.length || !defeitosPOS.length ||
-                                      !ferramentas.length || !equipCausas.length || !defeitosCausas.length || !acoesCausas.length
+                                      !ferramentas.length 
+                                      //|| !equipCausas.length || !defeitosCausas.length || !acoesCausas.length
                                     ) {
                                       return true;
                                     }
-                                  });
-                                });
-                              });
+                                  //});
+                                //});
+                              //});
                             });
                           });
                         });
@@ -302,27 +303,27 @@ export class HomePage {
                             loading.setContent(Config.MSG.CRIANDO_TAB_FERRAMENTAS);
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
                               this.ferramentaTecnicoService.buscarFerramentasTecnicoApi(this.dg.usuario.codUsuario, ferramentas).subscribe(() => {
-                                loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMETNOS_CAUSAS);
-                                this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
-                                  loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_CAUSAS);
-                                  this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
-                                    loading.setContent(Config.MSG.CRIANDO_TAB_ACOES_CAUSAS);
-                                    this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
+                                // loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMETNOS_CAUSAS);
+                                // this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                                //   loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_CAUSAS);
+                                //   this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
+                                    // loading.setContent(Config.MSG.CRIANDO_TAB_ACOES_CAUSAS);
+                                    // this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
                                       loading.dismiss();
   
                                       this.salvarDadosGlobais();
-                                    }, (e) => { 
-                                      loading.dismiss(); 
-                                      this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES_CAUSAS);
-                                    });
-                                  }, (e) => { 
-                                    loading.dismiss(); 
-                                    this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_CAUSAS);
-                                  });
-                                }, (e) => { 
-                                  loading.dismiss(); 
-                                  this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_CAUSAS);
-                                });
+                                    // }, (e) => { 
+                                    //   loading.dismiss(); 
+                                    //   this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES_CAUSAS);
+                                    // });
+                                //   }, (e) => { 
+                                //     loading.dismiss(); 
+                                //     this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_CAUSAS);
+                                //   });
+                                // }, (e) => { 
+                                //   loading.dismiss(); 
+                                //   this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_CAUSAS);
+                                // });
                               }, (e) => { 
                                 loading.dismiss(); 
                                 this.exibirAlerta(Config.MSG.ERRO_OBTER_FERRAMENTAS); 

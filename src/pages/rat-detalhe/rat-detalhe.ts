@@ -74,8 +74,10 @@ export class RatDetalhePage {
 
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
-    this.buscarEquipamentosCausasStorage();
     this.buscarTipoCausas();
+    this.buscarModulos();
+    this.buscarDefeitos();
+    this.buscarAcoes();
   }
 
   public buscarTipoCausas() {
@@ -208,7 +210,7 @@ export class RatDetalhePage {
         }
 
       if (causa.codECausa.substring(0, 2) == "08") {
-        this.exibirAlerta("Este chamado exige lançamento de laudo!");
+        this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
       }
     }
   }
@@ -216,7 +218,7 @@ export class RatDetalhePage {
   public salvarRatDetalheNoChamadoESair() {
     this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
     this.chamadoService.atualizarChamado(this.chamado);
-    this.toastFactory.exibirToast('Detalhe adicionado com sucesso', Config.TOAST.SUCCESS);
+    this.toastFactory.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
     this.fecharModal();
   }
 
