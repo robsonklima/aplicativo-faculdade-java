@@ -40,7 +40,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.menuCtrl.enable(false);
-    this.dadosGlobaisService.apagarDadosGlobaisStorage();
 
     this.appVersion.getVersionNumber().then((versaoApp) => {
       this.versaoApp = versaoApp;
@@ -69,7 +68,6 @@ export class LoginPage implements OnInit {
           this.usuario = login.usuario;
           this.salvarDadosGlobais();
           this.usuarioService.salvarCredenciais(this.usuario);
-          this.chamadoService.apagarChamadosStorage();
           this.events.publish('login:efetuado', this.dadosGlobais);
           this.menuCtrl.enable(true);
           this.navCtrl.setRoot(HomePage);
