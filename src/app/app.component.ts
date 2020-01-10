@@ -162,6 +162,8 @@ export class MyApp {
   }
 
   public sair() {
-    this.nav.setRoot(this.tutorialPage);
+    this.dadosGlobaisService.apagarDadosGlobaisStorage().then(() => {
+      this.nav.setRoot(this.tutorialPage);
+    }).catch((err) => {});
   }
 }

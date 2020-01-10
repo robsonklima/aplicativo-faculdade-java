@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.0";
+  public static VERSAO_APP = "0.0.76";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -49,12 +49,15 @@ export class Config {
     AZUL: '#00BCD4'
   };
   public static FOTO = { 
-    WIDTH: 720, 
-    HEIGHT: 1280, 
+    WIDTH: 360, 
+    HEIGHT: 640, 
     QUALITY: 90, 
     STATUS: { 
       ENVIADA: 'ENVIADA', 
       PENDENTE_ENVIO: 'PENDENTE_ENVIO' 
+    },
+    MODALIDADES: {
+      RAT: 'RAT'
     }
   };
   public static CHECKIN = { 
@@ -70,9 +73,9 @@ export class Config {
     debug: false,
     stopOnTerminate: true,
     startForeground: true,
-    interval: 5 * 60000,
-    fastestInterval: 5 * 60000,
-    activitiesInterval: 5 * 60000,
+    interval: 6 * 60000,
+    fastestInterval: 6 * 60000,
+    activitiesInterval: 6 * 60000,
     notificationsEnabled: true,
     notificationTitle: 'App Técnicos - Meus Chamados',
     notificationText: 'Sincronizando Chamados da sua Filial',
@@ -113,6 +116,7 @@ export class Config {
     ERRO_AO_ENVIAR_CHAMADO_FECHADO: 'Erro ao enviar chamado para o servidor',
     ERRO_AO_ENVIAR_CHECKINS: 'Erro ao enviar os checkins para o servidor',
     ERRO_AO_ENVIAR_INTENCOES: 'Erro ao enviar os deslocamentos de atendimento para o servidor',
+    ERRO_AO_OBTER_LOCALIZACAO: 'Erro ao obter a localização',
     CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKIN_REMOCAO: 'Deseja remover o checkin?',
@@ -174,7 +178,7 @@ export class Config {
     ATUALIZAR_CHAMADOS_STORAGE: "Atualizando chamados armazenados do smartphone",
     CHAMADO_EXIGE_LAUDO: 'Este chamado exige lançamento de laudo!',
     CHAMADOS_SINCRONIZADOS: 'Chamados sincronizados junto ao servidor',
-    AGUARDE_ALGUNS_INSTANTES: 'Sincronização junto ao servidor em andamento. Aguarde alguns instantes',
+    AGUARDE_ALGUNS_INSTANTES: 'Sincronização com o servidor sendo executada. Tente novamente em alguns instantes',
     ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando as fotos para o servidor',
     SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',

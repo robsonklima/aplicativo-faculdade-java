@@ -1,4 +1,7 @@
-0.0.74 - 10/01/20
+0.0.76 - ??/01/20
+-
+
+0.0.75 - 10/01/20
 - Adicionada lâmina de deslocamento anteriormente ao Checkin na tela de detalhes do chamado;
 - Substituido icone de registro de deslocamento (hand para walk);
 

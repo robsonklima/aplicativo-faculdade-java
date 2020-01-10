@@ -23,14 +23,14 @@ export class TutorialPage {
     this.slides = [
       {
         title: "Deslocamento",
-        description: `Na versão <b>` + this.versao + `</b> você poderá informar que está em deslocamento
-        para o local de atendimento. `,
+        description: `Na versão <b>${this.versao}</b> você poderá informar que está em deslocamento
+                      para o local de atendimento. `,
         image: "assets/imgs/late.png",
       },
       {
         title: "Lista de Chamados",
         description: `A tela de listagem de chamados mudou! Adicionamos os chamados fechados,
-        e agora você poderá acompanhar os chamados que estão na lista de sincronização.`,
+                      e agora você poderá acompanhar os chamados que estão na lista de sincronização.`,
         image: "assets/imgs/list.png",
       },
       {

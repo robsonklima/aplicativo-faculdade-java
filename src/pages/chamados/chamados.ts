@@ -1,12 +1,11 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, NavController, AlertController, Events, Platform, ToastController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { LoadingController, NavController, AlertController, Events, ToastController, Platform } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
 import moment from 'moment';
 
 import { DadosGlobais } from '../../models/dados-globais';
-import { Localizacao } from '../../models/localizacao';
 import { Chamado } from '../../models/chamado';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
@@ -16,9 +15,11 @@ import { ChamadoPage } from "../chamados/chamado";
 import { MapaChamadoPage } from '../mapas/mapa-chamado';
 import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { Config } from '../../models/config';
-import { GeolocationService } from '../../services/geo-location';
 import { ChamadosFechadosPage } from './chamados-fechados';
 import { ChamadoFechadoPage } from './chamado-fechado';
+import { LoadingFactory } from '../../factories/loading-factory';
+import { Geolocation } from '@ionic-native/geolocation';
+import { GeolocationService } from '../../services/geo-location';
 
 
 @Component({
@@ -32,25 +33,24 @@ export class ChamadosPage {
   qtdChamadosFechadosAExibir: Number = 20;
   dg: DadosGlobais;
   status: string = "abertos";
-  minhaLocalizacao: Localizacao;
-  mapa: any;
 
   constructor(
+    private platform: Platform,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
     private badge: Badge,
     private events: Events,
     private loadingCtrl: LoadingController,
-    private geolocationService: GeolocationService,
+    private geolocation: Geolocation,
     private chamadoService: ChamadoService,
-    private dadosGlobaisService: DadosGlobaisService
+    private dadosGlobaisService: DadosGlobaisService,
+    private geolocationService: GeolocationService,
+    private loadingFactory: LoadingFactory
   ) {}
 
   
   ionViewWillEnter() {
-    this.minhaLocalizacao = this.geolocationService.buscarUltimaLocalizacao();
-
     this.carregarDadosGlobais().then(() => {
       this.carregarChamadosStorage().then(() => {
         this.carregarChamadosFechadosApi();
@@ -60,7 +60,7 @@ export class ChamadosPage {
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
   }
 
-  ionViewDidLoad() {
+  ngOnInit() {
     this.events.subscribe('sincronizacao:efetuada', () => {
       this.carregarChamadosStorage();
     });
@@ -146,16 +146,36 @@ export class ChamadosPage {
       return
     }
 
-    this.chamados.forEach((c, i) => {
-      this.chamados[i].indIntencaoAtendimento = false;
-      this.chamados[i].dataHoraIntencaoAtendimento = null;
+    this.platform.ready().then(() => {
+      this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+
+      this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((c) => {
+        this.loadingFactory.encerrar();
+
+        this.chamados.forEach((c, i) => {
+          this.chamados[i].indIntencaoAtendimento = false;
+          this.chamados[i].dataHoraIntencaoAtendimento = null;
+        });
+    
+        this.chamados[i].indIntencaoAtendimento = true;
+        this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
+    
+        this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+        
+        this.chamadoService.atualizarChamadosStorage(this.chamados);
+
+        this.geolocationService.atualizarMinhaLocalizacao({ 
+          latitude: c.coords.latitude, longitude: c.coords.longitude,
+          dataHoraCad: new Date().toLocaleString('pt-BR'),
+          codUsuario: this.dg.usuario.codUsuario
+        });
+      }).catch(() => { 
+        this.loadingFactory.encerrar();
+        this.exibirToast(Config.MSG.ERRO_AO_OBTER_LOCALIZACAO);
+      });
+    }).catch(() => {
+      this.exibirToast(Config.MSG.ERRO_AO_OBTER_LOCALIZACAO);
     });
-
-    this.chamados[i].indIntencaoAtendimento = true;
-    this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');;
-
-    this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
-    this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
   public cancelarIntencaoAtendimento(i: number) {

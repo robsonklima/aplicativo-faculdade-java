@@ -171,13 +171,23 @@ export class ChamadoPage {
         return;
       }
 
+      let width: number = Config.FOTO.WIDTH;
+      let height: number = Config.FOTO.HEIGHT;
+      let quality: number = Config.FOTO.QUALITY;
+
+      if (modalidade == Config.FOTO.MODALIDADES.RAT) {
+        width = 720;
+        height = 1280;
+        quality = 90;
+      }
+
       this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
         this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
           this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
             this.camera.getPicture({
-              quality: Config.FOTO.QUALITY,
-              targetWidth: Config.FOTO.WIDTH,
-              targetHeight: Config.FOTO.HEIGHT,
+              quality: quality,
+              targetWidth: width,
+              targetHeight: height,
               destinationType: this.camera.DestinationType.DATA_URL,
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
@@ -318,14 +328,36 @@ export class ChamadoPage {
         {
           text: 'Sim',
           handler: () => {
-            this.chamado.indIntencaoAtendimento = true;
-            this.chamado.dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
+            this.chamadoService.buscarChamadosStorage().then((chamados) => {
+              chamados.forEach((c, i) => {
+                chamados[i].indIntencaoAtendimento = false;
+                chamados[i].dataHoraIntencaoAtendimento = null;
+              });
 
-            this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
-              this.configurarSlide(this.slides.getActiveIndex());
-              this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-            }).catch(() => { this.loadingFactory.encerrar() });
+              this.chamadoService.atualizarChamadosStorage(chamados);
+
+              this.platform.ready().then(() => {
+                this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+                
+                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((c) => {
+                  this.loadingFactory.encerrar();
+  
+                  this.chamado.indIntencaoAtendimento = true;
+                  this.chamado.dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
+                  this.geolocationService.atualizarMinhaLocalizacao({ 
+                    latitude: c.coords.latitude, longitude: c.coords.longitude,
+                    dataHoraCad: new Date().toLocaleString('pt-BR'),
+                    codUsuario: this.dg.usuario.codUsuario
+                  });
+  
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  }).catch(() => { this.loadingFactory.encerrar() });
+                }).catch(() => { this.loadingFactory.encerrar() });
+              }).catch(() => {});
+            });
           }
         }
       ]
@@ -528,27 +560,34 @@ export class ChamadoPage {
               return
             }
 
-            this.platform.ready().then(() => {
-              this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
-              
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                this.loadingFactory.encerrar();
-                if (this.chamado.indOSIntervencaoEquipamento) {
-                  this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
-                }
+            this.chamadoService.buscarStatusExecucao().then(executando => {
+              if (executando) {
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                return;
+              }
 
-                this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                this.chamado.checkin.localizacao.latitude = location.coords.latitude;
-                this.chamado.checkin.localizacao.longitude = location.coords.longitude;
-                this.chamado.checkin.codUsuario = this.dg.usuario.codUsuario;
-                this.chamado.checkin.codOS = this.chamado.codOs;
-
-                this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                  this.configurarSlide(this.slides.getActiveIndex());
-                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+              this.platform.ready().then(() => {
+                this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+                
+                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                  this.loadingFactory.encerrar();
+                  if (this.chamado.indOSIntervencaoEquipamento) {
+                    this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
+                  }
+  
+                  this.chamado.checkin.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkin.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkin.localizacao.longitude = location.coords.longitude;
+                  this.chamado.checkin.codUsuario = this.dg.usuario.codUsuario;
+                  this.chamado.checkin.codOS = this.chamado.codOs;
+  
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  }).catch(() => { this.loadingFactory.encerrar() });
                 }).catch(() => { this.loadingFactory.encerrar() });
-              }).catch(() => { this.loadingFactory.encerrar() });
-            }).catch(() => {});
+              }).catch(() => {});
+            });
           }
         }
       ]
@@ -574,24 +613,31 @@ export class ChamadoPage {
           handler: () => {
             if (!this.validarCamposObrigatorios()) return;
 
-            this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
+            this.chamadoService.buscarStatusExecucao().then(executando => {
+              if (executando) {
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                return;
+              }
 
-            this.platform.ready().then(() => {
-              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+              this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
 
-                this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
-                this.chamado.checkout.localizacao.latitude = location.coords.latitude;
-                this.chamado.checkout.localizacao.longitude = location.coords.longitude;
-                this.chamado.checkout.codUsuario = this.dg.usuario.codUsuario;
-                this.chamado.checkout.codOS = this.chamado.codOs;
+              this.platform.ready().then(() => {
+                this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
 
-                this.loadingFactory.encerrar();
-                this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                  this.configurarSlide(this.slides.getActiveIndex());
-                  this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  this.chamado.checkout.dataHoraCadastro = new Date().toLocaleString('pt-BR');
+                  this.chamado.checkout.localizacao.latitude = location.coords.latitude;
+                  this.chamado.checkout.localizacao.longitude = location.coords.longitude;
+                  this.chamado.checkout.codUsuario = this.dg.usuario.codUsuario;
+                  this.chamado.checkout.codOS = this.chamado.codOs;
+
+                  this.loadingFactory.encerrar();
+                  this.chamadoService.atualizarChamado(this.chamado).then(() => {
+                    this.configurarSlide(this.slides.getActiveIndex());
+                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+                  }).catch(() => { this.loadingFactory.encerrar() });
                 }).catch(() => { this.loadingFactory.encerrar() });
-              }).catch(() => { this.loadingFactory.encerrar() });
-            }).catch(() => {});
+              }).catch(() => {});
+            });
           }
         }
       ]
@@ -664,7 +710,7 @@ export class ChamadoPage {
 
     this.chamadoService.atualizarChamado(this.chamado);
     this.configurarSlide(this.slides.getActiveIndex());
-    this.slides.slideTo(4, 500);
+    this.slides.slideTo(this.slides.getActiveIndex()+1, 500);
   }
 
   public fecharChamado() {
@@ -700,12 +746,9 @@ export class ChamadoPage {
 
                 setTimeout(() => {
                   this.loadingFactory.encerrar();
-
-                  this.navCtrl.pop().then(() => {
-                    this.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
-                  }).catch();
-                }, 500);
-              }, 1000);
+                  this.navCtrl.pop().catch();
+                }, 1000);
+              }, 1500);
             }).catch();
           }
         }
@@ -923,16 +966,15 @@ export class ChamadoPage {
       if (!this.chamado.dataHoraOSMobileLida) {
         this.chamado.dataHoraOSMobileLida = new Date().toLocaleString('pt-BR');
 
-        this.chamadoService.registrarLeituraChamadoApi(this.chamado)
-          .subscribe((r) => {
-            this.chamadoService.atualizarChamado(this.chamado);
+        this.chamadoService.registrarLeituraChamadoApi(this.chamado).subscribe((r) => {
+          this.chamadoService.atualizarChamado(this.chamado);
 
-            resolve();
-          },
-          err => {
-            this.chamado.dataHoraOSMobileLida = null;
-            reject();
-          });
+          resolve();
+        },
+        err => {
+          this.chamado.dataHoraOSMobileLida = null;
+          reject();
+        });
       }
     });
   }
@@ -956,5 +998,9 @@ export class ChamadoPage {
     });
     
     toast.present();
+  }
+
+  ionViewWillLeave(){
+    this.chamadoService.sincronizarChamados(false, this.dg.usuario.codTecnico).catch();
   }
 }
