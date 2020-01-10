@@ -108,11 +108,6 @@
               {{ chamado.equipamentoContrato.equipamento.codEEquip.toUpperCase() }}
               {{ chamado.equipamentoContrato.numSerie ? ', ' : '' }} 
               {{ chamado.equipamentoContrato.numSerie }}
-              
-              {{ chamado.equipamentoContrato.distancia ? ', ' : '' }} 
-              <span class="small" *ngIf="chamado?.localAtendimento?.distancia">
-                {{ chamado?.localAtendimento?.distancia }}
-              </span>
             </span>
           </p>
           <p
@@ -271,6 +266,4 @@
       </ion-card>
     </ion-list>
   </div>
-
-  <div id="mapa"></div> 
 </ion-content>

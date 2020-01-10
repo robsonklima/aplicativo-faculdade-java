@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Toast, Events } from 'ionic-angular';
+import { Toast, Events, ToastController } from 'ionic-angular';
 
 import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
@@ -11,7 +11,6 @@ import { Config } from '../models/config';
 import _ from 'lodash';
 
 import { LoadingFactory } from '../factories/loading-factory';
-import { ToastFactory } from '../factories/toast-factory';
 
 import 'rxjs/Rx';
 import 'rxjs/add/operator/retry';
@@ -36,13 +35,13 @@ export class ChamadoService {
     private http: Http,
     private storage: Storage,
     private events: Events,
+    private toastCtrl: ToastController,
     private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
-    private toastFactory: ToastFactory,
     private geolocationService: GeolocationService
-  ) { }
+  ) {}
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
@@ -136,19 +135,19 @@ export class ChamadoService {
   sincronizarChamados(verbose: boolean=false, codTecnico: number): Promise<any[]> {
     return new Promise((resolve, reject) => {
       if (this.executando) {
-        if (verbose) this.toastFactory.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        if (verbose) this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
         resolve();
         return;
       }
       
       if (!codTecnico) {
-        if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, Config.TOAST.ERROR);
+        if (verbose) this.exibirToast(Config.MSG.ERRO_TECNICO_NAO_ENCONTRADO, Config.TOAST.ERROR);
         resolve();
         return;
       }
 
       if (!navigator.onLine) {
-        if (verbose) this.toastFactory.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
+        if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
         resolve();
         return;
       }
@@ -183,49 +182,49 @@ export class ChamadoService {
                     this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
                       this.executando = false;
                       this.loadingFactory.encerrar();
-                      if (verbose) this.toastFactory.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                      if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
                       this.events.publish('sincronizacao:efetuada');
                       resolve(chamadosStorageRes);
                     }).catch(() => { 
                       this.executando = false;
                       this.loadingFactory.encerrar();
-                      if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                      if (verbose) this.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                       reject();
                     });
                   }).catch(() => {
                     this.executando = false;
                     this.loadingFactory.encerrar();
-                    if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                    if (verbose) this.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                     reject();
                   });
                 }, () => { 
                   this.executando = false;
                   this.loadingFactory.encerrar();
-                  if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
+                  if (verbose) this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
                   reject();
                 });
               }).catch(() => { 
                 this.executando = false;
                 this.loadingFactory.encerrar();
-                if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
+                if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
                 reject();
               }); 
             }).catch(() => { 
               this.executando = false;
               this.loadingFactory.encerrar();
-              if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
+              if (verbose) this.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
               reject();
             });
           }).catch(() => { 
             this.executando = false;
             this.loadingFactory.encerrar();
-            if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_INTENCOES, Config.TOAST.ERROR);
+            if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_INTENCOES, Config.TOAST.ERROR);
             reject();
           });
         }).catch(() => { 
           this.executando = false;
           this.loadingFactory.encerrar();
-          if (verbose) this.toastFactory.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHECKINS, Config.TOAST.ERROR);
+          if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHECKINS, Config.TOAST.ERROR);
           reject();
         });
       });
@@ -422,14 +421,14 @@ export class ChamadoService {
   
       Promise.all(promises).then(response => {
         this.buscarChamadosStorage().then((chamadosStorage) => {
-          if (verbose) this.toastFactory.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);
+          if (verbose) this.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);
 
           resolve(chamadosStorage);
         }).catch(() => {
           reject();
         });
       }).catch(error => {
-        if (verbose) this.toastFactory.exibirToast(`Não foi possível enviar ${chamadosFechados.length == 1 ? 'o chamado' : 'os chamados'} para o servidor`, Config.TOAST.ERROR);
+        if (verbose) this.exibirToast(`Não foi possível enviar ${chamadosFechados.length == 1 ? 'o chamado' : 'os chamados'} para o servidor`, Config.TOAST.ERROR);
         reject(`Erro: ${error}`);
       });
     });
@@ -519,6 +518,17 @@ export class ChamadoService {
         }).catch()
       );
     });
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 
   private dispararSinalSonoroComVibracao() {

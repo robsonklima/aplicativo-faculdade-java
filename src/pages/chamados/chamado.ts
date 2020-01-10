@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, Platform, Slides, AlertController, Toast, ModalController, NavController } from 'ionic-angular';
+import { NavParams, Platform, Slides, AlertController, Toast, ModalController, NavController, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -29,7 +29,6 @@ import { UsuarioService } from '../../services/usuario';
 import { GeolocationService } from '../../services/geo-location';
 
 import { LoadingFactory } from '../../factories/loading-factory';
-import { ToastFactory } from '../../factories/toast-factory';
 
 import { RatDetalhePage } from "../rat-detalhe/rat-detalhe";
 import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
@@ -39,7 +38,6 @@ import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
 import { FotoPage } from '../fotos/foto';
-import { Checkin } from '../../models/checkin';
 
 
 @Component({
@@ -63,6 +61,7 @@ export class ChamadoPage {
 
   constructor(
     private platform: Platform,
+    private toastCtrl: ToastController,
     private appAvailability: AppAvailability,
     private geolocation: Geolocation,
     private diagnostic: Diagnostic,
@@ -73,7 +72,6 @@ export class ChamadoPage {
     private navParams: NavParams,
     private loadingFactory: LoadingFactory,
     private alertCtrl: AlertController,
-    private toastFactory: ToastFactory,
     private navCtrl: NavController,
     private geolocationService: GeolocationService,
     private equipamentoPOSService: EquipamentoPOSService,
@@ -169,7 +167,7 @@ export class ChamadoPage {
   public tirarFoto(modalidade: string) {
     this.platform.ready().then(() => {
       if (!this.platform.is('cordova')) {
-        this.toastFactory.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
+        this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
         return;
       }
 
@@ -201,7 +199,7 @@ export class ChamadoPage {
         }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
       },
       (no: boolean) => {
-        this.toastFactory.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
+        this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
         setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
         return;
       }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
@@ -305,7 +303,7 @@ export class ChamadoPage {
 
   public informarIntencaoAtendimento() {
     if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
       return
     }
 
@@ -324,7 +322,7 @@ export class ChamadoPage {
             this.chamado.dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
+              this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
               this.configurarSlide(this.slides.getActiveIndex());
               this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
             }).catch(() => { this.loadingFactory.encerrar() });
@@ -338,7 +336,7 @@ export class ChamadoPage {
 
   public cancelarIntencaoAtendimento() {
     if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
       return
     }
 
@@ -357,7 +355,7 @@ export class ChamadoPage {
             this.chamado.dataHoraIntencaoAtendimento = null;
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
+              this.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
               this.configurarSlide(this.slides.getActiveIndex());
               this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
             }).catch(() => { this.loadingFactory.encerrar() });
@@ -386,7 +384,7 @@ export class ChamadoPage {
             this.chamado.checkin.dataHoraCadastro = null;
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(`Checkin removido`, Config.TOAST.INFO);
+              this.exibirToast(`Checkin removido`, Config.TOAST.INFO);
               this.configurarSlide(this.slides.getActiveIndex());
               this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
             }).catch(() => { this.loadingFactory.encerrar() });
@@ -521,12 +519,12 @@ export class ChamadoPage {
           text: 'Confirmar',
           handler: () => {
             if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-              this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
+              this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR);
               return
             }
 
             if (!this.chamado.indIntencaoAtendimento) {
-              this.toastFactory.exibirToast(`Favor informar que está a caminho do chamado ${this.chamado.codOs} antes de efetuar o checkin`, Config.TOAST.ERROR);
+              this.exibirToast(`Favor informar que está a caminho do chamado ${this.chamado.codOs} antes de efetuar o checkin`, Config.TOAST.ERROR);
               return
             }
 
@@ -622,27 +620,27 @@ export class ChamadoPage {
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAgendamento, 'YYYY-MM-DD HH:mm'))) {
-      this.toastFactory.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado', Config.TOAST.ERROR);
+      this.exibirToast('A horário de atendimento deve ocorrer depois do horário de agendamento do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm').isBefore(moment(this.chamado.dataHoraAberturaOS, 'YYYY-MM-DD HH:mm'))) {
-      this.toastFactory.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado', Config.TOAST.ERROR);
+      this.exibirToast('A horário de atendimento deve ocorrer depois da data de abertura do chamado', Config.TOAST.ERROR);
       return
     }
 
     if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
-      this.toastFactory.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
+      this.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
       return
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {
-      this.toastFactory.exibirToast('A solução deve ocorrer após o início', Config.TOAST.ERROR);
+      this.exibirToast('A solução deve ocorrer após o início', Config.TOAST.ERROR);
       return
     }
 
     if (moment().isBefore(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm'))) {
-      this.toastFactory.exibirToast('A solução não pode ocorrer no futuro', Config.TOAST.ERROR);
+      this.exibirToast('A solução não pode ocorrer no futuro', Config.TOAST.ERROR);
       return
     }
 
@@ -685,7 +683,7 @@ export class ChamadoPage {
               if (!this.validarCamposObrigatorios()) return;
 
               if (executando) {
-                this.toastFactory.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
                 return;
               }
 
@@ -704,7 +702,7 @@ export class ChamadoPage {
                   this.loadingFactory.encerrar();
 
                   this.navCtrl.pop().then(() => {
-                    this.toastFactory.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
+                    this.exibirToast(Config.MSG.CHAMADO_FECHADO_COM_SUCESSO, Config.TOAST.SUCCESS);
                   }).catch();
                 }, 500);
               }, 1000);
@@ -719,20 +717,20 @@ export class ChamadoPage {
 
   private validarCamposObrigatorios(): boolean {
     if (this.chamado.rats.length == 0) {
-      this.toastFactory.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
+      this.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
 
       return;
     }
 
     if (this.platform.is('cordova') && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-        this.toastFactory.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
 
         return;
       }
 
       if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-        this.toastFactory.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
 
         return;
       }
@@ -740,7 +738,7 @@ export class ChamadoPage {
 
     if(_.has(this.chamado.rats[0], 'laudos')) {
       if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio() && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
-        this.toastFactory.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
   
         return;
       }
@@ -748,7 +746,7 @@ export class ChamadoPage {
     
     if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
-      this.toastFactory.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
+      this.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
 
       return false;
     }
@@ -758,7 +756,7 @@ export class ChamadoPage {
         (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
         (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
       ) {
-        this.toastFactory.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
+        this.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
 
         return false;
       }
@@ -826,7 +824,7 @@ export class ChamadoPage {
           handler: () => {
             this.chamado.rats[0].ratDetalhes.splice(i, 1);
             this.chamadoService.atualizarChamado(this.chamado);
-            this.toastFactory.exibirToast('Detalhe excluído com sucesso', Config.TOAST.SUCCESS)
+            this.exibirToast('Detalhe excluído com sucesso', Config.TOAST.SUCCESS)
           }
         }
       ]
@@ -947,5 +945,16 @@ export class ChamadoPage {
     });
 
     alerta.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 }

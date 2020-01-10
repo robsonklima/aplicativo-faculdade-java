@@ -9,7 +9,6 @@ import { Localizacao } from '../../models/localizacao';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { LocalizacaoService } from '../../services/localizacao';
 import { GeolocationService } from '../../services/geo-location';
-import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({

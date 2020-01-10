@@ -9,7 +9,6 @@ import { Chamado } from '../models/chamado';
 import { Localizacao } from '../models/localizacao';
 
 import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
@@ -26,7 +25,6 @@ import { Config } from '../models/config';
 })
 export class MyApp {
   toast: Toast;
-  loginPage = LoginPage;
   tutorialPage = TutorialPage;
   homePage = HomePage;
   @ViewChild('nav') nav: NavController;
@@ -164,6 +162,6 @@ export class MyApp {
   }
 
   public sair() {
-    this.nav.setRoot(this.loginPage);
+    this.nav.setRoot(this.tutorialPage);
   }
 }

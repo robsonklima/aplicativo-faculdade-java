@@ -1,12 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { LoadingController, NavController, AlertController, Events, Platform } from 'ionic-angular';
+import { LoadingController, NavController, AlertController, Events, Platform, ToastController } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 
 import moment from 'moment';
-import leaflet from 'leaflet';
-import 'leaflet-routing-machine';
-declare var L: any;
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { Localizacao } from '../../models/localizacao';
@@ -22,7 +19,6 @@ import { Config } from '../../models/config';
 import { GeolocationService } from '../../services/geo-location';
 import { ChamadosFechadosPage } from './chamados-fechados';
 import { ChamadoFechadoPage } from './chamado-fechado';
-import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({
@@ -40,14 +36,12 @@ export class ChamadosPage {
   mapa: any;
 
   constructor(
-    private platform: Platform,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
+    private toastCtrl: ToastController,
     private badge: Badge,
     private events: Events,
-    private changeDetector: ChangeDetectorRef,
     private loadingCtrl: LoadingController,
-    private toastFactory: ToastFactory,
     private geolocationService: GeolocationService,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService
@@ -148,7 +142,7 @@ export class ChamadosPage {
 
   public informarIntencaoAtendimento(i: number) {
     if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
       return
     }
 
@@ -160,13 +154,13 @@ export class ChamadosPage {
     this.chamados[i].indIntencaoAtendimento = true;
     this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');;
 
-    this.toastFactory.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+    this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
   public cancelarIntencaoAtendimento(i: number) {
     if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
-      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      this.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
       return
     }
 
@@ -175,7 +169,7 @@ export class ChamadosPage {
       this.chamados[i].dataHoraIntencaoAtendimento = null;
     });
 
-    this.toastFactory.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
+    this.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
@@ -205,11 +199,6 @@ export class ChamadosPage {
           .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
         });
 
-        this.chamados.map((chamado, chamadoIndex) => {
-          this.obterDistanciaETempoDoDestino(chamado, chamadoIndex);
-        });
-        
-        this.changeDetector.markForCheck();
         this.atualizarBadge();
         resolve();
       }).catch();
@@ -225,33 +214,18 @@ export class ChamadosPage {
     err => {});
   }
 
-  private obterDistanciaETempoDoDestino(chamado: Chamado, chamadoIndex: number): string {
-    if (!this.minhaLocalizacao || !this.platform.is('cordova')) return;
-
-    if (this.mapa != undefined) this.mapa.remove();  
-
-    this.mapa = leaflet.map('mapa');
-    let wps: any = [];
-    
-    wps.push(L.latLng([this.minhaLocalizacao.latitude, this.minhaLocalizacao.longitude]));
-    wps.push(L.latLng([chamado.localAtendimento.localizacao.latitude, chamado.localAtendimento.localizacao.longitude]));
-    
-    let route = L.Routing.control({ waypoints: wps }).addTo(this.mapa);
-    var bounds = L.latLngBounds(wps);
-    this.mapa.fitBounds(bounds);
-
-    route.on('routesfound', (e) => {
-      var routes = e.routes;
-      var summary = routes[0].summary;
-      let distancia = (summary.totalDistance / 1000).toFixed(0);
-      var tempoHoras = moment().startOf('day').seconds(summary.totalTime).format('H');
-      var tempoMinutos = moment().startOf('day').seconds(summary.totalTime).format('mm');
-
-      this.chamados[chamadoIndex].localAtendimento.distancia = `${distancia}km, ${tempoHoras}h ${tempoMinutos}min`;
-    });
-  }
-
   private atualizarBadge() {
     this.badge.set( this.chamados.filter((c) => { return (!c.dataHoraFechamento) }).length );
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 }

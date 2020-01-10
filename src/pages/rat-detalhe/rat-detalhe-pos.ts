@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, AlertController } from 'ionic-angular';
+import { NavParams, ViewController, AlertController, ToastController } from 'ionic-angular';
 
 import { Chamado } from './../../models/chamado';
 import { Config } from '../../models/config';
@@ -24,7 +24,6 @@ import { StatusServico } from '../../models/status-servico';
 import { DefeitoPOS } from '../../models/defeito-pos';
 import { ChamadoService } from '../../services/chamado';
 import { NgForm } from '@angular/forms';
-import { ToastFactory } from '../../factories/toast-factory';
 
 
 @Component({
@@ -45,7 +44,7 @@ export class RatDetalhePosPage {
   constructor(
     private navParams: NavParams,
     private viewCtrl: ViewController,
-    private toastFactory: ToastFactory,
+    private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
@@ -135,20 +134,20 @@ export class RatDetalhePosPage {
     if (!this.validarCamposObrigatorios()) return;
 
     this.chamadoService.atualizarChamado(this.chamado).then(() => {
-      this.toastFactory.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
+      this.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
       this.fecharModal() 
     });
   }
 
   private validarCamposObrigatorios(): boolean {
     if (!_.has(this.chamado.rats[0], 'statusServico') || !_.has(this.chamado.rats[0].statusServico, 'codStatusServico')) {
-      this.toastFactory.exibirToast("Informe o status de serviço do POS", Config.TOAST.ERROR);
+      this.exibirToast("Informe o status de serviço do POS", Config.TOAST.ERROR);
 
       return false;
     }
 
     if (!_.has(this.chamado.rats[0], 'defeitoPOS') || !_.has(this.chamado.rats[0].defeitoPOS, 'codDefeitoPOS')) {
-      this.toastFactory.exibirToast("Informe o defeito apresentado pelo POS", Config.TOAST.ERROR);
+      this.exibirToast("Informe o defeito apresentado pelo POS", Config.TOAST.ERROR);
 
       return false;
     }
@@ -158,7 +157,7 @@ export class RatDetalhePosPage {
       this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO
     ) {
       if (!_.has(this.chamado.rats[0], 'motivoCancelamento') || !_.has(this.chamado.rats[0].motivoCancelamento, 'codMotivoCancelamento') || !this.chamado.rats[0].obsMotivoCancelamento) {
-        this.toastFactory.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação', Config.TOAST.ERROR);
+        this.exibirToast('Favor inserir o motivo do cancelamento do chamado POS e a observação', Config.TOAST.ERROR);
 
         return false;
       }
@@ -167,19 +166,19 @@ export class RatDetalhePosPage {
     if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.FECHADO) {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.INSTALAÇÃO) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -188,26 +187,26 @@ export class RatDetalhePosPage {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.CORRETIVA) {
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-            this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado', Config.TOAST.ERROR);
+            this.exibirToast('Favor inserir o equipamento POS instalado', Config.TOAST.ERROR);
   
             return false;
           }
   
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
+            this.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
   
             return false;
           }
         }
 
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
 
           return false;
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -216,14 +215,14 @@ export class RatDetalhePosPage {
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.DESINSTALAÇÃO) {
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado e a série', Config.TOAST.ERROR);
+            this.exibirToast('Favor inserir o equipamento POS retirado e a série', Config.TOAST.ERROR);
   
             return false;
           }
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
 
           return false;
         }
@@ -234,27 +233,27 @@ export class RatDetalhePosPage {
         this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.TROCA_VELOHC
       ) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
   
           return false;
         }
 
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.toastFactory.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
+            this.exibirToast('Favor inserir o equipamento POS retirado', Config.TOAST.ERROR);
     
             return false;
           }
         }
   
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
   
           return false;
         }
@@ -265,19 +264,19 @@ export class RatDetalhePosPage {
         this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.ALTERAÇÃO_ENGENHARIA
       ) {
         if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
-          this.toastFactory.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o equipamento POS instalado e a série', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!_.has(this.chamado.rats[0], 'tipoComunicacao') || !_.has(this.chamado.rats[0].tipoComunicacao, 'codTipoComunicacao')) {
-          this.toastFactory.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir o tipo de comunicação do POS', Config.TOAST.ERROR);
   
           return false;
         }
   
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {
-          this.toastFactory.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
+          this.exibirToast('Favor inserir a rede do equipamento POS', Config.TOAST.ERROR);
   
           return false;
         }
@@ -445,6 +444,17 @@ export class RatDetalhePosPage {
     });
 
     confirmacao.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 
   private fecharModal() {

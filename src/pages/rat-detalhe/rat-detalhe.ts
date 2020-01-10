@@ -1,6 +1,6 @@
 import { RatDetalhe } from '../../models/rat-detalhe';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, NavParams, Slides, ViewController } from 'ionic-angular';
+import { AlertController, NavParams, Slides, ViewController, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Config } from '../../models/config';
@@ -12,8 +12,6 @@ import { Acao } from "../../models/acao";
 import { TipoCausa } from "../../models/tipo-causa";
 import { Causa } from "../../models/causa";
 import { Defeito } from "../../models/defeito";
-
-import { ToastFactory } from '../../factories/toast-factory';
 
 import { TipoServicoService } from "../../services/tipo-servico";
 import { AcaoService } from "../../services/acao";
@@ -57,7 +55,7 @@ export class RatDetalhePage {
   constructor(
     private navParams: NavParams,
     private viewCtrl: ViewController,
-    private toastFactory: ToastFactory,
+    private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private acaoService: AcaoService,
     private causaService: CausaService,
@@ -171,7 +169,7 @@ export class RatDetalhePage {
     let pecas: Peca[] = [];
 
     if (!tipoCausa.codTipoCausa  || !tipoServico.codTipoServico || !defeito.codDefeito || !causa.codCausa || !acao.codAcao ) {
-      this.toastFactory.exibirToast('Erro ao salvar detalhe! Tente novamente', Config.TOAST.ERROR);
+      this.exibirToast('Erro ao salvar detalhe! Tente novamente', Config.TOAST.ERROR);
       this.fecharModal();
       return
     } else {
@@ -218,7 +216,7 @@ export class RatDetalhePage {
   public salvarRatDetalheNoChamadoESair() {
     this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
     this.chamadoService.atualizarChamado(this.chamado);
-    this.toastFactory.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
+    this.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
     this.fecharModal();
   }
 
@@ -260,7 +258,7 @@ export class RatDetalhePage {
       });
       this.limparPesquisa();
     } else {
-      this.toastFactory.exibirToast("Esta peça já foi adicionada", Config.TOAST.ERROR);
+      this.exibirToast("Esta peça já foi adicionada", Config.TOAST.ERROR);
     }
   }
 
@@ -285,7 +283,7 @@ export class RatDetalhePage {
 
             if (i > -1) {
               this.ratDetalhe.pecas.splice(i, 1);
-              this.toastFactory.exibirToast("Peça removida com sucesso", Config.TOAST.SUCCESS);
+              this.exibirToast("Peça removida com sucesso", Config.TOAST.SUCCESS);
               this.chamadoService.atualizarChamado(this.chamado);
             }
           }
@@ -434,6 +432,17 @@ export class RatDetalhePage {
     });
 
     alerta.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 
   private fecharModal() {
