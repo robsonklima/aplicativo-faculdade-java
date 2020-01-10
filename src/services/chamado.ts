@@ -233,37 +233,42 @@ export class ChamadoService {
 
   combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (chamadosApi.length == 0) {
-          resolve([]);
-          return
-        }
+      if (chamadosApi.length == 0) {
+        resolve([]);
+        return
+      }
 
-        if (chamadosStorage.length == 0) {
-          chamadosStorage = chamadosApi;
-        }
+      if (chamadosStorage.length == 0) {
+        chamadosStorage = chamadosApi;
+      }
 
-        chamadosStorage.forEach((cStorage, cStorageIndex) => {
-          chamadosApi.forEach((cAPI) => {
-            if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage contem chamado api
-              // atualizar     
-            } else {
-              if (!verbose) this.exibirNotificacao(`Chamado ${cAPI.codOs} recebido`, 'Chamado recebido');
-              chamadosStorage.push(cAPI);
+      chamadosStorage.forEach((cStorage, sIndex) => {
+        chamadosApi.forEach((cAPI, aIndex) => {
+          if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage CONTEM chamado api
+            if (cStorage.codOs == cAPI.codOs) {
+              if (!_.isEqual(cAPI, cStorage)) {
+                chamadosStorage[sIndex].tipoIntervencao = chamadosApi[aIndex].tipoIntervencao;
+                chamadosStorage[sIndex].indBloqueioReincidencia = chamadosApi[aIndex].indBloqueioReincidencia;
+                chamadosStorage[sIndex].indOSIntervencaoEquipamento = chamadosApi[aIndex].indOSIntervencaoEquipamento;
+                chamadosStorage[sIndex].localAtendimento = chamadosApi[aIndex].localAtendimento;
+                chamadosStorage[sIndex].equipamentoContrato = chamadosApi[aIndex].equipamentoContrato;
+              }
             }
+          } else {
+            chamadosStorage.push(cAPI);
+          }
 
-            if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { // verifica se api contem chamado storage
-              chamadosStorage.splice(cStorageIndex, 1);
-            }
-          });
+          if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { // verifica se storage NAO contem chamado api
+            chamadosStorage.splice(sIndex, 1);
+          }
         });
+      });
 
-        chamadosStorage = chamadosStorage
-          .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs)))
-          .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))});
-        
-        resolve(chamadosStorage);
-      }, Math.floor(Math.random() * (2000 - 500 + 1) + 500));
+      chamadosStorage = chamadosStorage
+        .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs)))
+        .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))});
+      
+      resolve(chamadosStorage);
     });
   }
 
