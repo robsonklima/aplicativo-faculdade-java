@@ -351,7 +351,7 @@ export class ChamadoPage {
                   });
   
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {
-                    this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
+                    this.exibirToast(`Em deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
                     this.configurarSlide(this.slides.getActiveIndex());
                     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   }).catch(() => { this.loadingFactory.encerrar() });

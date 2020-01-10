@@ -252,6 +252,10 @@ export class ChamadoService {
                 chamadosStorage[sIndex].indOSIntervencaoEquipamento = chamadosApi[aIndex].indOSIntervencaoEquipamento;
                 chamadosStorage[sIndex].localAtendimento = chamadosApi[aIndex].localAtendimento;
                 chamadosStorage[sIndex].equipamentoContrato = chamadosApi[aIndex].equipamentoContrato;
+                chamadosStorage[sIndex].dataHoraAberturaOS = chamadosApi[aIndex].dataHoraAberturaOS;
+                chamadosStorage[sIndex].dataHoraAgendamento = chamadosApi[aIndex].dataHoraAgendamento;
+                chamadosStorage[sIndex].observacao = chamadosApi[aIndex].observacao;
+                chamadosStorage[sIndex].defeitoRelatado = chamadosApi[aIndex].defeitoRelatado;
               }
             }
           } else {

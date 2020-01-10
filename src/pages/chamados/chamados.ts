@@ -160,7 +160,7 @@ export class ChamadosPage {
         this.chamados[i].indIntencaoAtendimento = true;
         this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
     
-        this.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+        this.exibirToast(`Em deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
         
         this.chamadoService.atualizarChamadosStorage(this.chamados);
 
