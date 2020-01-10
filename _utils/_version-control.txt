@@ -1,5 +1,8 @@
-0.0.76 - ??/01/20
--
+0.0.77 - ??/01/20
+- 
+
+0.0.76 - 10/01/20
+- Correção atualização de chamados Api Smartphone;
 
 0.0.75 - 10/01/20
 - Adicionada lâmina de deslocamento anteriormente ao Checkin na tela de detalhes do chamado;
