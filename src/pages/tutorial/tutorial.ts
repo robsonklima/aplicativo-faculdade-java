@@ -22,11 +22,10 @@ export class TutorialPage {
     this.versao = Config.VERSAO_APP;
     this.slides = [
       {
-        title: "Sincronização",
-        description: `Criamos um novo sistema de sincronização de chamados na versão 
-        <b>` + this.versao + `</b>. Agora o sistema está muito mais preciso durante o processo 
-        de envio e recebimento de chamados.`,
-        image: "assets/imgs/refresh.png",
+        title: "Deslocamento",
+        description: `Na versão <b>` + this.versao + `</b> você poderá informar que está em deslocamento
+        para o local de atendimento. `,
+        image: "assets/imgs/late.png",
       },
       {
         title: "Lista de Chamados",
@@ -45,18 +44,6 @@ export class TutorialPage {
         description: `Adicionamos novos mapas para você! Visualize seus <b>chamados no mapa</b>, verifique
                       a <b>distância percorrida</b> e o <b>tempo de duração</b> do seu percurso!`,
         image: "assets/imgs/maps-icon-8223.png",
-      },
-      // {
-      //   title: "Ferramentas!",
-      //   description: `Agora você poderá informar ao seu coordenador as <b>ferramentas</b> que possui! 
-      //                 Assim, o seu líder o manterá sempre preparado! `,
-      //   image: "assets/imgs/briefcase.png",
-      // },
-      {
-        title: "Detalhes do RAT",
-        description: `A partir de agora, o algoritmo compreende quais causas cada equipamento possui e quais defeitos e ações cada causa contém! 
-                      Deste modo, otimizaremos o seu tempo!`,
-        image: "assets/imgs/atm.png",
       }
     ];
   }

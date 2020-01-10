@@ -39,6 +39,7 @@ import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { MapaPage } from '../mapas/mapa';
 import { FotoPage } from '../fotos/foto';
+import { Checkin } from '../../models/checkin';
 
 
 @Component({
@@ -300,6 +301,102 @@ export class ChamadoPage {
     });
 
     confirmacao.present();
+  }
+
+  public informarIntencaoAtendimento() {
+    if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
+      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      return
+    }
+
+    const alerta = this.alertCtrl.create({
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.INTENCAO_CONFIRMACAO,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.chamado.indIntencaoAtendimento = true;
+            this.chamado.dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
+
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.toastFactory.exibirToast(`Estou a caminho do chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
+              this.configurarSlide(this.slides.getActiveIndex());
+              this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+            }).catch(() => { this.loadingFactory.encerrar() });
+          }
+        }
+      ]
+    });
+
+    alerta.present();
+  }
+
+  public cancelarIntencaoAtendimento() {
+    if (this.chamadoService.verificarExisteCheckinEmOutroChamado()) {
+      this.toastFactory.exibirToast(Config.MSG.CHECKIN_EM_ABERTO, Config.TOAST.ERROR)
+      return
+    }
+
+    const alerta = this.alertCtrl.create({
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.INTENCAO_REMOCAO,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.chamado.indIntencaoAtendimento = false;
+            this.chamado.dataHoraIntencaoAtendimento = null;
+
+
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.toastFactory.exibirToast(`Intenção de atendimento cancelada`, Config.TOAST.INFO)
+              this.configurarSlide(this.slides.getActiveIndex());
+              this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+            }).catch(() => { this.loadingFactory.encerrar() });
+          }
+        }
+      ]
+    });
+
+    alerta.present();
+  }
+
+  public removerCheckin() {
+    const alerta = this.alertCtrl.create({
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.CHECKIN_REMOCAO,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.chamado.checkin.localizacao.latitude = null;
+            this.chamado.checkin.localizacao.longitude = null;
+            this.chamado.checkin.dataHoraCadastro = null;
+
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.toastFactory.exibirToast(`Checkin removido`, Config.TOAST.INFO);
+              this.configurarSlide(this.slides.getActiveIndex());
+              this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+            }).catch(() => { this.loadingFactory.encerrar() });
+          }
+        }
+      ]
+    });
+
+    alerta.present();
   }
 
   private verificarLaudoObrigatorio(): boolean {
@@ -748,6 +845,15 @@ export class ChamadoPage {
         this.slides.lockSwipeToNext(false);
         break;
       case 1:
+          this.tituloSlide = (i + 1) + ". " + "Deslocamento";
+  
+          this.slides.lockSwipeToPrev(false);
+          if (!this.chamado.indIntencaoAtendimento)
+            this.slides.lockSwipeToNext(true);
+            else
+              this.slides.lockSwipeToNext(false);
+          break;
+      case 2:
         this.tituloSlide = (i + 1) + ". " + "Checkin";
 
         this.slides.lockSwipeToPrev(false);
@@ -758,13 +864,13 @@ export class ChamadoPage {
           else
             this.slides.lockSwipeToNext(false);
         break;
-      case 2:
+      case 3:
         this.tituloSlide = (i + 1) + ". " + "Imagens";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
-      case 3:
+      case 4:
         this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
 
         this.slides.lockSwipeToPrev(false);
@@ -776,7 +882,7 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 4:
+      case 5:
         this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
 
         this.slides.lockSwipeToPrev(false);
@@ -789,7 +895,7 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 5:
+      case 6:
         this.tituloSlide = (i + 1) + ". " + "Checkout";
 
         this.slides.lockSwipeToPrev(false);
@@ -800,13 +906,13 @@ export class ChamadoPage {
           this.slides.lockSwipeToNext(false);
         }
         break;
-      case 6:
+      case 7:
         this.tituloSlide = (i + 1) + ". " + "Conferência";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
-      case 7:
+      case 8:
         this.tituloSlide = (i + 1) + ". " + "Fechamento";
 
         this.slides.lockSwipeToPrev(false);

@@ -233,6 +233,30 @@
     </ion-slide>
     <!-- Informações -->
 
+    <!-- Deslocamento -->
+    <ion-slide class="slide-deslocamento">
+      <ion-list>
+        <div padding *ngIf="!chamado?.indIntencaoAtendimento">
+          <button color="secondary" (click)="informarIntencaoAtendimento()" ion-button outline icon-start class="btn-checkin">
+            <ion-icon name='ios-walk' class="icon-button-start" is-active="false"></ion-icon>
+            {{ (!chamado?.indIntencaoAtendimento) ? 'Iniciar Deslocamento' : 'Deslocamento Iniciado' }}
+          </button>
+        </div>
+      </ion-list>
+
+      <ion-card text-left *ngIf="chamado?.indIntencaoAtendimento">
+        <ion-card-header class="card-map">
+          <h2>Deslocamento Iniciado</h2>
+        </ion-card-header>
+    
+        <ion-item>
+          <button ion-button color="silver-light" clear item-start class="data">{{ chamado?.dataHoraIntencaoAtendimento }}</button>
+          <button ion-button color="danger" clear item-end (click)="cancelarIntencaoAtendimento()">Cancelar</button>
+        </ion-item>
+      </ion-card>
+    </ion-slide>
+    <!-- Deslocamento -->
+
     <!-- Checkin -->
     <ion-slide class="slide-checkin">
       <ion-list>
@@ -251,15 +275,13 @@
           </ion-card-header>
           <ion-card-content>
             Favor realizar contato com sua <b ion-text>Filial</b> ou 
-            <b ion-text>Suporte Técnico</b> para garantir as ações necessárias 
-            e liberação do chamado.
+            <b ion-text>Suporte Técnico</b> para garantir as ações necessárias e liberação do chamado.
           </ion-card-content>
         </ion-card>
 
         <div padding *ngIf="!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude">
           <button color="secondary" (click)="efetuarCheckin()" ion-button outline icon-start class="btn-checkin">
-            <ion-icon name='ios-locate-outline' is-active="false"></ion-icon>
-
+            <ion-icon name='ios-locate-outline' class="icon-button-start" is-active="false"></ion-icon>
             {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Checkin' : 'Checkin Efetuado' }}
           </button>
 
@@ -269,16 +291,14 @@
         </div>
       </ion-list>
 
-      <ion-card text-left
-        *ngIf="chamado?.checkin?.localizacao?.latitude && chamado?.checkin?.localizacao?.longitude" 
-        (click)="telaMapa('Checkin', chamado?.checkin?.localizacao)">
+      <ion-card text-left *ngIf="chamado?.checkin?.localizacao?.latitude && chamado?.checkin?.localizacao?.longitude">
         <ion-card-header class="card-map">
           <h2>Checkin Efetuado</h2>
         </ion-card-header>
     
         <ion-item>
-          <button ion-button color="silver-light" clear item-start>{{ chamado?.checkin?.dataHoraCadastro }}</button>
-          <button ion-button clear item-end>Abrir no Mapa</button>
+          <button ion-button color="silver-light" clear item-start class="data">{{ chamado?.checkin?.dataHoraCadastro }}</button>
+          <button ion-button color="danger" clear item-end (click)="removerCheckin(chamado)">Remover Checkin</button>
         </ion-item>
       </ion-card>
     </ion-slide>
@@ -287,7 +307,7 @@
     <!-- Imagens da RAT -->
     <ion-slide>
       <ion-item-group>
-        <ion-item-divider color="light" class="first-item">3.1 RAT Física</ion-item-divider>
+        <ion-item-divider color="light" class="first-item">4.1 RAT Física</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -314,7 +334,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">3.2 Fotos do Equipamento</ion-item-divider>
+        <ion-item-divider color="light">4.2 Fotos do Equipamento</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -468,7 +488,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">3.3 Laudo Técnico</ion-item-divider>
+        <ion-item-divider color="light">4.3 Laudo Técnico</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -713,7 +733,7 @@
       <ion-list>
         <div padding *ngIf="!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude">
           <button color="secondary" outline ion-button icon-start (click)="efetuarCheckout()" class="btn-checkout">
-            <ion-icon name='ios-locate-outline' is-active="false"></ion-icon>
+            <ion-icon name='ios-locate-outline' class="icon-button-start" is-active="false"></ion-icon>
             
             {{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Checkout' : 'Checkout Efetuado' }}
           </button>
@@ -733,7 +753,6 @@
     
         <ion-item>
           <button ion-button color="silver-light" clear item-start>{{ chamado?.checkin?.dataHoraCadastro }}</button>
-          <button ion-button clear item-end>Abrir no Mapa</button>
         </ion-item>
       </ion-card>
     </ion-slide>

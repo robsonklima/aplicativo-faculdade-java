@@ -17,8 +17,12 @@ chamado-page {
             border-color: transparent;
         }
 
-        .slide-checkin, .slide-checkout, .slide-fechar {
+        .slide-checkin, .slide-checkout, .slide-fechar, .slide-deslocamento {
             background-color: #f4f4f4;
+        }
+
+        .icon-button-start {
+            margin-right: 6px;
         }
 
         .slide-zoom {
@@ -39,6 +43,10 @@ chamado-page {
             padding-top: 2px;
             margin-right: 4px !important;
             font-size: 15pt;
+        }
+
+        .data {
+            margin-left: -7px !important;
         }
 
         b {

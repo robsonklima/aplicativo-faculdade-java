@@ -438,8 +438,6 @@ export class ChamadoService {
   atualizarChamado(novoChamado: Chamado): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamadosStorage: Chamado[]) => {
-        this.chamados = chamadosStorage;
-
         chamadosStorage = chamadosStorage.filter((c) => {
           return (c.codOs.toString().indexOf(novoChamado.codOs.toString()) < 0);
         });
@@ -447,6 +445,7 @@ export class ChamadoService {
         chamadosStorage.push(novoChamado);
 
         this.storage.set('Chamados', chamadosStorage).then(() => {
+          this.chamados = chamadosStorage;
           resolve();
         }).catch(() => {
           reject();
@@ -459,10 +458,10 @@ export class ChamadoService {
   }
 
   atualizarChamadosStorage(novosChamados: Chamado[]): Promise<Chamado[]> {
-    this.chamados = novosChamados;
-
     return new Promise((resolve, reject) => {
       this.storage.set('Chamados', novosChamados).then((res) => {
+        this.chamados = novosChamados;
+
         resolve(novosChamados);
       })
       .catch(() => {

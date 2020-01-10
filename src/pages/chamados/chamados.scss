@@ -55,17 +55,20 @@ chamados-page {
         margin-top: 4px !important;
     }
 
-    .refresh, .pin, .open, .checkmark, .done-all, .create, .mark {
+    .refresh, .pin, .open, .checkmark, .done-all, .create {
         font-size: 21px !important;
         padding-left: 12px;
     }
 
-    .mark {
+    .pin {
         margin-left: 2px;
     }
 
-    .pin {
-        margin-left: 2px;
+    .ios-walk {
+        font-size: 26px !important;
+        padding-left: 12px;
+        margin-left: 4px;
+        margin-bottom: 2px;
     }
 
     .t-int {

@@ -8,6 +8,7 @@ export class Config {
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
   public static GOOGLE_PLAY_NOME_APP = 'perto.sat.apptecnicos';
   public static OPEN_CAMERA = 'net.sourceforge.opencamera';
+  public static CAMERA = 'com.motorola.camera2';
   public static POS_CONFIG = { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 };
   public static TIPO_CAUSA = { MAQUINA: 1, EXTRA_MAQUINA: 2 };
   public static TIPO_INTERVENCAO = { 
@@ -114,6 +115,9 @@ export class Config {
     ERRO_AO_ENVIAR_INTENCOES: 'Erro ao enviar as intenções de atendimento para o servidor',
     CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
+    CHECKIN_REMOCAO: 'Deseja remover o checkin?',
+    INTENCAO_REMOCAO: 'Deseja cancelar a intenção de atendimento?',
+    INTENCAO_CONFIRMACAO: 'Você está a caminho do local?',
     CHECKOUT_CONFIRMACAO: 'Somente confirme o checkout se você já concluiu o chamado e deixará o local de atendimento',
     GPS_DESATIVADO: 'GPS Desativado',
     GPS_DESATIVADO_ORIENTACAO: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
