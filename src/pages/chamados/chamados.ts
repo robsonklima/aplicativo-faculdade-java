@@ -160,7 +160,7 @@ export class ChamadosPage {
     this.chamados[i].indIntencaoAtendimento = true;
     this.chamados[i].dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');;
 
-    this.toastFactory.exibirToast(`Estou a caminho do chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
+    this.toastFactory.exibirToast(`Iniciado deslocamento para o chamado ${this.chamados[i].codOs}`, Config.TOAST.SUCCESS)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 
@@ -175,7 +175,7 @@ export class ChamadosPage {
       this.chamados[i].dataHoraIntencaoAtendimento = null;
     });
 
-    this.toastFactory.exibirToast(`Intenção de atendimento cancelada`, Config.TOAST.INFO)
+    this.toastFactory.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
     this.chamadoService.atualizarChamadosStorage(this.chamados);
   }
 

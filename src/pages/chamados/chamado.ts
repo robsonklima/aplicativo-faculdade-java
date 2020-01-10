@@ -324,7 +324,7 @@ export class ChamadoPage {
             this.chamado.dataHoraIntencaoAtendimento = new Date().toLocaleString('pt-BR');
 
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(`Estou a caminho do chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
+              this.toastFactory.exibirToast(`Iniciado deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
               this.configurarSlide(this.slides.getActiveIndex());
               this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
             }).catch(() => { this.loadingFactory.encerrar() });
@@ -356,9 +356,8 @@ export class ChamadoPage {
             this.chamado.indIntencaoAtendimento = false;
             this.chamado.dataHoraIntencaoAtendimento = null;
 
-
             this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.toastFactory.exibirToast(`Intenção de atendimento cancelada`, Config.TOAST.INFO)
+              this.toastFactory.exibirToast(Config.MSG.INTENCAO_CANCELADA, Config.TOAST.INFO)
               this.configurarSlide(this.slides.getActiveIndex());
               this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
             }).catch(() => { this.loadingFactory.encerrar() });
