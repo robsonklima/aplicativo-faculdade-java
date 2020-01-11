@@ -18,15 +18,13 @@
     <preference name="android-targetSdkVersion" value="28" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="SplashScreenDelay" value="5000" />
+    <preference name="SplashScreenDelay" value="3000" />
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashScreen" value="screen" />
     <preference name="ShowSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="FadeSplashScreen" value="true" />
-    <preference name="SplashStatusBarBackgroundColor" value="#488aff" />
-    <preference name="SplashNavigationBarBackgroundColor" value="#488aff" />
     <preference name="SplashScreenSpinnerColor" value="#488aff" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
@@ -125,6 +123,10 @@
     <plugin name="cordova-plugin-network-information" spec="^2.0.2" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.3" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="~5.0.4">
+        <variable name="GOOGLE_API_KEY_FOR_ANDROID" value="my-api-key-value" />
+        <variable name="OKHTTP_VERSION" value="3.12.0" />
+    </plugin>
     <engine name="browser" spec="^4.1.0" />
     <engine name="android" spec="7.0.0" />
 </widget>

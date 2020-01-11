@@ -1,5 +1,7 @@
 0.0.77 - ??/01/20
-- 
+- Maior agilidade para traçar a rota de atendimentos diretamente pela tela de listagem de chamados;
+- Correções no sistema de sincronização;
+- Sincronização imediata após o fechamento do chamado aprimorada;
 
 0.0.76 - 10/01/20
 - Correção atualização de chamados Api Smartphone;

@@ -41,7 +41,6 @@ import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
-import { MapaMinhaRotaPage } from '../mapas/mapa-minha-rota';
 import { GeolocationService } from '../../services/geo-location';
 
 
@@ -159,10 +158,6 @@ export class HomePage {
 
   public telaFerramentasTecnico() {
     this.navCtrl.push(FerramentasTecnicoPage);
-  }
-
-  public telaMinhaRota() {
-    this.navCtrl.push(MapaMinhaRotaPage);
   }
 
   public telaTeste() {

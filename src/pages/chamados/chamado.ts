@@ -36,7 +36,6 @@ import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
-import { MapaPage } from '../mapas/mapa';
 import { FotoPage } from '../fotos/foto';
 
 
@@ -125,11 +124,6 @@ export class ChamadoPage {
         this.configurarSlide(this.slides.getActiveIndex());
       });
     }
-  }
-
-  public telaMapa(popup: string, localizacao: Localizacao) {
-    const modal = this.modalCtrl.create(MapaPage, { popup: popup, localizacao: localizacao });
-    modal.present();
   }
 
   public telaRatDetalhePeca(chamado: Chamado, i: number) {

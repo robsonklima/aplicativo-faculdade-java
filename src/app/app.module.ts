@@ -15,6 +15,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Market } from '@ionic-native/market';
 import { AppAvailability } from '@ionic-native/app-availability';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 import { Device } from '@ionic-native/device';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
@@ -91,14 +92,9 @@ import { AssinaturaPage } from '../pages/assinatura/assinatura';
 import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
 import { TutorialPage } from '../pages/tutorial/tutorial';
-import { MapaChamadosPage } from '../pages/mapas/mapa-chamados';
-import { MapaChamadoPage } from '../pages/mapas/mapa-chamado';
-import { MapaEnderecoCorrecaoPage } from '../pages/mapas/mapa-endereco-correcao';
 import { TestePage } from '../pages/teste/teste';
-import { MapaMinhaRotaPage } from '../pages/mapas/mapa-minha-rota';
 import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
-import { MapaPage } from '../pages/mapas/mapa';
 import { FotoPage } from '../pages/fotos/foto';
 
 
@@ -139,13 +135,8 @@ import { FotoPage } from '../pages/fotos/foto';
     EllipsisPipe,
     LowercasePipe,
     FerramentasTecnicoPage,
-    MapaChamadosPage,
-    MapaChamadoPage,
-    MapaPage,
     TutorialPage,
-    TestePage,
-    MapaEnderecoCorrecaoPage,
-    MapaMinhaRotaPage
+    TestePage
   ],
   imports: [
     BrowserModule,
@@ -199,13 +190,8 @@ import { FotoPage } from '../pages/fotos/foto';
     MensagemPage,
     AssinaturaPage,
     FerramentasTecnicoPage,
-    MapaChamadosPage,
-    MapaChamadoPage,
-    MapaPage,
     TutorialPage,
-    TestePage,
-    MapaEnderecoCorrecaoPage,
-    MapaMinhaRotaPage
+    TestePage
   ],
   providers: [
     StatusBar,
@@ -215,6 +201,7 @@ import { FotoPage } from '../pages/fotos/foto';
     Geolocation,
     BackgroundGeolocation,
     BackgroundMode,
+    LaunchNavigator,
     PhonegapLocalNotification,
     AndroidPermissions,
     Badge,

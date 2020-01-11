@@ -40,9 +40,9 @@ export class TutorialPage {
         image: "assets/imgs/mcom.png",
       },
       {
-        title: "Novos Mapas",
-        description: `Adicionamos novos mapas para você! Visualize seus <b>chamados no mapa</b>, verifique
-                      a <b>distância percorrida</b> e o <b>tempo de duração</b> do seu percurso!`,
+        title: "Mapas",
+        description: `Agora ao clicar no icone de <b>navegação</b> você poderá selecionar rapidamente o aplicativo
+                      de mapas que deseja utilizar (Waze, Maps etc.)`,
         image: "assets/imgs/maps-icon-8223.png",
       }
     ];

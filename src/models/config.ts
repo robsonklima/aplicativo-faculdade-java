@@ -118,6 +118,7 @@ export class Config {
     ERRO_AO_ENVIAR_INTENCOES: 'Erro ao enviar os deslocamentos de atendimento para o servidor',
     ERRO_AO_OBTER_LOCALIZACAO: 'Erro ao obter a localização',
     ERRO_AO_ACESSAR_CAMERA: 'Erro ao acessar a câmera. Favor tentar novamente',
+    ERRO_LOCAL_NAO_POSSUI_COORDENADAS: 'O local de atendimento não possui latitude e longitude cadastradas',
     CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKIN_REMOCAO: 'Deseja remover o checkin?',

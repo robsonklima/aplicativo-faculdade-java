@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, AlertController, Events, ToastController, Platform } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 
 import moment from 'moment';
 
@@ -12,8 +13,6 @@ import { DadosGlobaisService } from '../../services/dados-globais';
 import { ChamadoService } from "../../services/chamado";
 
 import { ChamadoPage } from "../chamados/chamado";
-import { MapaChamadoPage } from '../mapas/mapa-chamado';
-import { MapaChamadosPage } from '../mapas/mapa-chamados';
 import { Config } from '../../models/config';
 import { ChamadosFechadosPage } from './chamados-fechados';
 import { ChamadoFechadoPage } from './chamado-fechado';
@@ -39,6 +38,7 @@ export class ChamadosPage {
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
+    private launchNavigator: LaunchNavigator,
     private badge: Badge,
     private events: Events,
     private loadingCtrl: LoadingController,
@@ -70,8 +70,13 @@ export class ChamadosPage {
     this.navCtrl.push(ChamadoPage, { chamado: chamado });
   }
 
-  public telaMapaChamado(chamado: Chamado) {
-    this.navCtrl.push(MapaChamadoPage, { chamado: chamado });
+  public abrirNavegacao(chamado: Chamado) {
+    if (!this.platform.is('cordova'))
+      this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);  
+    else if (!chamado.localAtendimento.localizacao.latitude || !chamado.localAtendimento.localizacao.longitude)
+      this.exibirToast(Config.MSG.ERRO_LOCAL_NAO_POSSUI_COORDENADAS, Config.TOAST.ERROR);  
+    else
+      this.launchNavigator.navigate([ chamado.localAtendimento.localizacao.latitude, chamado.localAtendimento.localizacao.longitude ]).catch();
   }
 
   public telaChamadoFechado(chamado: Chamado) {
@@ -80,10 +85,6 @@ export class ChamadosPage {
 
   public telaChamadosFechados() {
     this.navCtrl.push(ChamadosFechadosPage);
-  }
-
-  public telaMapaChamados() {
-    this.navCtrl.push(MapaChamadosPage);
   }
 
   public pushAtualizarChamados(refresher) {

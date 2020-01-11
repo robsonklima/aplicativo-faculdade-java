@@ -51,6 +51,7 @@
     "chart.js": "^2.9.3",
     "cordova-android": "7.0.0",
     "cordova-browser": "^4.1.0",
+    "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-app-event": "^1.2.2",
     "cordova-plugin-app-version": "^0.1.9",
@@ -60,6 +61,7 @@
     "cordova-plugin-camera": "git+https://github.com/apache/cordova-plugin-camera.git",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.7",
+    "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-inappbrowser": "^2.0.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
@@ -129,7 +131,11 @@
       },
       "cordova-plugin-background-mode": {},
       "cordova-plugin-mauron85-background-geolocation": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+        "GOOGLE_API_KEY_FOR_ANDROID": "my-api-key-value",
+        "OKHTTP_VERSION": "3.12.0"
+      }
     },
     "platforms": [
       "browser",
