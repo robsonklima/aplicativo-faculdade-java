@@ -45,7 +45,7 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
-      .timeout(15000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
@@ -53,6 +53,7 @@ export class ChamadoService {
 
   buscarChamadoApi(codOS: number): Observable<Chamado> {
     return this.http.get(Config.API_URL + 'Os/' + codOS)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
@@ -60,33 +61,36 @@ export class ChamadoService {
 
   enviarCheckinApi(checkin: Checkin): Observable<any> {
     return this.http.post(Config.API_URL + 'Checkin', checkin)
-      .timeout(20000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   enviarFotoApi(foto: Foto): Observable<any> {
     return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
-      .timeout(60000)
+      .delay(Math.floor(Math.random() * (800 - 250 + 1) + 250))
+      .timeout(120000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   enviarIntencaoApi(intencao: Intencao): Observable<any> {
     return this.http.post(Config.API_URL + 'OsIntencao', intencao)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
-      .timeout(30000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
   buscarChamadosFechadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnicoFechada/' + codTecnico)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
@@ -94,7 +98,7 @@ export class ChamadoService {
 
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
-      .timeout(3000)
+      .timeout(60000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
@@ -347,14 +351,11 @@ export class ChamadoService {
       const enviarFoto = (foto: Foto, i: number) => {
         return new Promise((resolve, reject) => {
           if (verbose) {
-            let qtdFotosAEnviar = fotos
-              .filter((f) => { return (f.status != Config.FOTO.STATUS.ENVIADA) }).length;
+            let qtdFotosAEnviar = fotos.filter((f) => { return (f.status != Config.FOTO.STATUS.ENVIADA) }).length;
             
-            this.loadingFactory.alterar(
-              `Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} para o servidor.
-              Isso pode demorar alguns minutos`);
+            this.loadingFactory.alterar(`Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} ao servidor. Por favor aguarde`);
           }
-            
+          
           this.enviarFotoApi(foto).subscribe(() => {
             resolve(`Foto ${foto.nome} enviada com sucesso`);
           }, err => {
@@ -379,22 +380,21 @@ export class ChamadoService {
         }
       })
   
-      Promise.all(promises)
-        .then(response => {
-          chamadosStorage.forEach(chamado => {
-            chamado.rats.forEach((rat, ratIndex) => {
-              rat.fotos.forEach((foto, fotoIndex) => {
-                chamado.rats[ratIndex].fotos[fotoIndex].status = Config.FOTO.STATUS.ENVIADA;
-                this.atualizarChamado(chamado);
-              });
+      Promise.all(promises).then(response => {
+        chamadosStorage.forEach(chamado => {
+          chamado.rats.forEach((rat, ratIndex) => {
+            rat.fotos.forEach((foto, fotoIndex) => {
+              chamado.rats[ratIndex].fotos[fotoIndex].status = Config.FOTO.STATUS.ENVIADA;
+              this.atualizarChamado(chamado);
             });
           });
-
-          resolve();
-        })
-        .catch(error => {
-          reject(`Erro: ${error}`);
         });
+
+        resolve();
+      })
+      .catch(error => {
+        reject(`Erro: ${error}`);
+      });
     });
   }
 

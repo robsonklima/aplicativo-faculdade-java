@@ -165,55 +165,62 @@ export class ChamadoPage {
   }
 
   public tirarFoto(modalidade: string) {
-    this.platform.ready().then(() => {
-      if (!this.platform.is('cordova')) {
-        this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
+    this.chamadoService.buscarStatusExecucao().then(executando => {
+      if (executando) {
+        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
         return;
       }
 
-      let width: number = Config.FOTO.WIDTH;
-      let height: number = Config.FOTO.HEIGHT;
-      let quality: number = Config.FOTO.QUALITY;
-
-      if (modalidade == Config.FOTO.MODALIDADES.RAT) {
-        width = 720;
-        height = 1280;
-        quality = 90;
-      }
-
-      this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
-        this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
-          this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
-            this.camera.getPicture({
-              quality: quality,
-              targetWidth: width,
-              targetHeight: height,
-              destinationType: this.camera.DestinationType.DATA_URL,
-              encodingType: this.camera.EncodingType.JPEG,
-              mediaType: this.camera.MediaType.PICTURE,
-              saveToPhotoAlbum: false,
-              allowEdit: true,
-              sourceType: 1,
-              correctOrientation: true
-            }).then(imageData => {
-              this.foto = new Foto();
-              this.foto.codOS = this.chamado.codOs;
-              this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
-              this.foto.str = 'data:image/jpeg;base64,' + imageData;
-              this.foto.modalidade = modalidade;
-              this.chamado.rats[0].fotos.push(this.foto);
-              this.chamadoService.atualizarChamado(this.chamado).catch();
-              this.camera.cleanup().catch();
+      this.platform.ready().then(() => {
+        if (!this.platform.is('cordova')) {
+          this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
+          return;
+        }
+  
+        let width: number = Config.FOTO.WIDTH;
+        let height: number = Config.FOTO.HEIGHT;
+        let quality: number = Config.FOTO.QUALITY;
+  
+        if (modalidade == Config.FOTO.MODALIDADES.RAT) {
+          width = 720;
+          height = 1280;
+          quality = 90;
+        }
+  
+        this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
+          this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
+            this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
+              this.camera.getPicture({
+                quality: quality,
+                targetWidth: width,
+                targetHeight: height,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+                saveToPhotoAlbum: false,
+                allowEdit: true,
+                sourceType: 1,
+                correctOrientation: true
+              }).then(imageData => {
+                this.foto = new Foto();
+                this.foto.codOS = this.chamado.codOs;
+                this.foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + this.chamado.codOs.toString() + '_' + modalidade;
+                this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                this.foto.modalidade = modalidade;
+                this.chamado.rats[0].fotos.push(this.foto);
+                this.chamadoService.atualizarChamado(this.chamado).catch();
+                this.camera.cleanup().catch();
+              }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
             }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
-          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
-        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
-      },
-      (no: boolean) => {
-        this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
-        setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
-        return;
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
+        },
+        (no: boolean) => {
+          this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
+          setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
+          return;
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
       }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
-    }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+    });    
   }
 
   public carregarFoto(modalidade: string): string {
@@ -562,7 +569,7 @@ export class ChamadoPage {
 
             this.chamadoService.buscarStatusExecucao().then(executando => {
               if (executando) {
-                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
                 return;
               }
 
@@ -615,7 +622,7 @@ export class ChamadoPage {
 
             this.chamadoService.buscarStatusExecucao().then(executando => {
               if (executando) {
-                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
                 return;
               }
 
@@ -729,7 +736,7 @@ export class ChamadoPage {
               if (!this.validarCamposObrigatorios()) return;
 
               if (executando) {
-                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.ERROR);
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
                 return;
               }
 
@@ -1001,6 +1008,6 @@ export class ChamadoPage {
   }
 
   ionViewWillLeave(){
-    this.chamadoService.sincronizarChamados(false, this.dg.usuario.codTecnico).catch();
+    this.chamadoService.sincronizarChamados(this.chamado.dataHoraFechamento ? true : false, this.dg.usuario.codTecnico).catch();
   }
 }

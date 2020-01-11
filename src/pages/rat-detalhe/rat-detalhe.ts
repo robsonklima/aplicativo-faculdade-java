@@ -156,7 +156,13 @@ export class RatDetalhePage {
   }
 
   public salvarRatDetalhe(form: NgForm) {
-    let tipoCausa = new TipoCausa();
+    this.chamadoService.buscarStatusExecucao().then(executando => {
+      if (executando) {
+        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        return;
+      }
+
+      let tipoCausa = new TipoCausa();
     tipoCausa = form.value.tipoCausa;
     let tipoServico = new TipoServico()
     tipoServico = form.value.tipoServico;
@@ -207,10 +213,11 @@ export class RatDetalhePage {
           this.apresentarCampoProtocoloStn();
         }
 
-      if (causa.codECausa.substring(0, 2) == "08") {
-        this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
+        if (causa.codECausa.substring(0, 2) == "08") {
+          this.exibirAlerta(Config.MSG.CHAMADO_EXIGE_LAUDO);
+        }
       }
-    }
+    });
   }
 
   public salvarRatDetalheNoChamadoESair() {

@@ -82,6 +82,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "ng2-charts": "^1.6.0",
+    "ngx-toastr": "^11.3.0",
     "phonegap-plugin-local-notification": "^1.0.1",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",

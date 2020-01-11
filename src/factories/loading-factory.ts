@@ -11,7 +11,7 @@ export class LoadingFactory {
   ) {}
 
   exibir(conteudo: string='Aguarde') {
-    this.loading = this.loadingCtrl.create({ content: conteudo });
+    this.loading = this.loadingCtrl.create({ content: conteudo, enableBackdropDismiss: true});
     
     this.loading.present();
   }

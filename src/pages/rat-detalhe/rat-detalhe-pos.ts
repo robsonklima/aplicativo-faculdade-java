@@ -131,11 +131,18 @@ export class RatDetalhePosPage {
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
     this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
 
-    if (!this.validarCamposObrigatorios()) return;
+    this.chamadoService.buscarStatusExecucao().then(executando => {
+      if (executando) {
+        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        return;
+      }
 
-    this.chamadoService.atualizarChamado(this.chamado).then(() => {
-      this.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
-      this.fecharModal() 
+      if (!this.validarCamposObrigatorios()) return;
+
+      this.chamadoService.atualizarChamado(this.chamado).then(() => {
+        this.exibirToast('Informações do POS salvas com sucesso', Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
+        this.fecharModal() 
+      });
     });
   }
 

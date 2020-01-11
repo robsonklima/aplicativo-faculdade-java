@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, AlertController, Platform } from 'ionic-angular';
+import { NavParams, ViewController, AlertController, Platform, ToastController } from 'ionic-angular';
+import { NgForm } from '@angular/forms';
+
+import { Config } from '../../models/config';
+import moment from 'moment';
 
 import { Camera } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -7,11 +11,9 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { Laudo } from '../../models/laudo';
 import { Foto } from '../../models/foto';
-
-import moment from 'moment';
 import { LaudoSituacao } from '../../models/laudo-situacao';
-import { NgForm } from '@angular/forms';
-import { Config } from '../../models/config';
+
+import { ChamadoService } from '../../services/chamado';
 
 
 @Component({
@@ -25,13 +27,15 @@ export class SituacaoPage {
   qtdFotosLaudo: number;
 
   constructor(
+    private platform: Platform,
     private diagnostic: Diagnostic,
     private navParams: NavParams,
     private viewCtrl: ViewController,
     private alertCtrl: AlertController,
-    private camera: Camera,
-    private platform: Platform,
+    private toastCtrl: ToastController,
     private androidPerm: AndroidPermissions,
+    private camera: Camera,
+    private chamadoService: ChamadoService
   ) {
     this.laudo = this.navParams.get('laudo');
   }
@@ -50,42 +54,49 @@ export class SituacaoPage {
     this.fecharModal()
   }
 
-  public selecionarFoto(sourceType: number) {
-    this.platform.ready().then(() => {
-      if (!this.platform.is('cordova')) return;
+  public tirarFoto() {
+    this.chamadoService.buscarStatusExecucao().then(executando => {
+      if (executando) {
+        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        return;
+      }
 
-      this.diagnostic.requestRuntimePermissions([
-        this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
-        this.diagnostic.permission.CAMERA
-      ]).then(() => {
-        this.androidPerm.requestPermissions([
-          this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE,
-          this.androidPerm.PERMISSION.CAMERA
+      this.platform.ready().then(() => {
+        if (!this.platform.is('cordova')) return;
+  
+        this.diagnostic.requestRuntimePermissions([
+          this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
+          this.diagnostic.permission.CAMERA
         ]).then(() => {
-          this.camera.getPicture({
-            quality: Config.FOTO.QUALITY,
-            targetWidth: Config.FOTO.WIDTH,
-            targetHeight: Config.FOTO.HEIGHT,
-            destinationType: this.camera.DestinationType.DATA_URL,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE,
-            saveToPhotoAlbum: false,
-            allowEdit: true,
-            sourceType: 1,
-            correctOrientation: true
-          }).then(imageData => {
-            this.foto = new Foto();
-              this.foto.codOS = this.laudo.codOS;
-              this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
-              this.foto.str = 'data:image/jpeg;base64,' + imageData;
-              this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
-              this.situacao.fotos.push(this.foto);
-              this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
-              this.camera.cleanup().catch();
-          }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
-        }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
-      }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
-    }).catch(() => { this.exibirAlerta('Erro ao acessar a câmera. Favor tentar novamente') });
+          this.androidPerm.requestPermissions([
+            this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE,
+            this.androidPerm.PERMISSION.CAMERA
+          ]).then(() => {
+            this.camera.getPicture({
+              quality: Config.FOTO.QUALITY,
+              targetWidth: Config.FOTO.WIDTH,
+              targetHeight: Config.FOTO.HEIGHT,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              saveToPhotoAlbum: false,
+              allowEdit: true,
+              sourceType: 1,
+              correctOrientation: true
+            }).then(imageData => {
+              this.foto = new Foto();
+                this.foto.codOS = this.laudo.codOS;
+                this.foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.laudo.codOS + '_LAUDO';
+                this.foto.str = 'data:image/jpeg;base64,' + imageData;
+                this.foto.modalidade = "LAUDO_SIT_" + (this.laudo.situacoes.length + 1);
+                this.situacao.fotos.push(this.foto);
+                this.qtdFotosLaudo = this.qtdFotosLaudo + 1;
+                this.camera.cleanup().catch();
+            }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+      }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+    });    
   }
 
   public removerFoto(i: number) {
@@ -125,6 +136,17 @@ export class SituacaoPage {
     });
 
     alerta.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 
   public fecharModal() {
