@@ -66,9 +66,23 @@ chamados-page {
 
     .ios-walk {
         font-size: 26px !important;
-        padding-left: 12px;
+        padding-left: 14px;
         margin-left: 4px;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
+    }
+
+    .man {
+        font-size: 24px !important;
+        padding-left: 15px;
+        margin-left: 4px;
+        margin-bottom: 1px;
+    }
+
+    .finger-print {
+        font-size: 22px !important;
+        padding-left: 12px;
+        margin-left: 2px;
+        margin-bottom: 0px;
     }
 
     .t-int {
@@ -76,7 +90,7 @@ chamados-page {
         text-align: center;
     }
 
-    .data-hora-leitura {
+    .data-hora-leitura, .icone-deslocamento {
         opacity: 0.9 !important;
     }
 

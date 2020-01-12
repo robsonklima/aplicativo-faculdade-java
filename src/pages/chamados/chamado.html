@@ -249,7 +249,7 @@
           <h3 class="silver-h3">{{ chamado?.checkin?.dataHoraCadastro }}</h3>
           <button ion-button clear item-end *ngIf="(!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude)" [disabled]="!chamado?.indIntencaoAtendimento" (click)="efetuarCheckin()">Registrar</button>
           <button ion-button clear color="danger" item-end *ngIf="chamado?.checkin?.localizacao?.latitude  && chamado?.checkin?.localizacao?.longitude" (click)="removerCheckin()">Cancelar</button>
-          <ion-icon name='ios-locate-outline' item-start color="primary"></ion-icon>
+          <ion-icon name='md-locate' item-start color="primary"></ion-icon>
         </ion-item>
       </ion-list>
 
@@ -705,7 +705,7 @@
         <h3 class="silver-h3">{{ chamado?.checkout?.dataHoraCadastro }}</h3>
         <button ion-button clear item-end *ngIf="!chamado?.checkout?.localizacao?.latitude  && !chamado?.checkout?.localizacao?.longitude" (click)="efetuarCheckout()">Registrar</button>
         <button ion-button clear item-end *ngIf="chamado?.checkout?.localizacao?.latitude  && chamado?.checkout?.localizacao?.longitude" [disabled]="true">Registrado</button>
-        <ion-icon name='ios-locate-outline' item-start color="primary"></ion-icon>
+        <ion-icon name='md-locate' item-start color="primary"></ion-icon>
       </ion-item>
 
       <ion-item>

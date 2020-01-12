@@ -5,7 +5,8 @@
 - Correções no sistema de sincronização;
 - Agrupadas lâminas de Checkin e Deslocamento;
 - Agrupadas lâminas de Checkout, Conferência e Fechamento;
-- Correção na resolução do logo da Splash Screen.
+- Correção na resolução do logo da Splash Screen;
+- Novos ícones indicativos (individuais para cada chamado) na tela de listagem de chamados - em deslocamento, checkin efetuado e Ocioso.
 
 0.0.76 - 10/01/20
 - Correção atualização de chamados Api Smartphone;

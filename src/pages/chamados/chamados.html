@@ -136,16 +136,17 @@
                 clear
                 [disabled]="true"
                 color="subtle">
-                  <ion-icon 
+                <ion-icon 
                   *ngIf="!chamado.dataHoraOSMobileLida" 
                   name="checkmark" 
                   class="checkmark">
                 </ion-icon>
-                  <ion-icon 
+
+                <ion-icon 
                   *ngIf="chamado.dataHoraOSMobileLida" 
                   name="done-all" 
                   class="done-all"
-                  color="secondary">
+                  color="primary">
                 </ion-icon>
               </button>
             </ion-col>
@@ -176,6 +177,45 @@
                 </div>
               </button>
             </ion-col>
+            
+            <ion-col col-2>
+              <button 
+                ion-button 
+                icon-only
+                clear 
+                small
+                [disabled]="true"
+                color="primary"
+                class="icone-deslocamento"
+                *ngIf="!chamado.indIntencaoAtendimento">
+                <ion-icon name="man" color="silver-hard" class="man"></ion-icon>
+              </button>
+
+              <button 
+                ion-button 
+                icon-only
+                clear 
+                small
+                [disabled]="true"
+                color="primary"
+                class="icone-deslocamento"
+                *ngIf="chamado.indIntencaoAtendimento && !chamado.checkin.localizacao.latitude && !chamado.checkin.localizacao.longitude">
+                <ion-icon name="ios-walk" color="secondary" class="ios-walk"></ion-icon>
+              </button>
+
+              <button 
+                ion-button 
+                icon-only
+                clear 
+                small
+                [disabled]="true"
+                color="primary"
+                class="icone-deslocamento"
+                *ngIf="chamado.indIntencaoAtendimento && chamado.checkin.localizacao.latitude && chamado.checkin.localizacao.longitude">
+                <ion-icon name="md-locate" color="secondary" class="finger-print"></ion-icon>
+              </button>
+            </ion-col>
+
             <ion-col col-2>
               <button 
                 ion-button 
@@ -186,27 +226,7 @@
                 <ion-icon name="pin" class="pin"></ion-icon>
               </button>
             </ion-col>
-            <ion-col col-2>
-              <button 
-                ion-button 
-                icon-only
-                clear 
-                small
-                color="primary"
-                *ngIf="!chamado.indIntencaoAtendimento">
-                <ion-icon name="ios-walk" color="silver-hard" class="ios-walk"></ion-icon>
-              </button>
 
-              <button 
-                ion-button 
-                icon-only
-                clear 
-                small
-                color="primary"
-                *ngIf="chamado.indIntencaoAtendimento">
-                <ion-icon name="ios-walk" color="secondary" class="ios-walk"></ion-icon>
-              </button>
-            </ion-col>
             <ion-col col-2>
               <button
                 ion-button 
@@ -215,10 +235,8 @@
                 small
                 (click)="telaChamado(chamado)"
                 [disabled]="chamado.dataHoraFechamento">
-                <ion-icon *ngIf="chamado.checkin.localizacao.latitude 
-                  || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
-                <ion-icon *ngIf="!chamado.checkin.localizacao.latitude 
-                  && !chamado.checkout.localizacao.latitude" name="md-open" class="open"></ion-icon>
+                <ion-icon *ngIf="chamado.checkin.localizacao.latitude || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
+                <ion-icon *ngIf="!chamado.checkin.localizacao.latitude && !chamado.checkout.localizacao.latitude" name="md-open" class="open"></ion-icon>
               </button>
             </ion-col>
           </ion-row>
