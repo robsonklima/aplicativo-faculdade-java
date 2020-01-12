@@ -23,7 +23,9 @@ import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
 import { Intencao } from '../models/intencao';
 import { GeolocationService } from './geo-location';
-import { NgxImageCompressService } from 'ngx-image-compress';
+import { FotoService } from './foto';
+import { CheckinCheckoutService } from './checkin-checkout';
+
 
 @Injectable()
 export class ChamadoService {
@@ -42,7 +44,8 @@ export class ChamadoService {
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
     private geolocationService: GeolocationService,
-    private imageCompress: NgxImageCompressService
+    private fotoService: FotoService,
+    private checkinCheckoutService: CheckinCheckoutService
   ) {}
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
@@ -59,21 +62,6 @@ export class ChamadoService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())
     );
-  }
-
-  enviarCheckinApi(checkin: Checkin): Observable<any> {
-    return this.http.post(Config.API_URL + 'Checkin', checkin)
-      .timeout(60000)
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
-  }
-
-  enviarFotoApi(foto: Foto): Observable<any> {
-    return this.http.post(Config.API_URL + 'RatImagemUpload', foto)
-      .delay(Math.floor(Math.random() * (800 - 250 + 1) + 250))
-      .timeout(120000)
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
   }
 
   enviarIntencaoApi(intencao: Intencao): Observable<any> {
@@ -288,7 +276,7 @@ export class ChamadoService {
         return new Promise((resolve, reject) => {
           if (verbose) this.loadingFactory.alterar(`Enviando checkins para o servidor`);
           
-          this.enviarCheckinApi(checkin).subscribe(() => {
+          this.checkinCheckoutService.enviarCheckinApi(checkin).subscribe(() => {
             resolve(`Checkin enviado com sucesso`);
           }, err => {
             reject(`Não foi possível enviar o checkin`);
@@ -358,8 +346,8 @@ export class ChamadoService {
             this.loadingFactory.alterar(`Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} ao servidor. Por favor aguarde`);
           }
           
-          this.comprimirFoto(foto).then(f => {
-            this.enviarFotoApi(f).subscribe(() => {
+          this.fotoService.comprimirFoto(foto).then(f => {
+            this.fotoService.enviarFotoApi(f).subscribe(() => {
               resolve(`Foto ${f.nome} enviada com sucesso`);
             }, err => {
               reject(`Não foi possível enviar a foto ${foto.nome}`);
@@ -435,7 +423,7 @@ export class ChamadoService {
 
       Promise.all(promises).then(response => {
         this.buscarChamadosStorage().then((chamadosStorage) => {
-          if (verbose) this.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);
+          //if (verbose) this.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);
 
           resolve(chamadosStorage);
         }).catch(() => {
@@ -512,17 +500,6 @@ export class ChamadoService {
   buscarStatusExecucao(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       resolve(this.executando);
-    });
-  }
-
-  comprimirFoto(foto: Foto): Promise<Foto> {
-    return new Promise((resolve, reject) => {
-      this.imageCompress.compressFile(foto.str, '', 50, 50).then(result => {
-        foto.str = result;
-        resolve(foto);
-      }).catch(() => {
-        reject();
-      });
     });
   }
 

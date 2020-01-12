@@ -37,6 +37,7 @@ import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../fotos/foto';
 import { ChamadoConfPage } from './chamado-conf';
+import { FotoService } from '../../services/foto';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class ChamadoPage {
     private equipamentoPOSService: EquipamentoPOSService,
     private dadosGlobaisService: DadosGlobaisService,
     private chamadoService: ChamadoService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private fotoService: FotoService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
@@ -290,7 +292,7 @@ export class ChamadoPage {
 
               this.loadingFactory.exibir('Enviado foto ao servidor');
 
-              this.chamadoService.enviarFotoApi(fotos[0]).subscribe(() => {
+              this.fotoService.enviarFotoApi(fotos[0]).subscribe(() => {
                 this.chamado.rats[0].fotos.forEach((foto, i) => {
                   if (foto.modalidade == modalidade) {
                     this.chamado.rats[0].fotos[i].status = Config.FOTO.STATUS.ENVIADA;
