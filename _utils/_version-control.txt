@@ -1,5 +1,6 @@
 0.0.77 - ??/01/20
-- Aprimoramento na rotina de sincronização (ganho de 50% de performance quando em 3G);
+- Adicionado duplo método de compressão nas fotos do RAT - aplicando um ganho de performance nas rotinas de sincronização de chamados;
+- Aprimoramento na rotina de sincronização smartphone servidor (ganho de 50% de performance, quando em H+/3G/4G);
 - Sincronização imediata após o fechamento do chamado aprimorada;
 - Maior agilidade para traçar a rota de atendimentos diretamente pela tela de listagem de chamados;
 - Correções no sistema de sincronização;
@@ -9,7 +10,7 @@
 - Novos ícones indicativos (individuais para cada chamado) na tela de listagem de chamados - em deslocamento, checkin efetuado e Ocioso.
 
 0.0.76 - 10/01/20
-- Correção atualização de chamados Api Smartphone;
+- Corrigido problema onde após atualização de chamados pela Filial - desbloqueio, exigência de laudos etc., alguns aparelhos não estavam refletindo as mudanças;
 
 0.0.75 - 10/01/20
 - Adicionada lâmina de deslocamento anteriormente ao Checkin na tela de detalhes do chamado;

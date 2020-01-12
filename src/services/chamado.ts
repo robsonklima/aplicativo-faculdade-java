@@ -23,6 +23,7 @@ import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
 import { Intencao } from '../models/intencao';
 import { GeolocationService } from './geo-location';
+import { NgxImageCompressService } from 'ngx-image-compress';
 
 @Injectable()
 export class ChamadoService {
@@ -40,7 +41,8 @@ export class ChamadoService {
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
-    private geolocationService: GeolocationService
+    private geolocationService: GeolocationService,
+    private imageCompress: NgxImageCompressService
   ) {}
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
@@ -356,11 +358,13 @@ export class ChamadoService {
             this.loadingFactory.alterar(`Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} ao servidor. Por favor aguarde`);
           }
           
-          this.enviarFotoApi(foto).subscribe(() => {
-            resolve(`Foto ${foto.nome} enviada com sucesso`);
-          }, err => {
-            reject(`Não foi possível enviar a foto ${foto.nome}`);
-          });
+          this.comprimirFoto(foto).then(f => {
+            this.enviarFotoApi(f).subscribe(() => {
+              resolve(`Foto ${f.nome} enviada com sucesso`);
+            }, err => {
+              reject(`Não foi possível enviar a foto ${foto.nome}`);
+            });
+          }).catch();
         })
       }
   
@@ -508,6 +512,17 @@ export class ChamadoService {
   buscarStatusExecucao(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       resolve(this.executando);
+    });
+  }
+
+  comprimirFoto(foto: Foto): Promise<Foto> {
+    return new Promise((resolve, reject) => {
+      this.imageCompress.compressFile(foto.str, '', 50, 50).then(result => {
+        foto.str = result;
+        resolve(foto);
+      }).catch(() => {
+        reject();
+      });
     });
   }
 

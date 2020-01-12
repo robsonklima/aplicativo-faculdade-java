@@ -143,6 +143,8 @@ export class ChamadoPage {
   }
 
   public telaFoto(modalidade: string) {
+    if (!this.verificarExistenciaFoto(modalidade)) return;
+
     const modal = this.modalCtrl.create(FotoPage, { foto: this.carregarFoto(modalidade) });
     modal.present();
     modal.onDidDismiss(() => {
@@ -267,6 +269,50 @@ export class ChamadoPage {
     confirmacao.present();
   }
 
+  public enviarFoto(modalidade: string) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Enviar para o Servidor',
+      message: 'Deseja enviar a foto para o servidor agora?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Enviar',
+          handler: () => {
+            if (this.chamado.rats.length > 0) {
+              let fotos = this.chamado.rats[0].fotos.filter((foto) => {
+                return (foto.modalidade == modalidade);
+              });
+        
+              if (fotos.length == 0) return;
+
+              this.loadingFactory.exibir('Enviado foto ao servidor');
+
+              this.chamadoService.enviarFotoApi(fotos[0]).subscribe(() => {
+                this.chamado.rats[0].fotos.forEach((foto, i) => {
+                  if (foto.modalidade == modalidade) {
+                    this.chamado.rats[0].fotos[i].status = Config.FOTO.STATUS.ENVIADA;
+                  }
+                });
+
+                this.exibirToast('Foto enviada com sucesso', Config.TOAST.SUCCESS);
+                this.loadingFactory.encerrar();
+              }, e => {
+                this.exibirToast('Não foi possível enviar ao foto ao servidor', Config.TOAST.ERROR);
+
+                this.loadingFactory.encerrar();
+              });
+            }
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
   public verificarExistenciaFoto(modalidade: string): boolean {
     if (typeof(this.chamado.rats) !== 'undefined') {
       if (this.chamado.rats.length > 0) {
@@ -282,6 +328,18 @@ export class ChamadoPage {
     }
 
     return false;
+  }
+
+  public verificarStatusFoto(modalidade: string): string {
+    if (this.chamado.rats.length > 0) {
+      this.chamado.rats[0].fotos.forEach((foto, i) => {
+        if (foto.modalidade === modalidade && foto.status !== Config.FOTO.STATUS.ENVIADA) {
+          return Config.FOTO.STATUS.ENVIADA;
+        }
+      });
+
+      return Config.FOTO.STATUS.PENDENTE_ENVIO;
+    }
   }
 
   public verificarExistenciaLaudo(): boolean {
