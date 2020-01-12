@@ -1,7 +1,11 @@
 0.0.77 - ??/01/20
+- Aprimoramento na rotina de sincronização (ganho de 50% de performance quando em 3G);
+- Sincronização imediata após o fechamento do chamado aprimorada;
 - Maior agilidade para traçar a rota de atendimentos diretamente pela tela de listagem de chamados;
 - Correções no sistema de sincronização;
-- Sincronização imediata após o fechamento do chamado aprimorada;
+- Agrupadas lâminas de Checkin e Deslocamento;
+- Agrupadas lâminas de Checkout, Conferência e Fechamento;
+- Correção na resolução do logo da Splash Screen.
 
 0.0.76 - 10/01/20
 - Correção atualização de chamados Api Smartphone;

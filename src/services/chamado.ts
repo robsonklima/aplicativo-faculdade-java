@@ -407,12 +407,12 @@ export class ChamadoService {
         return
       }
 
+      if (verbose) {
+        this.loadingFactory.alterar(`Enviando ${chamadosFechados.length} ${chamadosFechados.length == 1 ? 'chamado' : 'chamados'} para o servidor`);
+      }
+
       const enviarChamado = (chamado: Chamado, i: number) => {
         return new Promise((resolve, reject) => {
-          if (verbose) {
-            this.loadingFactory.alterar(`Enviando ${chamadosFechados.length} ${chamadosFechados.length == 1 ? 'chamado' : 'chamados'} para o servidor`);
-          }
-            
           this.fecharChamadoApi(chamado).subscribe((res) => {
             this.apagarChamadoStorage(chamado);
             
@@ -425,9 +425,10 @@ export class ChamadoService {
       
       const promises = []
       chamadosFechados.map((chamado, chamadoIndex) => {
+        delete chamado.rats[0].fotos;
         promises.push(enviarChamado(chamado, chamadoIndex));
-      })
-  
+      });
+
       Promise.all(promises).then(response => {
         this.buscarChamadosStorage().then((chamadosStorage) => {
           if (verbose) this.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);

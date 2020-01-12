@@ -120,6 +120,7 @@ export class Config {
     ERRO_AO_ACESSAR_CAMERA: 'Erro ao acessar a câmera. Favor tentar novamente',
     ERRO_LOCAL_NAO_POSSUI_COORDENADAS: 'O local de atendimento não possui latitude e longitude cadastradas',
     CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
+    CHECKOUT_EM_ABERTO: 'Você possui checkout em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
     CHECKIN_REMOCAO: 'Deseja remover o checkin?',
     INTENCAO_REMOCAO: 'Deseja cancelar o deslocamento?',

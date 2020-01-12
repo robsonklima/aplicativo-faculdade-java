@@ -25,7 +25,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="FadeSplashScreen" value="true" />
-    <preference name="SplashScreenSpinnerColor" value="#488aff" />
+    <preference name="SplashScreenSpinnerColor" value="#ffffff" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />

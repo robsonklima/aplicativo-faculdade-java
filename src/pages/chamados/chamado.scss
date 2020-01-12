@@ -17,10 +17,6 @@ chamado-page {
             border-color: transparent;
         }
 
-        .slide-checkin, .slide-checkout, .slide-fechar, .slide-deslocamento {
-            background-color: #f4f4f4;
-        }
-
         .icon-button-start {
             margin-right: 6px;
         }
@@ -77,6 +73,10 @@ chamado-page {
             color: #9E9E9E;
             margin-top: 0px;
             padding-bottom: 12px;
+        }
+
+        .silver-h3 {
+            color: #9E9E9E;
         }
 
         .swiper-slide {
@@ -199,6 +199,10 @@ chamado-page {
 
         .icon-checkin-button {
             margin-top: -2px !important;
+        }
+
+        .first-icon {
+            padding-top: 2px !important;
         }
 
         .trash-icon {

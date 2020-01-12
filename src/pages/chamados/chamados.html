@@ -193,9 +193,8 @@
                 clear 
                 small
                 color="primary"
-                (click)="informarIntencaoAtendimento(i)"
                 *ngIf="!chamado.indIntencaoAtendimento">
-                <ion-icon name="ios-walk" class="ios-walk"></ion-icon>
+                <ion-icon name="ios-walk" color="silver-hard" class="ios-walk"></ion-icon>
               </button>
 
               <button 
@@ -204,7 +203,6 @@
                 clear 
                 small
                 color="primary"
-                (click)="cancelarIntencaoAtendimento(i)"
                 *ngIf="chamado.indIntencaoAtendimento">
                 <ion-icon name="ios-walk" color="secondary" class="ios-walk"></ion-icon>
               </button>

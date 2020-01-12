@@ -20,7 +20,6 @@ import { UsuarioPonto } from '../../models/usuario-ponto';
 import { Foto } from '../../models/foto';
 import { RatDetalhe } from '../../models/rat-detalhe';
 import { EquipamentoPOS } from '../../models/equipamentoPOS';
-import { Localizacao } from '../../models/localizacao';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
@@ -37,6 +36,7 @@ import { FotosPage } from '../fotos/fotos';
 import { LaudoPage } from '../laudos/laudo';
 import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../fotos/foto';
+import { ChamadoConfPage } from './chamado-conf';
 
 
 @Component({
@@ -152,6 +152,14 @@ export class ChamadoPage {
 
   public telaFotos() {
     const modal = this.modalCtrl.create(FotosPage, { chamado: this.chamado, modalidade: 'FOTO' });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
+  public telaChamadoConf() {
+    const modal = this.modalCtrl.create(ChamadoConfPage, { chamado: this.chamado });
     modal.present();
     modal.onDidDismiss(() => {
       this.configurarSlide(this.slides.getActiveIndex());
@@ -353,8 +361,6 @@ export class ChamadoPage {
   
                   this.chamadoService.atualizarChamado(this.chamado).then(() => {
                     this.exibirToast(`Em deslocamento para o chamado ${this.chamado.codOs}`, Config.TOAST.SUCCESS);
-                    this.configurarSlide(this.slides.getActiveIndex());
-                    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
                   }).catch(() => { this.loadingFactory.encerrar() });
                 }).catch(() => { this.loadingFactory.encerrar() });
               }).catch(() => {});
@@ -401,6 +407,11 @@ export class ChamadoPage {
   }
 
   public removerCheckin() {
+    if (this.chamado.checkout.dataHoraCadastro) {
+      this.exibirToast(Config.MSG.CHECKOUT_EM_ABERTO, Config.TOAST.ERROR)
+      return
+    }
+
     const alerta = this.alertCtrl.create({
       title: Config.MSG.CONFIRMACAO,
       message: Config.MSG.CHECKIN_REMOCAO,
@@ -880,22 +891,13 @@ export class ChamadoPage {
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
-        this.tituloSlide = (i + 1) + ". " + "Informações";
+        this.tituloSlide = (i + 1) + ". " + "Informações do Chamado";
 
         this.slides.lockSwipeToPrev(true);
         this.slides.lockSwipeToNext(false);
         break;
       case 1:
-          this.tituloSlide = (i + 1) + ". " + "Deslocamento";
-  
-          this.slides.lockSwipeToPrev(false);
-          if (!this.chamado.indIntencaoAtendimento)
-            this.slides.lockSwipeToNext(true);
-            else
-              this.slides.lockSwipeToNext(false);
-          break;
-      case 2:
-        this.tituloSlide = (i + 1) + ". " + "Checkin";
+        this.tituloSlide = (i + 1) + ". " + "Deslocamento e Checkin";
 
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkin.localizacao.latitude
@@ -905,14 +907,14 @@ export class ChamadoPage {
           else
             this.slides.lockSwipeToNext(false);
         break;
-      case 3:
-        this.tituloSlide = (i + 1) + ". " + "Imagens";
+      case 2:
+        this.tituloSlide = (i + 1) + ". " + "Imagens do RAT";
 
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
-      case 4:
-        this.tituloSlide = (i + 1) + ". " + "Informações da RAT";
+      case 3:
+        this.tituloSlide = (i + 1) + ". " + "Relatório de Atendimento";
 
         this.slides.lockSwipeToPrev(false);
         if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
@@ -923,8 +925,8 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 5:
-        this.tituloSlide = (i + 1) + ". " + "Detalhes da RAT";
+      case 4:
+        this.tituloSlide = (i + 1) + ". " + "Detalhes do RAT";
 
         this.slides.lockSwipeToPrev(false);
         if (
@@ -936,8 +938,8 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
           }
         break;
-      case 6:
-        this.tituloSlide = (i + 1) + ". " + "Checkout";
+      case 5:
+        this.tituloSlide = (i + 1) + ". " + "Checkout e Fechamento";
 
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkout.localizacao.latitude || !this.chamado.checkout.localizacao.longitude) {
@@ -946,18 +948,6 @@ export class ChamadoPage {
         else {
           this.slides.lockSwipeToNext(false);
         }
-        break;
-      case 7:
-        this.tituloSlide = (i + 1) + ". " + "Conferência";
-
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-        break;
-      case 8:
-        this.tituloSlide = (i + 1) + ". " + "Fechamento";
-
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(true);
         break;
     }
   }

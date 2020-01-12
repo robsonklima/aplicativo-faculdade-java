@@ -86,7 +86,8 @@
     "ng2-charts": "^1.6.0",
     "ngx-toastr": "^11.3.0",
     "phonegap-plugin-local-notification": "^1.0.1",
-    "rxjs": "5.5.2",
+    "rxjs": "^5.5.2",
+    "rxjs-compat": "^6.5.4",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"
   },
@@ -95,7 +96,6 @@
     "@ionic/cli-plugin-cordova": "^1.4.1",
     "@ionic/cli-plugin-ionic-angular": "1.4.1",
     "ionic": "5.4.6",
-    "leaflet": "^1.6.0",
     "leaflet-routing-machine": "^3.2.12",
     "node-sass": "^4.13.0",
     "typescript": "2.4.2",

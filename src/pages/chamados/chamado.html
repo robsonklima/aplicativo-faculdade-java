@@ -233,34 +233,27 @@
     </ion-slide>
     <!-- Informações -->
 
-    <!-- Deslocamento -->
-    <ion-slide class="slide-deslocamento">
+    <!-- Deslocamento e Checkin -->
+    <ion-slide>
       <ion-list>
-        <div padding *ngIf="!chamado?.indIntencaoAtendimento">
-          <button color="secondary" (click)="informarIntencaoAtendimento()" ion-button outline icon-start class="btn-checkin">
-            <ion-icon name='ios-walk' class="icon-button-start" is-active="false"></ion-icon>
-            {{ (!chamado?.indIntencaoAtendimento) ? 'Iniciar Deslocamento' : 'Deslocamento Iniciado' }}
-          </button>
-        </div>
-      </ion-list>
-
-      <ion-card text-left *ngIf="chamado?.indIntencaoAtendimento">
-        <ion-card-header class="card-map">
-          <h2>Deslocamento Iniciado</h2>
-        </ion-card-header>
+        <ion-item class="first-item">
+          <h2>{{ (!chamado?.indIntencaoAtendimento) ? 'Estou a Caminho' : 'Deslocamento Iniciado' }}</h2>
+          <h3 class="silver-h3">{{ chamado?.dataHoraIntencaoAtendimento }}</h3>
+          <button ion-button clear item-end (click)="informarIntencaoAtendimento()" *ngIf="!chamado?.indIntencaoAtendimento">Registrar</button>
+          <button ion-button clear item-end color="danger" (click)="cancelarIntencaoAtendimento()" *ngIf="chamado?.indIntencaoAtendimento">Cancelar</button>
+          <ion-icon name='ios-walk' item-start class="first-icon" color="primary"></ion-icon>
+        </ion-item>
     
         <ion-item>
-          <button ion-button color="silver-light" clear item-start class="data">{{ chamado?.dataHoraIntencaoAtendimento }}</button>
-          <button ion-button color="danger" clear item-end (click)="cancelarIntencaoAtendimento()">Cancelar</button>
+          <h2>{{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Estou no Local' : 'Checkin Efetuado' }}</h2>
+          <h3 class="silver-h3">{{ chamado?.checkin?.dataHoraCadastro }}</h3>
+          <button ion-button clear item-end *ngIf="(!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude)" [disabled]="!chamado?.indIntencaoAtendimento" (click)="efetuarCheckin()">Registrar</button>
+          <button ion-button clear color="danger" item-end *ngIf="chamado?.checkin?.localizacao?.latitude  && chamado?.checkin?.localizacao?.longitude" (click)="removerCheckin()">Cancelar</button>
+          <ion-icon name='ios-locate-outline' item-start color="primary"></ion-icon>
         </ion-item>
-      </ion-card>
-    </ion-slide>
-    <!-- Deslocamento -->
+      </ion-list>
 
-    <!-- Checkin -->
-    <ion-slide class="slide-checkin">
-      <ion-list>
-        <ion-card text-left
+      <ion-card text-left
           class="card-chamado-bloqueado"
           *ngIf="chamado?.indBloqueioReincidencia">
           <ion-card-header color="danger">
@@ -278,36 +271,13 @@
             <b ion-text>Suporte Técnico</b> para garantir as ações necessárias e liberação do chamado.
           </ion-card-content>
         </ion-card>
-
-        <div padding *ngIf="!chamado?.checkin?.localizacao?.latitude  && !chamado?.checkin?.localizacao?.longitude">
-          <button color="secondary" (click)="efetuarCheckin()" ion-button outline icon-start class="btn-checkin">
-            <ion-icon name='ios-locate-outline' class="icon-button-start" is-active="false"></ion-icon>
-            {{ (!chamado?.checkin?.localizacao?.latitude && !chamado?.checkin?.localizacao?.longitude) ? 'Checkin' : 'Checkin Efetuado' }}
-          </button>
-
-          <p *ngIf="chamado?.indCercaEletronicaLiberada">
-            O checkin pode ser efetuado fora do local de atendimento para esta OS
-          </p>
-        </div>
-      </ion-list>
-
-      <ion-card text-left *ngIf="chamado?.checkin?.localizacao?.latitude && chamado?.checkin?.localizacao?.longitude">
-        <ion-card-header class="card-map">
-          <h2>Checkin Efetuado</h2>
-        </ion-card-header>
-    
-        <ion-item>
-          <button ion-button color="silver-light" clear item-start class="data">{{ chamado?.checkin?.dataHoraCadastro }}</button>
-          <button ion-button color="danger" clear item-end (click)="removerCheckin(chamado)">Remover Checkin</button>
-        </ion-item>
-      </ion-card>
     </ion-slide>
-    <!-- Checkin -->
+    <!-- Deslocamento e Checkin -->
 
     <!-- Imagens da RAT -->
     <ion-slide>
       <ion-item-group>
-        <ion-item-divider color="light" class="first-item">4.1 RAT Física</ion-item-divider>
+        <ion-item-divider color="light" class="first-item">3.1 RAT Física</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -334,7 +304,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">4.2 Fotos do Equipamento</ion-item-divider>
+        <ion-item-divider color="light">3.2 Fotos do Equipamento</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -488,7 +458,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">4.3 Laudo Técnico</ion-item-divider>
+        <ion-item-divider color="light">3.3 Laudo Técnico</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -728,190 +698,28 @@
     </ion-slide>
     <!-- Detalhes da RAT -->
 
-    <!-- Checkout -->
-    <ion-slide class="slide-checkout">
-      <ion-list>
-        <div padding *ngIf="!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude">
-          <button color="secondary" outline ion-button icon-start (click)="efetuarCheckout()" class="btn-checkout">
-            <ion-icon name='ios-locate-outline' class="icon-button-start" is-active="false"></ion-icon>
-            
-            {{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Checkout' : 'Checkout Efetuado' }}
-          </button>
-
-          <p *ngIf="chamado?.indCercaEletronicaLiberada">
-            O checkout pode ser efetuado fora do local de atendimento para esta OS
-          </p>
-        </div>
-      </ion-list>
-
-      <ion-card text-left
-        *ngIf="chamado?.checkout?.localizacao?.latitude && chamado?.checkout?.localizacao?.longitude"
-        (click)="telaMapa('Checkout', chamado?.checkout?.localizacao)">
-        <ion-card-header class="card-map">
-          <h2>Checkout Efetuado</h2>
-        </ion-card-header>
-    
-        <ion-item>
-          <button ion-button color="silver-light" clear item-start>{{ chamado?.checkin?.dataHoraCadastro }}</button>
-        </ion-item>
-      </ion-card>
-    </ion-slide>
-    <!-- Checkout -->
-
-    <!-- Conferência -->
+    <!-- Checkout e Fechamento -->
     <ion-slide>
-      <ion-item-divider 
-        class="first-divider text-left"
-        color="light">RAT</ion-item-divider>
+      <ion-item>
+        <h2>{{ (!chamado?.checkout?.localizacao?.latitude && !chamado?.checkout?.localizacao?.longitude) ? 'Estou Saindo do Local' : 'Checkout' }}</h2>
+        <h3 class="silver-h3">{{ chamado?.checkout?.dataHoraCadastro }}</h3>
+        <button ion-button clear item-end *ngIf="!chamado?.checkout?.localizacao?.latitude  && !chamado?.checkout?.localizacao?.longitude" (click)="efetuarCheckout()">Registrar</button>
+        <button ion-button clear item-end *ngIf="chamado?.checkout?.localizacao?.latitude  && chamado?.checkout?.localizacao?.longitude" [disabled]="true">Registrado</button>
+        <ion-icon name='ios-locate-outline' item-start color="primary"></ion-icon>
+      </ion-item>
 
-        <ion-item>
-          Número da RAT
-          <ion-note item-end>
-            {{ chamado?.rats[0]?.numRat }}
-          </ion-note>
-        </ion-item>
+      <ion-item>
+        <h2>Conferir Informações</h2>
+        <button ion-button clear item-end [disabled]="!chamado?.checkout?.localizacao?.latitude  && !chamado?.checkout?.localizacao?.longitude" (click)="telaChamadoConf()">Conferir</button>
+        <ion-icon name='albums' item-start color="primary"></ion-icon>
+      </ion-item>
 
-        <ion-item>
-          Checkin
-          <ion-note item-end>
-            {{ chamado?.checkin?.dataHoraCadastro }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Checkout
-          <ion-note item-end>
-            {{ chamado?.checkout?.dataHoraCadastro }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Início do Atendimento
-          <ion-note item-end>
-            {{ chamado?.rats[0]?.dataInicio | date:'dd/MM' }}
-            {{ chamado?.rats[0]?.horaInicio }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Solução do Atendimento
-          <ion-note item-end>
-            {{ chamado?.rats[0]?.dataInicio | date:'dd/MM' }}
-            {{ chamado?.rats[0]?.horaSolucao }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item>
-          Acompanhante
-          <ion-note item-end>
-            {{ chamado?.rats[0]?.nomeAcompanhante }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item-divider 
-          color="light"
-          class="text-left">Solução </ion-item-divider>
-
-        <ion-item text-wrap>
-          <span class="inf-bas">
-            {{ chamado?.rats[0]?.obsRAT }}</span>
-        </ion-item>
-
-        <div *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
-          <ion-item-divider 
-            color="light"
-            class="text-left">
-            Detalhe 
-            <ion-badge 
-              item-end
-              class="badge"
-              color="light">{{ i + 1 }}/{{ chamado?.rats[0]?.ratDetalhes?.length }}</ion-badge>
-          </ion-item-divider>
-
-          <ion-item>
-            Tipo da Causa
-            <ion-note item-end>
-              {{ ratDetalhe?.tipoCausa?.nomeTipoCausa 
-                | lowercase | capitalize | ellipsis: 20 }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Tipo de Serviço
-            <ion-note item-end>
-              {{ ratDetalhe?.tipoServico?.nomeTipoServico 
-                | lowercase | capitalize | ellipsis: 20 }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Causa
-            <ion-note item-end>
-              {{ ratDetalhe?.causa?.codECausa }}
-              - {{ ratDetalhe?.causa?.nomeCausa | lowercase | capitalize | ellipsis: 22 }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Defeito
-            <ion-note item-end>
-              {{ ratDetalhe?.defeito?.codEDefeito }}
-              - {{ ratDetalhe?.defeito?.nomeDefeito | lowercase | capitalize | ellipsis: 20 }}
-            </ion-note>
-          </ion-item>
-
-          <ion-item>
-            Ação
-            <ion-note item-end>
-              {{ ratDetalhe?.acao?.codEAcao }}
-              - {{ ratDetalhe?.acao?.nomeAcao | lowercase | capitalize | ellipsis: 20}}
-            </ion-note>
-          </ion-item>
-
-          <div *ngFor="let peca of ratDetalhe?.pecas; let i = index">
-            <ion-item-divider 
-              color="light"
-              class="text-left">
-              Peça 
-              <ion-badge 
-                item-end
-                class="badge"
-                color="light">{{ i + 1 }}/{{ ratDetalhe?.pecas?.length }}</ion-badge>
-            </ion-item-divider>
-
-            <ion-item>
-              Peça
-              <ion-note item-end>
-                {{ peca?.nomePeca | lowercase | capitalize | ellipsis: 20 }}
-              </ion-note>
-            </ion-item>
-
-            <ion-item>
-              Qtd
-              <ion-note item-end>
-                {{ peca.qtd }}
-              </ion-note>
-            </ion-item>
-          </div>
-        </div>
+      <ion-item>
+        <h2>Fechar o Chamado</h2>
+        <button ion-button item-end color="secondary" [disabled]="!chamado?.checkout?.localizacao?.latitude  && !chamado?.checkout?.localizacao?.longitude" (click)="fecharChamado()">Fechar</button>
+        <ion-icon name='md-checkbox' item-start color="primary"></ion-icon>
+      </ion-item>
     </ion-slide>
-    <!-- Conferência -->
-
-    <!-- Fechamento -->
-    <ion-slide class="slide-fechar">
-      <ion-list>
-        <div padding>
-          <button 
-            color="secondary"
-            ion-button 
-            outline
-            (click)="fecharChamado()"
-            class="btn-fechar">
-            Fechar o Chamado
-          </button>
-        </div>
-      </ion-list>
-    </ion-slide>
-    <!-- Fechamento -->
+    <!-- Checkout e Fechamento -->
   </ion-slides>
 </ion-content>

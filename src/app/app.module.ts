@@ -96,6 +96,7 @@ import { TestePage } from '../pages/teste/teste';
 import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../pages/fotos/foto';
+import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
 
 
 @NgModule({
@@ -136,7 +137,8 @@ import { FotoPage } from '../pages/fotos/foto';
     LowercasePipe,
     FerramentasTecnicoPage,
     TutorialPage,
-    TestePage
+    TestePage,
+    ChamadoConfPage
   ],
   imports: [
     BrowserModule,
@@ -191,6 +193,7 @@ import { FotoPage } from '../pages/fotos/foto';
     AssinaturaPage,
     FerramentasTecnicoPage,
     TutorialPage,
+    ChamadoConfPage,
     TestePage
   ],
   providers: [
