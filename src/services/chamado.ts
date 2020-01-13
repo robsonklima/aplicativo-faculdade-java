@@ -50,6 +50,7 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
+      .retry(3)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error));
   }
