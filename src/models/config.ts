@@ -136,7 +136,7 @@ export class Config {
     INTERNET_ONLINE: "Online",
     DEFEITOS_NAO_ENCONTRADOS_COMPONENTE: 'Não foi possível encontrar os defeitos deste componente',
     ACOES_NAO_ENCONTRADAS_COMPONENTE: 'Não foi possível encontrar as ações deste componente',
-    NENHUM_CHAMADO_ENCONTRADO: 'Nenhum chamado novo encontrado no servidor',
+    NENHUM_CHAMADO_ENCONTRADO: 'Nenhum novo chamado encontrado',
     REMOVER_OS_CHAMADOS: 'Deseja remover os chamados do dispositivo?',
     OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
     ERRO_OBTER_ACOES_CAUSAS: 'Não foi possível carregar as Ações e Causas',

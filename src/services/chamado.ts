@@ -50,18 +50,14 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
-      .timeout(60000)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json())
-    );
+      .catch((error: any) => Observable.throw(error));
   }
 
   buscarChamadoApi(codOS: number): Observable<Chamado> {
     return this.http.get(Config.API_URL + 'Os/' + codOS)
-      .timeout(60000)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json())
-    );
+      .catch((error: any) => Observable.throw(error));
   }
 
   enviarIntencaoApi(intencao: Intencao): Observable<any> {
@@ -174,10 +170,7 @@ export class ChamadoService {
 
                     if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
                     this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
-                      this.executando = false;
-                      this.loadingFactory.encerrar();
-                      if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
-                      this.events.publish('sincronizacao:efetuada');
+                      
                       resolve(chamadosStorageRes);
                     }).catch(() => { 
                       this.executando = false;
@@ -191,12 +184,26 @@ export class ChamadoService {
                     if (verbose) this.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                     reject();
                   });
-                }, () => { 
+                },
+                response => {
+                  if (verbose) {
+                    if (response.status === 500)
+                      this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
+                    
+                    if (response.status === 404)
+                      this.exibirToast(Config.MSG.NENHUM_CHAMADO_ENCONTRADO, Config.TOAST.WARNING);
+                  }
+
                   this.executando = false;
                   this.loadingFactory.encerrar();
-                  if (verbose) this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
                   reject();
-                });
+                },
+                () => {
+                  this.executando = false;
+                  this.loadingFactory.encerrar();
+                  if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                  this.events.publish('sincronizacao:efetuada');
+                })
               }).catch(() => { 
                 this.executando = false;
                 this.loadingFactory.encerrar();
@@ -423,8 +430,6 @@ export class ChamadoService {
 
       Promise.all(promises).then(response => {
         this.buscarChamadosStorage().then((chamadosStorage) => {
-          //if (verbose) this.exibirToast(`${chamadosFechados.length == 1 ? 'Chamado' : 'Chamados'} enviados com sucesso para o servidor`, Config.TOAST.SUCCESS);
-
           resolve(chamadosStorage);
         }).catch(() => {
           reject();
@@ -492,8 +497,12 @@ export class ChamadoService {
       });
 
       this.storage.set('Chamados', this.chamados)
-        .then(() => { resolve(true) })
-        .catch(() => { reject(false) });
+        .then(() => {
+          resolve(true);
+        })
+        .catch(() => {
+          reject(false);
+        });
     });
   }
 

@@ -33,8 +33,8 @@ export class FotoService {
 
   comprimirFoto(foto: Foto): Promise<Foto> {
     return new Promise((resolve, reject) => {
-      this.imageCompress.compressFile(foto.str, '', 50, 50).then(result => {
-        foto.str = result;
+      this.imageCompress.compressFile(foto.str, '', 50, 50).then(res => {
+        foto.str = res;
         resolve(foto);
       }).catch(() => {
         reject();
