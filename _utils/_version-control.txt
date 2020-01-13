@@ -1,3 +1,6 @@
+0.0.78 - ??/01/20
+- Correcao da perda de checkins;
+
 0.0.77 - ??/01/20
 - Adicionado duplo método de compressão nas fotos do RAT - aplicando um ganho de performance nas rotinas de sincronização de chamados;
 - Aprimoramento na rotina de sincronização smartphone servidor (ganho de 50% de performance, quando em H+/3G/4G);

@@ -132,12 +132,12 @@ export class ChamadosPage {
   public sincronizarChamados(verbose: boolean=false): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.sincronizarChamados(verbose, this.dg.usuario.codTecnico).then((cs) => {
-        this.chamados = cs.sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0));
-        });
-
+        this.carregarChamadosStorage().catch();
         resolve();
-      }).catch(() => { reject() });
+      }).catch(() => { 
+        this.carregarChamadosStorage().catch();
+        reject();
+      });
     });
   }
 
