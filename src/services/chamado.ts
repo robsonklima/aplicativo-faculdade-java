@@ -235,11 +235,8 @@ export class ChamadoService {
   combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       chamadosStorage.forEach((cStorage, sIndex) => {
-        chamadosApi.forEach((cAPI, aIndex) => {
-          if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) {
-            chamadosStorage.splice(sIndex, 1);
-          }
-        });
+        if (!this.verificarListaContemChamado(cStorage, chamadosApi))
+          chamadosStorage.splice(sIndex, 1);
       });
 
       chamadosStorage = chamadosStorage.concat(chamadosApi);
@@ -481,6 +478,17 @@ export class ChamadoService {
     return new Promise((resolve, reject) => {
       resolve(this.executando);
     });
+  }
+
+  private verificarListaContemChamado(chamado: Chamado, lista: Chamado[]): boolean {
+      var i;
+      for (i = 0; i < lista.length; i++) {
+        if (lista[i].codOs === chamado.codOs) {
+          return true;
+        }
+      }
+
+      return false;
   }
 
   private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
