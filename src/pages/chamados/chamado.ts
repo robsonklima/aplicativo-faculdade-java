@@ -38,6 +38,7 @@ import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../fotos/foto';
 import { ChamadoConfPage } from './chamado-conf';
 import { FotoService } from '../../services/foto';
+import { AssinaturaPage } from '../assinatura/assinatura';
 
 
 @Component({
@@ -604,6 +605,17 @@ export class ChamadoPage {
     });
   }
 
+  public telaAssinaturaCliente() {
+    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "RAT_CLIENTE", chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss((chamado) => {
+      this.chamado = chamado;
+      this.chamadoService.atualizarChamado(this.chamado);
+      
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
   public telaEquipamentosHistorico(chamado: Chamado) {
     const modal = this.modalCtrl.create(HistoricoListaPage, { chamado: this.chamado });
     modal.present();
@@ -999,6 +1011,17 @@ export class ChamadoPage {
           }
         break;
       case 5:
+          this.tituloSlide = (i + 1) + ". " + "Assinatura do Cliente";
+  
+          this.slides.lockSwipeToPrev(false);
+          if (!this.chamado.rats[0].assinaturaCliente)
+            //this.slides.lockSwipeToNext(true);
+            this.slides.lockSwipeToNext(false); // remover
+          else {
+            this.slides.lockSwipeToNext(false);
+          }
+          break;
+      case 6:
         this.tituloSlide = (i + 1) + ". " + "Checkout e Fechamento";
 
         this.slides.lockSwipeToPrev(false);

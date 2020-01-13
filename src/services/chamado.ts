@@ -234,45 +234,16 @@ export class ChamadoService {
 
   combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
-      if (chamadosApi.length == 0) {
-        resolve([]);
-        return
-      }
-
-      if (chamadosStorage.length == 0) {
-        chamadosStorage = chamadosApi;
-      }
-
       chamadosStorage.forEach((cStorage, sIndex) => {
         chamadosApi.forEach((cAPI, aIndex) => {
-          if (chamadosStorage.some(c => c.codOs === cAPI.codOs)) { // verifica se storage CONTEM chamado api
-            if (cStorage.codOs == cAPI.codOs) {
-              if (!_.isEqual(cAPI, cStorage)) {
-                chamadosStorage[sIndex].tipoIntervencao = chamadosApi[aIndex].tipoIntervencao;
-                chamadosStorage[sIndex].indBloqueioReincidencia = chamadosApi[aIndex].indBloqueioReincidencia;
-                chamadosStorage[sIndex].indOSIntervencaoEquipamento = chamadosApi[aIndex].indOSIntervencaoEquipamento;
-                chamadosStorage[sIndex].localAtendimento = chamadosApi[aIndex].localAtendimento;
-                chamadosStorage[sIndex].equipamentoContrato = chamadosApi[aIndex].equipamentoContrato;
-                chamadosStorage[sIndex].dataHoraAberturaOS = chamadosApi[aIndex].dataHoraAberturaOS;
-                chamadosStorage[sIndex].dataHoraAgendamento = chamadosApi[aIndex].dataHoraAgendamento;
-                chamadosStorage[sIndex].observacao = chamadosApi[aIndex].observacao;
-                chamadosStorage[sIndex].defeitoRelatado = chamadosApi[aIndex].defeitoRelatado;
-              }
-            }
-          } else {
-            chamadosStorage.push(cAPI);
-          }
-
-          if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) { // verifica se storage NAO contem chamado api
+          if (!chamadosApi.some(c => c.codOs === cStorage.codOs)) {
             chamadosStorage.splice(sIndex, 1);
           }
         });
       });
 
-      chamadosStorage = chamadosStorage
-        .filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs)))
-        .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))});
-      
+      chamadosStorage = chamadosStorage.concat(chamadosApi);
+
       resolve(chamadosStorage);
     });
   }

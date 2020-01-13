@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { Laudo } from '../../models/laudo';
+import { Chamado } from '../../models/chamado';
 
 
 @Component({
@@ -12,6 +13,7 @@ export class AssinaturaPage {
   paginaOrigem: string;
   tituloPagina: string;
   laudo: Laudo;
+  chamado: Chamado;
   @ViewChild(SignaturePad) public signaturePad: SignaturePad;
   public signaturePadOptions: Object = { 'minWidth': 2, 'canvasWidth': 320, 'canvasHeight': 200 };
   public signatureImage: string;
@@ -22,6 +24,7 @@ export class AssinaturaPage {
   ) {
     this.paginaOrigem = this.navParams.get('paginaOrigem');
     this.laudo = this.navParams.get('laudo');
+    this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
@@ -29,7 +32,7 @@ export class AssinaturaPage {
       this.tituloPagina = "Assinatura do Técnico";
     }
 
-    if (this.paginaOrigem == "LAUDO_CLIENTE") {
+    if (this.paginaOrigem == "LAUDO_CLIENTE" || this.paginaOrigem == "RAT_CLIENTE") {
       this.tituloPagina = "Assinatura do Cliente";
     }
   }
@@ -45,6 +48,11 @@ export class AssinaturaPage {
     if (this.paginaOrigem == "LAUDO_CLIENTE") {
       this.laudo.assinaturaCliente = this.signatureImage;
       this.viewCtrl.dismiss(this.laudo);
+    }
+
+    if (this.paginaOrigem == "RAT_CLIENTE") {
+      this.chamado.rats[0].assinaturaCliente = this.signatureImage;
+      this.viewCtrl.dismiss(this.chamado);
     }
   }
 

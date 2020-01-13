@@ -45,4 +45,6 @@ export class Rat {
 	obsMotivoCancelamento: string;
 	obsMotivoComunicacao: string;
 	defeitoPOS: DefeitoPOS;
+	assinaturaCliente: string;
+	emailCliente: string;
 }

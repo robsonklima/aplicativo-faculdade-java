@@ -658,6 +658,24 @@
     </ion-slide>
     <!-- Detalhes da RAT -->
 
+    <!-- Assinatura do Cliente -->
+    <ion-slide>
+      <!-- <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Solicite a assinatura do cliente</p> -->
+      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Espaço reservado para a assinatura do cliente (versões futuras)</p>
+
+      <img class="img" *ngIf="chamado?.rats[0]?.assinaturaCliente" src="{{ chamado?.rats[0]?.assinaturaCliente }}" alt="">
+
+      <ion-fab right bottom>
+        <button 
+          ion-fab color="secondary" 
+          (click)="telaAssinaturaCliente()"
+          [disabled]="true">
+          <ion-icon name="browsers"></ion-icon
+        ></button>
+      </ion-fab>
+    </ion-slide>
+    <!-- Assinatura do Cliente -->
+
     <!-- Checkout e Fechamento -->
     <ion-slide>
       <ion-item>
