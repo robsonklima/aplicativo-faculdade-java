@@ -387,7 +387,7 @@ export class ChamadoPage {
     }
 
     const alerta = this.alertCtrl.create({
-      title: Config.MSG.CONFIRMACAO,
+      title: Config.MSG.DESLOCAMENTO,
       message: Config.MSG.INTENCAO_CONFIRMACAO,
       buttons: [
         {
@@ -395,7 +395,7 @@ export class ChamadoPage {
           handler: () => {}
         },
         {
-          text: 'Sim',
+          text: 'Confirmar',
           handler: () => {
             this.chamadoService.buscarChamadosStorage().then((chamados) => {
               chamados.forEach((c, i) => {
@@ -612,7 +612,7 @@ export class ChamadoPage {
 
   public efetuarCheckin() {
     const alerta = this.alertCtrl.create({
-      title: Config.MSG.CONFIRMACAO,
+      title: Config.MSG.CHECKIN,
       message: Config.MSG.CHECKIN_CONFIRMACAO,
       buttons: [
         {
@@ -673,7 +673,7 @@ export class ChamadoPage {
     this.chamadoService.atualizarChamado(this.chamado);
 
     const alerta = this.alertCtrl.create({
-      title: Config.MSG.CONFIRMACAO,
+      title: Config.MSG.CHECKOUT,
       message: Config.MSG.CHECKOUT_CONFIRMACAO,
       buttons: [
         {
