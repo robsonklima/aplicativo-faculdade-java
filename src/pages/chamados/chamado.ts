@@ -54,6 +54,7 @@ export class ChamadoPage {
   equipamentosPOS: EquipamentoPOS[] = [];
   @ViewChild(Slides) slides: Slides;
   usuarioPonto: UsuarioPonto;
+  indexSlide: number;
   tituloSlide: string;
   dg: DadosGlobais;
   chamado: Chamado;
@@ -100,6 +101,11 @@ export class ChamadoPage {
   }
 
   public alterarSlide() {
+    this.configurarSlide(this.slides.getActiveIndex());
+  }
+
+  public prosseguirSlide() {
+    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
     this.configurarSlide(this.slides.getActiveIndex());
   }
 
@@ -963,13 +969,15 @@ export class ChamadoPage {
   private configurarSlide(i: number) {
     switch (i) {
       case 0:
+        this.indexSlide = (i + 1);
         this.tituloSlide = (i + 1) + ". " + "Informações do Chamado";
 
         this.slides.lockSwipeToPrev(true);
         this.slides.lockSwipeToNext(false);
         break;
       case 1:
-        this.tituloSlide = (i + 1) + ". " + "Deslocamento e Checkin";
+        this.indexSlide = (i + 1);
+        this.tituloSlide = `${this.indexSlide}. Deslocamento e Checkin`;
 
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkin.localizacao.latitude
@@ -980,14 +988,16 @@ export class ChamadoPage {
             this.slides.lockSwipeToNext(false);
         break;
       case 2:
-        this.tituloSlide = (i + 1) + ". " + "Imagens do RAT";
-
+        this.indexSlide = (i + 1);
+        this.tituloSlide = `${this.indexSlide}. Imagens do RAT`;
+        
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
         break;
       case 3:
-        this.tituloSlide = (i + 1) + ". " + "Relatório de Atendimento";
-
+        this.indexSlide = (i + 1);
+        this.tituloSlide = `${this.indexSlide}. Relatório de Atendimento`;
+        
         this.slides.lockSwipeToPrev(false);
         if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
           || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT
@@ -998,7 +1008,8 @@ export class ChamadoPage {
           }
         break;
       case 4:
-        this.tituloSlide = (i + 1) + ". " + "Detalhes do RAT";
+        this.indexSlide = (i + 1);
+        this.tituloSlide = `${this.indexSlide}. Detalhes do RAT`;
 
         this.slides.lockSwipeToPrev(false);
         if (
@@ -1011,8 +1022,9 @@ export class ChamadoPage {
           }
         break;
       case 5:
-          this.tituloSlide = (i + 1) + ". " + "Assinatura do Cliente";
-  
+          this.indexSlide = (i + 1);
+          this.tituloSlide = `${this.indexSlide}. Assinatura do Cliente`;
+          
           this.slides.lockSwipeToPrev(false);
           if (!this.chamado.rats[0].assinaturaCliente)
             //this.slides.lockSwipeToNext(true);
@@ -1022,7 +1034,8 @@ export class ChamadoPage {
           }
           break;
       case 6:
-        this.tituloSlide = (i + 1) + ". " + "Checkout e Fechamento";
+        this.indexSlide = (i + 1);
+        this.tituloSlide = `${this.indexSlide}. Checkout e Fechamento`;
 
         this.slides.lockSwipeToPrev(false);
         if (!this.chamado.checkout.localizacao.latitude || !this.chamado.checkout.localizacao.longitude) {
