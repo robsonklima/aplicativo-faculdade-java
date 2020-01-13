@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, PopoverController, Events, AlertController, Platform } from 'ionic-angular';
 
 import { AppVersion } from '@ionic-native/app-version';
@@ -38,9 +38,6 @@ import { StatusServicoService } from '../../services/status-servico';
 import { DefeitoPOSService } from '../../services/defeito-pos';
 import { FerramentasTecnicoPage } from '../ferramentas-tecnico/ferramentas-tecnico';
 import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
-import { EquipamentoCausaService } from '../../services/equipamento-causa';
-import { DefeitoCausaService } from '../../services/defeito-causa';
-import { AcaoCausaService } from '../../services/acao-causa';
 import { GeolocationService } from '../../services/geo-location';
 
 
@@ -87,10 +84,7 @@ export class HomePage {
     private motivoCancelamentoService: MotivoCancelamentoService,
     private statusServicoService: StatusServicoService,
     private defeitoPOSService: DefeitoPOSService,
-    private ferramentaTecnicoService: FerramentaTecnicoService,
-    private equipamentoCausaService: EquipamentoCausaService,
-    private defeitoCausaService: DefeitoCausaService,
-    private acaoCausaService: AcaoCausaService
+    private ferramentaTecnicoService: FerramentaTecnicoService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -109,7 +103,7 @@ export class HomePage {
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
   }
 
-  ionViewDidLoad() {
+  ngOnInit() {
     this.events.subscribe('sincronizacao:efetuada', () => {
       this.carregarChamadosStorage();
     });

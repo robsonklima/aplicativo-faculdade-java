@@ -11,7 +11,6 @@ import { Login } from '../../models/login';
 import { Usuario } from '../../models/usuario';
 
 import { DadosGlobaisService } from '../../services/dados-globais';
-import { ChamadoService } from '../../services/chamado';
 import { UsuarioService } from '../../services/usuario';
 
 
@@ -32,7 +31,6 @@ export class LoginPage implements OnInit {
     private menuCtrl: MenuController,
     private usuarioService: UsuarioService,
     private dadosGlobaisService: DadosGlobaisService,
-    private chamadoService: ChamadoService,
     private toastCtrl: ToastController,
     private events: Events,
     private appVersion: AppVersion

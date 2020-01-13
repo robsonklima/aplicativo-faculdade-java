@@ -18,15 +18,14 @@ export class CheckinCheckoutService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  buscarCheckoutApi(codOs: number): Observable<any> {
-    return this.http.get(Config.API_URL + 'Checkout/' + codOs)
+  enviarCheckinApi(checkin: Checkin): Observable<any> {
+    return this.http.post(Config.API_URL + 'Checkin', checkin)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarCheckinApi(checkin: Checkin): Observable<any> {
-    return this.http.post(Config.API_URL + 'Checkin', checkin)
-      .timeout(60000)
+  buscarCheckoutApi(codOs: number): Observable<any> {
+    return this.http.get(Config.API_URL + 'Checkout/' + codOs)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

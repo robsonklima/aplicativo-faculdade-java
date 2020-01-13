@@ -346,13 +346,13 @@ export class ChamadoService {
             this.loadingFactory.alterar(`Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} ao servidor. Por favor aguarde`);
           }
           
-          this.fotoService.comprimirFoto(foto).then(f => {
-            this.fotoService.enviarFotoApi(f).subscribe(() => {
-              resolve(`Foto ${f.nome} enviada com sucesso`);
+          //this.fotoService.comprimirFoto(foto).then(f => {
+            this.fotoService.enviarFotoApi(foto).subscribe(() => {
+              resolve(`Foto ${foto.nome} enviada com sucesso`);
             }, err => {
               reject(`Não foi possível enviar a foto ${foto.nome}`);
             });
-          }).catch();
+          //}).catch();
         })
       }
   
