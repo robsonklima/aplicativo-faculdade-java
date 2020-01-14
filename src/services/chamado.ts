@@ -5,7 +5,6 @@ import { Toast, Events, ToastController } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Observable } from "rxjs/Observable";
 import { NativeAudio } from '@ionic-native/native-audio';
-import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { Vibration } from '@ionic-native/vibration';
 import { Config } from '../models/config';
 import _ from 'lodash';
@@ -19,11 +18,9 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
 
 import { Chamado } from "../models/chamado";
-import { Foto } from '../models/foto';
 import { Checkin } from '../models/checkin';
 import { Intencao } from '../models/intencao';
 import { GeolocationService } from './geo-location';
-import { FotoService } from './foto';
 import { CheckinCheckoutService } from './checkin-checkout';
 
 
@@ -39,55 +36,53 @@ export class ChamadoService {
     private storage: Storage,
     private events: Events,
     private toastCtrl: ToastController,
-    private localNotification: PhonegapLocalNotification,
     private nativeAudio: NativeAudio,
     private vibration: Vibration,
     private loadingFactory: LoadingFactory,
     private geolocationService: GeolocationService,
-    private fotoService: FotoService,
     private checkinCheckoutService: CheckinCheckoutService
   ) {}
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
-      .retry(3)
+      .retry(2)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error));
   }
 
   buscarChamadoApi(codOS: number): Observable<Chamado> {
     return this.http.get(Config.API_URL + 'Os/' + codOS)
+      .retry(2)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error));
   }
 
   enviarIntencaoApi(intencao: Intencao): Observable<any> {
     return this.http.post(Config.API_URL + 'OsIntencao', intencao)
-      .timeout(60000)
+      .retry(2)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
+      .catch((error: any) => Observable.throw(error));
   }
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
-      .timeout(60000)
+      .retry(2)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
+      .catch((error: any) => Observable.throw(error));
   }
 
   buscarChamadosFechadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnicoFechada/' + codTecnico)
-      .timeout(60000)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json())
+      .catch((error: any) => Observable.throw(error)
     );
   }
 
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
-      .timeout(60000)
+      .retry(2)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
+      .catch((error: any) => Observable.throw(error));
   }
 
   buscarChamados(): Promise<Chamado[]> {
@@ -155,66 +150,57 @@ export class ChamadoService {
           if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_INTENCOES);
           this.enviarIntencao(verbose, chamadosStorage).then(() => {
 
-            if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_FOTOS_PARA_SERVIDOR);
-            this.enviarFotos(verbose, chamadosStorage).then(() => {
+            if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
+            this.enviarChamadosFechados(verbose, chamadosStorage).then((chamadosAbertos) => {
 
-              if (verbose) this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADOS_FECHADOS);
-              this.enviarChamadosFechados(verbose, chamadosStorage).then((chamadosAbertos) => {
+              if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
+              this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
 
-                if (verbose) this.loadingFactory.alterar(Config.MSG.BUSCANDO_CHAMADOS_SERVIDOR);
-                this.buscarChamadosApi(codTecnico).subscribe((chamadosApi) => {
+                if (chamadosApi.length !== chamadosStorage.length && !verbose) this.dispararSinalSonoroComVibracao();
 
-                  if (chamadosApi.length !== chamadosStorage.length && !verbose) this.dispararSinalSonoroComVibracao();
+                if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
+                this.combinarChamadosApiStorage(verbose, chamadosAbertos, chamadosApi).then((chamadosCombinados) => {
 
-                  if (verbose) this.loadingFactory.alterar(Config.MSG.COMBINANDO_CHAMADOS_SERVIDOR_SMARTPHONE);
-                  this.combinarChamadosApiStorage(verbose, chamadosAbertos, chamadosApi).then((chamadosCombinados) => {
-
-                    if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
-                    this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
-                      
-                      resolve(chamadosStorageRes);
-                    }).catch(() => { 
-                      this.executando = false;
-                      this.loadingFactory.encerrar();
-                      if (verbose) this.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
-                      reject();
-                    });
-                  }).catch(() => {
+                  if (verbose) this.loadingFactory.alterar(Config.MSG.ATUALIZAR_CHAMADOS_STORAGE);
+                  this.atualizarChamadosStorage(chamadosCombinados).then((chamadosStorageRes) => {
+                    
+                    resolve(chamadosStorageRes);
+                  }).catch(() => { 
                     this.executando = false;
                     this.loadingFactory.encerrar();
-                    if (verbose) this.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
+                    if (verbose) this.exibirToast(Config.MSG.ERRO_GRAVAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                     reject();
                   });
-                },
-                response => {
-                  if (verbose) {
-                    if (response.status === 500)
-                      this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
-                    
-                    if (response.status === 404)
-                      this.exibirToast(Config.MSG.NENHUM_CHAMADO_ENCONTRADO, Config.TOAST.WARNING);
-                  }
-
+                }).catch(() => {
                   this.executando = false;
                   this.loadingFactory.encerrar();
+                  if (verbose) this.exibirToast(Config.MSG.ERRO_UNIFICAR_CHAMADOS_API_STORAGE, Config.TOAST.ERROR);
                   reject();
-                },
-                () => {
-                  this.executando = false;
-                  this.loadingFactory.encerrar();
-                  if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
-                  this.events.publish('sincronizacao:efetuada');
-                })
-              }).catch(() => { 
+                });
+              },
+              response => {
+                if (verbose) {
+                  if (response.status === 500)
+                    this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
+                  
+                  if (response.status === 404)
+                    this.exibirToast(Config.MSG.NENHUM_CHAMADO_ENCONTRADO, Config.TOAST.WARNING);
+                }
+
                 this.executando = false;
                 this.loadingFactory.encerrar();
-                if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
                 reject();
-              }); 
+              },
+              () => {
+                this.executando = false;
+                this.loadingFactory.encerrar();
+                if (verbose) this.exibirToast(Config.MSG.CHAMADOS_SINCRONIZADOS, Config.TOAST.SUCCESS);
+                this.events.publish('sincronizacao:efetuada');
+              })
             }).catch(() => { 
               this.executando = false;
               this.loadingFactory.encerrar();
-              if (verbose) this.exibirToast(Config.MSG.ERRO_ENVIAR_FOTOS_PARA_SERVIDOR, Config.TOAST.ERROR);
+              if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
               reject();
             });
           }).catch(() => { 
@@ -312,60 +298,6 @@ export class ChamadoService {
     });
   }
 
-  enviarFotos(verbose: boolean=false, chamadosStorage: Chamado[]): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const enviarFoto = (foto: Foto, i: number) => {
-        return new Promise((resolve, reject) => {
-          if (verbose) {
-            let qtdFotosAEnviar = fotos.filter((f) => { return (f.status != Config.FOTO.STATUS.ENVIADA) }).length;
-            
-            this.loadingFactory.alterar(`Enviando ${qtdFotosAEnviar} ${qtdFotosAEnviar == 1 ? 'foto' : 'fotos'} ao servidor. Por favor aguarde`);
-          }
-          
-          //this.fotoService.comprimirFoto(foto).then(f => {
-            this.fotoService.enviarFotoApi(foto).subscribe(() => {
-              resolve(`Foto ${foto.nome} enviada com sucesso`);
-            }, err => {
-              reject(`Não foi possível enviar a foto ${foto.nome}`);
-            });
-          //}).catch();
-        })
-      }
-  
-      const fotos = []
-      chamadosStorage.forEach(chamado => {
-        chamado.rats.forEach((rat, ratIndex) => {
-          rat.fotos.forEach((foto, fotoIndex) => {
-            fotos.push(foto);
-          });
-        });
-      });
-
-      const promises = []
-      fotos.map((foto, fotoIndex) => {
-        if (foto.status != Config.FOTO.STATUS.ENVIADA) {
-          promises.push(enviarFoto(foto, fotoIndex));
-        }
-      })
-  
-      Promise.all(promises).then(response => {
-        chamadosStorage.forEach(chamado => {
-          chamado.rats.forEach((rat, ratIndex) => {
-            rat.fotos.forEach((foto, fotoIndex) => {
-              chamado.rats[ratIndex].fotos[fotoIndex].status = Config.FOTO.STATUS.ENVIADA;
-              this.atualizarChamado(chamado);
-            });
-          });
-        });
-
-        resolve();
-      })
-      .catch(error => {
-        reject(`Erro: ${error}`);
-      });
-    });
-  }
-
   enviarChamadosFechados(verbose: boolean=false, chamados: Chamado[]): Promise<any> {
     return new Promise((resolve, reject) => {
       let chamadosFechados = chamados.filter((c) => { return (c.dataHoraFechamento !== null) });
@@ -376,36 +308,21 @@ export class ChamadoService {
       }
 
       if (verbose) {
-        this.loadingFactory.alterar(`Enviando ${chamadosFechados.length} ${chamadosFechados.length == 1 ? 'chamado' : 'chamados'} para o servidor`);
+        this.loadingFactory.alterar(Config.MSG.ENVIANDO_CHAMADO_FECHADO);
       }
 
-      const enviarChamado = (chamado: Chamado, i: number) => {
-        return new Promise((resolve, reject) => {
-          this.fecharChamadoApi(chamado).subscribe((res) => {
-            this.apagarChamadoStorage(chamado);
-            
-            resolve(`Chamado ${chamado.codOs} enviado com sucesso`);
-          }, err => {
-            reject(`Não foi possível enviar o chamado ${chamado.codOs}`);
+      this.fecharChamadoApi(chamadosFechados[0]).subscribe((res) => {
+        this.apagarChamadoStorage(chamadosFechados[0]).then(() => {
+          this.buscarChamadosStorage().then((chamadosStorage) => {
+            resolve(chamadosStorage);
+          }).catch(() => {
+            reject();
           });
-        })
-      }
-      
-      const promises = []
-      chamadosFechados.map((chamado, chamadoIndex) => {
-        delete chamado.rats[0].fotos;
-        promises.push(enviarChamado(chamado, chamadoIndex));
-      });
-
-      Promise.all(promises).then(response => {
-        this.buscarChamadosStorage().then((chamadosStorage) => {
-          resolve(chamadosStorage);
         }).catch(() => {
           reject();
-        });
-      }).catch(error => {
-        if (verbose) this.exibirToast(`Não foi possível enviar ${chamadosFechados.length == 1 ? 'o chamado' : 'os chamados'} para o servidor`, Config.TOAST.ERROR);
-        reject(`Erro: ${error}`);
+        }); 
+      }, error => {
+       reject(); 
       });
     });
   }
@@ -490,25 +407,6 @@ export class ChamadoService {
       }
 
       return false;
-  }
-
-  private exibirNotificacao(titulo:string, corpo: string): Promise<any> {
-    return new Promise((resolve, reject) => {resolve(
-      this.localNotification.requestPermission()
-        .then((permission) => {
-          if (permission === 'granted') {
-            this.localNotification.create(
-              titulo, 
-              {
-                tag: titulo,
-                body: corpo,
-                icon: 'assets/icon/favicon.ico'
-              }
-            );
-          }
-        }).catch()
-      );
-    });
   }
 
   private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {

@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.81";
+  public static VERSAO_APP = "0.0.82";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -112,6 +112,7 @@ export class Config {
     ERRO_RESPOSTA_DISPOSITIVO: 'O dispositivo não respondeu',
     ERRO_FOTO: 'Erro ao tirar a foto. Favor tentar novamente',
     ERRO_AO_SINCRONIZAR: 'Erro ao sincronizar junto ao servidor',
+    CHAMADO_ENVIADO: 'Chamado enviado com sucesso',
     ERRO_AO_CONSULTAR_CHAMADOS_TECNICO: 'Não foi possível obter resposta do servidor',
     ERRO_UNIFICAR_CHAMADOS_API_STORAGE: 'Erro ao sincronizar chamados entre o servidor e o smartphone',
     ERRO_GRAVAR_CHAMADOS_API_STORAGE: 'Erro ao gravar chamados no smartphone',
@@ -122,6 +123,7 @@ export class Config {
     ERRO_AO_OBTER_LOCALIZACAO: 'Erro ao obter a localização',
     ERRO_AO_ACESSAR_CAMERA: 'Erro ao acessar a câmera. Favor tentar novamente',
     ERRO_LOCAL_NAO_POSSUI_COORDENADAS: 'O local de atendimento não possui latitude e longitude cadastradas',
+    ERRO_ENVIAR_CHAMADO: `Não foi possível enviar o chamado para o servidor`,
     CHECKIN_EM_ABERTO: 'Você possui checkin em aberto',
     CHECKOUT_EM_ABERTO: 'Você possui checkout em aberto',
     CHECKIN_CONFIRMACAO: 'Somente confirme o Checkin se você realmente estiver no local do atendimento',
@@ -134,6 +136,7 @@ export class Config {
     GPS_DESATIVADO_ORIENTACAO: 'Favor ativar o GPS do seu smartphone para que o aplicativo possa sincronizar seus chamados',
     INTERNET_OFFLINE: "Verifique sua conexão com a internet",
     INTERNET_ONLINE: "Online",
+    ENVIANDO_CHAMADO_FECHADO: `Enviando chamado para o servidor`,
     DEFEITOS_NAO_ENCONTRADOS_COMPONENTE: 'Não foi possível encontrar os defeitos deste componente',
     ACOES_NAO_ENCONTRADAS_COMPONENTE: 'Não foi possível encontrar as ações deste componente',
     NENHUM_CHAMADO_ENCONTRADO: 'Nenhum novo chamado encontrado',

@@ -223,7 +223,7 @@ export class RatDetalhePage {
   public salvarRatDetalheNoChamadoESair() {
     this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
     this.chamadoService.atualizarChamado(this.chamado);
-    this.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS, Config.TOAST.POSITION.TOP);
+    this.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS);
     this.fecharModal();
   }
 
