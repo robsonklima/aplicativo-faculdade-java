@@ -222,8 +222,19 @@ export class ChamadoService {
   combinarChamadosApiStorage(verbose: boolean=false, chamadosStorage: Chamado[], chamadosApi: Chamado[]): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       chamadosStorage.forEach((cStorage, sIndex) => {
-        if (!this.verificarListaContemChamado(cStorage, chamadosApi))
+        if (!this.verificarListaContemChamado(cStorage, chamadosApi)) {
           chamadosStorage.splice(sIndex, 1);
+        } else {
+          chamadosStorage.forEach((cStorage, sIndex) => {
+            chamadosApi.forEach((cApi) => {
+              if (cStorage.codOs === cApi.codOs) {
+                chamadosStorage[sIndex].indBloqueioReincidencia = cApi.indBloqueioReincidencia;
+                chamadosStorage[sIndex].indOSIntervencaoEquipamento = cApi.indOSIntervencaoEquipamento;
+                chamadosStorage[sIndex].tipoIntervencao = cApi.tipoIntervencao;
+              }
+            });
+          });
+        }
       });
 
       chamadosStorage = chamadosStorage.concat(chamadosApi);
