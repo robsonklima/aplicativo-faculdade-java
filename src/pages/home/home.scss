@@ -2,4 +2,13 @@ home-page {
     .first-divider, .first-item {
         padding-top: 5px !important;
     }
+
+    ion-footer {
+        text-align: center !important;
+    }
+
+    .footer {
+        font-size: 9pt;
+        color: darkgrey;
+    }
 }

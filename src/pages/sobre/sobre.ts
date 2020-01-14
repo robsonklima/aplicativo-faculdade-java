@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
-
-import { AppVersion } from '@ionic-native/app-version';
-
 import moment from 'moment';
+import { Config } from '../../models/config';
 
 @Component({
   selector: 'sobre-page',
@@ -14,17 +12,11 @@ export class SobrePage {
   anoAtual: string;
 
   constructor(
-    private viewCtrl: ViewController,
-    private appVersion: AppVersion
+    private viewCtrl: ViewController
   ) { }
 
   ionViewWillEnter() {
-    this.appVersion.getVersionNumber().then((versaoApp) => {
-      this.versaoApp = versaoApp;
-    }).catch(() => {
-
-    });
-
+    this.versaoApp = Config.VERSAO_APP;
     this.anoAtual = moment().format('YYYY');
   }
 

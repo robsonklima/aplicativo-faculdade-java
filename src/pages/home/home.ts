@@ -46,6 +46,7 @@ import { GeolocationService } from '../../services/geo-location';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  versaoApp = Config.VERSAO_APP;
   versaoAppAtualizada: boolean = true;
   necessidadeRegistrarIntervalo: boolean = false;
   loginPage = LoginPage;

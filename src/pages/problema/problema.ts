@@ -3,6 +3,7 @@ import { ViewController } from 'ionic-angular';
 
 import { DadosGlobais } from '../../models/dados-globais';
 import { DadosGlobaisService } from '../../services/dados-globais';
+import { Config } from '../../models/config';
 
 @Component({
   selector: 'problema-page',
@@ -10,6 +11,7 @@ import { DadosGlobaisService } from '../../services/dados-globais';
 })
 export class ProblemaPage {
   dadosGlobais: DadosGlobais;
+  versao: string;
 
   constructor(
     private viewCtrl: ViewController,
@@ -18,6 +20,7 @@ export class ProblemaPage {
 
   ionViewWillEnter() {
     this.carregarDadosGlobais();
+    this.versao = Config.VERSAO_APP;
   }
 
   private carregarDadosGlobais() {
