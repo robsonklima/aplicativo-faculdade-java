@@ -12,6 +12,23 @@
   </ion-navbar>
   <ion-toolbar>
     <ion-title>{{ tituloSlide }}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="prosseguirSlide()" *ngIf="indexSlide == 1 || indexSlide == 2 || indexSlide == 3">
+        <ion-icon name="md-arrow-forward"></ion-icon>
+      </button>
+
+      <button ion-button icon-only *ngIf="indexSlide == 5" (click)="telaRatDetalhe()" [disabled]="chamado?.rats?.length == 0">
+        <ion-icon name="add" *ngIf="!chamado?.rats[0]?.defeitoPOS"></ion-icon>
+
+        <ion-icon name="create" *ngIf="chamado?.rats[0]?.defeitoPOS"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="true" 
+        *ngIf="indexSlide == 6">
+        <ion-icon name="browsers"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="chamado-content-page outer-content">
@@ -277,7 +294,7 @@
     <!-- Imagens da RAT -->
     <ion-slide>
       <ion-item-group>
-        <ion-item-divider color="light" class="first-item">3.1 RAT Física</ion-item-divider>
+        <ion-item-divider color="light" class="first-item">{{ indexSlide }}.1 RAT Física</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start (click)="telaFoto('RAT')">
@@ -302,7 +319,7 @@
           </button> -->
         </ion-item>
 
-        <ion-item-divider color="light">3.2 Fotos do Equipamento</ion-item-divider>
+        <ion-item-divider color="light">{{ indexSlide }}.2 Fotos do Equipamento</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start (click)="telaFoto('ETIQUETANUMSERIE')">
@@ -418,7 +435,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">3.3 Laudo Técnico</ion-item-divider>
+        <ion-item-divider color="light">{{ indexSlide }}.3 Laudo Técnico</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -615,17 +632,6 @@
     <!-- Detalhes da RAT -->
     <ion-slide>
       <ion-list class="list-slide">
-        <ion-fab right bottom>
-          <button 
-            ion-fab color="secondary" 
-            (click)="telaRatDetalhe()"
-            [disabled]="chamado?.rats?.length == 0">
-            <ion-icon name="add" *ngIf="!chamado?.rats[0]?.defeitoPOS"></ion-icon>
-
-            <ion-icon name="create" *ngIf="chamado?.rats[0]?.defeitoPOS"></ion-icon>
-          </button>
-        </ion-fab>
-  
         <ion-item
           *ngFor="let ratDetalhe of chamado?.rats[0]?.ratDetalhes; let i = index">
           <ion-label>
@@ -664,15 +670,6 @@
       <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Espaço reservado para a assinatura do cliente (versões futuras)</p>
 
       <img class="img" *ngIf="chamado?.rats[0]?.assinaturaCliente" src="{{ chamado?.rats[0]?.assinaturaCliente }}" alt="">
-
-      <ion-fab right bottom>
-        <button 
-          ion-fab color="secondary" 
-          (click)="telaAssinaturaCliente()"
-          [disabled]="true">
-          <ion-icon name="browsers"></ion-icon
-        ></button>
-      </ion-fab>
     </ion-slide>
     <!-- Assinatura do Cliente -->
 
