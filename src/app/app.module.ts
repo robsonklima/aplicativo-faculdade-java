@@ -58,6 +58,7 @@ import { FerramentaTecnicoService } from '../services/ferramenta-tecnico';
 import { FerramentasTecnicoPage } from '../pages/ferramentas-tecnico/ferramentas-tecnico';
 import { AcaoCausaService } from '../services/acao-causa';
 import { DefeitoCausaService } from '../services/defeito-causa';
+import { LogService } from '../services/log';
 
 import { LoadingFactory } from '../factories/loading-factory';
 
@@ -98,6 +99,7 @@ import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../pages/fotos/foto';
 import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
+import { LogsPage } from '../pages/logs/logs';
 
 
 @NgModule({
@@ -138,6 +140,7 @@ import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
     LowercasePipe,
     FerramentasTecnicoPage,
     TutorialPage,
+    LogsPage,
     TestePage,
     ChamadoConfPage
   ],
@@ -195,6 +198,7 @@ import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
     FerramentasTecnicoPage,
     TutorialPage,
     ChamadoConfPage,
+    LogsPage,
     TestePage
   ],
   providers: [
@@ -248,6 +252,7 @@ import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
     AcaoCausaService,
     DefeitoCausaService,
     LocalizacaoService,
+    LogService,
     LoadingFactory
   ]
 })

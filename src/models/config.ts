@@ -93,6 +93,9 @@ export class Config {
     METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2, BRB: 197,
     SICREDI: 88, SAQUE_PAGUE: 434, PERTO_PARKING: 532
   };
+  public static LOG = {
+    TIPOS: { SUCCESS: 'SUCCESS', ERROR: 'ERROR', WARNING: 'WARNING' } 
+  };
   public static MSG = {
     OK: 'Ok',
     ALERTA: 'Alerta!',

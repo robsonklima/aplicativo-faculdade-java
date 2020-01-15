@@ -34,7 +34,7 @@ export class MensagensPage {
     loading.present();
 
     this.carregarDadosGlobais()
-      .then(() => this.carregarMensagensTecnico().catch(() => {}))
+      .then(() => this.carregarMensagensTecnico().catch(() => { loading.dismiss() }))
       .then(() => loading.dismiss())
       .catch(() => { loading.dismiss() });
   }

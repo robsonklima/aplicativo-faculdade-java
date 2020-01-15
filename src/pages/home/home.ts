@@ -32,6 +32,7 @@ import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { TipoComunicacaoService } from '../../services/tipo-comunicacao';
 import { MotivoComunicacaoService } from '../../services/motivo-comunicacao';
 import { OperadoraTelefoniaService } from '../../services/operadora-telefonia';
+import { LogsPage } from '../logs/logs';
 import { TestePage } from '../teste/teste';
 import { MotivoCancelamentoService } from '../../services/motivo-cancelamento';
 import { StatusServicoService } from '../../services/status-servico';
@@ -157,6 +158,10 @@ export class HomePage {
 
   public telaTeste() {
     this.navCtrl.push(TestePage);
+  }
+
+  public telaLogs() {
+    this.navCtrl.push(LogsPage);
   }
 
   public abrirPopover(event: MouseEvent) {
