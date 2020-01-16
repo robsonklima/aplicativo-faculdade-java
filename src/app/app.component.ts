@@ -91,18 +91,13 @@ export class MyApp {
           } else {
             const alert = this.alertCtrl.create({
                 title: 'Fechar o App',
-                message: 'Você tem certeza?',
+                message: `Favor manter o aplicativo aberto ou em segundo plano. Assim, 
+                          seus chamados serão recebidos automaticamente`,
                 buttons: [{
-                    text: 'Cancelar',
+                    text: 'Ok',
                     role: 'cancel',
                     handler: () => {
                       
-                    }
-                },{
-                    text: 'Fechar o App',
-                    handler: () => {
-                      this.sair();
-                      this.platform.exitApp();
                     }
                 }]
             });
