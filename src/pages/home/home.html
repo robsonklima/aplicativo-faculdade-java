@@ -98,16 +98,6 @@
 
     <button
       ion-item
-      (click)="telaLogs()">
-      <ion-icon 
-        color="primary" 
-        name="logo-android" 
-        item-start></ion-icon>
-      Logs do Aplicativo
-    </button>
-
-    <button
-      ion-item
       *ngIf="!platform.is('cordova')"
       (click)="telaTeste()">
       <ion-icon 

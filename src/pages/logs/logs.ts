@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { LogService } from '../../services/log';
 import { Log } from '../../models/log';
-import { LoadingController, AlertController } from 'ionic-angular';
+import { LoadingController, AlertController, ViewController } from 'ionic-angular';
 import { Config } from '../../models/config';
 
 
@@ -23,11 +23,18 @@ import { Config } from '../../models/config';
           </button>
 
           <button 
-            [disabled]="true"
             ion-button 
             icon-only 
-            (click)="funcao()">
+            (click)="enviarLogs()"
+            [disabled]="!logs?.length">
             <ion-icon name="md-cloud-upload"></ion-icon>
+          </button>
+
+          <button 
+            ion-button 
+            icon-only 
+            (click)="fecharModal()">
+            <ion-icon name="close"></ion-icon>
           </button>
         </ion-buttons>
       </ion-navbar>
@@ -53,7 +60,8 @@ export class LogsPage {
   constructor(
     private logService: LogService,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private viewCtrl: ViewController
   ) {}
 
   ionViewWillEnter() {
@@ -89,5 +97,20 @@ export class LogsPage {
     });
 
     confirmacao.present();
+  }
+
+  public enviarLogs() {
+    const loading = this.loadingCtrl.create({ content: Config.MSG.ENVIANDO_LOGS });
+    loading.present();
+
+    this.logService.enviarLogsApi().subscribe(() => {
+      loading.dismiss();
+    }, e => {
+      loading.dismiss();
+    });
+  }
+
+  public fecharModal() {
+    this.viewCtrl.dismiss();
   }
 }
