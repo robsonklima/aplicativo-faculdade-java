@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 
 import { LogService } from '../../services/log';
 import { Log } from '../../models/log';
+import { LoadingController, AlertController } from 'ionic-angular';
+import { Config } from '../../models/config';
 
 
 @Component({
@@ -13,6 +15,14 @@ import { Log } from '../../models/log';
 
         <ion-buttons end>
           <button 
+            ion-button 
+            icon-only 
+            (click)="apagarLogs()"
+            [disabled]="!logs?.length">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+
+          <button 
             [disabled]="true"
             ion-button 
             icon-only 
@@ -23,7 +33,7 @@ import { Log } from '../../models/log';
       </ion-navbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content class="cards-bg">
       <ion-list>
         <ion-item *ngFor="let log of logs" text-wrap>
           <p class="small" [ngClass]="{ 'font-green': log.tipo == 'SUCCESS', 'font-red': log.tipo == 'ERROR', 'font-orange': log.tipo == 'WARNING' }"><b>{{ log?.dataHoraCad }} - {{ log?.tipo }}</b></p>
@@ -41,10 +51,43 @@ export class LogsPage {
   logs: Log[] = [];
   
   constructor(
-    private logService: LogService
+    private logService: LogService,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {}
 
   ionViewWillEnter() {
-    this.logs = this.logService.buscarLogs();
+    this.logService.buscarLogs().then((logs) => {
+      this.logs = logs;
+    });
+  }
+
+  public apagarLogs() {
+    const confirmacao = this.alertCtrl.create({
+      title: Config.MSG.CONFIRMACAO,
+      message: Config.MSG.REMOVER_OS_LOGS,
+      buttons: [
+        {
+          text: Config.MSG.CANCELAR,
+          handler: () => {}
+        },
+        {
+          text: Config.MSG.CONFIRMAR,
+          handler: () => {
+            const loading = this.loadingCtrl.create({ content: Config.MSG.AGUARDE });
+            loading.present();
+        
+            this.logService.apagarLogs().then(() => {
+              this.logs = [];
+              loading.dismiss();
+            }).catch(() => {
+              loading.dismiss();
+            });
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 }

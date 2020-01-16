@@ -34,9 +34,8 @@ export class MensagensPage {
     loading.present();
 
     this.carregarDadosGlobais()
-      .then(() => this.carregarMensagensTecnico().catch(() => { loading.dismiss() }))
-      .then(() => loading.dismiss())
-      .catch(() => { loading.dismiss() });
+      .then(() => this.carregarMensagensTecnico().then(() => { loading.dismiss() }).catch(() => { loading.dismiss() }))
+      .then(() => loading.dismiss()).catch(() => { loading.dismiss() });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
@@ -64,6 +63,7 @@ export class MensagensPage {
         }, () => {
           this.exibirAlerta('Erro ao carregar dados do servidor');
           this.navCtrl.pop();
+          reject();
         });
     });
   }

@@ -7,7 +7,6 @@ import { Observable } from "rxjs/Observable";
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Vibration } from '@ionic-native/vibration';
 import { Config } from '../models/config';
-import moment from 'moment';
 import _ from 'lodash';
 
 import { LoadingFactory } from '../factories/loading-factory';
@@ -50,14 +49,10 @@ export class ChamadoService {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
       .retry(2)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - GET ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -66,14 +61,12 @@ export class ChamadoService {
     return this.http.get(Config.API_URL + 'Os/' + codOS)
       .retry(2)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - GET ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        console.log(error);
+
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -82,14 +75,12 @@ export class ChamadoService {
     return this.http.post(Config.API_URL + 'OsIntencao', intencao)
       .retry(2)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - POST ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        console.log(error);
+
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -98,14 +89,12 @@ export class ChamadoService {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
       .retry(2)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - POST ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        console.log(error);
+
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -113,14 +102,12 @@ export class ChamadoService {
   buscarChamadosFechadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnicoFechada/' + codTecnico)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - GET ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        console.log(error);
+
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -129,14 +116,12 @@ export class ChamadoService {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
       .retry(2)
       .map((res: Response) => {
-        this.logService.adicionarLog({
-          tipo: Config.LOG.TIPOS.SUCCESS, 
-          mensagem: `${res.status} ${res.statusText} - POST ${res.url.replace(Config.API_URL, '')}`
-        });
         return res.json()
       })
-      .catch((error: Error) => {
-        this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: `${error.name} ${error.message} ${error.stack}` });
+      .catch((error: any) => {
+        console.log(error);
+
+        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
         return Observable.throw(error);
       });
   }
@@ -238,13 +223,10 @@ export class ChamadoService {
                 if (verbose) {
                   if (response.status === 500) {
                     this.exibirToast(Config.MSG.ERRO_AO_CONSULTAR_CHAMADOS_TECNICO, Config.TOAST.ERROR);
-                    this.logService.adicionarLog({tipo: Config.LOG.TIPOS.SUCCESS, mensagem: response.message});
                   }
                     
-                  
                   if (response.status === 404) {
                     this.exibirToast(Config.MSG.NENHUM_CHAMADO_ENCONTRADO, Config.TOAST.WARNING);
-                    this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: response.message});
                   }
                 }
 
@@ -262,21 +244,18 @@ export class ChamadoService {
               this.executando = false;
               this.loadingFactory.encerrar();
               if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO, Config.TOAST.ERROR);
-              this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: Config.MSG.ERRO_AO_ENVIAR_CHAMADO_FECHADO});
               reject();
             });
           }).catch(() => { 
             this.executando = false;
             this.loadingFactory.encerrar();
             if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_INTENCOES, Config.TOAST.ERROR);
-            this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: Config.MSG.ERRO_AO_ENVIAR_INTENCOES});
             reject();
           });
         }).catch(() => { 
           this.executando = false;
           this.loadingFactory.encerrar();
           if (verbose) this.exibirToast(Config.MSG.ERRO_AO_ENVIAR_CHECKINS, Config.TOAST.ERROR);
-          this.logService.adicionarLog({tipo: Config.LOG.TIPOS.ERROR, mensagem: Config.MSG.ERRO_AO_ENVIAR_CHECKINS});
           reject();
         });
       });
@@ -301,9 +280,7 @@ export class ChamadoService {
         }
       });
 
-      chamadosStorage = chamadosStorage.concat(chamadosApi);
-
-      resolve(chamadosStorage);
+      resolve(chamadosStorage.concat(chamadosApi));
     });
   }
 

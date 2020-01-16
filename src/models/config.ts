@@ -144,6 +144,7 @@ export class Config {
     ACOES_NAO_ENCONTRADAS_COMPONENTE: 'Não foi possível encontrar as ações deste componente',
     NENHUM_CHAMADO_ENCONTRADO: 'Nenhum novo chamado encontrado',
     REMOVER_OS_CHAMADOS: 'Deseja remover os chamados do dispositivo?',
+    REMOVER_OS_LOGS: 'Deseja remover os logs do dispositivo?',
     OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
     ERRO_OBTER_ACOES_CAUSAS: 'Não foi possível carregar as Ações e Causas',
     ERRO_OBTER_DEFEITOS_CAUSAS: 'Não foi possível carregar os Defeitos e Causas',
