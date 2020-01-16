@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.83";
+  public static VERSAO_APP = "0.0.84";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -146,6 +146,7 @@ export class Config {
     NENHUM_CHAMADO_ENCONTRADO: 'Nenhum novo chamado encontrado',
     REMOVER_OS_CHAMADOS: 'Deseja remover os chamados do dispositivo?',
     REMOVER_OS_LOGS: 'Deseja remover os logs do dispositivo?',
+    ENVIAR_OS_LOGS: 'Deseja enviar os logs para a equipe de desenvolvimento do aplicativo?',
     OBTENDO_LOCALIZACAO: 'Obtendo sua localização',
     ERRO_OBTER_ACOES_CAUSAS: 'Não foi possível carregar as Ações e Causas',
     ERRO_OBTER_DEFEITOS_CAUSAS: 'Não foi possível carregar os Defeitos e Causas',
@@ -196,7 +197,11 @@ export class Config {
     ENVIANDO_FOTOS_PARA_SERVIDOR: 'Enviando fotos ao servidor',
     SINCRONIZANDO_CHAMADOS: 'Sincronizando chamados',
     AGUARDE_SINCRONIZACAO: 'Aguarde a sincronização',
-    DETALHE_ADICIONADO: 'Detalhe adicionado com sucesso'
+    DETALHE_ADICIONADO: 'Detalhe adicionado com sucesso',
+    LOGS_ENVIADOS_COM_SUCESSO: 'Logs enviados com sucesso',
+    LOGS_REMOVIDOS_COM_SUCESSO: 'Logs removidos com sucesso',
+    ERRO_ENVIAR_LOGS: 'Erro ao enviar os logs',
+    ERRO_REMOVER_LOGS: 'Erro ao remover os logs',
   };
   public static TOAST = { 
     INFO: 'info', 
@@ -216,6 +221,6 @@ export class Config {
     },
     SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
   };
-  public static API_URL = 'http://localhost:60687/api/';
-  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  //public static API_URL = 'http://localhost:60687/api/';
+  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }

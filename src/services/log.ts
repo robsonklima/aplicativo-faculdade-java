@@ -40,7 +40,7 @@ export class LogService {
       log.tipo = tipo;
       log.dataHoraCad = moment().format('DD/MM HH:mm:ss');
       log.codUsuarioCad = dg.usuario.codUsuario;
-      log.mensagem = mensagem;
+      log.mensagem = mensagem || 'Não Informado';
       log.versaoApp = Config.VERSAO_APP;
 
       this.buscarLogs().then(logs => {

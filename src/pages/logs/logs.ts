@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { LogService } from '../../services/log';
 import { Log } from '../../models/log';
-import { LoadingController, AlertController, ViewController } from 'ionic-angular';
+import { LoadingController, AlertController, ViewController, ToastController } from 'ionic-angular';
 import { Config } from '../../models/config';
 
 
@@ -14,14 +14,6 @@ import { Config } from '../../models/config';
         <ion-title>Logs do Aplicativo</ion-title>
 
         <ion-buttons end>
-          <button 
-            ion-button 
-            icon-only 
-            (click)="apagarLogs()"
-            [disabled]="!logs?.length">
-            <ion-icon name="trash"></ion-icon>
-          </button>
-
           <button 
             ion-button 
             icon-only 
@@ -61,7 +53,8 @@ export class LogsPage {
     private logService: LogService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private viewCtrl: ViewController
+    private viewCtrl: ViewController,
+    private toastCtrl: ToastController
   ) {}
 
   ionViewWillEnter() {
@@ -70,10 +63,10 @@ export class LogsPage {
     });
   }
 
-  public apagarLogs() {
+  public enviarLogs() {
     const confirmacao = this.alertCtrl.create({
       title: Config.MSG.CONFIRMACAO,
-      message: Config.MSG.REMOVER_OS_LOGS,
+      message: Config.MSG.ENVIAR_OS_LOGS,
       buttons: [
         {
           text: Config.MSG.CANCELAR,
@@ -82,13 +75,16 @@ export class LogsPage {
         {
           text: Config.MSG.CONFIRMAR,
           handler: () => {
-            const loading = this.loadingCtrl.create({ content: Config.MSG.AGUARDE });
+            const loading = this.loadingCtrl.create({ content: Config.MSG.ENVIANDO_LOGS });
             loading.present();
-        
-            this.logService.apagarLogs().then(() => {
-              this.logs = [];
+
+            this.logService.enviarLogsApi().subscribe(() => {
+              this.exibirToast(Config.MSG.LOGS_ENVIADOS_COM_SUCESSO, Config.TOAST.SUCCESS);
+
               loading.dismiss();
-            }).catch(() => {
+            }, e => {
+              this.exibirToast(Config.MSG.ERRO_ENVIAR_LOGS, Config.TOAST.ERROR);
+
               loading.dismiss();
             });
           }
@@ -99,15 +95,15 @@ export class LogsPage {
     confirmacao.present();
   }
 
-  public enviarLogs() {
-    const loading = this.loadingCtrl.create({ content: Config.MSG.ENVIANDO_LOGS });
-    loading.present();
-
-    this.logService.enviarLogsApi().subscribe(() => {
-      loading.dismiss();
-    }, e => {
-      loading.dismiss();
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
     });
+    
+    toast.present();
   }
 
   public fecharModal() {
