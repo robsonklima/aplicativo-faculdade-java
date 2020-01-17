@@ -290,7 +290,7 @@ export class ChamadoService {
         }
       });
 
-      chamadosApi.forEach((cApi, aIndex) => {
+      chamadosApi.forEach((cApi) => {
         if (!this.verificarListaContemChamado(cApi, chamadosStorage)) {
           chamadosStorage.push(cApi);
         }
