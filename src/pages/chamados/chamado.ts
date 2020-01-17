@@ -179,11 +179,6 @@ export class ChamadoPage {
 
   public tirarFoto(modalidade: string) {
     this.chamadoService.buscarStatusExecucao().then(executando => {
-      if (executando) {
-        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
-        return;
-      }
-
       this.platform.ready().then(() => {
         if (!this.platform.is('cordova')) {
           this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
@@ -651,11 +646,6 @@ export class ChamadoPage {
             }
 
             this.chamadoService.buscarStatusExecucao().then(executando => {
-              if (executando) {
-                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
-                return;
-              }
-
               this.platform.ready().then(() => {
                 this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
                 
@@ -704,11 +694,6 @@ export class ChamadoPage {
             if (!this.validarCamposObrigatorios()) return;
 
             this.chamadoService.buscarStatusExecucao().then(executando => {
-              if (executando) {
-                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
-                return;
-              }
-
               this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
 
               this.platform.ready().then(() => {
