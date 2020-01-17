@@ -47,54 +47,59 @@ export class ChamadoService {
 
   buscarChamadosApi(codTecnico: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'OsTecnico/' + codTecnico)
-      .retry(2)
+      .timeout(30000)
       .map((res: Response) => {
         return res.json()
       })
       .catch((error: any) => {
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
 
-  buscarChamadoApi(codOS: number): Observable<Chamado> {
+  buscarChamadoApi(codOS: number): Observable<Chamado[]> {
     return this.http.get(Config.API_URL + 'Os/' + codOS)
-      .retry(2)
       .map((res: Response) => {
         return res.json()
       })
       .catch((error: any) => {
-        console.log(error);
-
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
 
   enviarIntencaoApi(intencao: Intencao): Observable<any> {
     return this.http.post(Config.API_URL + 'OsIntencao', intencao)
-      .retry(2)
+      .timeout(30000)
       .map((res: Response) => {
         return res.json()
       })
       .catch((error: any) => {
-        console.log(error);
-
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
 
   fecharChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnico', chamado)
-      .retry(2)
+      .timeout(90000)
       .map((res: Response) => {
         return res.json()
       })
       .catch((error: any) => {
-        console.log(error);
-
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
@@ -105,23 +110,24 @@ export class ChamadoService {
         return res.json()
       })
       .catch((error: any) => {
-        console.log(error);
-
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
 
   registrarLeituraChamadoApi(chamado: Chamado): Observable<any> {
     return this.http.post(Config.API_URL + 'OsTecnicoLeitura', chamado)
-      .retry(2)
       .map((res: Response) => {
         return res.json()
       })
       .catch((error: any) => {
-        console.log(error);
-
-        this.logService.adicionarLog(Config.LOG.TIPOS.ERROR, `${error.status} ${error.url} ${error.statusText} ${error._body}`);
+        this.logService.adicionarLog(
+          Config.LOG.TIPOS.ERROR, 
+          `${error.status} ${error.url} ${error.statusText} ${error._body}`
+        );
         return Observable.throw(error);
       });
   }
@@ -142,8 +148,8 @@ export class ChamadoService {
   buscarChamadosStorage(): Promise<Chamado[]> {
     return new Promise((resolve, reject) => {
       this.storage.get('Chamados').then((chamados: Chamado[]) => {
-        this.chamados = chamados != null ? chamados.filter((cham, index, self) => index === self.findIndex((c) => ( c.codOs === cham.codOs ))
-      ) : [];
+        this.chamados = chamados != null ? chamados
+          .sort(function(a, b) { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0)) }) : [];
 
         resolve (this.chamados.slice());
       })
@@ -228,6 +234,10 @@ export class ChamadoService {
                   if (response.status === 404) {
                     this.exibirToast(Config.MSG.NENHUM_CHAMADO_ENCONTRADO, Config.TOAST.WARNING);
                   }
+
+                  if (response.status === 429) {
+                    this.exibirToast(Config.MSG.MUITAS_REQUISICOES, Config.TOAST.WARNING);
+                  }
                 }
 
                 this.executando = false;
@@ -280,7 +290,13 @@ export class ChamadoService {
         }
       });
 
-      resolve(chamadosStorage.concat(chamadosApi));
+      chamadosApi.forEach((cApi, aIndex) => {
+        if (!this.verificarListaContemChamado(cApi, chamadosStorage)) {
+          chamadosStorage.push(cApi);
+        }
+      });
+
+      resolve(chamadosStorage);
     });
   }
 
@@ -364,15 +380,34 @@ export class ChamadoService {
       }
 
       this.fecharChamadoApi(chamadosFechados[0]).subscribe((res) => {
-        this.apagarChamadoStorage(chamadosFechados[0]).then(() => {
-          this.buscarChamadosStorage().then((chamadosStorage) => {
-            resolve(chamadosStorage);
-          }).catch(() => {
-            reject();
-          });
-        }).catch(() => {
-          reject();
-        }); 
+        if (res) {
+          if (res.indexOf('00 - ') > -1) {
+            this.buscarChamadoApi(chamadosFechados[0].codOs).subscribe((chamados) => {
+              if (!chamados.length) {
+                resolve(chamados);
+                return
+              }
+
+              if (chamados[0].statusServico.codStatusServico == Config.STATUS_SERVICO.TRANSFERIDO) {
+                resolve(chamados);
+                return
+              }
+
+              this.apagarChamadoStorage(chamadosFechados[0]).then(() => {
+                this.buscarChamadosStorage().then((chamadosStorage) => {
+                  resolve(chamadosStorage);
+                }).catch(() => {
+                  reject();
+                });
+              }).catch(() => {
+                reject();
+              });
+            }, 
+            e => {
+              reject();
+            });
+          }
+        }
       }, error => {
        reject(); 
       });

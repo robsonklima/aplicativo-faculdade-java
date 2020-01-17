@@ -211,14 +211,8 @@ export class ChamadosPage {
   private carregarChamadosStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamados) => {
-        this.chamados = chamados.sort(function(a, b) { 
-          return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
-        });
-  
-        this.chamadosAbertos = chamados
-          .filter((c) => { return (!c.dataHoraFechamento) })
-          .sort((a, b) => { return ((a.codOs < b.codOs) ? -1 : ((a.codOs > b.codOs) ? 1 : 0))
-        });
+        this.chamados = chamados;
+        this.chamadosAbertos = chamados.filter((c) => { return (!c.dataHoraFechamento) });
 
         this.atualizarBadge();
         resolve();
