@@ -53,4 +53,5 @@ export class Chamado {
 	qtdRatsPendentes: number;
 	indIntencaoAtendimento: boolean;
 	dataHoraIntencaoAtendimento: string;
+	appVersao: string;
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, PopoverController, Events, AlertController, Platform } from 'ionic-angular';
 
-import { AppVersion } from '@ionic-native/app-version';
 import { Market } from '@ionic-native/market';
 
 import { LoginPage } from '../login/login';
@@ -47,7 +46,6 @@ import { GeolocationService } from '../../services/geo-location';
 })
 export class HomePage {
   versaoApp = Config.VERSAO_APP;
-  versaoAppAtualizada: boolean = true;
   necessidadeRegistrarIntervalo: boolean = false;
   loginPage = LoginPage;
   dg: DadosGlobais;
@@ -63,7 +61,6 @@ export class HomePage {
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private appVersion: AppVersion,
     private market: Market,
     private events: Events,
     private popoverCtrl: PopoverController,
@@ -98,7 +95,6 @@ export class HomePage {
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
-      .then(() => this.carregarVersaoApp().catch(() => {}))
       .catch(() => {});
 
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
@@ -376,26 +372,6 @@ export class HomePage {
     this.dg.dataHoraCadastro = moment().toDate();
 
     this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
-  }
-
-  private carregarVersaoApp(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.appVersion.getVersionNumber().then((versaoApp) => {
-        this.dadosGlobaisService.buscarUltimaVersaoApp({
-          versao: versaoApp, usuario: this.dg.usuario
-        }).subscribe(versaoAppMaisRecente => {
-          if (versaoAppMaisRecente) {
-            if (versaoApp >= versaoAppMaisRecente) {
-              this.versaoAppAtualizada = true;
-            } else {
-              this.versaoAppAtualizada = false;
-            }
-          }
-
-          resolve();
-        }, err => {});
-      }).catch((err) => {});
-    });
   }
 
   public abrirAplicativoNaLojaGoogle() {

@@ -18,16 +18,6 @@
   <ion-list>
     <ion-item-divider 
       color="danger"
-      *ngIf="!versaoAppAtualizada">
-      Aplicativo Desatualizado
-      <button 
-        (click)="abrirAplicativoNaLojaGoogle()" 
-        color="white" ion-button item-end outline>Atualizar
-      </button>
-    </ion-item-divider>
-
-    <ion-item-divider 
-      color="danger"
       *ngIf="necessidadeRegistrarIntervalo">
       Atenção! Não ultrapassar 6h contínuas de trabalho!
     </ion-item-divider>

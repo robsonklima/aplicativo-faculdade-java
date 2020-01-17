@@ -812,6 +812,7 @@ export class ChamadoPage {
               this.chamado.statusServico.abreviacao = "F";
               this.chamado.statusServico.nomeStatusServico = "FECHADO";
               this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
+              //this.chamado.appVersao = Config.VERSAO_APP;
 
               this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
 

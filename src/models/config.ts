@@ -222,6 +222,6 @@ export class Config {
     },
     SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
   };
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }
