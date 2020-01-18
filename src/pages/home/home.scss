@@ -8,7 +8,14 @@ home-page {
     }
 
     .footer {
-        font-size: 9pt;
+        font-size: 12pt;
         color: darkgrey;
+    }
+
+    .toolbar-title {
+        span {
+            padding-top: 0px;
+            height: 30px !important;
+        }
     }
 }

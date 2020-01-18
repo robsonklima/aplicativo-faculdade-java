@@ -867,11 +867,17 @@ export class ChamadoPage {
 
         return;
       }
+
+      if (!this.chamado.indRatEletronica && this.verificarSeEquipamentoEPOS() && this.chamado.rats[0].fotos.length < 4) {
+        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
+
+        return;
+      }
     }
 
     if(_.has(this.chamado.rats[0], 'laudos')) {
       if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio() && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
-        this.exibirToast("Este chamado deve possuir um laudo", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve possuir laudo", Config.TOAST.ERROR);
   
         return;
       }
