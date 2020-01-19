@@ -1,3 +1,7 @@
+0.0.84 - ??/01/20
+- Corrigido problema onde o aplicativo demorava para fechar o chamado;
+- Corrigido problema onde o chamado voltava para o dispositivo após fechamento.
+
 0.0.83 - ??/01/20
 - Logs no smartphone;
 
