@@ -107,20 +107,14 @@ export class ChamadosPage {
         {
           text: Config.MSG.CONFIRMAR,
           handler: () => {
-            const loading = this.loadingCtrl.create({ content: Config.MSG.AGUARDE });
-            loading.present();
-        
             this.chamadoService.apagarChamadosStorage().then((res) => {
-                this.chamadosAbertos = [];
-                loading.dismiss();
-
-                this.chamadoService.buscarChamadosStorage().then((chamados) => {
-                  this.chamados = chamados;
-                }).catch();
-              })
-              .catch(() => {
-                loading.dismiss();
-              });
+              this.chamadosAbertos = [];
+          
+              this.chamadoService.sincronizarChamados(true, this.dg.usuario.codTecnico).then(() => {
+                this.carregarChamadosStorage();
+              }).catch();
+            })
+            .catch();
           }
         }
       ]
