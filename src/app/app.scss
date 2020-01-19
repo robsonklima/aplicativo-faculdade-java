@@ -112,3 +112,18 @@ body {
     -ms-user-select: text;
     user-select: text;
 }
+
+ion-icon {
+    &[class*="custom-"] {
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: currentColor;
+        width: 1em;
+        height: 0.98em;
+    }
+    
+    &[class*="custom-save"] {
+        mask-image: url(../assets/icon/save.svg);
+    }
+}

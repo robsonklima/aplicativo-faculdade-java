@@ -8,14 +8,6 @@
       <button 
         ion-button 
         icon-only 
-        [disabled]="true"
-        (click)="telaMapaChamados()">
-        <ion-icon name="map"></ion-icon>
-      </button>
-
-      <button 
-        ion-button 
-        icon-only 
         [disabled]="chamados?.length == 0"
         (click)="limparChamadosDispositivo()">
         <ion-icon name="trash"></ion-icon>
