@@ -8,14 +8,6 @@
       <button 
         ion-button 
         icon-only 
-        [disabled]="true"
-        (click)="telaMapaChamados()">
-        <ion-icon name="map"></ion-icon>
-      </button>
-
-      <button 
-        ion-button 
-        icon-only 
         [disabled]="chamados?.length == 0"
         (click)="limparChamadosDispositivo()">
         <ion-icon name="trash"></ion-icon>
@@ -30,7 +22,7 @@
       </button>
     </ion-buttons>
     
-    <ion-title>Chamados</ion-title>
+    <ion-title>Meus Chamados</ion-title>
   </ion-navbar>
 
   <ion-toolbar no-border-top>
@@ -188,7 +180,7 @@
                 color="primary"
                 class="icone-deslocamento"
                 *ngIf="!chamado.indIntencaoAtendimento">
-                <ion-icon name="man" color="silver-hard" class="man"></ion-icon>
+                <ion-icon name="person" color="silver-hard" class="person"></ion-icon>
               </button>
 
               <button 
@@ -235,8 +227,8 @@
                 small
                 (click)="telaChamado(chamado)"
                 [disabled]="chamado.dataHoraFechamento">
-                <ion-icon *ngIf="chamado.checkin.localizacao.latitude || chamado.checkout.localizacao.latitude" name="create" class="create"></ion-icon>
-                <ion-icon *ngIf="!chamado.checkin.localizacao.latitude && !chamado.checkout.localizacao.latitude" name="md-open" class="open"></ion-icon>
+                <ion-icon *ngIf="!chamado.checkin.localizacao.latitude && !chamado.indIntencaoAtendimento" name="md-open" class="open"></ion-icon>
+                <ion-icon *ngIf="chamado.checkin.localizacao.latitude || chamado.indIntencaoAtendimento" name="create" class="create"></ion-icon>
               </button>
             </ion-col>
           </ion-row>

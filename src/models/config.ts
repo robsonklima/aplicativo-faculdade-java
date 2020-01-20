@@ -99,6 +99,7 @@ export class Config {
   public static MSG = {
     OK: 'Ok',
     ALERTA: 'Alerta!',
+    ATUALIZACAO: 'Atualização',
     CANCELAR: 'Cancelar',
     ATUALIZAR: 'Atualizar',
     AGUARDE: 'Aguarde',

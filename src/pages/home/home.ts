@@ -114,7 +114,7 @@ export class HomePage {
     }
 
     const confirmacao = this.alertCtrl.create({
-      title: Config.MSG.ALERTA,
+      title: Config.MSG.ATUALIZACAO,
       message: Config.MSG.ATUALIZAR_DADOS_LOCAIS,
       buttons: [
         {
