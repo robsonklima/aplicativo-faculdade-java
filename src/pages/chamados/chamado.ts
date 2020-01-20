@@ -803,6 +803,16 @@ export class ChamadoPage {
     this.slides.slideTo(this.slides.getActiveIndex()+1, 500);
   }
 
+  public salvarEmailCliente(form: NgForm) {
+    if (this.chamado.rats.length > 0) {
+      this.chamado.rats[0].emailCliente = form.value.emailCliente;
+    }
+
+    this.chamadoService.atualizarChamado(this.chamado);
+    this.configurarSlide(this.slides.getActiveIndex());
+    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+  }
+
   public fecharChamado() {
     const confirmacao = this.alertCtrl.create({
       title: 'Fechar',

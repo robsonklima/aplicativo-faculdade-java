@@ -24,8 +24,7 @@
         <ion-icon name="create" *ngIf="chamado?.rats[0]?.defeitoPOS"></ion-icon>
       </button>
 
-      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="true" 
-        *ngIf="indexSlide == 6">
+      <button ion-button icon-only (click)="telaAssinaturaCliente()" *ngIf="indexSlide == 6">
         <ion-icon name="browsers"></ion-icon>
       </button>
     </ion-buttons>
@@ -666,10 +665,34 @@
 
     <!-- Assinatura do Cliente -->
     <ion-slide>
-      <!-- <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Solicite a assinatura do cliente</p> -->
-      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Espaço reservado para a assinatura do cliente (versões futuras)</p>
+      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Solicite a assinatura do cliente</p>
+      
+      <img class="img-assinatura" *ngIf="chamado?.rats[0]?.assinaturaCliente" src="{{ chamado?.rats[0]?.assinaturaCliente }}" alt="">
 
-      <img class="img" *ngIf="chamado?.rats[0]?.assinaturaCliente" src="{{ chamado?.rats[0]?.assinaturaCliente }}" alt="">
+      <form #fDadosCliente="ngForm" (ngSubmit)="salvarEmailCliente(fDadosCliente)" class="form" *ngIf="chamado?.rats[0]?.assinaturaCliente">
+        <ion-list>
+          <ion-item>
+            <ion-label stacked>E-mail do Cliente</ion-label>
+            <ion-input
+              type="text"
+              name="emailCliente" 
+              [placeholder]="chamado?.rats[0]?.emailCliente || 'Digite seu e-mail para avaliar o atendimento'" 
+              [ngModel]="chamado?.rats[0]?.emailCliente" 
+              [required]="!chamado?.rats[0]?.emailCliente">
+            </ion-input>
+          </ion-item>
+
+          <div padding>
+            <button
+              color="secondary"
+              ion-button 
+              block
+              [disabled]="!fDadosCliente.valid">
+              Salvar
+            </button>
+          </div>
+        </ion-list>
+      </form>
     </ion-slide>
     <!-- Assinatura do Cliente -->
 
