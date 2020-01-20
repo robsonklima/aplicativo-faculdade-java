@@ -147,6 +147,20 @@
           </ion-note>
         </ion-item>
 
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+          Reincidências
+          <ion-note [ngClass]="{ 'font-red': chamado?.numReincidencias }" item-end>
+            {{ chamado?.numReincidencias || 'Nenhuma' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+          Pendências
+          <ion-note [ngClass]="{ 'font-red': chamado?.qtdRatsPendentes }" item-end>
+            {{ chamado?.qtdRatsPendentes || 'Nenhuma' }}
+          </ion-note>
+        </ion-item>
+
         <ion-item>
           Modelo
           <ion-note item-end>
@@ -195,20 +209,6 @@
           Data Solicitação
           <ion-note item-end>
             {{ chamado?.dataHoraSolicitacaoOS | date: 'dd/MM HH:mm' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
-          Reincidências
-          <ion-note item-end>
-            {{ chamado?.numReincidencias || 'Nenhuma' }}
-          </ion-note>
-        </ion-item>
-
-        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
-          Pendências
-          <ion-note item-end>
-            {{ chamado?.qtdRatsPendentes || 'Nenhuma' }}
           </ion-note>
         </ion-item>
 
