@@ -204,6 +204,8 @@ export class Config {
     LOGS_REMOVIDOS_COM_SUCESSO: 'Logs removidos com sucesso',
     ERRO_ENVIAR_LOGS: 'Erro ao enviar os logs',
     ERRO_REMOVER_LOGS: 'Erro ao remover os logs',
+    ERRO_EMAIL_INVALIDO: 'Favor digitar um e-mail válido',
+    LINK_AVALIACAO_ATENDIMENTO: 'E-mail salvo com sucesso! Enviaremos um link para que avalie o atendimento prestado',
     SAIR_APLICATIVO: `Ao sair do aplicativo você perderá todos os dados armazenados 
                       no dispositivo, como checkin, fotos ou dados dos chamados. 
                       Favor manter-se logado no app.`

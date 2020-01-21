@@ -808,6 +808,14 @@ export class ChamadoPage {
       this.chamado.rats[0].emailCliente = form.value.emailCliente;
     }
 
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.value.emailCliente))
+    {
+      this.exibirToast(Config.MSG.ERRO_EMAIL_INVALIDO, Config.TOAST.ERROR);
+      return;
+    }
+
+    this.exibirToast(Config.MSG.LINK_AVALIACAO_ATENDIMENTO, Config.TOAST.SUCCESS);
+    
     this.chamadoService.atualizarChamado(this.chamado);
     this.configurarSlide(this.slides.getActiveIndex());
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
