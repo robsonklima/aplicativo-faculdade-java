@@ -204,6 +204,9 @@ export class Config {
     LOGS_REMOVIDOS_COM_SUCESSO: 'Logs removidos com sucesso',
     ERRO_ENVIAR_LOGS: 'Erro ao enviar os logs',
     ERRO_REMOVER_LOGS: 'Erro ao remover os logs',
+    SAIR_APLICATIVO: `Ao sair do aplicativo você perderá todos os dados armazenados 
+                      no dispositivo, como checkin, fotos ou dados dos chamados. 
+                      Favor manter-se logado no app.`
   };
   public static TOAST = { 
     INFO: 'info', 
