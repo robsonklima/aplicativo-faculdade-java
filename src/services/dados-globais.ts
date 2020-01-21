@@ -39,9 +39,7 @@ export class DadosGlobaisService {
 
   apagarDadosGlobaisStorage(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storage.clear().then(() => {resolve()} ).catch();
-
-      //this.storage.set('DadosGlobais', null).then((res) => { resolve(res) }).catch(() => { reject() });
+      this.storage.clear().then(() => {resolve()}).catch();
     });
   }
 
