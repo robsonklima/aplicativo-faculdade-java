@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage' 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { File } from '@ionic-native/file';
 import { NgxImageCompressService } from 'ngx-image-compress';
 import { HttpModule } from "@angular/http";
 import { ChartsModule } from 'ng2-charts';
@@ -223,6 +224,7 @@ import { LogsPage } from '../pages/logs/logs';
     AppAvailability,
     Device,
     Camera,
+    File,
     ScreenOrientation,
     DadosGlobaisService,
     ChamadoService,
