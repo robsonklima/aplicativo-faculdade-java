@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController, ModalController } from 'ionic-angular';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { ChamadoConfPage } from '../chamados/chamado-conf';
 import { Laudo } from '../../models/laudo';
 import { Chamado } from '../../models/chamado';
 
@@ -20,7 +21,8 @@ export class AssinaturaPage {
 
   constructor(
     private viewCtrl: ViewController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private modalCtrl: ModalController
   ) {
     this.paginaOrigem = this.navParams.get('paginaOrigem');
     this.laudo = this.navParams.get('laudo');
@@ -60,7 +62,18 @@ export class AssinaturaPage {
     this.signaturePad.clear();
   }
 
+  public telaChamadoConf() {
+    const modal = this.modalCtrl.create(ChamadoConfPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      
+    });
+  }
+
   public fecharModal() {
-    this.viewCtrl.dismiss(this.laudo);
+    if (this.paginaOrigem == 'LAUDO_CLIENTE' || this.paginaOrigem == 'LAUDO_TECNICO')
+     this.viewCtrl.dismiss(this.laudo);
+    else if (this.paginaOrigem == 'RAT_CLIENTE')
+      this.viewCtrl.dismiss(this.chamado);
   }
 }

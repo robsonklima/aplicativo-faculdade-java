@@ -91,8 +91,7 @@ export class MyApp {
           } else {
             const alert = this.alertCtrl.create({
                 title: 'Fechar o App',
-                message: `Favor manter o aplicativo aberto ou em segundo plano. Assim, 
-                          seus chamados serão recebidos automaticamente`,
+                message: Config.MSG.SAIR_APLICATIVO,
                 buttons: [{
                     text: 'Ok',
                     role: 'cancel',
