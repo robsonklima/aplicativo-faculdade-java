@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 
 
 @Component({
@@ -9,10 +8,9 @@ import { MensagemTecnicoService } from '../../services/mensagem-tecnico';
 export class TestePage {
   
   constructor(
-    private mensagemService: MensagemTecnicoService
   ) {}
 
   ionViewWillEnter() {
-    this.mensagemService.buscarMensagensTecnicoApi(1153+'').subscribe(() => {}, e => {})
+
   }
 }

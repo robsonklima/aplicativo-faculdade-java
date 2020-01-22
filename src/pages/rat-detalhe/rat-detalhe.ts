@@ -23,8 +23,7 @@ import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { EquipamentoCausa } from '../../models/equipamento-causa';
 import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
-import { DefeitoCausa } from '../../models/defeito-causa';
-import { AcaoCausa } from '../../models/acao-causa';
+
 
 @Component({
   selector: 'rat-detalhe-page',
@@ -384,28 +383,6 @@ export class RatDetalhePage {
         this.modulos = eCausas[0].causas;
       else
         this.buscarModulos();
-    }).catch();
-  }
-
-  public buscarDefeitosEAcoes(codCausa: number) {
-    this.defeitoCausaService.buscarDefeitosPorCausa(codCausa).then((dCausas: DefeitoCausa[]) => { 
-      if (dCausas.length) {
-        this.defeitos = dCausas[0].defeitos.sort(function(a, b) { 
-          return ((a.codEDefeito < b.codEDefeito) ? -1 : ((a.codEDefeito > b.codEDefeito) ? 1 : 0));
-        });
-      }
-      else {
-        this.buscarDefeitos();
-      }
-    }).catch();
-
-    this.acaoCausaService.buscarAcoesPorCausa(codCausa).then((aCausas: AcaoCausa[]) => { 
-      if (aCausas.length)
-        this.acoes = aCausas[0].acoes.sort(function(a, b) { 
-          return ((a.codEAcao < b.codEAcao) ? -1 : ((a.codEAcao > b.codEAcao) ? 1 : 0));
-        });
-      else
-        this.buscarAcoes();
     }).catch();
   }
 
