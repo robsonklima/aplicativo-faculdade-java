@@ -284,6 +284,8 @@ export class ChamadoService {
                 chamadosStorage[sIndex].indBloqueioReincidencia = cApi.indBloqueioReincidencia;
                 chamadosStorage[sIndex].indOSIntervencaoEquipamento = cApi.indOSIntervencaoEquipamento;
                 chamadosStorage[sIndex].tipoIntervencao = cApi.tipoIntervencao;
+                chamadosStorage[sIndex].descMotivoMarcaEspecial = cApi.descMotivoMarcaEspecial;
+                chamadosStorage[sIndex].observacao = cApi.observacao;
               }
             });
           });
