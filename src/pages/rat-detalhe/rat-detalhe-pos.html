@@ -65,7 +65,8 @@ v<ion-header>
         <ion-label stacked>Equipamento Instalado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Instalado" name="equipamentoInstalado" interface="action-sheet"
-          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
+          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar"
+          [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
@@ -75,7 +76,7 @@ v<ion-header>
       <ion-item col-12>
         <ion-label stacked>Número da Série Instalada</ion-label>
         <ion-input type="text" placeholder="Número da Série Instalada" name="numSerieInstalada" maxlength="50"
-          [ngModel]="chamado?.rats[0]?.numSerieInstalada">
+          [ngModel]="chamado?.rats[0]?.numSerieInstalada" [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         </ion-input>
       </ion-item>
 
@@ -83,7 +84,8 @@ v<ion-header>
         <ion-label stacked>Equipamento Retirado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Retirado" name="equipamentoRetirado" interface="action-sheet"
-          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
+          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar"
+          [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
@@ -94,7 +96,7 @@ v<ion-header>
         <ion-label stacked>Número da Série Retirada</ion-label>
 
         <ion-input type="text" placeholder="Número da Série Retirada" name="numSerieRetirada" maxlength="50"
-          [ngModel]="chamado?.rats[0]?.numSerieRetirada">
+          [ngModel]="chamado?.rats[0]?.numSerieRetirada" [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         </ion-input>
       </ion-item>
 
@@ -119,7 +121,7 @@ v<ion-header>
         <ion-label stacked for="nroChipInstalado">Número do Chip Instalado</ion-label>
 
         <ion-input type="text" name="nroChipInstalado" placeholder="Número do Chip Instalado"
-          [ngModel]="chamado?.rats[0]?.nroChipInstalado" [disabled]="!this.verificarEquipamentoPossuiChip()">
+          [ngModel]="chamado?.rats[0]?.nroChipInstalado" [disabled]="!this.verificarEquipamentoPossuiChip() || (chamado?.equipamentoContrato?.equipamento?.codEquip !== 172 && chamado?.equipamentoContrato?.equipamento?.codEquip !== 289)">
         </ion-input>
       </ion-item>
 
@@ -128,7 +130,7 @@ v<ion-header>
 
         <ion-select placeholder="Selecione a Operadora do Chip Instalado" name="operadoraChipInstalado"
           [ngModel]="chamado?.rats[0]?.operadoraChipInstalado" [compareWith]="compararOperadoras"
-          [disabled]="!this.verificarEquipamentoPossuiChip()" interface="action-sheet" cancelText="Cancelar">
+          [disabled]="!this.verificarEquipamentoPossuiChip() || (chamado?.equipamentoContrato?.equipamento?.codEquip !== 172 && chamado?.equipamentoContrato?.equipamento?.codEquip !== 289)" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let operadora of operadoras" [value]="operadora">
             {{ operadora?.nomeOperadoraTelefonica }}
           </ion-option>
@@ -139,7 +141,7 @@ v<ion-header>
         <ion-label stacked>Número do Chip Retirado</ion-label>
 
         <ion-input type="text" name="nroChipRetirado" placeholder="Número do Chip Retirado"
-          [ngModel]="chamado?.rats[0]?.nroChipRetirado" [disabled]="!this.verificarEquipamentoPossuiChip()">
+          [ngModel]="chamado?.rats[0]?.nroChipRetirado" [disabled]="!this.verificarEquipamentoPossuiChip() || (chamado?.equipamentoContrato?.equipamento?.codEquip !== 172 && chamado?.equipamentoContrato?.equipamento?.codEquip !== 289)">
         </ion-input>
       </ion-item>
 
@@ -148,11 +150,17 @@ v<ion-header>
 
         <ion-select placeholder="Selecione a Operadora do Chip Retirado" name="operadoraChipRetirado"
           [ngModel]="chamado?.rats[0]?.operadoraChipRetirado" [compareWith]="compararOperadoras"
-          [disabled]="!this.verificarEquipamentoPossuiChip()" interface="action-sheet" cancelText="Cancelar">
+          [disabled]="!this.verificarEquipamentoPossuiChip() || (chamado?.equipamentoContrato?.equipamento?.codEquip !== 172 && chamado?.equipamentoContrato?.equipamento?.codEquip !== 289)" interface="action-sheet" cancelText="Cancelar">
           <ion-option *ngFor="let operadora of operadoras" [value]="operadora">
             {{ operadora?.nomeOperadoraTelefonica }}
           </ion-option>
         </ion-select>
+      </ion-item>
+
+      <ion-item col-12>
+        <ion-label stacked>Descrição do Atendimento</ion-label>
+        <ion-input type="text" name="descricaoAtendimento" placeholder="Descrição do Atendimento" maxlength="50" [ngModel]="chamado?.rats[0]?.descricaoAtendimento">
+        </ion-input>
       </ion-item>
 
       <div padding>

@@ -89,6 +89,20 @@
           </ion-note>
         </ion-item>
 
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Versão
+          <ion-note item-end>
+            {{ chamado?.versao || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeEquipamentoEPOS() && chamado?.cliente?.codCliente == 2">
+          Sim Card
+          <ion-note item-end>
+            {{ chamado?.simCard || 'Não Informado' }}
+          </ion-note>
+        </ion-item>
+
         <ion-item 
           *ngIf="chamado?.dataFimSLA">
           Fim SLA
@@ -119,14 +133,14 @@
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Num. Agência
           <ion-note item-end>
               {{ chamado?.localAtendimento?.numAgencia || '--' }} / {{ chamado?.localAtendimento?.dcPosto || '--' }}
           </ion-note>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
           Nome Agência
           <ion-note item-end>
             {{ chamado?.localAtendimento?.nomeLocalAtendimento || 'Não Informado' | ellipsis: 28 }}
@@ -237,7 +251,8 @@
         </ion-item>
 
         <ion-list-header text-left>
-          <ion-label>Marcações Especiais</ion-label>
+          <ion-label *ngIf="!verificarSeEquipamentoEPOS()">Marcações Especiais</ion-label>
+          <ion-label *ngIf="verificarSeEquipamentoEPOS()">Descrições Adicionais </ion-label>
         </ion-list-header>
 
         <ion-item class="text-wrap" text-wrap>

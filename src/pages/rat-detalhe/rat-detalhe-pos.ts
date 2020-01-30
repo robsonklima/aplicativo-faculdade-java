@@ -130,6 +130,7 @@ export class RatDetalhePosPage {
     this.chamado.rats[0].obsMotivoComunicacao = form.value.obsMotivoComunicacao;
     this.chamado.rats[0].obsMotivoCancelamento = form.value.obsMotivoCancelamento;
     this.chamado.rats[0].defeitoPOS = form.value.defeitoPOS;
+    this.chamado.rats[0].descricaoAtendimento = form.value.descricaoAtendimento;
 
     this.chamadoService.buscarStatusExecucao().then(executando => {
       if (executando) {

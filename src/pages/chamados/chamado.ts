@@ -750,9 +750,11 @@ export class ChamadoPage {
       return
     }
 
-    if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
-      this.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
-      return
+    if (!this.verificarSeEquipamentoEPOS()) {
+      if (moment.duration(moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').diff(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))).asMinutes() < 20) {
+        this.exibirToast('O período mínimo de atendimento é de 20 minutos', Config.TOAST.ERROR);
+        return
+      }
     }
 
     if (moment(rat.dataInicio + ' ' +  rat.horaSolucao, 'YYYY-MM-DD HH:mm').isBefore(moment(rat.dataInicio + ' ' +  rat.horaInicio, 'YYYY-MM-DD HH:mm'))) {

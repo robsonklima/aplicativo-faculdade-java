@@ -54,4 +54,6 @@ export class Chamado {
 	indIntencaoAtendimento: boolean;
 	dataHoraIntencaoAtendimento: string;
 	appVersao: string;
+	versao: string;
+	simCard: string;
 }

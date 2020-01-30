@@ -24,7 +24,7 @@ export class Config {
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
   public static EQUIPAMENTO = { TPC_4110_290_01_969: 362, TPC_4110: 90 };
-  public static INT_SINC_BD_LOCAL_DIAS = 7;
+  public static INT_SINC_BD_LOCAL_DIAS = 10;
   public static INT_SINC_CHAMADOS_MILISEG = 360000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10;
   public static CERCA_ELETRONICA = [
