@@ -44,7 +44,7 @@
         color="light">Máximo de 6 Fotos por Laudo</ion-badge>
     </ion-item-divider>
 
-      <p class="p-msg" *ngIf="!situacao?.fotos.length">Para inserir uma foto, clique no botão <ion-icon color="secondary" name="camera"></ion-icon>. Utilize o celular na horizontal, o que permitirá melhorar a qualidade da(s) sua(s) foto(s). Lembre-se que você poderá anexar o máximo de 2 fotos por situação e essa(s) foto(s) deve(m) demonstrar e registrar a causa do problema descrito nessa situação.</p>
+    <p class="p-msg" *ngIf="!situacao?.fotos.length">Para inserir uma foto, clique no botão <ion-icon color="secondary" name="camera"></ion-icon>. Utilize o celular na horizontal, o que permitirá melhorar a qualidade da(s) sua(s) foto(s). Lembre-se que você poderá anexar o máximo de 2 fotos por situação e essa(s) foto(s) deve(m) demonstrar e registrar a causa do problema descrito nessa situação.</p>
 
     <ion-item *ngFor="let foto of situacao?.fotos; let i = index">
       <ion-avatar item-start>
@@ -62,7 +62,7 @@
         color="secondary"
         ion-button 
         block
-        [disabled]="(!f.valid || !situacao?.fotos.length)">
+        [disabled]="(!f.valid || (!situacao?.fotos.length && platform.is('cordova')))">
         Salvar
       </button>
     </div>

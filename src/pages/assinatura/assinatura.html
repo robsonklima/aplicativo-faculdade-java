@@ -11,6 +11,15 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-list *ngIf="chamado?.rats[0]?.assinaturaCliente">
+    <ion-item>
+      <h2>Conferir Preenchimento</h2>
+      <p>Deseja conferir as informações?</p>
+      <button ion-button clear item-end (click)="telaChamadoConf()">SIM</button>
+      <button ion-button clear item-end color="secondary">NÃO</button>
+    </ion-item>
+  </ion-list>
+
   <p class="p-msg">Realize sua assinatura no espaço demarcado</p>
 
   <div class="signature">
@@ -19,15 +28,35 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col col-4>
+      <ion-col col-12>
         <button ion-button full color="light" (click)="limparAssinatura()">Limpar</button>
-      </ion-col>
-      <ion-col col-4>
-        <button ion-button full color="primary" (click)="telaChamadoConf()" *ngIf="paginaOrigem == 'RAT_CLIENTE'">Conferir</button>
-      </ion-col>
-      <ion-col col-4>
-        <button ion-button full color="secondary" (click)="salvarAssinatura()">Salvar</button>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <form #fDadosCliente="ngForm" (ngSubmit)="salvarAssinatura(fDadosCliente)" class="form">
+    <ion-list>
+      <ion-item *ngIf="chamado?.rats[0]?.assinaturaCliente">
+        <ion-label stacked>E-mail do Cliente</ion-label>
+        <ion-input
+          type="text"
+          name="emailCliente" 
+          [placeholder]="chamado?.rats[0]?.emailCliente || 'Digite seu e-mail para avaliar o atendimento'" 
+          [ngModel]="chamado?.rats[0]?.emailCliente">
+        </ion-input>
+      </ion-item>
+
+      <p class="p-msg-2" *ngIf="chamado?.rats[0]?.assinaturaCliente">Obrigado por participar. Sua avaliação vai nos ajudar a obter os melhores resultados.</p>
+
+      <div padding>
+        <button
+          color="secondary"
+          ion-button 
+          block
+          [disabled]="!fDadosCliente.valid">
+          Salvar
+        </button>
+      </div>
+    </ion-list>
+  </form>
 </ion-content>

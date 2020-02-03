@@ -27,7 +27,7 @@ export class SituacaoPage {
   qtdFotosLaudo: number;
 
   constructor(
-    private platform: Platform,
+    public platform: Platform,
     private diagnostic: Diagnostic,
     private navParams: NavParams,
     private viewCtrl: ViewController,
