@@ -103,11 +103,17 @@
           </ion-note>
         </ion-item>
 
-        <ion-item 
-          *ngIf="chamado?.dataFimSLA">
-          Fim SLA
+        <ion-item *ngIf="chamado?.dataFimSLA">
+          SLA
           <ion-note item-end>
             {{ chamado?.dataFimSLA | date: 'dd/MM HH:mm' }}
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="!chamado?.dataFimSLA">
+          SLA
+          <ion-note item-end>
+            Não Informado
           </ion-note>
         </ion-item>
 
