@@ -221,12 +221,10 @@ export class RatDetalhePosPage {
       }
 
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.DESINSTALAÇÃO) {
-        if (this.verificarSeDefeitoExigeTroca()) {
-          if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
-            this.exibirToast('Favor inserir o equipamento POS retirado e a série', Config.TOAST.ERROR);
-  
-            return false;
-          }
+        if (!_.has(this.chamado.rats[0], 'equipamentoRetirado') || !_.has(this.chamado.rats[0].equipamentoRetirado, 'codEquip') || !this.chamado.rats[0].numSerieRetirada) {
+          this.exibirToast('Favor inserir o equipamento POS retirado e a série', Config.TOAST.ERROR);
+
+          return false;
         }
 
         if (!this.chamado.rats[0].rede && this.chamado.cliente.codCliente == Config.CLIENTE.BANRISUL) {

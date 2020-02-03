@@ -61,7 +61,7 @@ v<ion-header>
         </ion-input>
       </ion-item>
 
-      <ion-item col-12>
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         <ion-label stacked>Equipamento Instalado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Instalado" name="equipamentoInstalado" interface="action-sheet"
@@ -73,30 +73,29 @@ v<ion-header>
         </ion-select>
       </ion-item>
 
-      <ion-item col-12>
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         <ion-label stacked>Número da Série Instalada</ion-label>
         <ion-input type="text" placeholder="Número da Série Instalada" name="numSerieInstalada" maxlength="50"
           [ngModel]="chamado?.rats[0]?.numSerieInstalada" [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         </ion-input>
       </ion-item>
 
-      <ion-item col-12>
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         <ion-label stacked>Equipamento Retirado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Retirado" name="equipamentoRetirado" interface="action-sheet"
-          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar"
-          [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+          [ngModel]="chamado?.rats[0]?.equipamentoRetirado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
         </ion-select>
       </ion-item>
 
-      <ion-item col-12>
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
         <ion-label stacked>Número da Série Retirada</ion-label>
 
         <ion-input type="text" placeholder="Número da Série Retirada" name="numSerieRetirada" maxlength="50"
-          [ngModel]="chamado?.rats[0]?.numSerieRetirada" [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+          [ngModel]="chamado?.rats[0]?.numSerieRetirada">
         </ion-input>
       </ion-item>
 
