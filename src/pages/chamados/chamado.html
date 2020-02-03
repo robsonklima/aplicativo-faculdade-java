@@ -19,9 +19,7 @@
       </button>
 
       <button ion-button icon-only *ngIf="indexSlide == 5" (click)="telaRatDetalhe()" [disabled]="chamado?.rats?.length == 0">
-        <ion-icon name="add" *ngIf="!chamado?.rats[0]?.defeitoPOS"></ion-icon>
-
-        <ion-icon name="create" *ngIf="chamado?.rats[0]?.defeitoPOS"></ion-icon>
+        <ion-icon name="add"></ion-icon>
       </button>
 
       <button ion-button icon-only (click)="telaAssinaturaCliente()" *ngIf="indexSlide == 6">
@@ -673,12 +671,8 @@
           </button>
         </ion-item>
 
-        <ion-item *ngIf="chamado?.rats[0]?.ratDetalhes?.length == 0 && !chamado?.rats[0]?.defeitoPOS">
+        <ion-item *ngIf="chamado?.rats[0]?.ratDetalhes?.length == 0">
           <p text-center class="p-msg">Insira os detalhes da RAT</p>
-        </ion-item>
-
-        <ion-item *ngIf="chamado?.rats[0]?.defeitoPOS">
-          <p text-center class="p-msg">Detalhes inseridos.</p>
         </ion-item>
       </ion-list>
     </ion-slide>

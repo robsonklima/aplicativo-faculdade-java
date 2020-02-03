@@ -3,12 +3,6 @@ v<ion-header>
     <ion-title>Rat: {{ chamado?.rats[0]?.numRat }}</ion-title>
   </ion-navbar>
   <ion-toolbar>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="fecharModalConfirmacao()">
-        <ion-icon name="close"></ion-icon>
-      </button>
-    </ion-buttons>
-
     <ion-title>Informações do POS</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -61,26 +55,25 @@ v<ion-header>
         </ion-input>
       </ion-item>
 
-      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento || chamado?.tipoIntervencao?.codTipoIntervencao == 2">
         <ion-label stacked>Equipamento Instalado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Instalado" name="equipamentoInstalado" interface="action-sheet"
-          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar"
-          [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+          [ngModel]="chamado?.rats[0]?.equipamentoInstalado" [compareWith]="compararEquipamentosPOS" cancelText="Cancelar">
           <ion-option *ngFor="let equipamento of equipamentosPOS" [value]="equipamento">
             {{ equipamento?.nomeEquip }}
           </ion-option>
         </ion-select>
       </ion-item>
 
-      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 4 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento || chamado?.tipoIntervencao?.codTipoIntervencao == 2">
         <ion-label stacked>Número da Série Instalada</ion-label>
         <ion-input type="text" placeholder="Número da Série Instalada" name="numSerieInstalada" maxlength="50"
-          [ngModel]="chamado?.rats[0]?.numSerieInstalada" [disabled]="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || !this.chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+          [ngModel]="chamado?.rats[0]?.numSerieInstalada">
         </ion-input>
       </ion-item>
 
-      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento || chamado?.tipoIntervencao?.codTipoIntervencao == 2">
         <ion-label stacked>Equipamento Retirado</ion-label>
 
         <ion-select placeholder="Selecione o Equipamento Retirado" name="equipamentoRetirado" interface="action-sheet"
@@ -91,7 +84,7 @@ v<ion-header>
         </ion-select>
       </ion-item>
 
-      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento">
+      <ion-item col-12 *ngIf="chamado?.tipoIntervencao?.codTipoIntervencao == 3 || chamado.rats[0].defeitoPOS?.exigeTrocaEquipamento || chamado?.tipoIntervencao?.codTipoIntervencao == 2">
         <ion-label stacked>Número da Série Retirada</ion-label>
 
         <ion-input type="text" placeholder="Número da Série Retirada" name="numSerieRetirada" maxlength="50"

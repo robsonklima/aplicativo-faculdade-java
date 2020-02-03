@@ -1,6 +1,6 @@
 import { RatDetalhe } from '../../models/rat-detalhe';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, NavParams, Slides, ViewController, ToastController } from 'ionic-angular';
+import { AlertController, NavParams, Slides, ViewController, ToastController, ModalController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 
 import { Config } from '../../models/config';
@@ -21,8 +21,9 @@ import { PecaService } from '../../services/peca';
 import { ChamadoService } from "../../services/chamado";
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { EquipamentoCausa } from '../../models/equipamento-causa';
-import { DefeitoCausaService } from '../../services/defeito-causa';
-import { AcaoCausaService } from '../../services/acao-causa';
+import { EquipamentoPOS } from '../../models/equipamentoPOS';
+import { EquipamentoPOSService } from '../../services/equipamento-pos';
+import { RatDetalhePosPage } from './rat-detalhe-pos';
 
 
 @Component({
@@ -48,6 +49,7 @@ export class RatDetalhePage {
     acoes: Acao[] = [];
     pecas: Peca[] = [];
     inputPesquisar: string;
+    equipamentosPOS: EquipamentoPOS[] = [];
     spinner: boolean;
     qtd = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
 
@@ -56,6 +58,7 @@ export class RatDetalhePage {
     private viewCtrl: ViewController,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
     private acaoService: AcaoService,
     private causaService: CausaService,
     private defeitoService: DefeitoService,
@@ -63,8 +66,7 @@ export class RatDetalhePage {
     private chamadoService: ChamadoService,
     private tipoServicoService: TipoServicoService,
     private equipamentoCausaService: EquipamentoCausaService,
-    private defeitoCausaService: DefeitoCausaService,
-    private acaoCausaService: AcaoCausaService
+    private equipamentoPOSService: EquipamentoPOSService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
@@ -75,6 +77,15 @@ export class RatDetalhePage {
     this.buscarModulos();
     this.buscarDefeitos();
     this.buscarAcoes();
+    this.buscarEquipamentosPOS();
+  }
+
+  public telaRatDetalhePOS() {
+    const modal = this.modalCtrl.create(RatDetalhePosPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
   }
 
   public buscarTipoCausas() {
@@ -154,6 +165,18 @@ export class RatDetalhePage {
       .catch(err => {});
   }
 
+  public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
+    return new Promise((resolve, reject) => {
+      this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => {
+        this.equipamentosPOS = equips;
+
+        resolve(equips);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
   public salvarRatDetalhe(form: NgForm) {
     this.chamadoService.buscarStatusExecucao().then(executando => {
       if (executando) {
@@ -175,7 +198,7 @@ export class RatDetalhePage {
 
     if (!tipoCausa.codTipoCausa  || !tipoServico.codTipoServico || !defeito.codDefeito || !causa.codCausa || !acao.codAcao ) {
       this.exibirToast('Erro ao salvar detalhe! Tente novamente', Config.TOAST.ERROR);
-      this.fecharModal();
+      this.viewCtrl.dismiss();
       return
     } else {
       this.ratDetalhe = {
@@ -223,7 +246,30 @@ export class RatDetalhePage {
     this.chamado.rats[0].ratDetalhes.push(this.ratDetalhe);
     this.chamadoService.atualizarChamado(this.chamado);
     this.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS);
-    this.fecharModal();
+
+    if (!this.verificarSeEquipamentoEPOS) {
+      this.viewCtrl.dismiss();
+    } else {
+      this.viewCtrl.dismiss().then(() => {
+        this.telaRatDetalhePOS();
+      }).catch();
+    }
+  }
+
+  public verificarSeEquipamentoEPOS(): boolean {
+    var i;
+
+    for (i = 0; i < this.equipamentosPOS.length; i++) {
+      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
+          return true;
+      }
+
+      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public filtrarPecas(ev: any) {
@@ -312,7 +358,7 @@ export class RatDetalhePage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.fecharModal()
+            this.viewCtrl.dismiss();
           }
         }
       ]
@@ -427,9 +473,5 @@ export class RatDetalhePage {
     });
     
     toast.present();
-  }
-
-  private fecharModal() {
-    this.viewCtrl.dismiss();
   }
 }

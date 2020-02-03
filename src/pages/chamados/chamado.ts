@@ -34,7 +34,6 @@ import { RatDetalhePecaPage } from "../rat-detalhe-peca/rat-detalhe-peca";
 import { HistoricoListaPage } from '../historico/historico-lista';
 import { FotosPage } from '../fotos/fotos';
 import { LaudoPage } from '../laudos/laudo';
-import { RatDetalhePosPage } from '../rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../fotos/foto';
 import { ChamadoConfPage } from './chamado-conf';
 import { FotoService } from '../../services/foto';
@@ -119,20 +118,12 @@ export class ChamadoPage {
     }
   }
 
-  public telaRatDetalhe(chamado: Chamado) {
-    if (this.verificarSeEquipamentoEPOS()) {
-      const modal = this.modalCtrl.create(RatDetalhePosPage, { chamado: this.chamado });
-      modal.present();
-      modal.onDidDismiss(() => {
-        this.configurarSlide(this.slides.getActiveIndex());
-      });
-    } else {
-      const modal = this.modalCtrl.create(RatDetalhePage, { chamado: this.chamado });
-      modal.present();
-      modal.onDidDismiss(() => {
-        this.configurarSlide(this.slides.getActiveIndex());
-      });
-    }
+  public telaRatDetalhe() {
+    const modal = this.modalCtrl.create(RatDetalhePage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
   }
 
   public telaRatDetalhePeca(chamado: Chamado, i: number) {
