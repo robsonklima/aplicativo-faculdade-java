@@ -22,7 +22,7 @@
         <ion-icon name="add"></ion-icon>
       </button>
 
-      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="true" *ngIf="indexSlide == 6">
+      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="false" *ngIf="indexSlide == 6">
         <ion-icon name="browsers"></ion-icon>
       </button>
     </ion-buttons>
@@ -680,7 +680,7 @@
 
     <!-- Assinatura do Cliente -->
     <ion-slide>
-      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Esta funcionalidade está em construção</p>
+      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Solicite a Assinatura do Cliente</p>
       
       <img class="img-assinatura" *ngIf="chamado?.rats[0]?.assinaturaCliente" src="{{ chamado?.rats[0]?.assinaturaCliente }}" alt="">
     </ion-slide>
