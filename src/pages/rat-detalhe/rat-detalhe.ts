@@ -77,7 +77,7 @@ export class RatDetalhePage {
     this.buscarModulos();
     this.buscarDefeitos();
     this.buscarAcoes();
-    this.buscarEquipamentosPOS();
+    this.buscarEquipamentosPOS();    
   }
 
   public telaRatDetalhePOS() {
@@ -247,29 +247,29 @@ export class RatDetalhePage {
     this.chamadoService.atualizarChamado(this.chamado);
     this.exibirToast(Config.MSG.DETALHE_ADICIONADO, Config.TOAST.SUCCESS);
 
-    if (!this.verificarSeEquipamentoEPOS) {
+    if (this.verificarSeEquipamentoEPOS()) {
       this.viewCtrl.dismiss();
+      this.telaRatDetalhePOS();
     } else {
-      this.viewCtrl.dismiss().then(() => {
-        this.telaRatDetalhePOS();
-      }).catch();
+      this.viewCtrl.dismiss();
     }
   }
 
   public verificarSeEquipamentoEPOS(): boolean {
     var i;
+    let retorno: boolean = false
 
     for (i = 0; i < this.equipamentosPOS.length; i++) {
       if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
-          return true;
+        retorno = true;
       }
 
       if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
-        return true;
+        retorno = true;
       }
     }
 
-    return false;
+    return retorno;
   }
 
   public filtrarPecas(ev: any) {
