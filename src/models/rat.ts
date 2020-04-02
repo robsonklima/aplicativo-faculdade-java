@@ -47,5 +47,6 @@ export class Rat {
 	defeitoPOS: DefeitoPOS;
 	descricaoAtendimento: string;
 	assinaturaCliente: string;
+	assinaturaTecnico: string;
 	emailCliente: string;
 }

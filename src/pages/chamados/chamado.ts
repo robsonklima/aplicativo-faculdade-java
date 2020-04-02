@@ -82,6 +82,7 @@ export class ChamadoPage {
     private fotoService: FotoService
   ) {
     this.chamado = this.navParams.get('chamado');
+    console.log(this.chamado);
   }
 
   ionViewWillEnter() {
@@ -597,6 +598,17 @@ export class ChamadoPage {
     });
   }
 
+  public telaAssinaturaTecnico() {
+    const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "RAT_TECNICO", chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss((chamado) => {
+      this.chamado = chamado;
+      this.chamadoService.atualizarChamado(this.chamado);
+      
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
   public telaAssinaturaCliente() {
     const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "RAT_CLIENTE", chamado: this.chamado });
     modal.present();
@@ -1008,17 +1020,29 @@ export class ChamadoPage {
         break;
       case 5:
           this.indexSlide = (i + 1);
-          this.tituloSlide = `${this.indexSlide}. Assinatura do Cliente`;
+          this.tituloSlide = `${this.indexSlide}. Assinatura do Técnico`;
           
           this.slides.lockSwipeToPrev(false);
-          if (!this.chamado.rats[0].assinaturaCliente)
+          if (!this.chamado.rats[0].assinaturaTecnico)
             //this.slides.lockSwipeToNext(true);
-            this.slides.lockSwipeToNext(false); // remover
+            this.slides.lockSwipeToNext(true);
           else {
             this.slides.lockSwipeToNext(false);
           }
           break;
       case 6:
+          this.indexSlide = (i + 1);
+          this.tituloSlide = `${this.indexSlide}. Assinatura do Cliente`;
+          
+          this.slides.lockSwipeToPrev(false);
+          if (!this.chamado.rats[0].assinaturaCliente)
+            //this.slides.lockSwipeToNext(true);
+            this.slides.lockSwipeToNext(true);
+          else {
+            this.slides.lockSwipeToNext(false);
+          }
+          break;
+      case 7:
         this.indexSlide = (i + 1);
         this.tituloSlide = `${this.indexSlide}. Checkout e Fechamento`;
 

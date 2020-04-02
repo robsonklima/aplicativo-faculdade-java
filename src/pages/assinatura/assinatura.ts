@@ -40,6 +40,10 @@ export class AssinaturaPage {
     if (this.paginaOrigem == "LAUDO_CLIENTE" || this.paginaOrigem == "RAT_CLIENTE") {
       this.tituloPagina = "Assinatura do Cliente";
     }
+
+    if (this.paginaOrigem == "RAT_TECNICO") {
+      this.tituloPagina = "Assinatura do Técnico";
+    }
   }
 
   public salvarAssinatura(form: NgForm) {
@@ -67,6 +71,11 @@ export class AssinaturaPage {
       }
 
       this.chamado.rats[0].assinaturaCliente = this.signatureImage;
+      this.viewCtrl.dismiss(this.chamado);
+    }
+
+    if (this.paginaOrigem == "RAT_TECNICO") {
+      this.chamado.rats[0].assinaturaTecnico = this.signatureImage;
       this.viewCtrl.dismiss(this.chamado);
     }
   }

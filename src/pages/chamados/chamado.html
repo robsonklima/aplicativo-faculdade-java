@@ -22,7 +22,11 @@
         <ion-icon name="add"></ion-icon>
       </button>
 
-      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="false" *ngIf="indexSlide == 6">
+      <button ion-button icon-only (click)="telaAssinaturaTecnico()" [disabled]="false" *ngIf="indexSlide == 6">
+        <ion-icon name="browsers"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="telaAssinaturaCliente()" [disabled]="false" *ngIf="indexSlide == 7">
         <ion-icon name="browsers"></ion-icon>
       </button>
     </ion-buttons>
@@ -677,6 +681,14 @@
       </ion-list>
     </ion-slide>
     <!-- Detalhes da RAT -->
+
+    <!-- Assinatura do Tecnico -->
+    <ion-slide>
+      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaTecnico">Por favor {{ dg?.usuario?.nome }} assine a RAT</p>
+      
+      <img class="img-assinatura" *ngIf="chamado?.rats[0]?.assinaturaTecnico" src="{{ chamado?.rats[0]?.assinaturaTecnico }}" alt="">
+    </ion-slide>
+    <!-- Assinatura do Cliente -->
 
     <!-- Assinatura do Cliente -->
     <ion-slide>
