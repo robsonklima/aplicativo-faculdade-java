@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list *ngIf="!chamado?.rats[0]?.assinaturaCliente">
+  <ion-list *ngIf="!chamado?.rats[0]?.assinaturaCliente && paginaOrigem == 'RAT_CLIENTE'">
     <ion-item>
       <h2>Conferir Preenchimento</h2>
       <p>Deseja conferir as informações?</p>
@@ -36,7 +36,7 @@
 
   <form #fDadosCliente="ngForm" (ngSubmit)="salvarAssinatura(fDadosCliente)" class="form">
     <ion-list>
-      <ion-item *ngIf="!chamado?.rats[0]?.assinaturaCliente">
+      <ion-item *ngIf="!chamado?.rats[0]?.assinaturaCliente && paginaOrigem == 'RAT_CLIENTE'">
         <ion-label stacked>E-mail do Cliente</ion-label>
         <ion-input
           type="text"
@@ -46,7 +46,7 @@
         </ion-input>
       </ion-item>
 
-      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente">Obrigado por participar. Sua avaliação vai nos ajudar a obter os melhores resultados.</p>
+      <p class="p-msg-2" *ngIf="!chamado?.rats[0]?.assinaturaCliente && paginaOrigem == 'RAT_CLIENTE'">Obrigado por participar. Sua avaliação vai nos ajudar a obter os melhores resultados.</p>
 
       <div padding>
         <button
