@@ -822,7 +822,7 @@ export class ChamadoPage {
               this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
 
               setTimeout(() => {
-                this.chamadoService.atualizarChamado(this.chamado);
+                this.chamadoService.atualizarChamado(this.chamado).catch();
                 this.loadingFactory.alterar(Config.MSG.SALVANDO_CHAMADO_BASE_LOCAL);
 
                 setTimeout(() => {
