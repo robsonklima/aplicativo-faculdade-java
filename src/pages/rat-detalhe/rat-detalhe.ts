@@ -77,7 +77,7 @@ export class RatDetalhePage {
     this.buscarModulos();
     this.buscarDefeitos();
     this.buscarAcoes();
-    this.buscarEquipamentosPOS();    
+    this.buscarEquipamentosPOS();   
   }
 
   public telaRatDetalhePOS() {
@@ -109,13 +109,12 @@ export class RatDetalhePage {
   }
 
   private buscarModulos() {
-    this.causaService.buscarCausasStorage()
-      .then((causas: Causa[]) => {
-        this.modulos = causas.filter((causa) => { 
-          return (causa.codECausa.substring(2, 5) == '000');
-        });
+    this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip)
+      .then((ec) => {
+        if (ec)
+          this.modulos = ec[0].causas;
       })
-      .catch(err => {});
+      .catch();
   }
 
   public buscarSubModulos(modulo: string) {

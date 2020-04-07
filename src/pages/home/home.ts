@@ -38,6 +38,9 @@ import { DefeitoPOSService } from '../../services/defeito-pos';
 import { FerramentasTecnicoPage } from '../ferramentas-tecnico/ferramentas-tecnico';
 import { FerramentaTecnicoService } from '../../services/ferramenta-tecnico';
 import { GeolocationService } from '../../services/geo-location';
+import { EquipamentoCausaService } from '../../services/equipamento-causa';
+import { DefeitoCausaService } from '../../services/defeito-causa';
+import { AcaoCausaService } from '../../services/acao-causa';
 
 
 @Component({
@@ -82,7 +85,10 @@ export class HomePage {
     private motivoCancelamentoService: MotivoCancelamentoService,
     private statusServicoService: StatusServicoService,
     private defeitoPOSService: DefeitoPOSService,
-    private ferramentaTecnicoService: FerramentaTecnicoService
+    private ferramentaTecnicoService: FerramentaTecnicoService,
+    private equipamentoCausaService: EquipamentoCausaService,
+    private defeitoCausaService: DefeitoCausaService,
+    private acaoCausaService: AcaoCausaService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -209,9 +215,10 @@ export class HomePage {
   }
 
   private verificarNecessidadeAtualizacao(): boolean {
-    let limiteAtualizacao = new Date();
-    limiteAtualizacao.setDate(limiteAtualizacao.getDate() - Config.INT_SINC_BD_LOCAL_DIAS);
-    if (new Date(this.dg.dataHoraCadastro) < limiteAtualizacao || !this.dg.dataHoraCadastro) return true;
+    var dataAtualizacaoNecessaria = moment().add(Config.INT_SINC_BD_LOCAL_DIAS, "days");;
+    var dataAtualizacao = moment(this.dg.dataHoraCadastro);
+    
+    if (dataAtualizacao.diff(dataAtualizacaoNecessaria, 'days') >= 0 || !this.dg.dataHoraCadastro) return true;
 
     this.tipoServicoService.buscarTipoServicosStorage().then((tiposServicos) => {
       this.acaoService.buscarAcoesStorage().then((acoes) => {
@@ -226,21 +233,20 @@ export class HomePage {
                         this.statusServicoService.buscarStatusServicosStorage().then((statusServicos) => {
                           this.defeitoPOSService.buscarDefeitosPOSStorage().then((defeitosPOS) => {
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
-                              //this.equipamentoCausaService.buscarEquipamentosCausasStorage().then((equipCausas) => {
-                                //this.defeitoCausaService.buscarDefeitosCausasStorage().then((defeitosCausas) => {
-                                  //this.acaoCausaService.buscarAcoesCausasStorage().then((acoesCausas) => {
+                              this.equipamentoCausaService.buscarEquipamentosCausasStorage().then((equipCausas) => {
+                                this.defeitoCausaService.buscarDefeitosCausasStorage().then((defeitosCausas) => {
+                                  this.acaoCausaService.buscarAcoesCausasStorage().then((acoesCausas) => {
                                     if (
                                       !tiposServicos.length || !acoes.length || !defeitos.length || !causas.length || 
                                       !pecas.length || !equipamentos.length || !operadoras.length || !tiposComunicacao.length ||
                                       !motivosComuni.length || !motivosCancel.length || !statusServicos.length || !defeitosPOS.length ||
-                                      !ferramentas.length 
-                                      //|| !equipCausas.length || !defeitosCausas.length || !acoesCausas.length
+                                      !ferramentas.length || !equipCausas.length || !defeitosCausas.length || !acoesCausas.length
                                     ) {
                                       return true;
                                     }
-                                  //});
-                                //});
-                              //});
+                                  });
+                                });
+                              });
                             });
                           });
                         });
@@ -289,27 +295,27 @@ export class HomePage {
                             loading.setContent(Config.MSG.CRIANDO_TAB_FERRAMENTAS);
                             this.ferramentaTecnicoService.buscarFerramentasTecnicoStorage().then((ferramentas) => {
                               this.ferramentaTecnicoService.buscarFerramentasTecnicoApi(this.dg.usuario.codUsuario, ferramentas).subscribe(() => {
-                                // loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMETNOS_CAUSAS);
-                                // this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
-                                //   loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_CAUSAS);
-                                //   this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
-                                    // loading.setContent(Config.MSG.CRIANDO_TAB_ACOES_CAUSAS);
-                                    // this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
+                                 loading.setContent(Config.MSG.CRIANDO_TAB_EQUIPAMETNOS_CAUSAS);
+                                 this.equipamentoCausaService.buscarEquipamentosCausasApi().subscribe(() => {
+                                   loading.setContent(Config.MSG.CRIANDO_TAB_DEFEITOS_CAUSAS);
+                                   this.defeitoCausaService.buscarDefeitosCausasApi().subscribe(() => {
+                                     loading.setContent(Config.MSG.CRIANDO_TAB_ACOES_CAUSAS);
+                                     this.acaoCausaService.buscarAcoesCausasApi().subscribe(() => {
                                       loading.dismiss();
   
                                       this.salvarDadosGlobais();
-                                    // }, (e) => { 
-                                    //   loading.dismiss(); 
-                                    //   this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES_CAUSAS);
-                                    // });
-                                //   }, (e) => { 
-                                //     loading.dismiss(); 
-                                //     this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_CAUSAS);
-                                //   });
-                                // }, (e) => { 
-                                //   loading.dismiss(); 
-                                //   this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_CAUSAS);
-                                // });
+                                     }, (e) => { 
+                                       loading.dismiss(); 
+                                       this.exibirAlerta(Config.MSG.ERRO_OBTER_ACOES_CAUSAS);
+                                     });
+                                   }, (e) => { 
+                                     loading.dismiss(); 
+                                    this.exibirAlerta(Config.MSG.ERRO_OBTER_DEFEITOS_CAUSAS);
+                                  });
+                                }, (e) => { 
+                                  loading.dismiss(); 
+                                  this.exibirAlerta(Config.MSG.ERRO_OBTER_EQUIPAMENTOS_CAUSAS);
+                                });
                               }, (e) => { 
                                 loading.dismiss(); 
                                 this.exibirAlerta(Config.MSG.ERRO_OBTER_FERRAMENTAS); 
