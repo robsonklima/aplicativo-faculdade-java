@@ -28,13 +28,17 @@ export class TutorialPage {
       },
       {
         title: "Equipamentos",
-        description: `Os equipamentos agora apresentarão apenas as causas configuradas pelo STN. `,
+        description: `A partir de agora, o App permitirá incluir somente causas/periféricos relacionados ao equipamento.
+                      Essa configuração é realizada no momento que o equipamento é cadastrado, ou seja, se houver alguma
+                      anormalidade de cadastro, entre em contato com o Suporte Técnico Nacional.`,
         image: "assets/imgs/teller.png",
       },
       {
         title: "Defeitos e Ações",
-        description: `Os defeitos e as ações serão apresentados de acordo com cada causa, também 
-                      configurados pela equipe de STN. `,
+        description: `A partir de agora, o App permitirá incluir somente defeitos e ações devidamente relacionadas 
+                      às causas/periféricos. Isso garantirá que o usuário não registre, por exemplo, uma ação de "ajuste"
+                      no periférico "dispensador de cédulas". Essa configuração dos critérios aceitos na inclusão dos 
+                      detalhes do RAT, é realizada pelo Suporte Técnico Nacional.`,
         image: "assets/imgs/plugin.png",
       }
     ];

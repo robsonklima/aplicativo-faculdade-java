@@ -24,6 +24,8 @@ import { EquipamentoCausa } from '../../models/equipamento-causa';
 import { EquipamentoPOS } from '../../models/equipamentoPOS';
 import { EquipamentoPOSService } from '../../services/equipamento-pos';
 import { RatDetalhePosPage } from './rat-detalhe-pos';
+import { DefeitoCausaService } from '../../services/defeito-causa';
+import { AcaoCausaService } from '../../services/acao-causa';
 
 
 @Component({
@@ -66,6 +68,8 @@ export class RatDetalhePage {
     private chamadoService: ChamadoService,
     private tipoServicoService: TipoServicoService,
     private equipamentoCausaService: EquipamentoCausaService,
+    private defeitoCausaService: DefeitoCausaService,
+    private acaoCausaService: AcaoCausaService,
     private equipamentoPOSService: EquipamentoPOSService
   ) {
     this.chamado = this.navParams.get('chamado');
@@ -150,6 +154,13 @@ export class RatDetalhePage {
           Number(a.codEDefeito) - Number(b.codEDefeito));
       })
       .catch(err => {});
+
+    // this.defeitoCausaService.buscarDefeitosPorCausa(this.chamado.codEquip)
+    //   .then((ec) => {
+    //     if (ec)
+    //       this.modulos = ec[0].causas;
+    //   })
+    //   .catch();
   }
 
   public buscarAcoes() {
