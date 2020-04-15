@@ -9,6 +9,7 @@ import { Observable } from "rxjs/Observable";
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LoadingFactory } from '../factories/loading-factory';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Cep } from '../models/cep';
 
 
 @Injectable()
@@ -64,6 +65,14 @@ export class GeolocationService {
 
   buscarDetalhesPorEnderecoApi(endereco: string): Observable<any> {
     return this.http.get(`https://nominatim.openstreetmap.org/search?q=${endereco}&format=json&polygon=1&addressdetails=1=`)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json()));
+  }
+
+  buscarDetalhesPorCepApi(cep: string): Observable<Cep> {
+    cep = cep.replace(/\D/g, '');
+
+    return this.http.get(`https://viacep.com.br/ws/${cep}/json`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

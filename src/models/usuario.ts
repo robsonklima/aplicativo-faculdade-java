@@ -9,4 +9,14 @@ export class Usuario {
     email: string;
     usuarioPerfil: UsuarioPerfil;
     filial: Filial;
+    fone: string;
+    fonePerto: string;
+    cep: string;
+    endereco: string;
+    enderecoComplemento: string;
+    bairro: string;
+    cidade: string;
+    siglaUF: string;
+    numero: string;
+    cpf: string;
 }

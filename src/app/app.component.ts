@@ -10,6 +10,7 @@ import { Localizacao } from '../models/localizacao';
 
 import { HomePage } from '../pages/home/home';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { UsuarioPage } from '../pages/usuario/usuario';
 import { SenhaAlteracaoPage } from "../pages/senha-alteracao/senha-alteracao";
 
 import { DadosGlobais } from '../models/dados-globais';
@@ -108,6 +109,12 @@ export class MyApp {
         }
       });
     });
+  }
+
+  public telaUsuario() {
+    this.menuCtrl.close().then(() => {
+      this.nav.push(UsuarioPage);
+    })
   }
 
   public telaSenhaAlteracao() {

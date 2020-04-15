@@ -27,6 +27,12 @@ export class UsuarioService {
     this.usuario = usuario;
   }
 
+  public atualizarUsuarioApi(usuario: Usuario): Observable<any> {
+    return this.http.post(Config.API_URL + 'Usuario', usuario)
+      .map((res: Response) => { return res.json() })
+      .catch((error: any) => { return Observable.throw(error) });
+  }
+
   public login(login: Login): Observable<Login> {
     return this.http.post(Config.API_URL + 'UsuarioLogin', login)
       .map((res: Response) => {
