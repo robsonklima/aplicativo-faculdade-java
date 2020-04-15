@@ -35,11 +35,11 @@ export class DefeitoCausaService {
     });
   }
 
-  buscarDefeitosPorCausa(codCausa: number): Promise<DefeitoCausa[]> {
+  buscarDefeitosPorCausa(codECausa: string): Promise<DefeitoCausa[]> {
     return new Promise((resolve, reject) => {
       this.buscarDefeitosCausasStorage().then((dCausas: DefeitoCausa[]) => { 
         let defeitosCausas: DefeitoCausa[] = dCausas.filter(defeitosCausas => {
-          return Number(defeitosCausas.causa.codCausa) === codCausa;
+          return defeitosCausas.causa.codECausa === codECausa;
         });
         
         resolve(defeitosCausas);

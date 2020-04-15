@@ -1,3 +1,6 @@
+SERVE
+sudo ionic serve --browser "google chrome"
+
 KEYTOOL
 "C:\Program Files\Java\jdk1.8.0_101\bin\keytool" -genkey -v -keystore "I:\ionic-projects\app-tecnicos\_utils\app-tecnicos-key.keystore" -alias app-tecnicos -keyalg RSA -keysize 2048 -validity 10000
 

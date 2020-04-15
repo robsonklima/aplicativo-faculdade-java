@@ -82,7 +82,6 @@ export class ChamadoPage {
     private fotoService: FotoService
   ) {
     this.chamado = this.navParams.get('chamado');
-    console.log(this.chamado);
   }
 
   ionViewWillEnter() {

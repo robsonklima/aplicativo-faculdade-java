@@ -78,9 +78,11 @@ export class RatDetalhePage {
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
     this.buscarTipoCausas();
-    this.buscarModulos();
-    this.buscarDefeitos();
-    this.buscarAcoes();
+    
+    this.buscarModulosPorEquipamento();
+    this.buscarDefeitosTodos();
+    this.buscarAcoesTodas();
+    
     this.buscarEquipamentosPOS();   
   }
 
@@ -112,16 +114,33 @@ export class RatDetalhePage {
       .catch(err => {});
   }
 
-  private buscarModulos() {
+  private buscarModulosTodos() {
+    this.causaService.buscarCausasStorage()
+      .then((causas: Causa[]) => {
+        this.modulos = causas.filter((causa) => { 
+          return (causa.codECausa.substring(2, 5) == '000');
+        });
+      })
+      .catch(err => {});
+  }
+
+  private buscarModulosPorEquipamento() {
     this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip)
       .then((ec) => {
         if (ec)
           this.modulos = ec[0].causas;
+
+          if (this.modulos.length === 0) {
+            this.buscarModulosTodos();
+          }
       })
       .catch();
   }
 
-  public buscarSubModulos(modulo: string) {
+  public buscarSubModulosDefeitosEAcoes(modulo: string) {
+    this.buscarDefeitosPorCausa(modulo);
+    this.buscarAcoesPorCausa(modulo);
+
     this.causaService.buscarCausasStorage()
       .then((causas: Causa[]) => {
         this.subModulos = causas.filter((causa) => { 
@@ -144,7 +163,7 @@ export class RatDetalhePage {
       .catch(err => {});
   }
 
-  public buscarDefeitos() {
+  public buscarDefeitosTodos() {
     this.defeitoService.buscarDefeitosStorage()
       .then((defeitos: Defeito[]) => {
         if (!defeitos.length) 
@@ -154,16 +173,23 @@ export class RatDetalhePage {
           Number(a.codEDefeito) - Number(b.codEDefeito));
       })
       .catch(err => {});
-
-    // this.defeitoCausaService.buscarDefeitosPorCausa(this.chamado.codEquip)
-    //   .then((ec) => {
-    //     if (ec)
-    //       this.modulos = ec[0].causas;
-    //   })
-    //   .catch();
   }
 
-  public buscarAcoes() {
+  public buscarDefeitosPorCausa(causa: string) {
+    this.defeitoCausaService.buscarDefeitosPorCausa(causa)
+      .then((res) => {
+        if (res) {
+          this.defeitos = res[0].defeitos;
+        }
+          
+        if (this.modulos.length === 0) {
+          this.buscarDefeitosTodos();
+        }
+      })
+      .catch();
+  }
+
+  public buscarAcoesTodas() {
     this.acaoService.buscarAcoesStorage()
       .then((acoes: Acao[]) => {
         if (!acoes.length)
@@ -173,6 +199,20 @@ export class RatDetalhePage {
           Number(a.codEAcao) - Number(b.codEAcao));
       })
       .catch(err => {});
+  }
+
+  public buscarAcoesPorCausa(causa: string) {
+    this.acaoCausaService.buscarAcoesPorCausa(causa)
+      .then((res) => {
+        if (res) {
+          this.acoes = res[0].acoes;
+        }
+          
+        if (this.modulos.length === 0) {
+          this.buscarAcoesTodas();
+        }
+      })
+      .catch();
   }
 
   public buscarEquipamentosPOS(): Promise<EquipamentoPOS[]> {
@@ -431,15 +471,6 @@ export class RatDetalhePage {
           .catch(err => { })
       );
     });
-  }
-
-  public buscarEquipamentosCausasStorage() {
-    this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip).then((eCausas: EquipamentoCausa[]) => { 
-      if (eCausas.length) 
-        this.modulos = eCausas[0].causas;
-      else
-        this.buscarModulos();
-    }).catch();
   }
 
   private configurarSlide(i: number) {

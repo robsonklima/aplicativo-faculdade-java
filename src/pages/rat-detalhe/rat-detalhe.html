@@ -92,7 +92,7 @@ v<ion-header>
               [disabled]="modulos?.length == 0"
               interface="action-sheet"
               cancelText="Cancelar"
-              (ionChange)="buscarSubModulos($event.codECausa)"
+              (ionChange)="buscarSubModulosDefeitosEAcoes($event.codECausa)"
               required>
               <ion-option 
                 *ngFor="let modulo of modulos" 

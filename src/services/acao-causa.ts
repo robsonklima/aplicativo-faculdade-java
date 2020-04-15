@@ -32,11 +32,11 @@ export class AcaoCausaService {
     .catch();
   }
 
-  buscarAcoesPorCausa(codCausa: number): Promise<AcaoCausa[]> {
+  buscarAcoesPorCausa(codECausa: string): Promise<AcaoCausa[]> {
     return new Promise((resolve, reject) => {
       this.buscarAcoesCausasStorage().then((aCausas: AcaoCausa[]) => { 
         let acoesCausas: AcaoCausa[] = aCausas.filter(acoesCausas => {
-          return Number(acoesCausas.causa.codCausa) === codCausa;
+          return acoesCausas.causa.codECausa === codECausa;
         });
         
         resolve(acoesCausas);
