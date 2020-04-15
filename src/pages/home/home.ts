@@ -41,6 +41,7 @@ import { GeolocationService } from '../../services/geo-location';
 import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
+import { UsuarioPage } from '../usuario/usuario';
 
 
 @Component({
@@ -202,6 +203,23 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         this.dg = dados;
+
+        if (dados.usuario.nome === 'Usuário de Teste') {
+          const confirm = this.alertCtrl.create({
+            title: 'Atenção',
+            message: `Percebemos que seus dados não estão atualizados! você será redirecionado para que possa
+                      inserir seus dados pessoais e foto.`,
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.navCtrl.push(UsuarioPage);
+                }
+              }
+            ]
+          });
+          confirm.present();
+        }
         
         if (!this.dg.usuario.codTecnico) {
           reject();
