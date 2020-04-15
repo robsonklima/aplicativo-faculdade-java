@@ -23,8 +23,15 @@ export class TutorialPage {
     this.slides = [
       {
         title: "Assinatura",
-        description: `Na versão <b>${this.versao}</b> você e o cliente poderão assinar o RAT. `,
+        description: `Na versão <b>${this.versao}</b> você e o cliente poderão assinar o 
+                      Relatório de Atendimento.`,
         image: "assets/imgs/form.png",
+      },
+      {
+        title: "Perfil",
+        description: `Agora é possível editar os seus dados. Altere sua foto, telefone, endereço e informações
+                      pessoais diretamente pelo aplicativo. `,
+        image: "assets/imgs/user.png",
       },
       {
         title: "Equipamentos",
@@ -39,7 +46,7 @@ export class TutorialPage {
                       às causas/periféricos. Isso garantirá que o usuário não registre, por exemplo, uma ação de "ajuste"
                       no periférico "dispensador de cédulas". Essa configuração dos critérios aceitos na inclusão dos 
                       detalhes do RAT, é realizada pelo Suporte Técnico Nacional.`,
-        image: "assets/imgs/plugin.png",
+        image: "assets/imgs/atm-2.png",
       }
     ];
   }
