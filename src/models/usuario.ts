@@ -19,4 +19,5 @@ export class Usuario {
     siglaUF: string;
     numero: string;
     cpf: string;
+    foto: string;
 }

@@ -3,7 +3,7 @@
     <name>App Técnicos</name>
     <description>Aplicativo para automação dos atendimentos técnicos da assistência técnica da empresa Perto S.A.</description>
     <author email="equipe.sat@perto.com.br" href="">Robson Lima</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8102" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -128,6 +128,7 @@
         <variable name="OKHTTP_VERSION" value="3.12.0" />
     </plugin>
     <plugin name="cordova-plugin-file" spec="^6.0.2" />
+    <allow-navigation href="http://localhost:8102" sessionid="d8ece90b" />
     <engine name="browser" spec="^4.1.0" />
     <engine name="android" spec="7.0.0" />
 </widget>

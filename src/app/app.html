@@ -10,21 +10,28 @@
         class="first-item"
         *ngIf="dadosGlobais?.usuario?.nome"
         (click)="telaUsuario()">
-        <ion-icon color="primary" name="contact" item-start></ion-icon>
-        <span class="user-name">{{ dadosGlobais?.usuario?.nome }}</span>
+        
+        <ion-avatar item-start>
+          <img 
+            src="http://sat.perto.com.br/DiretorioE/AppTecnicos/Fotos/{{ dadosGlobais?.usuario?.codUsuario }}.jpg" 
+            onError="this.src='assets/imgs/man.png';" />
+        </ion-avatar>
+
+        <span class="user-name"> &nbsp; {{ dadosGlobais?.usuario?.nome }}</span>
         <p *ngIf="dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil">
+          &nbsp;
           {{ dadosGlobais?.usuario?.usuarioPerfil?.nomeUsuarioPerfil | lowercase | capitalize }} 
           {{ dadosGlobais?.usuario?.filial?.nomeFilial }}
         </p>
       </ion-item>
 
       <ion-item (click)="telaSenhaAlteracao()">
-        <ion-icon color="primary" name="lock" item-start></ion-icon>
+        <ion-icon color="primary" name="lock" class="icone-menu" item-start></ion-icon>
         Alterar Minha Senha
       </ion-item>
 
       <ion-item (click)="sair()">
-        <ion-icon color="primary" name="exit" item-start></ion-icon>
+        <ion-icon color="primary" name="exit" class="icone-menu" item-start></ion-icon>
         Sair
       </ion-item>
     </ion-list>

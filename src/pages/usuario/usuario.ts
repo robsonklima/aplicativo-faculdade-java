@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
-import { AlertController, LoadingController } from 'ionic-angular';
+import { AlertController, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 import { GeolocationService } from '../../services/geo-location';
 import { Cep } from '../../models/cep';
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario';
+import { AppAvailability } from '@ionic-native/app-availability';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Camera } from '@ionic-native/camera';
+import { Config } from '../../models/config';
+import { Market } from '@ionic-native/market';
 
 
 @Component({
@@ -18,6 +24,13 @@ export class UsuarioPage {
   
   constructor(
     private alertCtrl: AlertController,
+    private platform: Platform,
+    private diagnostic: Diagnostic,
+    private androidPerm: AndroidPermissions,
+    private camera: Camera,
+    private market: Market,
+    private toastCtrl: ToastController,
+    private appAvailability: AppAvailability,
     private loadingCtrl: LoadingController,
     private dadosGlobaisService: DadosGlobaisService,
     private geolocationService: GeolocationService,
@@ -67,11 +80,11 @@ export class UsuarioPage {
     this.usuarioService.atualizarUsuarioApi(this.dg.usuario).subscribe((res: Usuario) => {
       loading.dismiss().then(() => {
         this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
-        this.exibirAlerta('Confirmação!', 'Usuário salvo com sucesso!');
+        this.exibirToast('Usuário salvo com sucesso!');
       });
     }, e => {
       loading.dismiss().then(() => {
-        this.exibirAlerta('Erro!', 'Não foi possível salvar o usuário!');
+        this.exibirToast('Não foi possível salvar o usuário!');
       });
     })
   }
@@ -96,16 +109,88 @@ export class UsuarioPage {
   }
 
   public tirarFoto() {
-    this.exibirAlerta('Instruções!', 'Por favor, utilize a câmera do aparelho para tirar um Foto 3x4, utilizando crachá e uniforme da empresa.');
+    const confirm = this.alertCtrl.create({
+      title: 'Instruções',
+      message: `Por favor, utilize a câmera do aparelho para tirar uma foto 3x4. 
+                Certifique-se de estar utilizando o crachá e uniforme da empresa.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.platform.ready().then(() => {
+              this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
+                this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
+                  this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
+                    this.camera.getPicture({
+                      quality: 80,
+                      targetWidth: 320,
+                      destinationType: this.camera.DestinationType.DATA_URL,
+                      encodingType: this.camera.EncodingType.JPEG,
+                      mediaType: this.camera.MediaType.PICTURE,
+                      saveToPhotoAlbum: false,
+                      allowEdit: true,
+                      sourceType: 1,
+                      correctOrientation: true
+                    }).then(imageData => {
+
+                      const loading = this.loadingCtrl.create({ 
+                        content: 'Aguarde...' 
+                      });
+                      loading.present();
+
+                      this.dg.usuario.foto = 'data:image/jpeg;base64,' + imageData;
+                  
+                      this.usuarioService.atualizarUsuarioApi(this.dg.usuario).subscribe((res: Usuario) => {
+                        loading.dismiss().then(() => {
+                          this.dadosGlobaisService.insereDadosGlobaisStorage(this.dg);
+                          this.exibirToast('Foto salva com sucesso! A foto pode levar até 5 minutos para atualizar!');
+                        });
+                      }, e => {
+                        loading.dismiss().then(() => {
+                          this.exibirToast('Não foi possível salvar a foto! Tente novamente!');
+                        });
+                      });
+
+                      this.camera.cleanup().catch();
+                    }).catch();
+                  }).catch();
+                }).catch();
+              },
+              (no: boolean) => {
+                this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
+                setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
+                return;
+              }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+            }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
-  private exibirAlerta(titulo: string, conteudo: string) {
-    const alert = this.alertCtrl.create({
-      title: titulo,
-      subTitle: conteudo,
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
       buttons: ['OK']
     });
 
-    alert.present();
+    alerta.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 }
