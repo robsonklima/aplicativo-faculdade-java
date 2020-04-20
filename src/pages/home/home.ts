@@ -204,7 +204,7 @@ export class HomePage {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         this.dg = dados;
 
-        if (dados.usuario.nome === 'Usuário de Teste') {
+        if (!dados.usuario.foto) {
           const confirm = this.alertCtrl.create({
             title: 'Atenção',
             message: `Percebemos que seus dados não estão atualizados! você será redirecionado para que possa
