@@ -203,7 +203,7 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
         this.dg = dados;
-
+        
         if (!dados.usuario.foto) {
           const confirm = this.alertCtrl.create({
             title: 'Atenção',

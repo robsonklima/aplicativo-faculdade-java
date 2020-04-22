@@ -378,7 +378,8 @@ export class RatDetalhePosPage {
     return new Promise((resolve, reject) => {
       this.statusServicoService.buscarStatusServicosStorage().then((statusServicos: StatusServico[]) => { 
         this.statusServicos = statusServicos.filter((s) => { 
-          return (s.codStatusServico == 3 || s.codStatusServico == 2 || s.codStatusServico == 16 || s.codStatusServico == 5 || s.codStatusServico == 7);
+          return (s.codStatusServico == 10 || s.codStatusServico == 5 || s.codStatusServico == 3 || 
+                  s.codStatusServico == 2 || s.codStatusServico == 16 || s.codStatusServico == 7);
         });
         
         resolve(statusServicos);

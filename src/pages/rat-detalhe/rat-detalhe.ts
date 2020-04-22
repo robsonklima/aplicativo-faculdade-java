@@ -77,13 +77,13 @@ export class RatDetalhePage {
 
   ionViewWillEnter() {
     this.configurarSlide(this.slides.getActiveIndex());
-    this.buscarTipoCausas();
     
-    this.buscarModulosPorEquipamento();
-    this.buscarDefeitosTodos();
-    this.buscarAcoesTodas();
-    
-    this.buscarEquipamentosPOS();   
+    this.buscarEquipamentosPOS().then(() => {
+      this.buscarTipoCausas();
+      this.buscarModulosPorEquipamento();
+      this.buscarDefeitosTodos();
+      this.buscarAcoesTodas();
+    });   
   }
 
   public telaRatDetalhePOS() {
@@ -115,13 +115,13 @@ export class RatDetalhePage {
   }
 
   private buscarModulosTodos() {
-    this.causaService.buscarCausasStorage()
-      .then((causas: Causa[]) => {
-        this.modulos = causas.filter((causa) => { 
-          return (causa.codECausa.substring(2, 5) == '000');
-        });
-      })
-      .catch(err => {});
+    this.causaService.buscarCausasStorage().then((causas: Causa[]) => {
+      this.modulos = causas.filter((causa) => { return (causa.codECausa.substring(2, 5) == '000') });
+
+      if (this.verificarSeEquipamentoEPOS()) {
+        this.modulos = this.modulos.filter((m) => { return (Number(m.codECausa) >= 50000) });
+      }
+    }).catch(err => {});
   }
 
   private buscarModulosPorEquipamento() {
@@ -169,20 +169,30 @@ export class RatDetalhePage {
         if (!defeitos.length) 
           this.exibirAlerta(Config.MSG.DEFEITOS_NAO_ENCONTRADOS_COMPONENTE);
         
-        this.defeitos = defeitos.sort((a, b) => 
-          Number(a.codEDefeito) - Number(b.codEDefeito));
+        this.defeitos = defeitos.sort((a, b) => Number(a.codEDefeito) - Number(b.codEDefeito));
+
+        if (this.verificarSeEquipamentoEPOS()) {
+          this.defeitos = this.defeitos.filter((d) => { 
+            return (Number(d.codEDefeito) >= 500);
+          });
+        }
       })
       .catch(err => {});
   }
 
   public buscarDefeitosPorCausa(causa: string) {
+    if (this.verificarSeEquipamentoEPOS()) {
+      this.buscarDefeitosTodos();
+      return;
+    }
+
     this.defeitoCausaService.buscarDefeitosPorCausa(causa)
       .then((res) => {
         if (res) {
           this.defeitos = res[0].defeitos;
         }
           
-        if (this.modulos.length === 0) {
+        if (this.defeitos.length === 0) {
           this.buscarDefeitosTodos();
         }
       })
@@ -202,13 +212,18 @@ export class RatDetalhePage {
   }
 
   public buscarAcoesPorCausa(causa: string) {
+    if (this.verificarSeEquipamentoEPOS()) {
+      this.buscarAcoesTodas();
+      return;
+    }
+
     this.acaoCausaService.buscarAcoesPorCausa(causa)
       .then((res) => {
         if (res) {
           this.acoes = res[0].acoes;
         }
           
-        if (this.modulos.length === 0) {
+        if (this.acoes.length === 0) {
           this.buscarAcoesTodas();
         }
       })

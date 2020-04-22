@@ -859,9 +859,13 @@ export class ChamadoPage {
       }
 
       if (!this.chamado.indRatEletronica && this.verificarSeEquipamentoEPOS() && this.chamado.rats[0].fotos.length < 4) {
+        if (this.chamado.equipamentoContrato.equipamento.codEquip == 328) {
+          return true;
+        }
+
         this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
 
-        return;
+        return false;
       }
     }
 
