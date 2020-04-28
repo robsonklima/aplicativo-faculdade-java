@@ -793,9 +793,24 @@ export class ChamadoPage {
   }
 
   public fecharChamado() {
+    let mensagem: string;
+
+    if (this.chamado.dataFimSLA && this.chamado.rats.length) {
+      let inicio = moment(this.chamado.rats[0].dataSolucao + ' ' + this.chamado.rats[0].horaSolucao);
+      let fim = moment(this.chamado.dataFimSLA);
+
+      let difMin = fim.diff(inicio, 'minutes');
+
+      if (difMin < 0 && difMin > -60) {
+        mensagem = `Confirma o fechamento deste chamado com ${difMin} minutos de atraso?`;
+      }
+    } else {
+      mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;
+    }
+
     const confirmacao = this.alertCtrl.create({
       title: 'Fechar',
-      message: 'Deseja fechar este chamado?',
+      message: mensagem,
       buttons: [
         {
           text: 'Cancelar',
@@ -816,7 +831,7 @@ export class ChamadoPage {
               this.chamado.statusServico.abreviacao = "F";
               this.chamado.statusServico.nomeStatusServico = "FECHADO";
               this.chamado.dataHoraFechamento = new Date().toLocaleString('pt-BR');
-              //this.chamado.appVersao = Config.VERSAO_APP;
+              this.chamado.appVersao = Config.VERSAO_APP;
 
               this.loadingFactory.exibir(Config.MSG.FECHANDO_CHAMADO);
 
