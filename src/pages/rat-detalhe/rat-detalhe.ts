@@ -188,7 +188,7 @@ export class RatDetalhePage {
 
     this.defeitoCausaService.buscarDefeitosPorCausa(causa)
       .then((res) => {
-        if (res) {
+        if (res.length) {
           this.defeitos = res[0].defeitos;
         }
           
@@ -219,7 +219,7 @@ export class RatDetalhePage {
 
     this.acaoCausaService.buscarAcoesPorCausa(causa)
       .then((res) => {
-        if (res) {
+        if (res.length) {
           this.acoes = res[0].acoes;
         }
           
