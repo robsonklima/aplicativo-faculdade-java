@@ -803,6 +803,8 @@ export class ChamadoPage {
 
       if (difMin < 0 && difMin > -60) {
         mensagem = `Confirma o fechamento deste chamado com ${difMin} minutos de atraso?`;
+      } else {
+        mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;  
       }
     } else {
       mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;
