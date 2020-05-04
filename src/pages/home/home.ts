@@ -42,6 +42,7 @@ import { EquipamentoCausaService } from '../../services/equipamento-causa';
 import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
 import { UsuarioPage } from '../usuario/usuario';
+import { AuditoriasPage } from '../auditorias/auditorias';
 
 
 @Component({
@@ -156,6 +157,10 @@ export class HomePage {
 
   public telaFerramentasTecnico() {
     this.navCtrl.push(FerramentasTecnicoPage);
+  }
+
+  public telaAuditorias() {
+    this.navCtrl.push(AuditoriasPage);
   }
 
   public telaTeste() {

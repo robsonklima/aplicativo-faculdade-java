@@ -78,6 +78,10 @@ export class AssinaturaPage {
       this.chamado.rats[0].assinaturaTecnico = this.signatureImage;
       this.viewCtrl.dismiss(this.chamado);
     }
+
+    if (this.paginaOrigem == "AUDITORIA_TECNICO") {
+      this.viewCtrl.dismiss(this.signatureImage);
+    }
   }
 
   public limparAssinatura() {

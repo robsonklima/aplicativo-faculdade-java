@@ -77,6 +77,16 @@
 
     <button
       ion-item
+      (click)="telaAuditorias()">
+      <ion-icon 
+        color="primary" 
+        name="md-car" 
+        item-start></ion-icon>
+      Auditorias
+    </button>
+
+    <button
+      ion-item
       *ngIf="!platform.is('cordova')"
       (click)="telaFerramentasTecnico()">
       <ion-icon 
@@ -88,7 +98,7 @@
 
     <button
       ion-item
-      *ngIf="false"
+      *ngIf="!platform.is('cordova')"
       (click)="telaTeste()">
       <ion-icon 
         color="primary" 

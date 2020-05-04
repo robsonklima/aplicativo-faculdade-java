@@ -96,6 +96,8 @@ import { MensagensPage } from '../pages/mensagens/mensagens';
 import { MensagemPage } from '../pages/mensagens/mensagem';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { UsuarioPage } from '../pages/usuario/usuario';
+import { AuditoriasPage } from '../pages/auditorias/auditorias';
+import { AuditoriaPage } from '../pages/auditorias/auditoria';
 import { TestePage } from '../pages/teste/teste';
 import { LocalizacaoService } from '../services/localizacao';
 import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
@@ -143,6 +145,8 @@ import { LogsPage } from '../pages/logs/logs';
     FerramentasTecnicoPage,
     TutorialPage,
     UsuarioPage,
+    AuditoriasPage,
+    AuditoriaPage,
     LogsPage,
     TestePage,
     ChamadoConfPage
@@ -201,6 +205,8 @@ import { LogsPage } from '../pages/logs/logs';
     FerramentasTecnicoPage,
     TutorialPage,
     UsuarioPage,
+    AuditoriasPage,
+    AuditoriaPage,
     ChamadoConfPage,
     LogsPage,
     TestePage

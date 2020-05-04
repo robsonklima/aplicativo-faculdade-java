@@ -1,0 +1,37 @@
+auditoria-page {
+    ion-slides {
+    }
+
+    .swiper-pagination-bullet {
+        display: none;
+    }
+
+    ion-input{ 
+        .text-input{ text-align: right; }
+    }
+
+    .left-align { 
+        .text-input{ text-align: left; }
+    }
+
+    .swiper-slide {
+        overflow-y: scroll;
+        display: block;
+    }
+
+    ion-item-divider {
+        text-align: left !important;
+        font-size: 11pt !important;
+    }
+
+    p {
+        padding: 0 40px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #60646B;
+
+        b {
+            color: #000000;
+        }
+    }
+}

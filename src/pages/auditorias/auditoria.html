@@ -1,0 +1,397 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Auditoria do Veículo</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar>
+    <ion-title>{{ tituloSlide }}</ion-title>
+
+    <ion-buttons end>
+        <button ion-button icon-only (click)="telaAssinaturaTecnico()" [disabled]="false" *ngIf="slides.getActiveIndex() == 5">
+          <ion-icon name="browsers"></ion-icon>
+        </button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-slides pager (ionSlideDidChange)="configurarSlide()">
+    <ion-slide>
+      <form #f1="ngForm" (ngSubmit)="salvar1(f1)" class="form">
+        <ion-list>
+          <ion-item class="first-item">
+            <ion-label fixed>Nome</ion-label>
+            <ion-input type="text" name="nome" maxlength="50" [ngModel]="" placeholder="Digite seu Nome">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>Matrícula</ion-label>
+            <ion-input type="text" name="matricula" maxlength="10" [ngModel]="" placeholder="Digite sua Matrícula">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>RG</ion-label>
+            <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
+              placeholder="Digite seu RG"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>CPF</ion-label>
+            <ion-input type="text" name="cpf" (keyup)="formatarCampo($event, '###.###.###-##')" maxlength="14"
+              [ngModel]="" placeholder="Digite seu CPF"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>CNH</ion-label>
+            <ion-input type="text" name="cnh" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
+              placeholder="Digite sua CNH"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Categoria</ion-label>
+            <ion-select 
+              placeholder="Selecione..."
+              name="cnhCategoria" 
+              [ngModel]="" 
+              interface="action-sheet"
+              cancelText="Cancelar"
+              >
+              <ion-option [value]="0">A</ion-option>
+              <ion-option [value]="1">B</ion-option>
+              <ion-option [value]="2">AB</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Filial</ion-label>
+            <ion-select 
+              placeholder="Selecione..."
+              name="filial" 
+              [ngModel]="" 
+              interface="action-sheet"
+              cancelText="Cancelar"
+              >
+              <ion-option [value]="0">FRJ</ion-option>
+              <ion-option [value]="1">FRS</ion-option>
+              <ion-option [value]="2">FSP</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Finalidade de Uso</ion-label>
+            <ion-select 
+              placeholder="Selecione..."
+              name="finalidadeUso" 
+              [ngModel]="" 
+              interface="action-sheet"
+              cancelText="Cancelar"
+              >
+              <ion-option [value]="0">Trabalho</ion-option>
+              <ion-option [value]="1">Trabalho + Pessoal</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <div padding>
+          <button ion-button color="secondary" full [disabled]="!f1.valid">Salvar</button>
+        </div>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <form #f2="ngForm" (ngSubmit)="salvar2(f2)" class="form">
+        <ion-item-group>
+          <ion-item-divider color="light">Identificação</ion-item-divider>
+
+          <ion-item class="first-item">
+            <ion-label fixed>Placa</ion-label>
+            <ion-input type="text" name="placa" maxlength="7" [ngModel]="" placeholder="Digite a Placa">
+            </ion-input>
+          </ion-item>
+        </ion-item-group>
+
+        <ion-item-group>
+          <ion-item-divider color="light">Fotos</ion-item-divider>
+          
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_1.png">
+            </ion-thumbnail>
+            <h2>Frontal</h2>
+            <p>Orientações</p>
+            <button ion-button clear item-end type="button">Adicionar</button>
+          </ion-item>
+  
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_2.png">
+            </ion-thumbnail>
+            <h2>Frontal/Lateral Esquerda</h2>
+            <p>Orientações</p>
+            <button ion-button clear item-end type="button" color="danger">Remover</button>
+          </ion-item>
+  
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_3.png">
+            </ion-thumbnail>
+            <h2>Odômetro</h2>
+            <p>Orientações</p>
+            <button ion-button clear item-end type="button">Adicionar</button>
+          </ion-item>
+  
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_4.png">
+            </ion-thumbnail>
+            <h2>Tras./Lat. Direita</h2>
+            <p>Orientações</p>
+            <button ion-button clear item-end type="button">Adicionar</button>
+          </ion-item>
+  
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_5.png">
+            </ion-thumbnail>
+            <h2>Interna</h2>
+            <p>Orientações</p>
+            <button ion-button clear item-end type="button">Adicionar</button>
+          </ion-item>
+  
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/imgs/aud_6.png">
+            </ion-thumbnail>
+            <h2>Ítens de Segurança</h2>
+            <p>Estepe, Manual e Chave Reserva</p>
+            <button ion-button clear item-end type="button">Adicionar</button>
+          </ion-item>
+        </ion-item-group>
+
+        <div padding>
+          <button ion-button color="secondary" full [disabled]="!f2.valid">Salvar</button>
+        </div>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <form #f3="ngForm" (ngSubmit)="salvar3(f3)" class="form">
+        <ion-list>
+          <ion-item-divider color="light">
+            Verificações
+          </ion-item-divider>
+
+          <ion-item>
+            <ion-label>Água</ion-label>
+            <ion-checkbox item-right></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Óleo</ion-label>
+            <ion-checkbox item-right></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Luzes</ion-label>
+            <ion-checkbox item-right></ion-checkbox>
+          </ion-item>
+        </ion-list>
+
+        <ion-list radio-group>
+          <ion-item-divider color="light">
+            Pneus Dianteiros
+          </ion-item-divider>
+        
+          <ion-item>
+            <ion-label>Novos</ion-label>
+            <ion-radio value="0"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Bons</ion-label>
+            <ion-radio value="1"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Ruins</ion-label>
+            <ion-radio value="2"></ion-radio>
+          </ion-item>
+        </ion-list>
+
+        <ion-list radio-group>
+          <ion-item-divider color="light">
+            Pneus Traseiros
+          </ion-item-divider>
+        
+          <ion-item>
+            <ion-label>Novos</ion-label>
+            <ion-radio value="0"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Bons</ion-label>
+            <ion-radio value="1"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Ruins</ion-label>
+            <ion-radio value="2"></ion-radio>
+          </ion-item>
+        </ion-list>
+
+        <ion-list radio-group>
+          <ion-item-divider color="light">
+            Estepe
+          </ion-item-divider>
+        
+          <ion-item>
+            <ion-label>Novos</ion-label>
+            <ion-radio value="0"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Bons</ion-label>
+            <ion-radio value="1"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Ruins</ion-label>
+            <ion-radio value="2"></ion-radio>
+          </ion-item>
+        </ion-list>
+
+        <ion-list radio-group>
+          <ion-item-divider color="light">
+            Revisão Programada Realizada
+          </ion-item-divider>
+        
+          <ion-item>
+            <ion-label>10.000</ion-label>
+            <ion-radio value="0"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>20.000</ion-label>
+            <ion-radio value="1"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>30.000</ion-label>
+            <ion-radio value="2"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label fixed>Outro</ion-label>
+            <ion-input type="number" name="nome" maxlength="50" [ngModel]="" placeholder="Digite o Valor">
+            </ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div padding>
+          <button ion-button color="secondary" full [disabled]="!f3.valid">Salvar</button>
+        </div>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <form #f4="ngForm" (ngSubmit)="salvar4(f4)" class="form">
+          <ion-item-divider color="light">
+            Selecione os acessórios que possui
+          </ion-item-divider>
+
+          <ion-item *ngFor="let acessorio of acessorios">
+            <ion-toggle [checked]="acessorio.selecionado" (ionChange)="selecionarAcessorio(acessorio, $event)"></ion-toggle>
+
+            <ion-label>
+              {{ acessorio?.nome }}
+            </ion-label>
+          </ion-item>
+
+          <div padding>
+            <button ion-button color="secondary" full [disabled]="!f4.valid">Salvar</button>
+          </div>
+        </form>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <form #f5="ngForm" (ngSubmit)="salvar5(f5)" class="form">
+        <ion-list>
+          <ion-item>
+            <ion-label stacked>Data da Retirada</ion-label>
+            <ion-input type="text" name="dataRetirada" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
+              placeholder="01/01/2001" class="left-align"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Data da Auditoria</ion-label>
+            <ion-input type="text" name="dataAuditoria" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
+              placeholder="01/01/2001" class="left-align"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Dias em Uso</ion-label>
+            <ion-input type="number" name="diasEmUso" maxlength="10" [ngModel]="" placeholder="Qtd Dias em Uso" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Odômetro Inicial da Retirada</ion-label>
+            <ion-input type="number" name="odometroRetirada" maxlength="10" [ngModel]="" placeholder="Odômetro Inicial" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Odômetro no Período Auditado</ion-label>
+            <ion-input type="number" name="odometroAuditoria" maxlength="10" [ngModel]="" placeholder="Odômetro Auditoria" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Km Percorrido no RD/SAT</ion-label>
+            <ion-input type="number" name="kmRdSAT" maxlength="10" [ngModel]="" placeholder="Km Percorrido no RD/SAT" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Km Compensado no RD/SAT</ion-label>
+            <ion-input type="number" name="kmRdSATCompensado" maxlength="10" [ngModel]="" placeholder="Km Compensado no RD/SAT" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Total do Km Particular</ion-label>
+            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Total do Km Particular" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Total do Km Percorrido em Férias</ion-label>
+            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Tolerância 3000 km" class="left-align">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>Total do Km Particular do Mês</ion-label>
+            <ion-input type="number" name="kmParticularMes" maxlength="10" [ngModel]="" placeholder="Tolerância 800 km" class="left-align">
+            </ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div padding>
+          <button ion-button color="secondary" full [disabled]="!f5.valid">Salvar</button>
+        </div>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <p class="p-msg-2" *ngIf="!assinaturaTecnico">Por favor assine a Auditoria</p>
+    
+      <img class="img-assinatura" *ngIf="assinaturaTecnico" src="{{ assinaturaTecnico }}" alt="">
+    </ion-slide>
+  </ion-slides>
+</ion-content>
