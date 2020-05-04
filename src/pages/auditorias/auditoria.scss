@@ -1,17 +1,6 @@
 auditoria-page {
-    ion-slides {
-    }
-
     .swiper-pagination-bullet {
         display: none;
-    }
-
-    ion-input{ 
-        .text-input{ text-align: right; }
-    }
-
-    .left-align { 
-        .text-input{ text-align: left; }
     }
 
     .swiper-slide {
@@ -25,7 +14,7 @@ auditoria-page {
     }
 
     p {
-        padding: 0 40px;
+        //padding: 0 40px;
         font-size: 14px;
         line-height: 1.5;
         color: #60646B;
@@ -33,5 +22,18 @@ auditoria-page {
         b {
             color: #000000;
         }
+    }
+
+    .trash-icon {
+        margin-right: 4px !important;
+        font-size: 20pt;
+    }
+
+    .add-icon {
+        font-size: 20pt;
+    }
+
+    .align-right {
+        .text-input{ text-align: right; }
     }
 }

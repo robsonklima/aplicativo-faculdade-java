@@ -21,37 +21,37 @@
       <form #f1="ngForm" (ngSubmit)="salvar1(f1)" class="form">
         <ion-list>
           <ion-item class="first-item">
-            <ion-label fixed>Nome</ion-label>
+            <ion-label stacked>Nome</ion-label>
             <ion-input type="text" name="nome" maxlength="50" [ngModel]="" placeholder="Digite seu Nome">
             </ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label fixed>Matrícula</ion-label>
+            <ion-label stacked>Matrícula</ion-label>
             <ion-input type="text" name="matricula" maxlength="10" [ngModel]="" placeholder="Digite sua Matrícula">
             </ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label fixed>RG</ion-label>
+            <ion-label stacked>RG</ion-label>
             <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
               placeholder="Digite seu RG"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label fixed>CPF</ion-label>
+            <ion-label stacked>CPF</ion-label>
             <ion-input type="text" name="cpf" (keyup)="formatarCampo($event, '###.###.###-##')" maxlength="14"
               [ngModel]="" placeholder="Digite seu CPF"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label fixed>CNH</ion-label>
+            <ion-label stacked>CNH</ion-label>
             <ion-input type="text" name="cnh" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
               placeholder="Digite sua CNH"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label>Categoria</ion-label>
+            <ion-label stacked>Categoria</ion-label>
             <ion-select 
               placeholder="Selecione..."
               name="cnhCategoria" 
@@ -66,7 +66,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-label>Filial</ion-label>
+            <ion-label stacked>Filial</ion-label>
             <ion-select 
               placeholder="Selecione..."
               name="filial" 
@@ -81,7 +81,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-label>Finalidade de Uso</ion-label>
+            <ion-label stacked>Finalidade de Uso</ion-label>
             <ion-select 
               placeholder="Selecione..."
               name="finalidadeUso" 
@@ -104,10 +104,8 @@
     <ion-slide>
       <form #f2="ngForm" (ngSubmit)="salvar2(f2)" class="form">
         <ion-item-group>
-          <ion-item-divider color="light">Identificação</ion-item-divider>
-
           <ion-item class="first-item">
-            <ion-label fixed>Placa</ion-label>
+            <ion-label stacked>Placa</ion-label>
             <ion-input type="text" name="placa" maxlength="7" [ngModel]="" placeholder="Digite a Placa">
             </ion-input>
           </ion-item>
@@ -122,7 +120,9 @@
             </ion-thumbnail>
             <h2>Frontal</h2>
             <p>Orientações</p>
-            <button ion-button clear item-end type="button">Adicionar</button>
+            <button ion-button color="secondary" clear icon-only item-end type="button">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
           </ion-item>
   
           <ion-item>
@@ -131,7 +131,9 @@
             </ion-thumbnail>
             <h2>Frontal/Lateral Esquerda</h2>
             <p>Orientações</p>
-            <button ion-button clear item-end type="button" color="danger">Remover</button>
+            <button ion-button color="danger" clear icon-only item-end type="button">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
+            </button>
           </ion-item>
   
           <ion-item>
@@ -140,7 +142,9 @@
             </ion-thumbnail>
             <h2>Odômetro</h2>
             <p>Orientações</p>
-            <button ion-button clear item-end type="button">Adicionar</button>
+            <button ion-button color="secondary" clear icon-only item-end type="button">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
           </ion-item>
   
           <ion-item>
@@ -149,7 +153,9 @@
             </ion-thumbnail>
             <h2>Tras./Lat. Direita</h2>
             <p>Orientações</p>
-            <button ion-button clear item-end type="button">Adicionar</button>
+            <button ion-button color="secondary" clear icon-only item-end type="button">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
           </ion-item>
   
           <ion-item>
@@ -158,7 +164,9 @@
             </ion-thumbnail>
             <h2>Interna</h2>
             <p>Orientações</p>
-            <button ion-button clear item-end type="button">Adicionar</button>
+            <button ion-button color="secondary" clear icon-only item-end type="button">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
           </ion-item>
   
           <ion-item>
@@ -166,8 +174,10 @@
               <img src="assets/imgs/aud_6.png">
             </ion-thumbnail>
             <h2>Ítens de Segurança</h2>
-            <p>Estepe, Manual e Chave Reserva</p>
-            <button ion-button clear item-end type="button">Adicionar</button>
+            <p>Estepe, Manual/Chave Reserva</p>
+            <button ion-button color="secondary" clear icon-only item-end type="button">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
           </ion-item>
         </ion-item-group>
 
@@ -285,7 +295,7 @@
 
           <ion-item>
             <ion-label fixed>Outro</ion-label>
-            <ion-input type="number" name="nome" maxlength="50" [ngModel]="" placeholder="Digite o Valor">
+            <ion-input type="number" name="nome" maxlength="50" [ngModel]="" class="align-right" placeholder="Digite o Valor">
             </ion-input>
           </ion-item>
         </ion-list>
@@ -324,60 +334,60 @@
           <ion-item>
             <ion-label stacked>Data da Retirada</ion-label>
             <ion-input type="text" name="dataRetirada" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
-              placeholder="01/01/2001" class="left-align"></ion-input>
+              placeholder="01/01/2001"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Data da Auditoria</ion-label>
             <ion-input type="text" name="dataAuditoria" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
-              placeholder="01/01/2001" class="left-align"></ion-input>
+              placeholder="01/01/2001"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Dias em Uso</ion-label>
-            <ion-input type="number" name="diasEmUso" maxlength="10" [ngModel]="" placeholder="Qtd Dias em Uso" class="left-align">
+            <ion-input type="number" name="diasEmUso" maxlength="10" [ngModel]="" placeholder="Qtd Dias em Uso">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Odômetro Inicial da Retirada</ion-label>
-            <ion-input type="number" name="odometroRetirada" maxlength="10" [ngModel]="" placeholder="Odômetro Inicial" class="left-align">
+            <ion-input type="number" name="odometroRetirada" maxlength="10" [ngModel]="" placeholder="Odômetro Inicial">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Odômetro no Período Auditado</ion-label>
-            <ion-input type="number" name="odometroAuditoria" maxlength="10" [ngModel]="" placeholder="Odômetro Auditoria" class="left-align">
+            <ion-input type="number" name="odometroAuditoria" maxlength="10" [ngModel]="" placeholder="Odômetro Auditoria">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Km Percorrido no RD/SAT</ion-label>
-            <ion-input type="number" name="kmRdSAT" maxlength="10" [ngModel]="" placeholder="Km Percorrido no RD/SAT" class="left-align">
+            <ion-input type="number" name="kmRdSAT" maxlength="10" [ngModel]="" placeholder="Km Percorrido no RD/SAT">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Km Compensado no RD/SAT</ion-label>
-            <ion-input type="number" name="kmRdSATCompensado" maxlength="10" [ngModel]="" placeholder="Km Compensado no RD/SAT" class="left-align">
+            <ion-input type="number" name="kmRdSATCompensado" maxlength="10" [ngModel]="" placeholder="Km Compensado no RD/SAT">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Total do Km Particular</ion-label>
-            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Total do Km Particular" class="left-align">
+            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Total do Km Particular">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Total do Km Percorrido em Férias</ion-label>
-            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Tolerância 3000 km" class="left-align">
+            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Tolerância 3000 km">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Total do Km Particular do Mês</ion-label>
-            <ion-input type="number" name="kmParticularMes" maxlength="10" [ngModel]="" placeholder="Tolerância 800 km" class="left-align">
+            <ion-input type="number" name="kmParticularMes" maxlength="10" [ngModel]="" placeholder="Tolerância 800 km">
             </ion-input>
           </ion-item>
         </ion-list>
