@@ -804,7 +804,7 @@ export class ChamadoPage {
       if (difMin < 0 && difMin > -60) {
         mensagem = `Confirma o fechamento deste chamado com ${difMin} minutos de atraso?`;
       } else {
-        mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;  
+        mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;
       }
     } else {
       mensagem = `Deseja fechar do chamado ${this.chamado.codOs}?`;
@@ -876,7 +876,14 @@ export class ChamadoPage {
       }
 
       if (!this.chamado.indRatEletronica && this.verificarSeEquipamentoEPOS() && this.chamado.rats[0].fotos.length < 4) {
-        if (this.chamado.equipamentoContrato.equipamento.codEquip == 328) {
+        if (this.chamado.statusServico.codStatusServico == 2 || this.chamado.statusServico.codStatusServico == 16) {
+          return true;
+        }
+
+        if (
+          this.chamado.equipamentoContrato.equipamento.codEquip == 328 ||
+          this.chamado.rats[0].equipamentoInstalado.codEquip == 328
+        ) {
           return true;
         }
 
