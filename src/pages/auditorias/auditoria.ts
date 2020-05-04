@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
 
@@ -16,7 +16,10 @@ export class AuditoriaPage {
 
   constructor(
     private toastCtrl: ToastController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private viewCtrl: ViewController,
+    public loadingCtrl: LoadingController
   ) {}
 
   ionViewWillEnter() {
@@ -37,6 +40,8 @@ export class AuditoriaPage {
       'Bateria', 'Rodas Comum', 'Lanternas', 'Luz de Neblina', 'Documentos', 'Bancos Dianteiros', 'Bancos Traseiros', 'Manual',
       'Tapetes', 'Rádio', 'MP3', 'Cartão Abastecimento', 'Buzina', 'Painel', 'Para-Brisa', 'Macaco', 'Triângulo', 'Chave de Rodas',
       'Chave e Reserva', 'Estofamento Geral'];  
+
+    listaAcessorios.sort();
 
     listaAcessorios.forEach(a => {
       this.acessorios.push({ nome: a, selecionao: false });
@@ -88,8 +93,9 @@ export class AuditoriaPage {
 
     switch (i) {
       case 0:
-        this.slides.lockSwipeToPrev(true);
         this.tituloSlide = `Dados do Condutor`;
+        this.slides.lockSwipeToPrev(true);
+        this.slides.lockSwipeToNext(false);
       break;
 
       case 1:
@@ -118,6 +124,7 @@ export class AuditoriaPage {
 
       case 5:
         this.tituloSlide = `Assinatura`;
+        this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(true);
       break;
     }
@@ -129,6 +136,51 @@ export class AuditoriaPage {
         this.acessorios[i].selecionado = e.checked;
       }
     }
+  }
+
+  public salvarAuditoria() {
+    const confirm = this.alertCtrl.create({
+      title: 'Finalizar Auditoria e Salvar?',
+      message: 'Você deseja finalizar sua auditoria e enviar os dados para o servidor?',
+      buttons: [
+        {
+          text: 'Não',
+          handler: () => {}
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            const loader = this.loadingCtrl.create({
+              content: "Enviando dados... Por favor aguarde.",
+              duration: 3000
+            });
+
+            loader.present();
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  public sair() {
+    const confirm = this.alertCtrl.create({
+      title: 'Deseja sair?',
+      message: 'Você perderá todas as informações inseridas',
+      buttons: [
+        {
+          text: 'Não',
+          handler: () => {}
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.viewCtrl.dismiss();
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {

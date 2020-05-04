@@ -33,7 +33,7 @@ export class AssinaturaPage {
   }
 
   ionViewWillEnter() {
-    if (this.paginaOrigem == "LAUDO_TECNICO") {
+    if (this.paginaOrigem == "LAUDO_TECNICO" || this.paginaOrigem == "AUDITORIA_TECNICO") {
       this.tituloPagina = "Assinatura do Técnico";
     }
 

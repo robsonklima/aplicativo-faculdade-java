@@ -7,8 +7,16 @@
     <ion-title>{{ tituloSlide }}</ion-title>
 
     <ion-buttons end>
+        <button ion-button icon-only (click)="sair()">
+          <ion-icon name="md-close"></ion-icon>
+        </button>
+
         <button ion-button icon-only (click)="telaAssinaturaTecnico()" [disabled]="false" *ngIf="slides.getActiveIndex() == 5">
           <ion-icon name="browsers"></ion-icon>
+        </button>
+
+        <button ion-button icon-only (click)="salvarAuditoria()">
+          <ion-icon name="custom-save" class="custom-save-icon"></ion-icon>
         </button>
       </ion-buttons>
   </ion-toolbar>
@@ -399,7 +407,7 @@
     </ion-slide>
 
     <ion-slide>
-      <p class="p-msg-2" *ngIf="!assinaturaTecnico">Por favor assine a Auditoria</p>
+      <p class="p-msg-2" *ngIf="!assinaturaTecnico">Por favor insira a sua assinatura</p>
     
       <img class="img-assinatura" *ngIf="assinaturaTecnico" src="{{ assinaturaTecnico }}" alt="">
     </ion-slide>
