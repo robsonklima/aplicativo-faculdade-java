@@ -28,7 +28,7 @@
 
   <ion-slides pager (ionSlideDidChange)="configurarSlide()">
     <ion-slide>
-      <form #f1="ngForm" (ngSubmit)="salvar1(f1)" class="form">
+      <form #f1="ngForm" (ngSubmit)="salvarDadosCondutor(f1)" class="form">
         <ion-list>
           <ion-item class="first-item">
             <ion-label stacked>Nome</ion-label>
@@ -61,17 +61,18 @@
           </ion-item>
 
           <ion-item>
-            <ion-label stacked>Categoria</ion-label>
+            <ion-label stacked>Categorias da CNH</ion-label>
             <ion-select 
+              multiple="true" cancelText="Cancelar" okText="Ok"
               placeholder="Selecione..."
-              name="cnhCategoria" 
+              name="cnhCategorias" 
               [ngModel]="" 
               interface="action-sheet"
-              cancelText="Cancelar"
-              >
-              <ion-option [value]="0">A</ion-option>
-              <ion-option [value]="1">B</ion-option>
-              <ion-option [value]="2">AB</ion-option>
+              cancelText="Cancelar">
+              <ion-option [value]="A">A</ion-option>
+              <ion-option [value]="B">B</ion-option>
+              <ion-option [value]="C">C</ion-option>
+              <ion-option [value]="D">D</ion-option>
             </ion-select>
           </ion-item>
 
@@ -84,23 +85,23 @@
               interface="action-sheet"
               cancelText="Cancelar"
               >
-              <ion-option [value]="0">FRJ</ion-option>
-              <ion-option [value]="1">FRS</ion-option>
-              <ion-option [value]="2">FSP</ion-option>
+              <ion-option [value]="FRJ">FRJ</ion-option>
+              <ion-option [value]="FRS">FRS</ion-option>
+              <ion-option [value]="FSP">FSP</ion-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
-            <ion-label stacked>Finalidade de Uso</ion-label>
+            <ion-label stacked>Finalidades de Uso</ion-label>
             <ion-select 
+              multiple="true" cancelText="Cancelar" okText="Ok"
               placeholder="Selecione..."
-              name="finalidadeUso" 
+              name="finalidadesUso" 
               [ngModel]="" 
               interface="action-sheet"
-              cancelText="Cancelar"
-              >
-              <ion-option [value]="0">Trabalho</ion-option>
-              <ion-option [value]="1">Trabalho + Pessoal</ion-option>
+              cancelText="Cancelar">
+              <ion-option [value]="TRABALHO">Trabalho</ion-option>
+              <ion-option [value]="PESSOAL">Pessoal</ion-option>
             </ion-select>
           </ion-item>
         </ion-list>
@@ -112,7 +113,7 @@
     </ion-slide>
 
     <ion-slide>
-      <form #f2="ngForm" (ngSubmit)="salvar2(f2)" class="form">
+      <form #f2="ngForm" (ngSubmit)="salvarDadosVeiculo(f2)" class="form">
         <ion-item-group>
           <ion-item class="first-item">
             <ion-label stacked>Placa</ion-label>
@@ -130,8 +131,14 @@
             </ion-thumbnail>
             <h2>Frontal</h2>
             <p>Orientações</p>
-            <button ion-button color="secondary" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_FRONTAL')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_FRONTAL')">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
@@ -141,7 +148,13 @@
             </ion-thumbnail>
             <h2>Frontal/Lateral Esquerda</h2>
             <p>Orientações</p>
-            <button ion-button color="danger" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_FRONTAL_LAT_ESQ')">
+              <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_FRONTAL_LAT_ESQ')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
@@ -152,8 +165,14 @@
             </ion-thumbnail>
             <h2>Odômetro</h2>
             <p>Orientações</p>
-            <button ion-button color="secondary" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_ODOMETRO')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_ODOMETRO')">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
@@ -163,8 +182,14 @@
             </ion-thumbnail>
             <h2>Tras./Lat. Direita</h2>
             <p>Orientações</p>
-            <button ion-button color="secondary" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_TRAS_LAT_DIR')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_TRAS_LAT_DIR')">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
@@ -174,8 +199,14 @@
             </ion-thumbnail>
             <h2>Interna</h2>
             <p>Orientações</p>
-            <button ion-button color="secondary" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_INTERNA')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_INTERNA')">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
@@ -185,8 +216,14 @@
             </ion-thumbnail>
             <h2>Ítens de Segurança</h2>
             <p>Estepe, Manual/Chave Reserva</p>
-            <button ion-button color="secondary" clear icon-only item-end type="button">
+            <button ion-button color="secondary" clear icon-only item-end type="button"
+              (click)="tirarFoto('AUD_ITENS_SEG')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
+            </button>
+
+            <button ion-button color="danger" clear icon-only item-end type="button"
+              (click)="removerFoto('AUD_ITENS_SEG')">
+              <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
         </ion-item-group>
@@ -323,7 +360,7 @@
             Selecione os acessórios que possui
           </ion-item-divider>
 
-          <ion-item *ngFor="let acessorio of acessorios">
+          <ion-item *ngFor="let acessorio of acessoriosVeiculo">
             <ion-toggle [checked]="acessorio.selecionado" (ionChange)="selecionarAcessorio(acessorio, $event)"></ion-toggle>
 
             <ion-label>
@@ -409,9 +446,9 @@
     </ion-slide>
 
     <ion-slide>
-      <p class="p-msg-2" *ngIf="!assinaturaTecnico">Por favor insira a sua assinatura</p>
+      <p class="p-msg-2" *ngIf="!auditoria?.assinaturaTecnico">Por favor insira a sua assinatura</p>
     
-      <img class="img-assinatura" *ngIf="assinaturaTecnico" src="{{ assinaturaTecnico }}" alt="">
+      <img class="img-assinatura" *ngIf="auditoria?.assinaturaTecnico" src="{{ auditoria?.assinaturaTecnico }}" alt="">
     </ion-slide>
   </ion-slides>
 </ion-content>

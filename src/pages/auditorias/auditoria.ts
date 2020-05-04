@@ -1,7 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
+import { Auditoria } from '../../models/auditoria';
+import { Condutor } from '../../models/condutor';
+import { AcessorioVeiculo } from '../../models/acessorio-veiculo';
+import { NgForm } from '@angular/forms';
+import { Filial } from '../../models/filial';
+import { Veiculo } from '../../models/veiculo';
+import { AppAvailability } from '@ionic-native/app-availability';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { Camera } from '@ionic-native/camera';
+import { Foto } from '../../models/foto';
+import moment from 'moment';
+import { Market } from '@ionic-native/market';
 
 
 @Component({
@@ -11,10 +24,17 @@ import { AssinaturaPage } from '../assinatura/assinatura';
 export class AuditoriaPage {
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
-  acessorios: any[] = [];
-  assinaturaTecnico: string;
+  acessoriosVeiculo: AcessorioVeiculo[] = [];
+  auditoria: Auditoria = new Auditoria();
+  veiculo: Veiculo = new Veiculo();
 
   constructor(
+    private platform: Platform,
+    private market: Market,
+    private appAvailability: AppAvailability,
+    private diagnostic: Diagnostic,
+    private androidPerm: AndroidPermissions,
+    private camera: Camera,
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
@@ -31,7 +51,7 @@ export class AuditoriaPage {
     const modal = this.modalCtrl.create(AssinaturaPage, { paginaOrigem: "AUDITORIA_TECNICO" });
     modal.present();
     modal.onDidDismiss((assinatura: string) => {
-      this.assinaturaTecnico = assinatura;
+      this.auditoria.assinaturaTecnico = assinatura;
     });
   }
 
@@ -43,21 +63,109 @@ export class AuditoriaPage {
 
     listaAcessorios.sort();
 
-    listaAcessorios.forEach(a => {
-      this.acessorios.push({ nome: a, selecionao: false });
+    listaAcessorios.forEach(acess => {
+      let acessorio = new AcessorioVeiculo();
+      acessorio.nome = acess;
+      acessorio.selecionado = false;
+
+      this.acessoriosVeiculo.push(acessorio);
     });
   }
 
-  public salvar1() {
+  public salvarDadosCondutor(f: NgForm) {
+    let condutor = new Condutor();
+    condutor.nome = f.value.nome;
+    condutor.matricula = f.value.matricula;
+    condutor.rg = f.value.rg;
+    condutor.cpf = f.value.cpf;
+    condutor.cnh = f.value.cnh;
+    condutor.categorias = f.value.cnhCategorias;
+    condutor.finalidadesUso = f.value.finalidadesUso;
+
+    let filial = new Filial();
+    filial.nomeFilial = f.value.filial;
+    condutor.filial = filial;
+
+    this.auditoria.condutor = condutor;
+
+    console.log(this.auditoria);
+
     this.exibirToast('Dados do condutor salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
     this.configurarSlide();
   }
 
-  public salvar2() {
+  public salvarDadosVeiculo(f: NgForm) {
+    this.veiculo.placa = f.value.placa;
+
     this.exibirToast('Dados do veículo salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
     this.configurarSlide();
+  }
+
+  public tirarFoto(modalidade: string) {
+    this.platform.ready().then(() => {
+      if (!this.platform.is('cordova')) {
+        this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.ERROR);
+        return;
+      }
+
+      this.appAvailability.check(Config.OPEN_CAMERA).then((yes: boolean) => {
+        this.diagnostic.requestRuntimePermissions([ this.diagnostic.permission.WRITE_EXTERNAL_STORAGE, this.diagnostic.permission.CAMERA ]).then(() => {
+          this.androidPerm.requestPermissions([ this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE, this.androidPerm.PERMISSION.CAMERA ]).then(() => {
+            this.camera.getPicture({
+              quality: Config.FOTO.QUALITY,
+              targetWidth: Config.FOTO.WIDTH,
+              targetHeight: Config.FOTO.HEIGHT,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              saveToPhotoAlbum: false,
+              allowEdit: true,
+              sourceType: 1,
+              correctOrientation: true
+            }).then(imageData => {
+              let foto = new Foto();
+              foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + '_' + modalidade;
+              foto.str = 'data:image/jpeg;base64,' + imageData;
+              foto.modalidade = modalidade;
+              this.auditoria.veiculo.fotos.push(foto);
+              this.camera.cleanup().catch();
+            }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_PERMISSAO_CAMERA) });
+      },
+      (no: boolean) => {
+        this.exibirToast('Favor instalar o aplicativo Open Camera', Config.TOAST.ERROR);
+        setTimeout(() => { this.market.open('net.sourceforge.opencamera') }, 2500);
+        return;
+      }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+    }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_RESPOSTA_DISPOSITIVO) });
+  }
+
+  public removerFoto(modalidade: string) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Deseja excluir esta foto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Excluir',
+          handler: () => {
+            if (this.auditoria.veiculo.fotos.length > 0) {
+              this.auditoria.veiculo.fotos = this.auditoria.veiculo.fotos.filter((f) => {
+                return (f.modalidade != modalidade);
+              });
+            }
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 
   public salvar3() {
@@ -130,10 +238,10 @@ export class AuditoriaPage {
     }
   }
 
-  public selecionarAcessorio(acessorio: any, e: any) {
-    for (let i = 0; i < this.acessorios.length; i++) {
-      if (this.acessorios[i].nome === acessorio.nome) {
-        this.acessorios[i].selecionado = e.checked;
+  public selecionarAcessorio(acessorio: AcessorioVeiculo, e: any) {
+    for (let i = 0; i < this.acessoriosVeiculo.length; i++) {
+      if (this.acessoriosVeiculo[i].nome === acessorio.nome) {
+        this.acessoriosVeiculo[i].selecionado = e.checked;
       }
     }
   }
@@ -181,6 +289,16 @@ export class AuditoriaPage {
       ]
     });
     confirm.present();
+  }
+
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
+    });
+
+    alerta.present();
   }
 
   private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
