@@ -13,7 +13,7 @@
     <ion-title>{{ tituloSlide }}</ion-title>
 
     <ion-buttons end>
-      <button ion-button icon-only (click)="telaAssinaturaTecnico()" [disabled]="false" *ngIf="slides.getActiveIndex() == 5">
+      <button ion-button icon-only (click)="telaAssinaturaTecnico()" *ngIf="slides.getActiveIndex() == 5">
         <ion-icon name="browsers"></ion-icon>
       </button>
 
@@ -32,7 +32,7 @@
         <ion-list>
           <ion-item class="first-item">
             <ion-label stacked>Nome</ion-label>
-            <ion-input type="text" name="nome" maxlength="50" [ngModel]="" placeholder="Digite seu Nome">
+            <ion-input type="text" name="nome" maxlength="50" [ngModel]="dg?.usuario?.nome" placeholder="Digite seu Nome">
             </ion-input>
           </ion-item>
 
@@ -61,6 +61,12 @@
           </ion-item>
 
           <ion-item>
+            <ion-label stacked>Filial</ion-label>
+            <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial.nomeFilial" placeholder="Digite seu Nome" [disabled]="true">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
             <ion-label stacked>Categorias da CNH</ion-label>
             <ion-select 
               multiple="true" cancelText="Cancelar" okText="Ok"
@@ -73,21 +79,6 @@
               <ion-option [value]="B">B</ion-option>
               <ion-option [value]="C">C</ion-option>
               <ion-option [value]="D">D</ion-option>
-            </ion-select>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Filial</ion-label>
-            <ion-select 
-              placeholder="Selecione..."
-              name="filial" 
-              [ngModel]="" 
-              interface="action-sheet"
-              cancelText="Cancelar"
-              >
-              <ion-option [value]="FRJ">FRJ</ion-option>
-              <ion-option [value]="FRS">FRS</ion-option>
-              <ion-option [value]="FSP">FSP</ion-option>
             </ion-select>
           </ion-item>
 

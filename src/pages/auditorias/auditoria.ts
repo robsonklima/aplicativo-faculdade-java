@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavController } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
 import { Auditoria } from '../../models/auditoria';
@@ -15,6 +15,8 @@ import { Camera } from '@ionic-native/camera';
 import { Foto } from '../../models/foto';
 import moment from 'moment';
 import { Market } from '@ionic-native/market';
+import { DadosGlobaisService } from '../../services/dados-globais';
+import { DadosGlobais } from '../../models/dados-globais';
 
 
 @Component({
@@ -22,12 +24,15 @@ import { Market } from '@ionic-native/market';
   templateUrl: 'auditoria.html'
 })
 export class AuditoriaPage {
+  dg: DadosGlobais;
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
   auditoria: Auditoria = new Auditoria();
   
   constructor(
     private platform: Platform,
+    private navCtrl: NavController,
+    private dadosGlobaisService: DadosGlobaisService,
     private market: Market,
     private appAvailability: AppAvailability,
     private diagnostic: Diagnostic,
@@ -44,8 +49,9 @@ export class AuditoriaPage {
     this.auditoria.veiculo = new Veiculo();
     this.auditoria.veiculo.acessoriosVeiculo = [];
 
-    this.configurarSlide();
+    this.carregarDadosGlobais();
     this.carregarAcessorios();
+    this.configurarSlide();
   }
 
   public telaAssinaturaTecnico() {
@@ -53,6 +59,17 @@ export class AuditoriaPage {
     modal.present();
     modal.onDidDismiss((assinatura: string) => {
       this.auditoria.assinaturaTecnico = assinatura;
+    });
+  }
+
+  private carregarDadosGlobais(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
+        this.dg = dados;
+
+        resolve(true);
+      })
+      .catch((err) => { reject(false) });
     });
   }
 
@@ -287,6 +304,8 @@ export class AuditoriaPage {
   }
 
   public salvarAuditoria() {
+    if (!this.validarCamposObrigatorios()) return;
+
     const confirm = this.alertCtrl.create({
       title: 'Finalizar Auditoria e Salvar?',
       message: 'Você deseja finalizar sua auditoria e enviar os dados para o servidor?',
@@ -309,6 +328,90 @@ export class AuditoriaPage {
       ]
     });
     confirm.present();
+  }
+
+  private validarCamposObrigatorios(): boolean {
+    if (typeof(this.auditoria.condutor) === 'undefined') {
+      this.exibirToast('Insira os dados do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.nome) {
+      this.exibirToast('Insira o nome do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.matricula) {
+      this.exibirToast('Insira a matrícula do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.rg) {
+      this.exibirToast('Insira o RG do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.cpf) {
+      this.exibirToast('Insira o CPF do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.filial) {
+      this.exibirToast('Insira a filial do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.categorias) {
+      this.exibirToast('Insira as categorias da CNH do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+    
+    if (!this.auditoria.condutor.categorias.length) {
+      this.exibirToast('Insira as categorias da CNH do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.finalidadesUso) {
+      this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.finalidadesUso.length) {
+      this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.condutor.cnh) {
+      this.exibirToast('Insira a CNH do condutor', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (typeof(this.auditoria.veiculo) === 'undefined') {
+      this.exibirToast('Insira os dados do veículo', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.veiculo.placa) {
+      this.exibirToast('Insira a placa do veículo', Config.TOAST.ERROR);
+      return false;
+    }
+      
+    if (typeof(this.auditoria.veiculo.fotos) === 'undefined') {
+      this.exibirToast('Insira as fotos do veículo', Config.TOAST.ERROR);
+      return false;
+    }
+      
+    if (this.auditoria.veiculo.fotos.length < 6) {
+      this.exibirToast('Insira ao menos 6 fotos do veículo', Config.TOAST.ERROR);
+      return false;
+    }
+
+    if (!this.auditoria.assinaturaTecnico) {
+      this.exibirToast('Insira a sua assinatura', Config.TOAST.ERROR);
+      return false;
+    }
+
+    return true;
   }
 
   public sair() {
