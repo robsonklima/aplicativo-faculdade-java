@@ -127,102 +127,102 @@
           
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_1.png">
+              <img src="{{ carregarFoto('AUD_FRONTAL') }}">
             </ion-thumbnail>
             <h2>Frontal</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_FRONTAL')">
+              (click)="tirarFoto('AUD_FRONTAL')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_FRONTAL')">
+              (click)="removerFoto('AUD_FRONTAL')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_2.png">
+              <img src="{{ carregarFoto('AUD_FRONTAL_LAT_ESQ') }}">
             </ion-thumbnail>
             <h2>Frontal/Lateral Esquerda</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_FRONTAL_LAT_ESQ')">
+              (click)="tirarFoto('AUD_FRONTAL_LAT_ESQ')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_FRONTAL_LAT_ESQ')">
+              (click)="removerFoto('AUD_FRONTAL_LAT_ESQ')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_3.png">
+              <img src="{{ carregarFoto('AUD_ODOMETRO') }}">
             </ion-thumbnail>
             <h2>Odômetro</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_ODOMETRO')">
+              (click)="tirarFoto('AUD_ODOMETRO')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_ODOMETRO')">
+              (click)="removerFoto('AUD_ODOMETRO')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_4.png">
+              <img src="{{ carregarFoto('AUD_TRAS_LAT_DIR') }}">
             </ion-thumbnail>
             <h2>Tras./Lat. Direita</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_TRAS_LAT_DIR')">
+              (click)="tirarFoto('AUD_TRAS_LAT_DIR')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_TRAS_LAT_DIR')">
+              (click)="removerFoto('AUD_TRAS_LAT_DIR')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_5.png">
+              <img src="{{ carregarFoto('AUD_INTERNA') }}">
             </ion-thumbnail>
             <h2>Interna</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_INTERNA')">
+              (click)="tirarFoto('AUD_INTERNA')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_INTERNA')">
+              (click)="removerFoto('AUD_INTERNA')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
   
           <ion-item>
             <ion-thumbnail item-start>
-              <img src="assets/imgs/aud_6.png">
+              <img src="{{ carregarFoto('AUD_ITENS_SEG') }}">
             </ion-thumbnail>
             <h2>Ítens de Segurança</h2>
             <p>Estepe, Manual/Chave Reserva</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
-              (click)="tirarFoto('AUD_ITENS_SEG')">
+              (click)="tirarFoto('AUD_ITENS_SEG')" *ngIf="!verificarExistenciaFoto('RAT')">
               <ion-icon name='md-add-circle' is-active="false" class="add-icon"></ion-icon>
             </button>
 
             <button ion-button color="danger" clear icon-only item-end type="button"
-              (click)="removerFoto('AUD_ITENS_SEG')">
+              (click)="removerFoto('AUD_ITENS_SEG')" *ngIf="verificarExistenciaFoto('RAT')">
               <ion-icon name='trash' is-active="false" class="trash-icon"></ion-icon>
             </button>
           </ion-item>
@@ -360,7 +360,7 @@
             Selecione os acessórios que possui
           </ion-item-divider>
 
-          <ion-item *ngFor="let acessorio of acessoriosVeiculo">
+          <ion-item *ngFor="let acessorio of auditoria?.veiculo?.acessoriosVeiculo">
             <ion-toggle [checked]="acessorio.selecionado" (ionChange)="selecionarAcessorio(acessorio, $event)"></ion-toggle>
 
             <ion-label>

@@ -24,10 +24,8 @@ import { Market } from '@ionic-native/market';
 export class AuditoriaPage {
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
-  acessoriosVeiculo: AcessorioVeiculo[] = [];
   auditoria: Auditoria = new Auditoria();
-  veiculo: Veiculo = new Veiculo();
-
+  
   constructor(
     private platform: Platform,
     private market: Market,
@@ -43,6 +41,9 @@ export class AuditoriaPage {
   ) {}
 
   ionViewWillEnter() {
+    this.auditoria.veiculo = new Veiculo();
+    this.auditoria.veiculo.acessoriosVeiculo = [];
+
     this.configurarSlide();
     this.carregarAcessorios();
   }
@@ -56,10 +57,10 @@ export class AuditoriaPage {
   }
 
   private carregarAcessorios() {
-    let listaAcessorios: string[] = ['Retrovisor Direito', 'Retrovisor Esquerdo', 'Retrovisor Interno', 'Faróis', 'Calotas', 
-      'Bateria', 'Rodas Comum', 'Lanternas', 'Luz de Neblina', 'Documentos', 'Bancos Dianteiros', 'Bancos Traseiros', 'Manual',
-      'Tapetes', 'Rádio', 'MP3', 'Cartão Abastecimento', 'Buzina', 'Painel', 'Para-Brisa', 'Macaco', 'Triângulo', 'Chave de Rodas',
-      'Chave e Reserva', 'Estofamento Geral'];  
+    let listaAcessorios: string[] = ['Retrovisor Direito', 'Retrovisor Esquerdo', 'Retrovisor Interno', 'Faróis', 
+      'Calotas', 'Bateria', 'Rodas Comum', 'Lanternas', 'Luz de Neblina', 'Documentos', 'Bancos Dianteiros', 
+      'Bancos Traseiros', 'Manual', 'Tapetes', 'Rádio', 'MP3', 'Cartão Abastecimento', 'Buzina', 'Painel', 
+      'Para-Brisa', 'Macaco', 'Triângulo', 'Chave de Rodas', 'Chave e Reserva', 'Estofamento Geral'];  
 
     listaAcessorios.sort();
 
@@ -68,7 +69,7 @@ export class AuditoriaPage {
       acessorio.nome = acess;
       acessorio.selecionado = false;
 
-      this.acessoriosVeiculo.push(acessorio);
+      this.auditoria.veiculo.acessoriosVeiculo.push(acessorio);
     });
   }
 
@@ -96,7 +97,7 @@ export class AuditoriaPage {
   }
 
   public salvarDadosVeiculo(f: NgForm) {
-    this.veiculo.placa = f.value.placa;
+    this.auditoria.veiculo.placa = f.value.placa;
 
     this.exibirToast('Dados do veículo salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
@@ -166,6 +167,45 @@ export class AuditoriaPage {
     });
 
     confirmacao.present();
+  }
+
+  public verificarExistenciaFoto(modalidade: string): boolean {
+    if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
+      if (this.auditoria.veiculo.fotos.length > 0) {
+        let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
+
+        if (fotos.length > 0) return true;
+      }
+    }
+
+    return false;
+  }
+
+  public carregarFoto(modalidade: string): string {
+    if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
+      if (this.auditoria.veiculo.fotos.length > 0) {
+        let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
+
+        if (fotos.length > 0) return fotos[0].str;
+      }
+    }
+
+    switch (modalidade) {
+      case 'AUD_FRONTAL':
+        return 'assets/imgs/aud_1.png';
+      case 'AUD_FRONTAL_LAT_ESQ':
+        return 'assets/imgs/aud_2.png';
+      case 'AUD_ODOMETRO':
+        return 'assets/imgs/aud_3.png';
+      case 'AUD_TRAS_LAT_DIR':
+        return 'assets/imgs/aud_4.png';
+      case 'AUD_INTERNA':
+        return 'assets/imgs/aud_5.png';
+      case 'AUD_ITENS_SEG':
+        return 'assets/imgs/aud_6.png';
+      default:
+        return 'assets/imgs/no-photo.png';
+    }
   }
 
   public salvar3() {
@@ -239,9 +279,9 @@ export class AuditoriaPage {
   }
 
   public selecionarAcessorio(acessorio: AcessorioVeiculo, e: any) {
-    for (let i = 0; i < this.acessoriosVeiculo.length; i++) {
-      if (this.acessoriosVeiculo[i].nome === acessorio.nome) {
-        this.acessoriosVeiculo[i].selecionado = e.checked;
+    for (let i = 0; i < this.auditoria.veiculo.acessoriosVeiculo.length; i++) {
+      if (this.auditoria.veiculo.acessoriosVeiculo[i].nome === acessorio.nome) {
+        this.auditoria.veiculo.acessoriosVeiculo[i].selecionado = e.checked;
       }
     }
   }
