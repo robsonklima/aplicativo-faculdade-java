@@ -318,7 +318,7 @@ export class AuditoriaPage {
           text: 'Sim',
           handler: () => {
             const loader = this.loadingCtrl.create({
-              content: "Enviando dados... Por favor aguarde.",
+              content: "Enviando dados... Por favor aguarde",
               duration: 3000
             });
 
