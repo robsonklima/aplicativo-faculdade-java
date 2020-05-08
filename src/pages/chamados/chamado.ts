@@ -122,7 +122,9 @@ export class ChamadoPage {
     const modal = this.modalCtrl.create(RatDetalhePage, { chamado: this.chamado });
     modal.present();
     modal.onDidDismiss(() => {
-      this.configurarSlide(this.slides.getActiveIndex());
+      setTimeout(() => {
+        this.configurarSlide(this.slides.getActiveIndex());  
+      }, 500);
     });
   }
 
