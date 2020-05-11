@@ -74,10 +74,10 @@ export class AuditoriaPage {
   }
 
   private carregarAcessorios() {
-    let listaAcessorios: string[] = ['Retrovisor Direito', 'Retrovisor Esquerdo', 'Retrovisor Interno', 'Faróis', 
-      'Calotas', 'Bateria', 'Rodas Comum', 'Lanternas', 'Luz de Neblina', 'Documentos', 'Bancos Dianteiros', 
-      'Bancos Traseiros', 'Manual', 'Tapetes', 'Rádio', 'MP3', 'Cartão Abastecimento', 'Buzina', 'Painel', 
-      'Para-Brisa', 'Macaco', 'Triângulo', 'Chave de Rodas', 'Chave e Reserva', 'Estofamento Geral'];  
+    let listaAcessorios: string[] = ['Agua', 'Oleo', 'Luzes', 'Pneus Dianteiros',
+      'Pneus Traseiros', 'Estepe', 'Revisão Programada', 'Para-Brisa', 'Lanternas', 
+      'Retrovisores', 'Calota', 'Estofamento Geral', 'Radio', 'Documento CRLV', 
+      'Chave-reserva/manual', 'Cartão de abastecimento'];
 
     listaAcessorios.sort();
 
@@ -85,6 +85,7 @@ export class AuditoriaPage {
       let acessorio = new AcessorioVeiculo();
       acessorio.nome = acess;
       acessorio.selecionado = false;
+      acessorio.justificativa = null;
 
       this.auditoria.veiculo.acessoriosVeiculo.push(acessorio);
     });
@@ -243,6 +244,12 @@ export class AuditoriaPage {
     this.configurarSlide();
   }
 
+  public salvar6() {
+    this.exibirToast('Utilização dos créditos salvo com sucesso', Config.TOAST.SUCCESS);
+    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
+    this.configurarSlide();
+  }
+
   public formatarCampo(event: any, mascara: string) {
     var i = event.target.value.length;
     var saida = mascara.substring(1,0);
@@ -276,13 +283,13 @@ export class AuditoriaPage {
       break;
 
       case 3:
-        this.tituloSlide = `Componentes e Acessórios`;
+        this.tituloSlide = `Utilização do Km`;
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
       break;
 
       case 4:
-        this.tituloSlide = `Utilização do Km`;
+        this.tituloSlide = `Utilização dos Créditos`;
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
       break;
@@ -296,9 +303,40 @@ export class AuditoriaPage {
   }
 
   public selecionarAcessorio(acessorio: AcessorioVeiculo, e: any) {
+
+    if (!e) {
+      const prompt = this.alertCtrl.create({
+        title: 'Justificativa',
+        message: `Justifique a inconformidade do item ${acessorio.nome}`,
+        inputs: [
+          {
+            name: 'justificativa',
+            placeholder: 'Justificativa'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: res => {}
+          },
+          {
+            text: 'Salvar',
+            handler: res => {
+              for (let i = 0; i < this.auditoria.veiculo.acessoriosVeiculo.length; i++) {
+                if (this.auditoria.veiculo.acessoriosVeiculo[i].nome === acessorio.nome) {
+                  this.auditoria.veiculo.acessoriosVeiculo[i].justificativa = res.justificativa;
+                }
+              }
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+
     for (let i = 0; i < this.auditoria.veiculo.acessoriosVeiculo.length; i++) {
       if (this.auditoria.veiculo.acessoriosVeiculo[i].nome === acessorio.nome) {
-        this.auditoria.veiculo.acessoriosVeiculo[i].selecionado = e.checked;
+        this.auditoria.veiculo.acessoriosVeiculo[i].selecionado = e;
       }
     }
   }
