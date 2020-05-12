@@ -865,6 +865,10 @@ export class ChamadoPage {
     }
 
     if (this.platform.is('cordova') && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
+      if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO) {
+        return true;
+      }
+
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
         this.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
 

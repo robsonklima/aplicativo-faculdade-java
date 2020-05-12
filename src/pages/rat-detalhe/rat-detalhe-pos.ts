@@ -193,6 +193,12 @@ export class RatDetalhePosPage {
       }
 
       if (this.chamado.tipoIntervencao.codTipoIntervencao == Config.TIPO_INTERVENCAO.CORRETIVA) {
+        if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
+          this.exibirToast('Favor inserir o equipamento POS instalado', Config.TOAST.ERROR);
+
+          return false;
+        }
+
         if (this.verificarSeDefeitoExigeTroca()) {
           if (!_.has(this.chamado.rats[0], 'equipamentoInstalado') || !_.has(this.chamado.rats[0].equipamentoInstalado, 'codEquip') || !this.chamado.rats[0].numSerieInstalada) {
             this.exibirToast('Favor inserir o equipamento POS instalado', Config.TOAST.ERROR);
