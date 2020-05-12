@@ -25,8 +25,8 @@
     <button 
       ion-item
       class="first-item"
-      [disabled]="true"
-      (click)="telaChamados()">
+      (click)="telaChamados()"
+      [disabled]="qtdAuditoriasPendentes">
       <ion-icon 
         color="primary" 
         name="clipboard" 
@@ -84,7 +84,7 @@
         name="md-car" 
         item-start></ion-icon>
       Auditorias de Veículos
-      <p class="font-red">Realize a auditoria do seu veículo</p>
+      <p class="font-red" *ngIf="qtdAuditoriasPendentes">Realize a auditoria do seu veículo</p>
     </button>
 
     <button

@@ -43,6 +43,7 @@ import { DefeitoCausaService } from '../../services/defeito-causa';
 import { AcaoCausaService } from '../../services/acao-causa';
 import { UsuarioPage } from '../usuario/usuario';
 import { AuditoriasPage } from '../auditorias/auditorias';
+import { AuditoriaService } from '../../services/auditoria';
 
 
 @Component({
@@ -56,6 +57,7 @@ export class HomePage {
   dg: DadosGlobais;
   chamados: Chamado[];
   qtdMensagensTecnicoNaoLidas: number;
+  qtdAuditoriasPendentes: number;
   laudos: Laudo[];
   task: any;
   perfilTecnico: boolean;
@@ -80,6 +82,7 @@ export class HomePage {
     private nav: NavController,
     private geolocationService: GeolocationService,
     private mensagemTecnicoService: MensagemTecnicoService,
+    private auditoriaService: AuditoriaService,
     private equipamentoPOSService: EquipamentoPOSService,
     private tipoComunicacaoService: TipoComunicacaoService,
     private motivoComunicacaoService: MotivoComunicacaoService,
@@ -100,6 +103,7 @@ export class HomePage {
   ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => this.carregarChamadosStorage().catch(() => {}))
+      .then(() => this.carregarAuditoriasUsuario().catch(() => {}))
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
@@ -198,6 +202,17 @@ export class HomePage {
       this.mensagemTecnicoService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario)
         .subscribe(mt => {
           this.qtdMensagensTecnicoNaoLidas = mt.filter((msg) => { return (!msg.indLeitura) }).length;
+
+          resolve();
+        }, err => {});
+    });
+  }
+
+  public carregarAuditoriasUsuario(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.auditoriaService.buscarAuditoriasPorUsuario(this.dg.usuario.codUsuario)
+        .subscribe(mt => {
+          //this.qtdAuditoriasPendentes = mt.filter((aud) => { return (!aud.indLeitura) }).length;
 
           resolve();
         }, err => {});
