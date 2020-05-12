@@ -104,6 +104,7 @@ import { RatDetalhePosPage } from '../pages/rat-detalhe/rat-detalhe-pos';
 import { FotoPage } from '../pages/fotos/foto';
 import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
 import { LogsPage } from '../pages/logs/logs';
+import { AuditoriaService } from '../services/auditoria';
 
 
 @NgModule({
@@ -263,6 +264,7 @@ import { LogsPage } from '../pages/logs/logs';
     AcaoCausaService,
     DefeitoCausaService,
     LocalizacaoService,
+    AuditoriaService,
     LogService,
     LoadingFactory
   ]
