@@ -13,7 +13,7 @@
     <ion-title>{{ tituloSlide }}</ion-title>
 
     <ion-buttons end>
-      <button ion-button icon-only (click)="telaAssinaturaTecnico()" *ngIf="slides.getActiveIndex() == 5">
+      <button ion-button icon-only (click)="telaAssinaturaTecnico()" *ngIf="slides.getActiveIndex() == 3">
         <ion-icon name="browsers"></ion-icon>
       </button>
 
@@ -251,93 +251,6 @@
           </div>
         </form>
       </ion-list>
-    </ion-slide>
-
-    <ion-slide>
-      <form #f5="ngForm" (ngSubmit)="salvar5(f5)" class="form">
-        <ion-list>
-          <ion-item>
-            <ion-label stacked>Data da Retirada</ion-label>
-            <ion-input type="text" name="dataRetirada" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
-              placeholder="01/01/2001"></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Data da Auditoria</ion-label>
-            <ion-input type="text" name="dataAuditoria" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]=""
-              placeholder="01/01/2001"></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Dias em Uso</ion-label>
-            <ion-input type="number" name="diasEmUso" maxlength="10" [ngModel]="" placeholder="Qtd Dias em Uso">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Odômetro Inicial da Retirada</ion-label>
-            <ion-input type="number" name="odometroRetirada" maxlength="10" [ngModel]="" placeholder="Odômetro Inicial">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Odômetro no Período Auditado</ion-label>
-            <ion-input type="number" name="odometroAuditoria" maxlength="10" [ngModel]="" placeholder="Odômetro Auditoria">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Km Percorrido no RD/SAT</ion-label>
-            <ion-input type="number" name="kmRdSAT" maxlength="10" [ngModel]="" placeholder="Km Percorrido no RD/SAT">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Km Compensado no RD/SAT</ion-label>
-            <ion-input type="number" name="kmRdSATCompensado" maxlength="10" [ngModel]="" placeholder="Km Compensado no RD/SAT">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Total do Km Particular</ion-label>
-            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Total do Km Particular">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Total do Km Percorrido em Férias</ion-label>
-            <ion-input type="number" name="kmParticular" maxlength="10" [ngModel]="" placeholder="Tolerância 3000 km">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Total do Km Particular do Mês</ion-label>
-            <ion-input type="number" name="kmParticularMes" maxlength="10" [ngModel]="" placeholder="Tolerância 800 km">
-            </ion-input>
-          </ion-item>
-        </ion-list>
-
-        <div padding>
-          <button ion-button color="secondary" full [disabled]="!f5.valid">Salvar</button>
-        </div>
-      </form>
-    </ion-slide>
-
-    <ion-slide>
-      <form #f6="ngForm" (ngSubmit)="salvar6(f6)" class="form">
-        <ion-list>
-          <ion-item>
-            <ion-label stacked>Créditos no Cartão</ion-label>
-            <ion-input type="number" name="dataRetirada" maxlength="10" [ngModel]=""
-              placeholder="1000"></ion-input>
-          </ion-item>
-
-        </ion-list>
-
-        <div padding>
-          <button ion-button color="secondary" full [disabled]="!f6.valid">Salvar</button>
-        </div>
-      </form>
     </ion-slide>
 
     <ion-slide>

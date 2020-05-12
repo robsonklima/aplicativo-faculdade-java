@@ -283,18 +283,6 @@ export class AuditoriaPage {
       break;
 
       case 3:
-        this.tituloSlide = `Utilização do Km`;
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-      break;
-
-      case 4:
-        this.tituloSlide = `Utilização dos Créditos`;
-        this.slides.lockSwipeToPrev(false);
-        this.slides.lockSwipeToNext(false);
-      break;
-
-      case 5:
         this.tituloSlide = `Assinatura`;
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(true);
