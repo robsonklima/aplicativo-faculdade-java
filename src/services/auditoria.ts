@@ -13,7 +13,7 @@ export class AuditoriaService {
     private http: Http
   ) {}
 
-  buscarTopicosApi(codUsuario: string): Observable<Auditoria[]> {
+  buscarAuditoriasPorUsuario(codUsuario: string): Observable<Auditoria[]> {
     return this.http.get(Config.API_URL + 'Auditoria/' + codUsuario)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
