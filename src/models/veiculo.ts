@@ -5,6 +5,5 @@ import { AcessorioVeiculo } from "./acessorio-veiculo";
 export class Veiculo {
   placa: string;
   fotos: Foto[];
-  condicaoVeiculo: CondicaoVeiculo;
   acessoriosVeiculo: AcessorioVeiculo[];
 }

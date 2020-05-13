@@ -44,6 +44,8 @@ import { AcaoCausaService } from '../../services/acao-causa';
 import { UsuarioPage } from '../usuario/usuario';
 import { AuditoriasPage } from '../auditorias/auditorias';
 import { AuditoriaService } from '../../services/auditoria';
+import { MensagemTecnico } from '../../models/mensagem-tecnico';
+import { Auditoria } from '../../models/auditoria';
 
 
 @Component({
@@ -56,7 +58,9 @@ export class HomePage {
   loginPage = LoginPage;
   dg: DadosGlobais;
   chamados: Chamado[];
+  mensagens: MensagemTecnico[] = [];
   qtdMensagensTecnicoNaoLidas: number;
+  auditorias: Auditoria[] = [];
   qtdAuditoriasPendentes: number;
   laudos: Laudo[];
   task: any;
@@ -156,7 +160,7 @@ export class HomePage {
   }
 
   public telaMensagensTecnico() {
-    this.navCtrl.push(MensagensPage);
+    this.navCtrl.push(MensagensPage, { mensagens: this.mensagens });
   }
 
   public telaFerramentasTecnico() {
@@ -164,7 +168,7 @@ export class HomePage {
   }
 
   public telaAuditorias() {
-    this.navCtrl.push(AuditoriasPage);
+    this.navCtrl.push(AuditoriasPage, { auditorias: this.auditorias });
   }
 
   public telaTeste() {
@@ -199,21 +203,23 @@ export class HomePage {
 
   public carregarMensagensTecnico(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.mensagemTecnicoService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario)
-        .subscribe(mt => {
-          this.qtdMensagensTecnicoNaoLidas = mt.filter((msg) => { return (!msg.indLeitura) }).length;
-
-          resolve();
-        }, err => {});
+      this.mensagemTecnicoService.buscarMensagensTecnicoApi(this.dg.usuario.codUsuario).subscribe(mensagens => {
+        this.qtdMensagensTecnicoNaoLidas = mensagens.filter((msg) => { return (!msg.indLeitura) }).length;
+        this.mensagens = mensagens;
+        resolve();
+      }, err => {});
     });
   }
 
   public carregarAuditoriasUsuario(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.auditoriaService.buscarAuditoriasPorUsuario(this.dg.usuario.codUsuario)
-        .subscribe(mt => {
-          //this.qtdAuditoriasPendentes = mt.filter((aud) => { return (!aud.indLeitura) }).length;
+        .subscribe(auditorias => {
+          console.log(auditorias);
+          
 
+          this.qtdAuditoriasPendentes = auditorias.filter((aud) => { return (aud.auditoriaStatus.codAuditoriaStatus === 1) }).length;
+          this.auditorias = auditorias;
           resolve();
         }, err => {});
     });

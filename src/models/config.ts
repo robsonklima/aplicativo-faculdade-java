@@ -1,6 +1,9 @@
 import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
 
 export class Config {
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+
   public static NOME_APP = "App Técnicos";
   public static VERSAO_APP = "0.0.86";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
@@ -228,6 +231,4 @@ export class Config {
     },
     SOMBRA: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png'
   };
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 }
