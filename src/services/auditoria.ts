@@ -18,4 +18,10 @@ export class AuditoriaService {
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
+
+  enviarAuditoriaApi(auditoria: Auditoria): Observable<Auditoria> {
+    return this.http.post(Config.API_URL + 'Auditoria', auditoria)
+      .map((res: Response) => {return res.json()})
+      .catch((error: any) => {return Observable.throw(error)});
+  }
 }

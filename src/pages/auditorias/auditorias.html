@@ -9,8 +9,10 @@
     <button 
       ion-item 
       *ngFor="let auditoria of auditorias; let i=index" 
-      (click)="telaAuditoria(auditoria)">
-      Auditoria: {{ auditoria?.codAuditoria }} - {{ auditoria.auditoriaStatus.nome }}
+      (click)="telaAuditoria(auditoria)"
+      [disabled]="auditoria.auditoriaStatus.codAuditoriaStatus !== 1">
+      Auditoria: {{ auditoria?.codAuditoria }}
+      <p>{{ auditoria.auditoriaStatus.nome }}</p>
     </button>  
   </ion-list>
 

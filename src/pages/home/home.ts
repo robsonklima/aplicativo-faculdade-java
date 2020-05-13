@@ -215,9 +215,6 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       this.auditoriaService.buscarAuditoriasPorUsuario(this.dg.usuario.codUsuario)
         .subscribe(auditorias => {
-          console.log(auditorias);
-          
-
           this.qtdAuditoriasPendentes = auditorias.filter((aud) => { return (aud.auditoriaStatus.codAuditoriaStatus === 1) }).length;
           this.auditorias = auditorias;
           resolve();

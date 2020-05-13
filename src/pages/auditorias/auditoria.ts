@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavParams } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavParams, NavController } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
 import { Auditoria } from '../../models/auditoria';
@@ -17,6 +17,7 @@ import moment from 'moment';
 import { Market } from '@ionic-native/market';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
+import { AuditoriaService } from '../../services/auditoria';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class AuditoriaPage {
   constructor(
     private platform: Platform,
     private navParams: NavParams,
+    private navCtrl: NavController,
     private dadosGlobaisService: DadosGlobaisService,
     private market: Market,
     private appAvailability: AppAvailability,
@@ -42,7 +44,8 @@ export class AuditoriaPage {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
-    public loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private auditoriaService: AuditoriaService
   ) {
     this.auditoria = this.navParams.get('auditoria');
   }
@@ -72,22 +75,15 @@ export class AuditoriaPage {
   }
 
   public salvarDadosCondutor(f: NgForm) {
-    let condutor = new Condutor();
-    condutor.nome = f.value.nome;
-    condutor.matricula = f.value.matricula;
-    condutor.rg = f.value.rg;
-    condutor.cpf = f.value.cpf;
-    condutor.cnh = f.value.cnh;
-    condutor.categorias = f.value.cnhCategorias;
-    condutor.finalidadesUso = f.value.finalidadesUso;
-
-    let filial = new Filial();
-    filial.nomeFilial = f.value.filial;
-    condutor.filial = filial;
-
-    this.auditoria.condutor = condutor;
-
-    console.log(this.auditoria);
+    this.auditoria.condutor.nome = f.value.nome;
+    this.auditoria.condutor.matricula = f.value.matricula;
+    this.auditoria.condutor.rg = f.value.rg;
+    this.auditoria.condutor.cpf = f.value.cpf;
+    this.auditoria.condutor.cnh = f.value.cnh;
+    this.auditoria.condutor.categorias = f.value.cnhCategorias;
+    this.auditoria.condutor.finalidadesUso = f.value.finalidadesUso;
+    this.auditoria.usuario.filial.nomeFilial = f.value.filial;
+    this.auditoria.usuario.codTecnico = this.dg.usuario.codTecnico;
 
     this.exibirToast('Dados do condutor salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
@@ -218,18 +214,6 @@ export class AuditoriaPage {
     this.configurarSlide();
   }
 
-  public salvar5() {
-    this.exibirToast('Utilização do KM salva com sucesso', Config.TOAST.SUCCESS);
-    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-    this.configurarSlide();
-  }
-
-  public salvar6() {
-    this.exibirToast('Utilização dos créditos salvo com sucesso', Config.TOAST.SUCCESS);
-    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-    this.configurarSlide();
-  }
-
   public formatarCampo(event: any, mascara: string) {
     var i = event.target.value.length;
     var saida = mascara.substring(1,0);
@@ -323,12 +307,16 @@ export class AuditoriaPage {
         {
           text: 'Sim',
           handler: () => {
-            const loader = this.loadingCtrl.create({
-              content: "Enviando dados... Por favor aguarde",
-              duration: 3000
-            });
-
+            const loader = this.loadingCtrl.create({ content: "Enviando dados... Por favor aguarde" });
             loader.present();
+
+            this.auditoriaService.enviarAuditoriaApi(this.auditoria).subscribe(() => {
+              loader.dismiss().then(() => {
+                this.navCtrl.popToRoot().then(() => {
+                  this.exibirToast('Auditoria enviada com sucesso');
+                });
+              });
+            }, err => loader.dismiss())
           }
         }
       ]
@@ -362,11 +350,6 @@ export class AuditoriaPage {
       return false;
     }
 
-    if (!this.auditoria.condutor.filial) {
-      this.exibirToast('Insira a filial do condutor', Config.TOAST.ERROR);
-      return false;
-    }
-
     if (!this.auditoria.condutor.categorias) {
       this.exibirToast('Insira as categorias da CNH do condutor', Config.TOAST.ERROR);
       return false;
@@ -377,15 +360,15 @@ export class AuditoriaPage {
       return false;
     }
 
-    if (!this.auditoria.condutor.finalidadesUso) {
-      this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
-      return false;
-    }
+    // if (!this.auditoria.condutor.finalidadesUso) {
+    //   this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
+    //   return false;
+    // }
 
-    if (!this.auditoria.condutor.finalidadesUso.length) {
-      this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
-      return false;
-    }
+    // if (!this.auditoria.condutor.finalidadesUso.length) {
+    //   this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
+    //   return false;
+    // }
 
     if (!this.auditoria.condutor.cnh) {
       this.exibirToast('Insira a CNH do condutor', Config.TOAST.ERROR);
@@ -407,10 +390,10 @@ export class AuditoriaPage {
       return false;
     }
       
-    if (this.auditoria.auditoriaVeiculo.fotos.length < 6) {
-      this.exibirToast('Insira ao menos 6 fotos do veículo', Config.TOAST.ERROR);
-      return false;
-    }
+    // if (this.auditoria.auditoriaVeiculo.fotos.length < 6) {
+    //   this.exibirToast('Insira ao menos 6 fotos do veículo', Config.TOAST.ERROR);
+    //   return false;
+    // }
 
     if (!this.auditoria.assinaturaTecnico) {
       this.exibirToast('Insira a sua assinatura', Config.TOAST.ERROR);
