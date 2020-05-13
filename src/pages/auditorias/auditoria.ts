@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavController } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavParams } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
 import { Auditoria } from '../../models/auditoria';
@@ -31,7 +31,7 @@ export class AuditoriaPage {
   
   constructor(
     private platform: Platform,
-    private navCtrl: NavController,
+    private navParams: NavParams,
     private dadosGlobaisService: DadosGlobaisService,
     private market: Market,
     private appAvailability: AppAvailability,
@@ -43,14 +43,12 @@ export class AuditoriaPage {
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
     public loadingCtrl: LoadingController
-  ) {}
+  ) {
+    this.auditoria = this.navParams.get('auditoria');
+  }
 
   ionViewWillEnter() {
-    this.auditoria.veiculo = new Veiculo();
-    this.auditoria.veiculo.acessoriosVeiculo = [];
-
     this.carregarDadosGlobais();
-    this.carregarAcessorios();
     this.configurarSlide();
   }
 
@@ -70,24 +68,6 @@ export class AuditoriaPage {
         resolve(true);
       })
       .catch((err) => { reject(false) });
-    });
-  }
-
-  private carregarAcessorios() {
-    let listaAcessorios: string[] = ['Agua', 'Oleo', 'Luzes', 'Pneus Dianteiros',
-      'Pneus Traseiros', 'Estepe', 'Revisão Programada', 'Para-Brisa', 'Lanternas', 
-      'Retrovisores', 'Calota', 'Estofamento Geral', 'Radio', 'Documento CRLV', 
-      'Chave-reserva/manual', 'Cartão de abastecimento'];
-
-    listaAcessorios.sort();
-
-    listaAcessorios.forEach(acess => {
-      let acessorio = new AcessorioVeiculo();
-      acessorio.nome = acess;
-      acessorio.selecionado = false;
-      acessorio.justificativa = null;
-
-      this.auditoria.veiculo.acessoriosVeiculo.push(acessorio);
     });
   }
 
@@ -115,7 +95,7 @@ export class AuditoriaPage {
   }
 
   public salvarDadosVeiculo(f: NgForm) {
-    this.auditoria.veiculo.placa = f.value.placa;
+    this.auditoria.auditoriaVeiculo.placa = f.value.placa;
 
     this.exibirToast('Dados do veículo salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
@@ -148,7 +128,7 @@ export class AuditoriaPage {
               foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + '_' + modalidade;
               foto.str = 'data:image/jpeg;base64,' + imageData;
               foto.modalidade = modalidade;
-              this.auditoria.veiculo.fotos.push(foto);
+              this.auditoria.auditoriaVeiculo.fotos.push(foto);
               this.camera.cleanup().catch();
             }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
           }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_FOTO) });
@@ -174,8 +154,8 @@ export class AuditoriaPage {
         {
           text: 'Excluir',
           handler: () => {
-            if (this.auditoria.veiculo.fotos.length > 0) {
-              this.auditoria.veiculo.fotos = this.auditoria.veiculo.fotos.filter((f) => {
+            if (this.auditoria.auditoriaVeiculo.fotos.length > 0) {
+              this.auditoria.auditoriaVeiculo.fotos = this.auditoria.auditoriaVeiculo.fotos.filter((f) => {
                 return (f.modalidade != modalidade);
               });
             }
@@ -188,21 +168,21 @@ export class AuditoriaPage {
   }
 
   public verificarExistenciaFoto(modalidade: string): boolean {
-    if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
-      if (this.auditoria.veiculo.fotos.length > 0) {
-        let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
+    // if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
+    //   if (this.auditoria.veiculo.fotos.length > 0) {
+    //     let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
 
-        if (fotos.length > 0) return true;
-      }
-    }
+    //     if (fotos.length > 0) return true;
+    //   }
+    // }
 
     return false;
   }
 
   public carregarFoto(modalidade: string): string {
-    if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
-      if (this.auditoria.veiculo.fotos.length > 0) {
-        let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
+    if (typeof(this.auditoria.auditoriaVeiculo) !== 'undefined' && typeof(this.auditoria.auditoriaVeiculo.fotos) !== 'undefined') {
+      if (this.auditoria.auditoriaVeiculo.fotos.length > 0) {
+        let fotos = this.auditoria.auditoriaVeiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
 
         if (fotos.length > 0) return fotos[0].str;
       }
@@ -310,9 +290,9 @@ export class AuditoriaPage {
           {
             text: 'Salvar',
             handler: res => {
-              for (let i = 0; i < this.auditoria.veiculo.acessoriosVeiculo.length; i++) {
-                if (this.auditoria.veiculo.acessoriosVeiculo[i].nome === acessorio.nome) {
-                  this.auditoria.veiculo.acessoriosVeiculo[i].justificativa = res.justificativa;
+              for (let i = 0; i < this.auditoria.auditoriaVeiculo.acessorios.length; i++) {
+                if (this.auditoria.auditoriaVeiculo.acessorios[i] .nome === acessorio.nome) {
+                  this.auditoria.auditoriaVeiculo.acessorios[i].justificativa = res.justificativa;
                 }
               }
             }
@@ -322,9 +302,9 @@ export class AuditoriaPage {
       prompt.present();
     }
 
-    for (let i = 0; i < this.auditoria.veiculo.acessoriosVeiculo.length; i++) {
-      if (this.auditoria.veiculo.acessoriosVeiculo[i].nome === acessorio.nome) {
-        this.auditoria.veiculo.acessoriosVeiculo[i].selecionado = e;
+    for (let i = 0; i < this.auditoria.auditoriaVeiculo.acessorios.length; i++) {
+      if (this.auditoria.auditoriaVeiculo.acessorios[i].nome === acessorio.nome) {
+        this.auditoria.auditoriaVeiculo.acessorios[i].selecionado = e;
       }
     }
   }
@@ -412,22 +392,22 @@ export class AuditoriaPage {
       return false;
     }
 
-    if (typeof(this.auditoria.veiculo) === 'undefined') {
+    if (typeof(this.auditoria.auditoriaVeiculo) === 'undefined') {
       this.exibirToast('Insira os dados do veículo', Config.TOAST.ERROR);
       return false;
     }
 
-    if (!this.auditoria.veiculo.placa) {
+    if (!this.auditoria.auditoriaVeiculo.placa) {
       this.exibirToast('Insira a placa do veículo', Config.TOAST.ERROR);
       return false;
     }
       
-    if (typeof(this.auditoria.veiculo.fotos) === 'undefined') {
+    if (typeof(this.auditoria.auditoriaVeiculo.fotos) === 'undefined') {
       this.exibirToast('Insira as fotos do veículo', Config.TOAST.ERROR);
       return false;
     }
       
-    if (this.auditoria.veiculo.fotos.length < 6) {
+    if (this.auditoria.auditoriaVeiculo.fotos.length < 6) {
       this.exibirToast('Insira ao menos 6 fotos do veículo', Config.TOAST.ERROR);
       return false;
     }

@@ -10,7 +10,7 @@
       ion-item 
       *ngFor="let auditoria of auditorias; let i=index" 
       (click)="telaAuditoria(auditoria)">
-      {{ auditoria?.codAuditoria }}
+      Auditoria: {{ auditoria?.codAuditoria }} - {{ auditoria.auditoriaStatus.nome }}
     </button>  
   </ion-list>
 

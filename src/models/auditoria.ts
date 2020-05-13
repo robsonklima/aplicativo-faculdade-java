@@ -6,7 +6,7 @@ import { Usuario } from "./usuario";
 export class Auditoria {
   usuario: Usuario;
   condutor: Condutor;
-  veiculo: Veiculo;
+  auditoriaVeiculo: Veiculo;
   auditoriaStatus: AuditoriaStatus;
   assinaturaTecnico: string;
 }

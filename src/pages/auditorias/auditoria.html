@@ -32,38 +32,32 @@
         <ion-list>
           <ion-item class="first-item">
             <ion-label stacked>Nome</ion-label>
-            <ion-input type="text" name="nome" maxlength="50" [ngModel]="dg?.usuario?.nome" placeholder="Digite seu Nome">
+            <ion-input type="text" name="nome" maxlength="50" [ngModel]="auditoria?.condutor?.nome" placeholder="Digite seu Nome">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>Matrícula</ion-label>
-            <ion-input type="text" name="matricula" maxlength="10" [ngModel]="" placeholder="Digite sua Matrícula">
+            <ion-input type="text" name="matricula" maxlength="10" [ngModel]="auditoria?.condutor?.matricula" placeholder="Digite sua Matrícula">
             </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>RG</ion-label>
-            <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
+            <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]="auditoria?.condutor?.rg"
               placeholder="Digite seu RG"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>CPF</ion-label>
             <ion-input type="text" name="cpf" (keyup)="formatarCampo($event, '###.###.###-##')" maxlength="14"
-              [ngModel]="" placeholder="Digite seu CPF"></ion-input>
+              [ngModel]="auditoria?.condutor?.cpf" placeholder="Digite seu CPF"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>CNH</ion-label>
-            <ion-input type="text" name="cnh" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]=""
+            <ion-input type="text" name="cnh" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]="auditoria?.condutor?.cnh"
               placeholder="Digite sua CNH"></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label stacked>Filial</ion-label>
-            <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial.nomeFilial" placeholder="Digite seu Nome" [disabled]="true">
-            </ion-input>
           </ion-item>
 
           <ion-item>
@@ -83,6 +77,12 @@
           </ion-item>
 
           <ion-item>
+            <ion-label stacked>Filial</ion-label>
+            <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial?.nomeFilial" placeholder="Digite sua Filial" [disabled]="true">
+            </ion-input>
+          </ion-item>
+
+          <!-- <ion-item>
             <ion-label stacked>Finalidades de Uso</ion-label>
             <ion-select 
               multiple="true" cancelText="Cancelar" okText="Ok"
@@ -94,7 +94,7 @@
               <ion-option [value]="TRABALHO">Trabalho</ion-option>
               <ion-option [value]="PESSOAL">Pessoal</ion-option>
             </ion-select>
-          </ion-item>
+          </ion-item> -->
         </ion-list>
 
         <div padding>
@@ -228,7 +228,7 @@
     <ion-slide>
       <ion-list>
         <form #f4="ngForm" (ngSubmit)="salvar4(f4)" class="form">
-          <div *ngFor="let acessorio of auditoria?.veiculo?.acessoriosVeiculo; let i=index">
+          <div *ngFor="let acessorio of auditoria?.auditoriaVeiculo?.acessorios; let i=index">
 
             <ion-item >
               <ion-label stacked>{{ acessorio?.nome }}</ion-label>
