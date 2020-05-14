@@ -255,7 +255,6 @@ export class AuditoriaPage {
   }
 
   public selecionarAcessorio(acessorio: AcessorioVeiculo, e: any) {
-
     if (!e) {
       const prompt = this.alertCtrl.create({
         title: 'Justificativa',
@@ -316,7 +315,11 @@ export class AuditoriaPage {
                   this.exibirToast('Auditoria enviada com sucesso');
                 });
               });
-            }, err => loader.dismiss())
+            }, err => 
+              loader.dismiss().then(() => {
+                this.exibirToast('Erro ao enviar auditoria. Tente novamente', Config.TOAST.ERROR);
+              })
+            )
           }
         }
       ]
