@@ -2,7 +2,7 @@ import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocatio
 
 export class Config {
   public static API_URL = 'http://localhost:60687/api/';
-  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  //public static API_URL = 'https://sat.perto.com.br/prjSATWebAPI/api/';
 
   public static NOME_APP = "App Técnicos";
   public static VERSAO_APP = "0.0.86";
