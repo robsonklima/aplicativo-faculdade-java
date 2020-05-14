@@ -202,13 +202,7 @@ export class AuditoriaPage {
     }
   }
 
-  public salvar3() {
-    this.exibirToast('Condições do veículo salvas com sucesso', Config.TOAST.SUCCESS);
-    this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
-    this.configurarSlide();
-  }
-
-  public salvar4() {
+  public salvarCondicoesVeiculo() {
     this.exibirToast('Componentes e acessórios salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
     this.configurarSlide();
