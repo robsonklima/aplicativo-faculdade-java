@@ -1,13 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, ToastController, ModalController, AlertController, ViewController, LoadingController, Platform, NavParams, NavController } from 'ionic-angular';
+import { Slides, ToastController, ModalController, AlertController, ViewController, Platform, NavParams, NavController } from 'ionic-angular';
 import { Config } from '../../models/config';
 import { AssinaturaPage } from '../assinatura/assinatura';
 import { Auditoria } from '../../models/auditoria';
-import { Condutor } from '../../models/condutor';
 import { AcessorioVeiculo } from '../../models/acessorio-veiculo';
 import { NgForm } from '@angular/forms';
-import { Filial } from '../../models/filial';
-import { Veiculo } from '../../models/veiculo';
 import { AppAvailability } from '@ionic-native/app-availability';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -18,6 +15,7 @@ import { Market } from '@ionic-native/market';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
 import { AuditoriaService } from '../../services/auditoria';
+import { LoadingFactory } from '../../factories/loading-factory';
 
 
 @Component({
@@ -44,7 +42,7 @@ export class AuditoriaPage {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
-    private loadingCtrl: LoadingController,
+    private loadingFactory: LoadingFactory,
     private auditoriaService: AuditoriaService
   ) {
     this.auditoria = this.navParams.get('auditoria');
@@ -300,20 +298,17 @@ export class AuditoriaPage {
         {
           text: 'Sim',
           handler: () => {
-            const loader = this.loadingCtrl.create({ content: "Enviando dados... Por favor aguarde" });
-            loader.present();
+            this.loadingFactory.exibir("Enviando dados... Por favor aguarde");
 
             this.auditoriaService.enviarAuditoriaApi(this.auditoria).subscribe(() => {
-              loader.dismiss().then(() => {
                 this.navCtrl.popToRoot().then(() => {
+                  this.loadingFactory.encerrar();
                   this.exibirToast('Auditoria enviada com sucesso');
                 });
-              });
-            }, err => 
-              loader.dismiss().then(() => {
-                this.exibirToast('Erro ao enviar auditoria. Tente novamente', Config.TOAST.ERROR);
-              })
-            )
+            }, err => {
+              this.loadingFactory.encerrar();
+              this.exibirToast('Erro ao enviar auditoria. Tente novamente', Config.TOAST.ERROR);
+            })
           }
         }
       ]
