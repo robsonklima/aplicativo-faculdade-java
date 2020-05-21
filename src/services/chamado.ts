@@ -283,8 +283,9 @@ export class ChamadoService {
               if (cStorage.codOs === cApi.codOs) {
                 chamadosStorage[sIndex].indBloqueioReincidencia = cApi.indBloqueioReincidencia;
                 chamadosStorage[sIndex].indOSIntervencaoEquipamento = cApi.indOSIntervencaoEquipamento;
-                chamadosStorage[sIndex].tipoIntervencao = cApi.tipoIntervencao;
                 chamadosStorage[sIndex].descMotivoMarcaEspecial = cApi.descMotivoMarcaEspecial;
+                chamadosStorage[sIndex].dataHoraAgendamento = cApi.dataHoraAgendamento;
+                chamadosStorage[sIndex].tipoIntervencao = cApi.tipoIntervencao;
                 chamadosStorage[sIndex].observacao = cApi.observacao;
               }
             });
