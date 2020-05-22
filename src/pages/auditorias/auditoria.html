@@ -111,13 +111,19 @@
             <ion-input type="text" name="placa" maxlength="7" [ngModel]="" placeholder="Digite a Placa">
             </ion-input>
           </ion-item>
-        </ion-item-group>
-
-        <ion-item-group>
-          <ion-item class="first-item">
+        
+          <ion-item>
             <ion-label stacked>Odômetro</ion-label>
             <ion-input type="number" name="odometro" maxlength="7" [ngModel]="" placeholder="Digite o Odômetro">
             </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked class="label-c">Nível de Combustível</ion-label>
+            <ion-range min="1" max="5" step="1" snaps="true" [ngModel]="" color="secondary" name="nivelCombustivel">
+              <ion-icon range-left color="secondary" name="ios-color-fill-outline"></ion-icon>
+              <ion-icon range-right color="secondary" name="ios-color-fill"></ion-icon>
+            </ion-range>
           </ion-item>
         </ion-item-group>
 

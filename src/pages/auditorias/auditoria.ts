@@ -91,6 +91,7 @@ export class AuditoriaPage {
   public salvarDadosVeiculo(f: NgForm) {
     this.auditoria.auditoriaVeiculo.placa = f.value.placa;
     this.auditoria.auditoriaVeiculo.odometro = f.value.odometro;
+    this.auditoria.auditoriaVeiculo.nivelCombustivel = f.value.nivelCombustivel;
 
     this.exibirToast('Dados do veículo salvos com sucesso', Config.TOAST.SUCCESS);
     this.slides.slideTo(this.slides.getActiveIndex() + 1, 500);
