@@ -7,6 +7,7 @@ export class Condutor {
   cpf: string;
   cnh: string;
   categorias: string[];
+  cnhValidade: string;
   filial: Filial;
   finalidadesUso: string[];
 }

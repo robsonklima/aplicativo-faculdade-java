@@ -61,6 +61,12 @@
           </ion-item>
 
           <ion-item>
+            <ion-label stacked>Validade da CNH</ion-label>
+            <ion-input type="text" name="cnhValidade" (keyup)="formatarCampo($event, '##/##/####')" maxlength="10" [ngModel]="auditoria?.condutor?.cnhValidade"
+              placeholder="Ex.: 01/01/2020"></ion-input>
+          </ion-item>
+
+          <ion-item>
             <ion-label stacked>Categorias da CNH</ion-label>
             <ion-select 
               multiple="true" cancelText="Cancelar" okText="Ok"
@@ -81,20 +87,6 @@
             <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial?.nomeFilial" placeholder="Digite sua Filial" [disabled]="true">
             </ion-input>
           </ion-item>
-
-          <!-- <ion-item>
-            <ion-label stacked>Finalidades de Uso</ion-label>
-            <ion-select 
-              multiple="true" cancelText="Cancelar" okText="Ok"
-              placeholder="Selecione..."
-              name="finalidadesUso" 
-              [ngModel]="" 
-              interface="action-sheet"
-              cancelText="Cancelar">
-              <ion-option [value]="TRABALHO">Trabalho</ion-option>
-              <ion-option [value]="PESSOAL">Pessoal</ion-option>
-            </ion-select>
-          </ion-item> -->
         </ion-list>
 
         <div padding>

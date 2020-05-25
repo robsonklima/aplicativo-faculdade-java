@@ -78,6 +78,7 @@ export class AuditoriaPage {
     this.auditoria.condutor.rg = f.value.rg;
     this.auditoria.condutor.cpf = f.value.cpf;
     this.auditoria.condutor.cnh = f.value.cnh;
+    this.auditoria.condutor.cnhValidade = f.value.cnhValidade;
     this.auditoria.condutor.categorias = f.value.cnhCategorias;
     this.auditoria.condutor.finalidadesUso = f.value.finalidadesUso;
     this.auditoria.usuario.filial.nomeFilial = f.value.filial;
