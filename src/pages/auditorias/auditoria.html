@@ -112,7 +112,7 @@
 
           <ion-item>
             <ion-label stacked class="label-c">Nível de Combustível</ion-label>
-            <ion-range min="1" max="5" step="1" snaps="true" [ngModel]="" color="secondary" name="codAuditoriaVeiculoTanque">
+            <ion-range min="1" max="5" step="1" snaps="true" [ngModel]="" pin="true" color="secondary" name="codAuditoriaVeiculoTanque">
               <ion-icon range-left color="secondary" name="ios-color-fill-outline"></ion-icon>
               <ion-icon range-right color="secondary" name="ios-color-fill"></ion-icon>
             </ion-range>
@@ -160,7 +160,7 @@
             <ion-thumbnail item-start>
               <img src="{{ carregarFoto('AUD_ODOMETRO') }}">
             </ion-thumbnail>
-            <h2>Odômetro</h2>
+            <h2>Odômetro/Nível Combustível</h2>
             <p>Orientações</p>
             <button ion-button color="secondary" clear icon-only item-end type="button"
               (click)="tirarFoto('AUD_ODOMETRO')" *ngIf="!verificarExistenciaFoto('AUD_ODOMETRO')">
