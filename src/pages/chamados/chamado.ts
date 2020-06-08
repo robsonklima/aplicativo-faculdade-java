@@ -1068,12 +1068,8 @@ export class ChamadoPage {
           this.tituloSlide = `${this.indexSlide}. Assinatura do Cliente`;
           
           this.slides.lockSwipeToPrev(false);
-          if (!this.chamado.rats[0].assinaturaCliente)
-            //this.slides.lockSwipeToNext(true);
-            this.slides.lockSwipeToNext(true);
-          else {
-            this.slides.lockSwipeToNext(false);
-          }
+          //if (!this.chamado.rats[0].assinaturaCliente) this.slides.lockSwipeToNext(false);
+          this.slides.lockSwipeToNext(false);
           break;
       case 7:
         this.indexSlide = (i + 1);
