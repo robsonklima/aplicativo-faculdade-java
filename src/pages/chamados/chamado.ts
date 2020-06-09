@@ -698,6 +698,11 @@ export class ChamadoPage {
             if (!this.validarCamposObrigatorios()) return;
 
             this.chamadoService.buscarStatusExecucao().then(executando => {
+              if (executando) {
+                this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+                return;
+              }
+
               this.loadingFactory.exibir(Config.MSG.OBTENDO_LOCALIZACAO);
 
               this.platform.ready().then(() => {
@@ -859,70 +864,42 @@ export class ChamadoPage {
 
   private validarCamposObrigatorios(): boolean {
     if (this.chamado.rats.length == 0) {
-      this.exibirToast("favor inserir a RAT", Config.TOAST.ERROR);
+      this.exibirToast("favor inserir a RAT");
 
       return;
     }
 
-    if (this.platform.is('cordova') && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
-      if (this.chamado.rats[0].statusServico.codStatusServico == Config.STATUS_SERVICO.CANCELADO_COM_ATENDIMENTO) {
-        return true;
-      }
-
+    if (this.platform.is('cordova')) {
       if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
-        this.exibirToast("Este chamado deve conter no mínimo 3 fotos", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
 
         return;
-      }
-
+      } 
+      
       if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
-        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
+        this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
 
         return;
       }
-
-      if (!this.chamado.indRatEletronica && this.verificarSeEquipamentoEPOS() && this.chamado.rats[0].fotos.length < 4) {
-        if (this.chamado.statusServico.codStatusServico == 2 || this.chamado.statusServico.codStatusServico == 16) {
-          return true;
-        }
-
-        if (
-          this.chamado.equipamentoContrato.equipamento.codEquip == 328 ||
-          this.chamado.rats[0].equipamentoInstalado.codEquip == 328
-        ) {
-          return true;
-        }
-
-        this.exibirToast("Este chamado deve conter no mínimo 4 fotos", Config.TOAST.ERROR);
-
-        return false;
-      }
     }
 
-    if(_.has(this.chamado.rats[0], 'laudos')) {
-      if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio() && this.chamado.tipoIntervencao.codTipoIntervencao !== Config.TIPO_INTERVENCAO.AUTORIZACAO_DESL) {
-        this.exibirToast("Este chamado deve possuir laudo", Config.TOAST.ERROR);
-  
-        return;
-      }
+    if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
+      this.exibirToast("Este chamado deve possuir um laudo");
+
+      return;
     }
-    
-    if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio
+
+    if ((!this.chamado.rats[0].numRat && !this.chamado.indRatEletronica) || !this.chamado.rats[0].horaInicio 
       || !this.chamado.rats[0].horaSolucao || !this.chamado.rats[0].obsRAT || !this.chamado.rats[0].nomeAcompanhante) {
-      this.exibirToast('Favor informar os dados da RAT', Config.TOAST.ERROR);
+      this.exibirToast('Favor informar os dados da RAT');
 
       return false;
     }
 
-    if(!_.has(this.chamado.rats[0], 'ratDetalhes')) {
-      if (
-        (this.chamado.rats[0].ratDetalhes.length == 0 && !this.verificarSeEquipamentoEPOS()) ||
-        (!this.chamado.rats[0].defeitoPOS && this.verificarSeEquipamentoEPOS())
-      ) {
-        this.exibirToast('Favor inserir os detalhes da RAT', Config.TOAST.ERROR);
+    if (this.chamado.rats[0].ratDetalhes.length == 0) {
+      this.exibirToast('Favor inserir os detalhes da RAT');
 
-        return false;
-      }
+      return false;
     }
 
     return true;

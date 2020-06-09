@@ -125,6 +125,12 @@ export class RatDetalhePage {
   }
 
   private buscarModulosPorEquipamento() {
+    if (!this.chamado.codEquip) {
+      this.buscarModulosTodos();
+
+      return;
+    }
+
     this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip)
       .then((ec) => {
         if (ec)

@@ -168,13 +168,13 @@ export class AuditoriaPage {
   }
 
   public verificarExistenciaFoto(modalidade: string): boolean {
-    // if (typeof(this.auditoria.veiculo) !== 'undefined' && typeof(this.auditoria.veiculo.fotos) !== 'undefined') {
-    //   if (this.auditoria.veiculo.fotos.length > 0) {
-    //     let fotos = this.auditoria.veiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
+    if (typeof(this.auditoria.auditoriaVeiculo.fotos) !== 'undefined') {
+      if (this.auditoria.auditoriaVeiculo.fotos.length > 0) {
+        let fotos = this.auditoria.auditoriaVeiculo.fotos.filter((foto) => { return (foto.modalidade == modalidade) });
 
-    //     if (fotos.length > 0) return true;
-    //   }
-    // }
+        if (fotos.length > 0) return true;
+      }
+    }
 
     return false;
   }
@@ -358,16 +358,6 @@ export class AuditoriaPage {
       return false;
     }
 
-    // if (!this.auditoria.condutor.finalidadesUso) {
-    //   this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
-    //   return false;
-    // }
-
-    // if (!this.auditoria.condutor.finalidadesUso.length) {
-    //   this.exibirToast('Insira a finalidade de uso do condutor', Config.TOAST.ERROR);
-    //   return false;
-    // }
-
     if (!this.auditoria.condutor.cnh) {
       this.exibirToast('Insira a CNH do condutor', Config.TOAST.ERROR);
       return false;
@@ -387,15 +377,22 @@ export class AuditoriaPage {
       this.exibirToast('Insira as fotos do veículo', Config.TOAST.ERROR);
       return false;
     }
-      
-    // if (this.auditoria.auditoriaVeiculo.fotos.length < 6) {
-    //   this.exibirToast('Insira ao menos 6 fotos do veículo', Config.TOAST.ERROR);
-    //   return false;
-    // }
 
     if (!this.auditoria.assinaturaTecnico) {
       this.exibirToast('Insira a sua assinatura', Config.TOAST.ERROR);
       return false;
+    }
+
+    if (this.auditoria.auditoriaVeiculo.fotos.length < 6) {
+      this.exibirToast('Favor inserir as fotos', Config.TOAST.ERROR);
+
+      return;
+    }
+    
+    if (this.auditoria.auditoriaVeiculo.acessorios.length == 0) {
+      this.exibirToast('Favor inserir os acessórios', Config.TOAST.ERROR);
+      
+      return;
     }
 
     return true;
