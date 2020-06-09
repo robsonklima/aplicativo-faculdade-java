@@ -551,6 +551,8 @@ export class ChamadoPage {
     return new Promise((resolve, reject) => {
       this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => {
         this.equipamentosPOS = equips;
+        console.log(equips);
+        
 
         resolve(equips);
       }).catch(err => {
@@ -870,13 +872,13 @@ export class ChamadoPage {
     }
 
     if (this.platform.is('cordova')) {
-      if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3) {
+      if (this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 3 && this.chamado.tipoIntervencao.codTipoIntervencao !== 14) {
         this.exibirToast("Este chamado deve conter no mínimo 3 fotos");
 
         return;
       } 
       
-      if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4) {
+      if (!this.chamado.indRatEletronica && this.chamado.rats[0].fotos.length < 4 && this.chamado.tipoIntervencao.codTipoIntervencao !== 14) {
         this.exibirToast("Este chamado deve conter no mínimo 4 fotos");
 
         return;

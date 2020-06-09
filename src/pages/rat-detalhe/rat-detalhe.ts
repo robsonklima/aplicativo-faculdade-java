@@ -125,7 +125,7 @@ export class RatDetalhePage {
   }
 
   private buscarModulosPorEquipamento() {
-    if (!this.chamado.codEquip) {
+    if (!this.chamado.codEquip || this.chamado.codEquip == null || this.chamado.codEquip == 0) {
       this.buscarModulosTodos();
 
       return;
