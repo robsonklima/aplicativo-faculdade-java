@@ -110,8 +110,12 @@ export class PontoPage {
                 }, er => {
                   this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
                 });
-              }).catch(() => {});
-            }).catch(() => {});
+              }).catch((er) => {
+                this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+              });
+            }).catch((er) => {
+              this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+            });
           }
         }
       ]
