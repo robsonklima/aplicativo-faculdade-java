@@ -4,7 +4,34 @@
     </ion-navbar>
   </ion-header>
   
-  <ion-content padding>
-    
-    
+  <ion-content>
+    <ion-item class="first-item">
+      <ion-label>Filtro por Data</ion-label>
+      <ion-datetime 
+        (ionChange)="selecionarData($event)"
+        displayFormat="DD/MM/YYYY" 
+        pickerFormat="DD MMMM YYYY" 
+        cancelText="Cancelar"
+        doneText="Selecionar"
+        placeholder="{{ dataSelecionadaFormatada }}"
+        [ngModel]="dataSelecionadaFormatada"></ion-datetime>
+    </ion-item>
+
+    <ion-list>
+      <button 
+        ion-item 
+        *ngFor="let pontoUsuario of pontosUsuarioDataSelecionada; let i=index">
+        <ion-icon 
+          color="primary" 
+          name="md-finger-print" 
+          item-start></ion-icon>
+        {{ pontoUsuario.dataHoraRegistro | date: 'dd/MM HH:mm' }}
+      </button>  
+    </ion-list>
+  
+    <p *ngIf="!pontosUsuarioDataSelecionada?.length" text-center>Nenhum registro encontrado</p>
+
+    <ion-fab right bottom>
+      <button ion-fab color="secondary" (click)="registrarPonto()"><ion-icon name="md-finger-print"></ion-icon></button>
+    </ion-fab>
   </ion-content>

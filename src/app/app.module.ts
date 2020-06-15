@@ -106,6 +106,7 @@ import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
 import { LogsPage } from '../pages/logs/logs';
 import { AuditoriaService } from '../services/auditoria';
 import { PontoPage } from '../pages/ponto/ponto';
+import { PontoUsuarioService } from '../services/ponto-usuario';
 
 
 @NgModule({
@@ -247,6 +248,7 @@ import { PontoPage } from '../pages/ponto/ponto';
     DefeitoService,
     CausaService,
     PecaService,
+    PontoUsuarioService,
     EquipamentoContratoService,
     TipoServicoService,
     CheckinCheckoutService,
