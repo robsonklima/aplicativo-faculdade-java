@@ -1,11 +1,11 @@
 import { BackgroundGeolocationConfig } from "@ionic-native/background-geolocation";
 
 export class Config {
-  //public static API_URL = 'http://localhost:60687/api/';
-  public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
+  public static API_URL = 'http://localhost:60687/api/';
+  //public static API_URL = 'http://sat.perto.com.br/prjSATWebAPI/api/';
 
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.86";
+  public static VERSAO_APP = "0.0.87";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -171,22 +171,22 @@ export class Config {
     ERRO_ENVIAR_FOTOS_PARA_SERVIDOR: 'Erro ao enviar fotos ao servidor',
     ERRO_ENVIAR_FOTO: 'Erro ao enviar foto para o servidor',
     ATUALIZAR_DADOS_LOCAIS: 'É necessário atualizar os dados do aplicativo para prosseguir',
-    CRIANDO_TAB_TIPOS_SERVICOS: "1/14: Configurando os Tipos de Serviço",
-    CRIANDO_TAB_ACOES: "2/14: Configurando as Ações",
-    CRIANDO_TAB_DEFEITOS: "3/14: Configurando os Defeitos",
-    CRIANDO_TAB_CAUSAS: "4/14: Configurando as Causas",
-    CRIANDO_TAB_PECAS: "5/14: Configurando as Peças",
-    CRIANDO_TAB_EQUIPAMENTOS_POS: "6/14: Configurando os Equipamentos POS",
-    CRIANDO_TAB_OPERADORAS: "7/14: Configurando as Operadoras",
-    CRIANDO_TAB_TIPOS_COMUNICACAO: "8/14: Configurando os Tipos de Comunicação",
-    CRIANDO_TAB_MOTIVOS_COMUNICACAO: "9/14: Configurando os Motivos de Comunicação",
-    CRIANDO_TAB_MOTIVOS_CANCELAMENTO: "10/14: Configurando os Motivos de Cancelamento",
-    CRIANDO_TAB_STATUS_SERVICO: "11/14: Configurando os Status de Serviços",
-    CRIANDO_TAB_DEFEITOS_POS: "12/14: Configurando os Defeitos do POS",
-    CRIANDO_TAB_FERRAMENTAS: "13/14: Configurando as Ferramentas dos Técnicos",
-    CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/14: Configurando os Equipamentos e Causas",
-    CRIANDO_TAB_DEFEITOS_CAUSAS: "15/14: Configurando os Defeitos e Causas",
-    CRIANDO_TAB_ACOES_CAUSAS: "16/14: Configurando as Ações e Causas",
+    CRIANDO_TAB_TIPOS_SERVICOS: "1/16: Configurando os Tipos de Serviço",
+    CRIANDO_TAB_ACOES: "2/16: Configurando as Ações",
+    CRIANDO_TAB_DEFEITOS: "3/16: Configurando os Defeitos",
+    CRIANDO_TAB_CAUSAS: "4/16: Configurando as Causas",
+    CRIANDO_TAB_PECAS: "5/16: Configurando as Peças",
+    CRIANDO_TAB_EQUIPAMENTOS_POS: "6/16: Configurando os Equipamentos POS",
+    CRIANDO_TAB_OPERADORAS: "7/16: Configurando as Operadoras",
+    CRIANDO_TAB_TIPOS_COMUNICACAO: "8/16: Configurando os Tipos de Comunicação",
+    CRIANDO_TAB_MOTIVOS_COMUNICACAO: "9/16: Configurando os Motivos de Comunicação",
+    CRIANDO_TAB_MOTIVOS_CANCELAMENTO: "10/16: Configurando os Motivos de Cancelamento",
+    CRIANDO_TAB_STATUS_SERVICO: "11/16: Configurando os Status de Serviços",
+    CRIANDO_TAB_DEFEITOS_POS: "12/16: Configurando os Defeitos do POS",
+    CRIANDO_TAB_FERRAMENTAS: "13/16: Configurando as Ferramentas dos Técnicos",
+    CRIANDO_TAB_EQUIPAMETNOS_CAUSAS: "14/16: Configurando os Equipamentos e Causas",
+    CRIANDO_TAB_DEFEITOS_CAUSAS: "15/16: Configurando os Defeitos e Causas",
+    CRIANDO_TAB_ACOES_CAUSAS: "16/16: Configurando as Ações e Causas",
     BUSCANDO_CHAMADOS_BASE_LOCAL: "Buscando chamados armazenados do smartphone",
     ENVIANDO_CHAMADOS_FECHADOS: "Enviando chamados ao servidor",
     ENVIANDO_CHECKINS: "Enviando checkins ao servidor",
