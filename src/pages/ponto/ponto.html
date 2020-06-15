@@ -32,6 +32,12 @@
     <p *ngIf="!pontosUsuarioDataSelecionada?.length" text-center>Nenhum registro encontrado</p>
 
     <ion-fab right bottom>
-      <button ion-fab color="secondary" (click)="registrarPonto()"><ion-icon name="md-finger-print"></ion-icon></button>
+      <button 
+        ion-fab 
+        color="secondary" 
+        (click)="registrarPonto()" 
+        [disabled]="dataAtualFormatada !== dataSelecionadaFormatada">
+        <ion-icon name="md-finger-print"></ion-icon>
+      </button>
     </ion-fab>
   </ion-content>

@@ -17,6 +17,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 })
 export class PontoPage {
   dg: DadosGlobais;
+  dataAtual: any;
+  dataAtualFormatada: any;
   dataSelecionada: any;
   dataSelecionadaFormatada: string;
   pontosUsuario: PontoUsuario[] = [];
@@ -36,7 +38,9 @@ export class PontoPage {
     this.carregarDadosGlobais()
       .then(() => this.carregarPontosUsuario())
       .catch(() => {});
-    ;
+
+    this.dataAtual = moment();
+    this.dataAtualFormatada = this.dataAtual.format('DD/MM/YYYY');
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
@@ -61,7 +65,7 @@ export class PontoPage {
     
     this.dataSelecionada = moment();
     this.dataSelecionadaFormatada = this.dataSelecionada.format('DD/MM/YYYY');
-
+    
     this.pontoUsuarioService.buscarPontosPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosUsuario: PontoUsuario[]) => {
       this.pontosUsuario = pontosUsuario;
       this.atualizarPontosDataSelecionada();
