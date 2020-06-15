@@ -36,7 +36,7 @@
         ion-fab 
         color="secondary" 
         (click)="registrarPonto()" 
-        [disabled]="dataAtualFormatada !== dataSelecionadaFormatada">
+        *ngIf="dataAtualFormatada == dataSelecionadaFormatada">
         <ion-icon name="md-finger-print"></ion-icon>
       </button>
     </ion-fab>
