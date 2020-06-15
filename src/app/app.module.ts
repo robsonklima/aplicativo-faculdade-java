@@ -105,6 +105,7 @@ import { FotoPage } from '../pages/fotos/foto';
 import { ChamadoConfPage } from '../pages/chamados/chamado-conf';
 import { LogsPage } from '../pages/logs/logs';
 import { AuditoriaService } from '../services/auditoria';
+import { PontoPage } from '../pages/ponto/ponto';
 
 
 @NgModule({
@@ -150,7 +151,8 @@ import { AuditoriaService } from '../services/auditoria';
     AuditoriaPage,
     LogsPage,
     TestePage,
-    ChamadoConfPage
+    ChamadoConfPage,
+    PontoPage
   ],
   imports: [
     BrowserModule,
@@ -209,6 +211,7 @@ import { AuditoriaService } from '../services/auditoria';
     AuditoriasPage,
     AuditoriaPage,
     ChamadoConfPage,
+    PontoPage,
     LogsPage,
     TestePage
   ],

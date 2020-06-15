@@ -46,6 +46,7 @@ import { AuditoriasPage } from '../auditorias/auditorias';
 import { AuditoriaService } from '../../services/auditoria';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { Auditoria } from '../../models/auditoria';
+import { PontoPage } from '../ponto/ponto';
 
 
 @Component({
@@ -153,6 +154,10 @@ export class HomePage {
 
   public telaPecas() {
     this.navCtrl.push(PecasPage);
+  }
+
+  public telaPonto() {
+    this.navCtrl.push(PontoPage);
   }
 
   public telaIndicadoresMenu() {
