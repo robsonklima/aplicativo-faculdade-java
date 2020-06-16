@@ -36,7 +36,7 @@ export class PontoPage {
 
   ngOnInit() {
     this.carregarDadosGlobais()
-      .then(() => this.carregarPontosUsuario())
+      .then(() => this.carregarPontosUsuario(null))
       .catch(() => {});
 
     this.dataAtual = moment();
@@ -59,7 +59,7 @@ export class PontoPage {
     });
   }
 
-  private carregarPontosUsuario(verbose: boolean=true) {
+  public carregarPontosUsuario(refresher, verbose: boolean=true) {
     const loader = this.loadingCtrl.create({ content: "Carregando..." });
     if (verbose) loader.present();
     
@@ -70,9 +70,11 @@ export class PontoPage {
       this.pontosUsuario = pontosUsuario;
       this.atualizarPontosDataSelecionada();
       if (verbose) loader.dismiss();
+      if (refresher) refresher.complete();
     }, e => {
       this.exibirToast('Não foi possível carregar os registros.', Config.TOAST.ERROR);
       if (verbose) loader.dismiss();
+      if (refresher) refresher.complete();
     })
   }
 
@@ -157,12 +159,13 @@ export class PontoPage {
                 let pontosUsuario: PontoUsuario[] = [];
 
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
-                pontoUsuario.dataHoraRegistro = moment().format(`YYYY-MM-DD ${data.ponto}`);
+
+                pontoUsuario.dataHoraRegistro = this.dataSelecionada.format(`YYYY-MM-DD ${data.ponto}`);
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
                 pontosUsuario.push(pontoUsuario);
-
+                
                 this.pontoUsuarioService.enviarPontosUsuarioApi(pontosUsuario).subscribe(() => {
                   this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
                   this.carregarPontosUsuario(false);
@@ -194,7 +197,16 @@ export class PontoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            console.log(this.pontosUsuarioDataSelecionada);
+            this.pontosUsuarioDataSelecionada.forEach((ponto, i) => {
+              this.pontosUsuarioDataSelecionada[i].correcaoHabilitada = 0;
+            });
+
+            this.pontoUsuarioService.enviarPontosUsuarioApi(this.pontosUsuarioDataSelecionada).subscribe(() => {
+              this.exibirToast('Registros atualizados com sucesso!', Config.TOAST.SUCCESS);
+              this.carregarPontosUsuario(false);
+            }, er => {
+              this.exibirToast(`Erro ao atualizar os registros: ${er}.`, Config.TOAST.ERROR);
+            });
           }
         }
       ]

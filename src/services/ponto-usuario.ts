@@ -16,6 +16,7 @@ export class PontoUsuarioService {
 
   buscarPontosPorUsuario(codUsuario: string): Observable<PontoUsuario[]> {
     return this.http.get(Config.API_URL + 'PontoUsuario/' + codUsuario)
+      .timeout(10000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }

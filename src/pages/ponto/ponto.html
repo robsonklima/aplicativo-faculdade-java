@@ -5,6 +5,10 @@
   </ion-header>
   
   <ion-content>
+    <ion-refresher (ionRefresh)="carregarPontosUsuario($event, false)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <ion-item class="first-item">
       <ion-label>Filtro por Data</ion-label>
       <ion-datetime 
@@ -37,7 +41,9 @@
         <button ion-fab color="light" (click)="registrarPonto()" 
           [disabled]="dataAtualFormatada !== dataSelecionadaFormatada"
           [ngClass]="{ 'bg-gray': dataAtualFormatada !== dataSelecionadaFormatada }"><ion-icon name="md-finger-print"></ion-icon></button>
+
         <button ion-fab color="light" (click)="incluirPonto()" *ngIf="pontosUsuarioDataSelecionada.length && pontosUsuarioDataSelecionada[0].correcaoHabilitada"><ion-icon name="md-add"></ion-icon></button>
+
         <button ion-fab color="light" (click)="salvarAlteracoesPonto()" [disabled]="!pontosUsuarioDataSelecionada.length" [ngClass]="{ 'bg-gray': !pontosUsuarioDataSelecionada.length }"
           *ngIf="pontosUsuarioDataSelecionada.length && pontosUsuarioDataSelecionada[0].correcaoHabilitada"><ion-icon name="custom-save" class="custom-save-icon"></ion-icon></button>
       </ion-fab-list>
