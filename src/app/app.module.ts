@@ -107,6 +107,7 @@ import { LogsPage } from '../pages/logs/logs';
 import { AuditoriaService } from '../services/auditoria';
 import { PontoPage } from '../pages/ponto/ponto';
 import { PontoUsuarioService } from '../services/ponto-usuario';
+import { PontosPage } from '../pages/ponto/pontos';
 
 
 @NgModule({
@@ -153,7 +154,8 @@ import { PontoUsuarioService } from '../services/ponto-usuario';
     LogsPage,
     TestePage,
     ChamadoConfPage,
-    PontoPage
+    PontoPage,
+    PontosPage
   ],
   imports: [
     BrowserModule,
@@ -213,6 +215,7 @@ import { PontoUsuarioService } from '../services/ponto-usuario';
     AuditoriaPage,
     ChamadoConfPage,
     PontoPage,
+    PontosPage,
     LogsPage,
     TestePage
   ],

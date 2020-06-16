@@ -6,11 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: 'ponto.html'
 })
 export class PontosPage {
-  
-
   constructor(
  
   ) {}
-
-  
 }
