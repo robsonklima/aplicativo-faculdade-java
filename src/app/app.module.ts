@@ -108,6 +108,7 @@ import { AuditoriaService } from '../services/auditoria';
 import { PontoPage } from '../pages/ponto/ponto';
 import { PontoUsuarioService } from '../services/ponto-usuario';
 import { PontosPage } from '../pages/ponto/pontos';
+import { PontoDataService } from '../services/ponto-data';
 
 
 @NgModule({
@@ -252,6 +253,7 @@ import { PontosPage } from '../pages/ponto/pontos';
     CausaService,
     PecaService,
     PontoUsuarioService,
+    PontoDataService,
     EquipamentoContratoService,
     TipoServicoService,
     CheckinCheckoutService,

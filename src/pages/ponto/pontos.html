@@ -5,5 +5,30 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="carregarDatasEPontosUsuario($event, false)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
+  <ion-list>
+    <ion-item *ngFor="let pontoData of pontosData; let i=index">
+      <ion-icon color="primary" name="md-clock" item-start></ion-icon>
+      {{ pontoData.dataRegistro | date: 'dd/MM/yyyy' }}
+
+      <p>
+        <span *ngFor="let ponto of pontoData.pontosUsuario; let i=index" class="marcacao">
+          {{ ponto.dataHoraRegistro | date: 'HH:mm' }}
+        </span>
+
+        <span *ngIf="!pontoData.pontosUsuario.length">
+          Nenhuma marcação
+        </span>
+      </p>
+    </ion-item >
+  </ion-list>
+
+  <p *ngIf="!pontosData?.length" text-center>Nenhum registro encontrado</p>
+
+  <ion-fab right bottom>
+    <button ion-fab color="secondary"><ion-icon name="md-finger-print"></ion-icon></button>
+  </ion-fab>
 </ion-content>
