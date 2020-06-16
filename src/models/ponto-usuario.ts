@@ -9,4 +9,5 @@ export class PontoUsuario {
     latitude: number;
     longitude: number;
     indAtivo: number;
+    correcaoHabilitada: number;
 }

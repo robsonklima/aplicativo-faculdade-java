@@ -20,8 +20,14 @@ export class PontoUsuarioService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarPontoUsuarioApi(pontoUsuario: PontoUsuario): Observable<PontoUsuario> {
-    return this.http.post(Config.API_URL + 'PontoUsuario', pontoUsuario)
+  enviarPontosUsuarioApi(pontosUsuario: PontoUsuario[]): Observable<PontoUsuario> {
+    return this.http.post(Config.API_URL + 'PontoUsuario', pontosUsuario)
+      .map((res: Response) => {return res.json()})
+      .catch((error: any) => {return Observable.throw(error)});
+  }
+
+  deletarPontoUsuarioApi(codPontoUsuario: number): Observable<string> {
+    return this.http.delete(Config.API_URL + 'PontoUsuario/' + codPontoUsuario)
       .map((res: Response) => {return res.json()})
       .catch((error: any) => {return Observable.throw(error)});
   }

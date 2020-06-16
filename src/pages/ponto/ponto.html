@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar>
-      <ion-title>Ponto</ion-title>
+      <ion-title>Registros de Ponto</ion-title>
     </ion-navbar>
   </ion-header>
   
@@ -18,26 +18,28 @@
     </ion-item>
 
     <ion-list>
-      <button 
-        ion-item 
+      <ion-item  
         *ngFor="let pontoUsuario of pontosUsuarioDataSelecionada; let i=index">
         <ion-icon 
           color="primary" 
           name="md-finger-print" 
           item-start></ion-icon>
         {{ pontoUsuario.dataHoraRegistro | date: 'dd/MM HH:mm' }}
-      </button>  
+        <button ion-button clear item-end icon-only color="danger" (click)="deletarPontoUsuario(pontoUsuario?.codPontoUsuario)" *ngIf="pontoUsuario.correcaoHabilitada"><ion-icon name="trash"></ion-icon></button>
+      </ion-item >
     </ion-list>
   
     <p *ngIf="!pontosUsuarioDataSelecionada?.length" text-center>Nenhum registro encontrado</p>
 
     <ion-fab right bottom>
-      <button 
-        ion-fab 
-        color="secondary" 
-        (click)="registrarPonto()" 
-        *ngIf="dataAtualFormatada == dataSelecionadaFormatada">
-        <ion-icon name="md-finger-print"></ion-icon>
-      </button>
+      <button ion-fab color="secondary"><ion-icon name="md-arrow-dropup"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button ion-fab color="light" (click)="registrarPonto()" 
+          [disabled]="dataAtualFormatada !== dataSelecionadaFormatada"
+          [ngClass]="{ 'bg-gray': dataAtualFormatada !== dataSelecionadaFormatada }"><ion-icon name="md-finger-print"></ion-icon></button>
+        <button ion-fab color="light" (click)="incluirPonto()" *ngIf="pontosUsuarioDataSelecionada.length && pontosUsuarioDataSelecionada[0].correcaoHabilitada"><ion-icon name="md-add"></ion-icon></button>
+        <button ion-fab color="light" (click)="salvarAlteracoesPonto()" [disabled]="!pontosUsuarioDataSelecionada.length" [ngClass]="{ 'bg-gray': !pontosUsuarioDataSelecionada.length }"
+          *ngIf="pontosUsuarioDataSelecionada.length && pontosUsuarioDataSelecionada[0].correcaoHabilitada"><ion-icon name="custom-save" class="custom-save-icon"></ion-icon></button>
+      </ion-fab-list>
     </ion-fab>
   </ion-content>

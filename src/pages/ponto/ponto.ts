@@ -102,13 +102,17 @@ export class PontoPage {
           handler: () => {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                let pontosUsuario: PontoUsuario[] = [];
+
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
                 pontoUsuario.dataHoraRegistro = moment().format('YYYY-MM-DD HH:mm:ss');
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
 
-                this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe(() => {
+                pontosUsuario.push(pontoUsuario);
+
+                this.pontoUsuarioService.enviarPontosUsuarioApi(pontosUsuario).subscribe(() => {
                   this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
                   this.carregarPontosUsuario(false);
                 }, er => {
@@ -119,6 +123,103 @@ export class PontoPage {
               });
             }).catch((er) => {
               this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+            });
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
+  }
+
+  public incluirPonto() {
+    const prompt = this.alertCtrl.create({
+      title: 'Novo Registro',
+      message: "Digite a data e horário da marcação de ponto",
+      inputs: [
+        {
+          name: 'ponto',
+          type: 'time'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: data => {}
+        },
+        {
+          text: 'Salvar',
+          handler: data => {
+            if (!data.ponto) return;
+
+            this.platform.ready().then(() => {
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                let pontosUsuario: PontoUsuario[] = [];
+
+                let pontoUsuario: PontoUsuario = new PontoUsuario();
+                pontoUsuario.dataHoraRegistro = moment().format(`YYYY-MM-DD ${data.ponto}`);
+                pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
+                pontoUsuario.latitude = location.coords.latitude;
+                pontoUsuario.longitude = location.coords.longitude;
+                pontosUsuario.push(pontoUsuario);
+
+                this.pontoUsuarioService.enviarPontosUsuarioApi(pontosUsuario).subscribe(() => {
+                  this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
+                  this.carregarPontosUsuario(false);
+                }, er => {
+                  this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                });
+              }).catch((er) => {
+                this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+              });
+            }).catch((er) => {
+              this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+            });
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  public salvarAlteracoesPonto() {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: `Deseja aplicar as alterações realizadas?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            console.log(this.pontosUsuarioDataSelecionada);
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();    
+  }
+
+  public deletarPontoUsuario(codPontoUsuario: number) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: `Deseja deletar este registro de ponto?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.pontoUsuarioService.deletarPontoUsuarioApi(codPontoUsuario).subscribe(() => {
+              this.exibirToast('Registro deletado com sucesso!', Config.TOAST.SUCCESS);
+              this.carregarPontosUsuario(false);
+            }, er => {
+              this.exibirToast(`Erro ao deletar o registro: ${er}.`, Config.TOAST.ERROR);
             });
           }
         }
