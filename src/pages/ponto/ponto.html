@@ -10,7 +10,7 @@
       <ion-icon color="primary" name="md-clock" item-start></ion-icon>
       {{ pontoUsuario.dataHoraRegistro | date: 'HH:mm' }}
 
-      <button ion-button clear item-end icon-only color="danger" (click)="deletarPontoUsuario(pontoUsuario?.codPontoUsuario)"><ion-icon name="trash"></ion-icon></button>
+      <button ion-button clear item-end icon-only color="danger" (click)="deletarPontoUsuario(pontoUsuario)"><ion-icon name="trash"></ion-icon></button>
     </ion-item>
   </ion-list>
 

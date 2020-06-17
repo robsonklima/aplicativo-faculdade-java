@@ -52,10 +52,10 @@ export class PontoPage {
     });
   }
 
-  public deletarPontoUsuario(codPontoUsuario: number) {
+  public deletarPontoUsuario(pontoUsuario: PontoUsuario) {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: `Deseja deletar este registro de ponto?`,
+      message: `Deseja remover este registro de ponto?`,
       buttons: [
         {
           text: 'Cancelar',
@@ -64,14 +64,16 @@ export class PontoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.pontoUsuarioService.deletarPontoUsuarioApi(codPontoUsuario).subscribe(() => {
-              this.exibirToast('Registro deletado com sucesso!', Config.TOAST.SUCCESS);
-              
+            pontoUsuario.indAtivo = 0;
+
+            this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe(() => {
+              this.exibirToast('Registro removido com sucesso!', Config.TOAST.SUCCESS);
+
               this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.filter((p) => {
-                return (p.codPontoUsuario != codPontoUsuario);
+                return (p.indAtivo);
               });
             }, er => {
-              this.exibirToast(`Erro ao deletar o registro: ${er}.`, Config.TOAST.ERROR);
+              this.exibirToast(`Erro ao remover o registro: ${er}.`, Config.TOAST.ERROR);
             });
           }
         }
@@ -103,19 +105,27 @@ export class PontoPage {
 
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                let pontosUsuario: PontoUsuario[] = [];
-
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
-
                 pontoUsuario.dataHoraRegistro = `${this.pontoData.dataRegistro} ${data.ponto}`;
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
-                pontosUsuario.push(pontoUsuario);
+                pontoUsuario.indAtivo = 1;
                 
-                this.pontoUsuarioService.enviarPontosUsuarioApi(pontoUsuario).subscribe(() => {
+                this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe((pontoUsuarioApi) => {
                   this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
-                  this.pontoData.pontosUsuario.push(pontoUsuario);
+                  
+
+                  
+
+                  this.pontoData.pontosUsuario.push(pontoUsuarioApi);
+
+                  this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.sort(function(a, b) { 
+                    return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
+                  }); 
+
+                  console.log(this.pontoData);
+                  
                 }, er => {
                   this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
                 });

@@ -34,7 +34,7 @@ export class PontosPage {
     private toastCtrl: ToastController
   ) {}
 
-  ionViewWillEnter() {
+  ngOnInit() {
     this.carregarDadosGlobais()
       .then(() => this.carregarDatasEPontosUsuario(null))
       .catch(() => {});
@@ -42,7 +42,7 @@ export class PontosPage {
     this.dataAtual = moment();
     this.dataAtualFormatada = this.dataAtual.format('DD/MM/YYYY');
   }
-
+  
   public telaPonto(pontoData: PontoData) {
     this.navCtrl.push(PontoPage, { pontoData: pontoData });
   }
@@ -71,7 +71,9 @@ export class PontosPage {
       this.pontosData = pontosData;
 
       this.pontosData.forEach((data, i) => {
-        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort(function(a,b) { return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)}); 
+        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort(function(a,b) { 
+          return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
+        }); 
       });
 
       if (verbose) loader.dismiss();
@@ -104,9 +106,10 @@ export class PontosPage {
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
+                pontoUsuario.indAtivo = 1;
                 pontosUsuario.push(pontoUsuario);
 
-                this.pontoUsuarioService.enviarPontosUsuarioApi(pontoUsuario).subscribe((pontoUsuario: PontoUsuario) => {
+                this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe((pontoUsuario: PontoUsuario) => {
                   this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
 
                   this.pontosData[0].pontosUsuario.push(pontoUsuario);
