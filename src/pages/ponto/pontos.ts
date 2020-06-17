@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController, AlertController, ToastController } from 'ionic-angular';
+import { Platform, LoadingController, AlertController, ToastController, NavController } from 'ionic-angular';
 import { PontoDataService } from '../../services/ponto-data';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import moment from 'moment';
@@ -7,6 +7,9 @@ import { DadosGlobais } from '../../models/dados-globais';
 import { PontoData } from '../../models/ponto-data';
 import { Config } from '../../models/config';
 import { Geolocation } from '@ionic-native/geolocation';
+import { PontoUsuario } from '../../models/ponto-usuario';
+import { PontoUsuarioService } from '../../services/ponto-usuario';
+import { PontoPage } from './ponto';
 
 
 @Component({
@@ -20,8 +23,10 @@ export class PontosPage {
   pontosData: PontoData[] = [];
 
   constructor(
+    private navCtrl: NavController,
     private pontoDataService: PontoDataService,
     private dadosGlobaisService: DadosGlobaisService,
+    private pontoUsuarioService: PontoUsuarioService,
     private platform: Platform,
     private loadingCtrl: LoadingController,
     private geolocation: Geolocation,
@@ -29,13 +34,17 @@ export class PontosPage {
     private toastCtrl: ToastController
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.carregarDadosGlobais()
       .then(() => this.carregarDatasEPontosUsuario(null))
       .catch(() => {});
 
     this.dataAtual = moment();
     this.dataAtualFormatada = this.dataAtual.format('DD/MM/YYYY');
+  }
+
+  public telaPonto(pontoData: PontoData) {
+    this.navCtrl.push(PontoPage, { pontoData: pontoData });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
@@ -61,6 +70,10 @@ export class PontosPage {
     this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
       this.pontosData = pontosData;
 
+      this.pontosData.forEach((data, i) => {
+        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort(function(a,b) { return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)}); 
+      });
+
       if (verbose) loader.dismiss();
       if (refresher) refresher.complete();
     }, e => {
@@ -68,6 +81,50 @@ export class PontosPage {
       if (verbose) loader.dismiss();
       if (refresher) refresher.complete();
     })
+  }
+
+  public registrarPonto() {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: `Deseja registrar seu ponto em ${moment().format('DD/MM/YYYY HH:mm')}?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {}
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.platform.ready().then(() => {
+              this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+                let pontosUsuario: PontoUsuario[] = [];
+
+                let pontoUsuario: PontoUsuario = new PontoUsuario();
+                pontoUsuario.dataHoraRegistro = moment().format('YYYY-MM-DD HH:mm:ss');
+                pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
+                pontoUsuario.latitude = location.coords.latitude;
+                pontoUsuario.longitude = location.coords.longitude;
+                pontosUsuario.push(pontoUsuario);
+
+                this.pontoUsuarioService.enviarPontosUsuarioApi(pontoUsuario).subscribe((pontoUsuario: PontoUsuario) => {
+                  this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
+
+                  this.pontosData[0].pontosUsuario.push(pontoUsuario);
+                }, er => {
+                  this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                });
+              }).catch((er) => {
+                this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+              });
+            }).catch((er) => {
+              this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+            });
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 
   private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {

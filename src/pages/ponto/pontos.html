@@ -9,9 +9,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <p class="msg-no-records" *ngIf="!pontosData?.length" text-center>Nenhum registro encontrado</p>
+
   <ion-list>
     <ion-item *ngFor="let pontoData of pontosData; let i=index">
-      <ion-icon color="primary" name="md-clock" item-start></ion-icon>
+      <ion-icon color="primary" name="md-calendar" [ngClass]="{ 'font-red': pontoData.pontoDataStatus.codPontoDataStatus == 1 }" item-start></ion-icon>
       {{ pontoData.dataRegistro | date: 'dd/MM/yyyy' }}
 
       <p>
@@ -23,12 +25,14 @@
           Nenhuma marcação
         </span>
       </p>
+
+      <button ion-button outline item-end icon-start color="danger" (click)="telaPonto(pontoData)" *ngIf="pontoData.pontoDataStatus.codPontoDataStatus == 1">
+        Editar
+      </button>
     </ion-item >
   </ion-list>
 
-  <p *ngIf="!pontosData?.length" text-center>Nenhum registro encontrado</p>
-
   <ion-fab right bottom>
-    <button ion-fab color="secondary"><ion-icon name="md-finger-print"></ion-icon></button>
+    <button ion-fab color="secondary" (click)="registrarPonto()"><ion-icon name="md-finger-print"></ion-icon></button>
   </ion-fab>
 </ion-content>

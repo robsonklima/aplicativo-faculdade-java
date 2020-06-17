@@ -21,8 +21,8 @@ export class PontoUsuarioService {
       .catch((error: any) => Observable.throw(error.json()));
   }
 
-  enviarPontosUsuarioApi(pontosUsuario: PontoUsuario[]): Observable<PontoUsuario> {
-    return this.http.post(Config.API_URL + 'PontoUsuario', pontosUsuario)
+  enviarPontosUsuarioApi(pontoUsuario: PontoUsuario): Observable<PontoUsuario> {
+    return this.http.post(Config.API_URL + 'PontoUsuario', pontoUsuario)
       .map((res: Response) => {return res.json()})
       .catch((error: any) => {return Observable.throw(error)});
   }
