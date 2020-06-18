@@ -71,7 +71,7 @@ export class PontosPage {
       this.pontosData = pontosData;
 
       this.pontosData.forEach((data, i) => {
-        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort(function(a,b) { 
+        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort((a,b) => { 
           return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
         }); 
       });
@@ -97,6 +97,9 @@ export class PontosPage {
         {
           text: 'Confirmar',
           handler: () => {
+            const loader = this.loadingCtrl.create({ content: "Carregando..." });
+            loader.present();
+
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 let pontosUsuario: PontoUsuario[] = [];
@@ -113,14 +116,19 @@ export class PontosPage {
                   this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
 
                   this.pontosData[0].pontosUsuario.push(pontoUsuario);
+
+                  loader.dismiss();
                 }, er => {
                   this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                  loader.dismiss();
                 });
               }).catch((er) => {
                 this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                loader.dismiss();
               });
             }).catch((er) => {
               this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+              loader.dismiss();
             });
           }
         }

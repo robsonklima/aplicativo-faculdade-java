@@ -1,6 +1,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ pontoData.dataRegistro | date: 'dd/MM/yyyy' }}</ion-title>
+
+    <ion-buttons end>
+      <button 
+        ion-button 
+        icon-only 
+        (click)="salvarAlteracoes()">
+        <ion-icon name="custom-save"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
