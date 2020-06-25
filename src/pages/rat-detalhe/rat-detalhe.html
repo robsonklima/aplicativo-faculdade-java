@@ -94,11 +94,8 @@ v<ion-header>
               cancelText="Cancelar"
               (ionChange)="buscarSubModulosDefeitosEAcoes($event.codECausa)"
               required>
-              <ion-option 
-                *ngFor="let modulo of modulos" 
-                [value]="modulo">
-                {{ modulo.codECausa }} - {{ modulo.nomeCausa 
-                  | lowercase | capitalize }}
+              <ion-option *ngFor="let modulo of modulos" [value]="modulo">
+                {{ modulo.codECausa }} - {{ modulo.nomeCausa | lowercase | capitalize }}
               </ion-option>
             </ion-select>
           </ion-item>
