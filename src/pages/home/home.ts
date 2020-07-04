@@ -47,6 +47,8 @@ import { AuditoriaService } from '../../services/auditoria';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { Auditoria } from '../../models/auditoria';
 import { PontosPage } from '../ponto/pontos';
+import { PontoDataService } from '../../services/ponto-data';
+import { PontoData } from '../../models/ponto-data';
 
 
 @Component({
@@ -54,9 +56,9 @@ import { PontosPage } from '../ponto/pontos';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  loginPage = LoginPage;
   versaoApp = Config.VERSAO_APP;
   necessidadeRegistrarIntervalo: boolean = false;
-  loginPage = LoginPage;
   dg: DadosGlobais;
   chamados: Chamado[];
   mensagens: MensagemTecnico[] = [];
@@ -67,6 +69,7 @@ export class HomePage {
   task: any;
   perfilTecnico: boolean;
   usuarioPonto: UsuarioPonto;
+  pontosDataInconsistentesQtd: number;
 
   constructor(
     public platform: Platform,
@@ -98,7 +101,8 @@ export class HomePage {
     private ferramentaTecnicoService: FerramentaTecnicoService,
     private equipamentoCausaService: EquipamentoCausaService,
     private defeitoCausaService: DefeitoCausaService,
-    private acaoCausaService: AcaoCausaService
+    private acaoCausaService: AcaoCausaService,
+    private pontoDataService: PontoDataService
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -110,6 +114,7 @@ export class HomePage {
       .then(() => this.carregarChamadosStorage().catch(() => {}))
       .then(() => this.carregarAuditoriasUsuario().catch(() => {}))
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
+      .then(() => this.obterRegistrosPontoDoDia().catch(() => {}))
       .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
       .catch(() => {});
@@ -442,14 +447,27 @@ export class HomePage {
     });
   }
 
-  private obterRegistrosPonto(): Promise<any> {
+  private obterRegistrosPontoDoDia(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.usuarioService.buscarRegistrosPonto(
         this.dg.usuario.codUsuario)
         .subscribe(res => {
           this.usuarioPonto = res;
-          
+
           resolve(this.usuarioPonto);
+        },
+        err => {
+          reject();
+        });
+    });
+  }
+
+  private obterRegistrosPonto(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe(pontosData => {
+          this.pontosDataInconsistentesQtd = pontosData.filter((p) => { return (p.pontoDataStatus.codPontoDataStatus == 2) }).length;
+
+          resolve(this.pontosDataInconsistentesQtd);
         },
         err => {
           reject();
