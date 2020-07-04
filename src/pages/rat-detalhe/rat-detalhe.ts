@@ -125,23 +125,15 @@ export class RatDetalhePage {
   }
 
   private buscarModulosPorEquipamento() {
-    // if (!this.chamado.codEquip || this.chamado.codEquip == null || this.chamado.codEquip == 0) {
-    //   this.buscarModulosTodos();
-
-    //   return;
-    // }
-
-    // this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.codEquip)
-    //   .then((ec) => {
-    //     if (ec)
-    //       this.modulos = ec[0].causas;
-
-    //       if (this.modulos.length === 0) {
-    //         this.buscarModulosTodos();
-    //       }
-    //   })
-    //   .catch();
-    this.buscarModulosTodos();
+    this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.equipamentoContrato.equipamento.codEquip || this.chamado.codEquip)
+      .then((ec) => {
+          this.modulos = ec[0].causas;
+          console.log(this.modulos)
+          if (this.modulos.length === 0) this.buscarModulosTodos();
+      })
+      .catch(() => {
+        this.buscarModulosTodos();
+      });
   }
 
   public buscarSubModulosDefeitosEAcoes(modulo: string) {

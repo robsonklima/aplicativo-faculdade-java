@@ -551,9 +551,7 @@ export class ChamadoPage {
     return new Promise((resolve, reject) => {
       this.equipamentoPOSService.buscarEquipamentosPOSStorage().then((equips: EquipamentoPOS[]) => {
         this.equipamentosPOS = equips;
-        console.log(equips);
         
-
         resolve(equips);
       }).catch(err => {
         reject(err);
