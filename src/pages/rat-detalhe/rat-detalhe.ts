@@ -124,10 +124,9 @@ export class RatDetalhePage {
   }
 
   private buscarModulosPorEquipamento(codTipoCausa: any=null) {
-
-    if (codTipoCausa == Config.TIPO_CAUSA.EXTRA_MAQUINA) {
-      this.buscarModulosTodos();   
-    } else {
+    // if (codTipoCausa == Config.TIPO_CAUSA.EXTRA_MAQUINA) {
+    //   this.buscarModulosTodos();   
+    // } else {
       this.equipamentoCausaService.buscarCausasPorEquipamento(this.chamado.equipamentoContrato.equipamento.codEquip || this.chamado.codEquip)
         .then((ec) => {
             this.modulos = ec[0].causas;
@@ -136,7 +135,7 @@ export class RatDetalhePage {
         .catch(() => {
           this.buscarModulosTodos();
         });
-    }   
+    //}   
   }
 
   public buscarSubModulosDefeitosEAcoes(modulo: string) {
