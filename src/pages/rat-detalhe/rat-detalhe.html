@@ -54,7 +54,7 @@ v<ion-header>
               name="tipoCausa" 
               cancelText="Cancelar"
               placeholder="Selecione..." 
-              (ionChange)="buscarTipoServicos($event.codTipoCausa)"
+              (ionChange)="buscarTipoServicos($event.codTipoCausa); buscarModulosPorEquipamento($event.codTipoCausa)"
               [ngModel]="ratDetalhe?.tipoCausa" 
               interface="action-sheet"
               required>

@@ -41,7 +41,6 @@ export class EquipamentoCausaService {
           return Number(equipamentosCausas.equipamento.codEquip) === codEquip;
         });
         
-        console.log(equipamentosCausas)
         resolve(equipamentosCausas);
       }).catch(() => reject());
     });
