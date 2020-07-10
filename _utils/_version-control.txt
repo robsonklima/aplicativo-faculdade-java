@@ -1,8 +1,9 @@
 0.0.88 - 13/07/20
-- HTTPS
+- HTTPS.
 
 0.0.87 - 13/07/20
-- Ponto
+- Ponto;
+- Perfil do Usuario.
 
 0.0.86 - 13/07/20
 - Causas e Modelos de Equipamentos
