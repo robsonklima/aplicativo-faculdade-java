@@ -21,6 +21,7 @@ export class PontosPage {
   dataAtual: any;
   dataAtualFormatada: any;
   pontosData: PontoData[] = [];
+  botaoPontoStatus: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -37,6 +38,7 @@ export class PontosPage {
   ngOnInit() {
     this.carregarDadosGlobais()
       .then(() => this.carregarDatasEPontosUsuario(null))
+      .then(() => this.verificarStatusBotaoPonto())
       .catch(() => {});
 
     this.dataAtual = moment();
@@ -63,10 +65,24 @@ export class PontosPage {
     });
   }
 
-  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true) {
+  private verificarStatusBotaoPonto() {
+    this.pontosData.forEach(data => {
+      if (data.dataRegistro ==  moment().format('YYYY-MM-DD')) {
+        this.botaoPontoStatus = true;
+      }      
+    });
+  }
+
+  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true) {   
+    if (!navigator.onLine) {
+      if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
+      if (refresher) refresher.complete(); 
+      return;
+    }
+
     const loader = this.loadingCtrl.create({ content: "Carregando..." });
     if (verbose) loader.present();
-     
+    
     this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
       this.pontosData = pontosData;
 
@@ -77,7 +93,7 @@ export class PontosPage {
       });
 
       if (verbose) loader.dismiss();
-      if (refresher) refresher.complete();
+      if (refresher) refresher.complete(); 
     }, e => {
       this.exibirToast('Não foi possível carregar os registros.', Config.TOAST.ERROR);
       if (verbose) loader.dismiss();
@@ -119,15 +135,15 @@ export class PontosPage {
 
                   loader.dismiss();
                 }, er => {
-                  this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                  this.exibirToast(`Erro ao registrar o ponto.`, Config.TOAST.ERROR);
                   loader.dismiss();
                 });
               }).catch((er) => {
-                this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+                this.exibirToast(`Favor ativar a localizacao.`, Config.TOAST.ERROR);
                 loader.dismiss();
               });
             }).catch((er) => {
-              this.exibirToast(`Erro ao registrar o ponto: ${er}.`, Config.TOAST.ERROR);
+              this.exibirToast(`Erro ao registrar o ponto.`, Config.TOAST.ERROR);
               loader.dismiss();
             });
           }

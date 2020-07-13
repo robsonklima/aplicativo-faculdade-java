@@ -47,12 +47,6 @@
         name="md-time" 
         item-start></ion-icon>
       Ponto
-      <ion-badge 
-        item-end
-        *ngIf="pontosDataInconsistentesQtd"
-        [ngClass]="{ 'bd-red': pontosDataInconsistentesQtd }">
-        {{ pontosDataInconsistentesQtd }}
-      </ion-badge>
     </button>
 
     <button 

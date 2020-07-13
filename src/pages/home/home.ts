@@ -69,7 +69,6 @@ export class HomePage {
   task: any;
   perfilTecnico: boolean;
   usuarioPonto: UsuarioPonto;
-  pontosDataInconsistentesQtd: number;
 
   constructor(
     public platform: Platform,
@@ -115,7 +114,6 @@ export class HomePage {
       .then(() => this.carregarAuditoriasUsuario().catch(() => {}))
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
       .then(() => this.obterRegistrosPontoDoDia().catch(() => {}))
-      .then(() => this.obterRegistrosPonto().catch(() => {}))
       .then(() => this.verificarNecessidadeRegistroPontoIntervalo().catch(() => {}))
       .catch(() => {});
 
@@ -455,19 +453,6 @@ export class HomePage {
           this.usuarioPonto = res;
 
           resolve(this.usuarioPonto);
-        },
-        err => {
-          reject();
-        });
-    });
-  }
-
-  private obterRegistrosPonto(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe(pontosData => {
-          this.pontosDataInconsistentesQtd = pontosData.filter((p) => { return (p.pontoDataStatus.codPontoDataStatus == 2) }).length;
-
-          resolve(this.pontosDataInconsistentesQtd);
         },
         err => {
           reject();

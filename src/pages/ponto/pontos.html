@@ -33,6 +33,6 @@
   </ion-list>
 
   <ion-fab right bottom>
-    <button ion-fab color="secondary" (click)="registrarPonto()"><ion-icon name="md-finger-print"></ion-icon></button>
+    <button ion-fab color="secondary" (click)="registrarPonto()" [disabled]="!botaoPontoStatus"><ion-icon name="md-finger-print"></ion-icon></button>
   </ion-fab>
 </ion-content>
