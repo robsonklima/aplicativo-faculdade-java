@@ -67,38 +67,46 @@ export class PontosPage {
 
   private verificarStatusBotaoPonto() {
     this.pontosData.forEach(data => {
+      console.log(data.dataRegistro, moment().format('YYYY-MM-DD'));
+      
+
       if (data.dataRegistro ==  moment().format('YYYY-MM-DD')) {
         this.botaoPontoStatus = true;
       }      
     });
   }
 
-  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true) {   
-    if (!navigator.onLine) {
-      if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
-      if (refresher) refresher.complete(); 
-      return;
-    }
+  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true): Promise<any> {  
+    return new Promise((resolve, reject) => { 
+      if (!navigator.onLine) {
+        if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
+        if (refresher) refresher.complete(); 
+        reject();
+      }
 
-    const loader = this.loadingCtrl.create({ content: "Carregando..." });
-    if (verbose) loader.present();
-    
-    this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
-      this.pontosData = pontosData;
+      const loader = this.loadingCtrl.create({ content: "Carregando...", enableBackdropDismiss: true });
+      if (verbose) loader.present();
+      
+      this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
+        this.pontosData = pontosData;
 
-      this.pontosData.forEach((data, i) => {
-        this.pontosData[i].pontosUsuario = data.pontosUsuario.sort((a,b) => { 
-          return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
-        }); 
-      });
+        this.pontosData.forEach((data, i) => {
+          this.pontosData[i].pontosUsuario = data.pontosUsuario.sort((a,b) => { 
+            return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
+          }); 
+        });
 
-      if (verbose) loader.dismiss();
-      if (refresher) refresher.complete(); 
-    }, e => {
-      this.exibirToast('Não foi possível carregar os registros.', Config.TOAST.ERROR);
-      if (verbose) loader.dismiss();
-      if (refresher) refresher.complete();
-    })
+        if (verbose) loader.dismiss();
+        if (refresher) refresher.complete(); 
+        
+        resolve();
+      }, e => {
+        this.exibirToast('Não foi possível carregar os registros.', Config.TOAST.ERROR);
+        if (verbose) loader.dismiss();
+        if (refresher) refresher.complete();
+        reject();
+      })
+    });
   }
 
   public registrarPonto() {

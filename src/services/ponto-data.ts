@@ -16,14 +16,15 @@ export class PontoDataService {
 
   buscarPontosDataPorUsuario(codUsuario: string): Observable<PontoData[]> {
     return this.http.get(Config.API_URL + 'PontoData/' + codUsuario)
-      .timeout(10000)
+      .timeout(60000)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json()));
+      .catch((error: any) => Observable.throw(error));
   }
 
   enviarPontoDataApi(pontoData: PontoData): Observable<PontoData> {
     return this.http.post(Config.API_URL + 'PontoData', pontoData)
-      .map((res: Response) => {return res.json()})
+      .timeout(30000)
+      .map((res: Response) => {console.log(res.json()); return res.json()})
       .catch((error: any) => {return Observable.throw(error)});
   }
 }
