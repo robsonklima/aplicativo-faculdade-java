@@ -46,7 +46,8 @@ export class PontosPage {
   }
   
   public telaPonto(pontoData: PontoData) {
-    this.navCtrl.push(PontoPage, { pontoData: pontoData });
+    //this.navCtrl.push(PontoPage, { pontoData: pontoData });
+    this.exibirToast('Recurso temporariamente indisponivel. Utilize o SAT Web para corrigir o seu ponto.', Config.TOAST.INFO);
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
