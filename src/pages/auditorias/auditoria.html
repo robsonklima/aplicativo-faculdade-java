@@ -44,7 +44,7 @@
 
           <ion-item>
             <ion-label stacked>RG</ion-label>
-            <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="10" [ngModel]="auditoria?.condutor?.rg"
+            <ion-input type="text" name="rg" (keyup)="formatarCampo($event, '##########')" maxlength="12" [ngModel]="auditoria?.condutor?.rg"
               placeholder="Digite seu RG"></ion-input>
           </ion-item>
 
@@ -72,7 +72,7 @@
               multiple="true" cancelText="Cancelar" okText="Ok"
               placeholder="Selecione..."
               name="cnhCategorias" 
-              [ngModel]="" 
+              [ngModel]="cnhCategorias" 
               interface="action-sheet"
               cancelText="Cancelar">
               <ion-option [value]="A">A</ion-option>
@@ -84,7 +84,8 @@
 
           <ion-item>
             <ion-label stacked>Filial</ion-label>
-            <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial?.nomeFilial" placeholder="Digite sua Filial" [disabled]="true">
+            <ion-input type="text" name="filial" maxlength="10" [ngModel]="dg?.usuario?.filial?.nomeFilial" 
+              placeholder="Digite sua Filial" [disabled]="true">
             </ion-input>
           </ion-item>
         </ion-list>
