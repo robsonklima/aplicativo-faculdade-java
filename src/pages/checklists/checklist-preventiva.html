@@ -1,0 +1,40 @@
+<ion-header>
+    <ion-navbar no-border-bottom>
+      <ion-buttons end>
+        <button 
+          ion-button 
+          icon-only 
+          (click)="fecharModalConfirmacao()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+
+      <ion-title>Checklist Preventiva</ion-title>
+    </ion-navbar>
+
+    <ion-toolbar>
+      <ion-title>{{ tituloSlide }}</ion-title>
+  
+      <ion-buttons end>
+        <button ion-button icon-only (click)="salvarChecklist()">
+          <ion-icon name="custom-save" class="custom-save-icon"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-slides pager (ionSlideDidChange)="configurarSlide()">
+      <ion-slide>
+        <p>Slide A</p>
+      </ion-slide>
+
+      <ion-slide>
+        <p>Slide B</p>
+      </ion-slide>
+
+      <ion-slide>
+        <p>Slide C</p>
+      </ion-slide>
+    </ion-slides>
+  </ion-content>

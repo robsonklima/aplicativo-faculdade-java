@@ -5,7 +5,7 @@ export class Config {
   public static API_URL = 'https://sat.perto.com.br/prjSATWebAPI/api/';
 
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.93";
+  public static VERSAO_APP = "0.0.94";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';

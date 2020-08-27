@@ -38,6 +38,7 @@ import { FotoPage } from '../fotos/foto';
 import { ChamadoConfPage } from './chamado-conf';
 import { FotoService } from '../../services/foto';
 import { AssinaturaPage } from '../assinatura/assinatura';
+import { ChecklistPreventivaPage } from '../checklists/checklist-preventiva';
 
 
 @Component({
@@ -138,6 +139,14 @@ export class ChamadoPage {
 
   public telaLaudo(chamado: Chamado) {
     const modal = this.modalCtrl.create(LaudoPage, { chamado: this.chamado });
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.configurarSlide(this.slides.getActiveIndex());
+    });
+  }
+
+  public telaChecklistPreventiva(chamado: Chamado) {
+    const modal = this.modalCtrl.create(ChecklistPreventivaPage, { chamado: this.chamado });
     modal.present();
     modal.onDidDismiss(() => {
       this.configurarSlide(this.slides.getActiveIndex());

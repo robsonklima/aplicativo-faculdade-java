@@ -110,10 +110,6 @@ export class ChamadosPage {
             this.chamadoService.apagarChamadosStorage().then((res) => {
               this.chamadosAbertos = [];
               this.carregarChamadosStorage();
-          
-              // this.chamadoService.sincronizarChamados(true, this.dg.usuario.codTecnico).then(() => {
-              //   this.carregarChamadosStorage();
-              // }).catch();
             })
             .catch();
           }

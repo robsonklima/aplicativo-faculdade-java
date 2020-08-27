@@ -457,7 +457,7 @@
           </button>
         </ion-item>
 
-        <ion-item-divider color="light">{{ indexSlide }}.3 Laudo Técnico</ion-item-divider>
+        <ion-item-divider color="light">{{ indexSlide }}.3 Laudo Técnico e Checklist</ion-item-divider>
 
         <ion-item>
           <ion-avatar item-start>
@@ -474,6 +474,18 @@
           <button ion-button clear item-end (click)="removerLaudo()"
             *ngIf="verificarExistenciaLaudo()">
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="assets/imgs/list_1.png">
+          </ion-avatar>
+          
+          <h2>Checklist Preventiva</h2>
+       
+          <button ion-button clear item-end (click)="telaChecklistPreventiva(chamado)">
+            <ion-icon name="add-circle" color="primary"></ion-icon>
           </button>
         </ion-item>
       </ion-item-group>

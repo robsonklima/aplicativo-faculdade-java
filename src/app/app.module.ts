@@ -109,6 +109,7 @@ import { PontoPage } from '../pages/ponto/ponto';
 import { PontoUsuarioService } from '../services/ponto-usuario';
 import { PontosPage } from '../pages/ponto/pontos';
 import { PontoDataService } from '../services/ponto-data';
+import { ChecklistPreventivaPage } from '../pages/checklists/checklist-preventiva';
 
 
 @NgModule({
@@ -156,7 +157,8 @@ import { PontoDataService } from '../services/ponto-data';
     TestePage,
     ChamadoConfPage,
     PontoPage,
-    PontosPage
+    PontosPage,
+    ChecklistPreventivaPage
   ],
   imports: [
     BrowserModule,
@@ -218,6 +220,7 @@ import { PontoDataService } from '../services/ponto-data';
     PontoPage,
     PontosPage,
     LogsPage,
+    ChecklistPreventivaPage,
     TestePage
   ],
   providers: [
