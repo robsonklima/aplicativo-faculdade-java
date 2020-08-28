@@ -135,7 +135,30 @@
       </ion-slide>
 
       <ion-slide>
-        <p>Fotos</p>
+        <ion-list class="list-slide">
+          <ion-item *ngFor="let foto of chamado?.checklistPreventiva?.fotos; let i = index">
+            <ion-avatar item-start>
+              <img src="{{ foto.str }}">
+            </ion-avatar>
+            <h2>Foto {{ i+1 }}</h2>
+            <button ion-button clear item-end 
+              (click)="removerFoto(i)">
+              <ion-icon name="trash" color="danger" class="icon-button"></ion-icon>
+            </button>
+          </ion-item>
+  
+          <ion-item *ngIf="!chamado?.checklistPreventiva?.fotos?.length">
+            <p text-center class="p-msg">Insira as fotos do Checklist</p>
+          </ion-item>
+        </ion-list>
+
+        <ion-fab right bottom>
+          <button 
+            ion-fab color="secondary" 
+            (click)="tirarFoto()">
+            <ion-icon name="camera"></ion-icon>
+          </button>
+        </ion-fab>
       </ion-slide>
 
       <ion-slide>

@@ -484,7 +484,9 @@
           
           <h2>Checklist Preventiva</h2>
        
-          <button ion-button clear item-end (click)="telaChecklistPreventiva(chamado)">
+          <button ion-button clear item-end 
+            (click)="telaChecklistPreventiva(chamado)"
+            [disabled]="!chamado?.checklistPreventiva?.itens.length">
             <ion-icon name="add-circle" color="primary"></ion-icon>
           </button>
         </ion-item>

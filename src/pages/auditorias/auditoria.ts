@@ -121,9 +121,9 @@ export class AuditoriaPage {
               encodingType: this.camera.EncodingType.JPEG,
               mediaType: this.camera.MediaType.PICTURE,
               saveToPhotoAlbum: false,
-              allowEdit: true,
+              allowEdit: false,
               sourceType: 1,
-              correctOrientation: true
+              correctOrientation: false
             }).then(imageData => {
               let foto = new Foto();
               foto.nome = moment().format('YYYYMMDDHHmmss') + "_" + '_' + modalidade;

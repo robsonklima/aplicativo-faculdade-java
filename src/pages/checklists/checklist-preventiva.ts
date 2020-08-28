@@ -1,10 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavParams, AlertController, ViewController, ToastController, Slides } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, AlertController, ViewController, ToastController, Slides, Platform } from 'ionic-angular';
 import { Chamado } from '../../models/chamado';
 import { Config } from '../../models/config';
 import { NgForm } from '@angular/forms';
 import { ChamadoService } from '../../services/chamado';
 import { ChecklistPreventivaItem } from '../../models/checklist-preventiva-item';
+import { Foto } from '../../models/foto';
+import { Camera } from '@ionic-native/camera';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import moment from 'moment';
 
 
 @Component({
@@ -19,6 +24,10 @@ export class ChecklistPreventivaPage {
 
   constructor(
     private navParams: NavParams,
+    private camera: Camera,
+    private diagnostic: Diagnostic,
+    private androidPerm: AndroidPermissions,
+    private platform: Platform,
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
     private toastCtrl: ToastController,
@@ -30,6 +39,10 @@ export class ChecklistPreventivaPage {
   ionViewWillEnter() {
     this.configurarSlide();
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
+    // if (!this.chamado.checklistPreventiva.tensaoComCarga) this.chamado.checklistPreventiva.tensaoComCarga = null;
+    // if (!this.chamado.checklistPreventiva.tensaoSemCarga) this.chamado.checklistPreventiva.tensaoSemCarga = null;
+    // if (!this.chamado.checklistPreventiva.tensaoEntreTerraENeutro) this.chamado.checklistPreventiva.tensaoEntreTerraENeutro = null;
+    // if (!this.chamado.checklistPreventiva.temperatura) this.chamado.checklistPreventiva.temperatura = null;
   }
 
   public fecharModalConfirmacao() {
@@ -53,8 +66,12 @@ export class ChecklistPreventivaPage {
     confirmacao.present();
   }
 
+  private validarCamposObrigatorios(): boolean {
+    return true;
+  }
+
   public salvarChecklist() {
-    //if (!this.validarCamposObrigatorios()) return;
+    if (!this.validarCamposObrigatorios()) return;
 
     const confirm = this.alertCtrl.create({
       title: 'Finalizar Checklist?',
@@ -92,6 +109,51 @@ export class ChecklistPreventivaPage {
       this.configurarSlide();
       this.slides.slideTo(1, 500);
     });
+  }
+
+  public tirarFoto() {
+    this.chamadoService.buscarStatusExecucao().then(executando => {
+      if (executando) {
+        this.exibirToast(Config.MSG.AGUARDE_ALGUNS_INSTANTES, Config.TOAST.WARNING);
+        return;
+      }
+
+      this.platform.ready().then(() => {
+        if (!this.platform.is('cordova')) return;
+  
+        this.diagnostic.requestRuntimePermissions([
+          this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
+          this.diagnostic.permission.CAMERA
+        ]).then(() => {
+          this.androidPerm.requestPermissions([
+            this.androidPerm.PERMISSION.WRITE_EXTERNAL_STORAGE,
+            this.androidPerm.PERMISSION.CAMERA
+          ]).then(() => {
+            this.camera.getPicture({
+              quality: Config.FOTO.QUALITY,
+              targetWidth: Config.FOTO.WIDTH,
+              targetHeight: Config.FOTO.HEIGHT,
+              destinationType: this.camera.DestinationType.DATA_URL,
+              encodingType: this.camera.EncodingType.JPEG,
+              mediaType: this.camera.MediaType.PICTURE,
+              saveToPhotoAlbum: false,
+              allowEdit: false,
+              sourceType: 1,
+              correctOrientation: false
+            }).then(imageData => {
+              let foto: Foto = new Foto();
+              foto.codOS = this.chamado.codOs;
+              foto.nome = moment().format('YYYYMMDDHHmmss') + '_' + this.chamado.codOs + '_CHECKLIST_PREVENTIVA';
+              foto.str = 'data:image/jpeg;base64,' + imageData;
+              foto.modalidade = "CHECKLIST_PREVENTIVA";
+              this.chamado.checklistPreventiva.fotos.push(foto);
+              this.chamadoService.atualizarChamado(this.chamado);
+              this.camera.cleanup().catch();
+            }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+          }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+        }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+      }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
+    });    
   }
 
   public selecionarItem(item: ChecklistPreventivaItem, e: any) {
@@ -160,13 +222,24 @@ export class ChecklistPreventivaPage {
     }
   }
 
-  private exibirToast(mensagem: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const toast = this.toastCtrl.create({
-        message: mensagem, duration: Config.TOAST.DURACAO, position: 'bottom'
-      });
-
-      resolve(toast.present());
+  private exibirAlerta(msg: string) {
+    const alerta = this.alertCtrl.create({
+      title: 'Alerta!',
+      subTitle: msg,
+      buttons: ['OK']
     });
+
+    alerta.present();
+  }
+
+  private exibirToast(mensagem: string, tipo: string='info', posicao: string=null) {
+    const toast = this.toastCtrl.create({
+      message: mensagem, 
+      duration: Config.TOAST.DURACAO, 
+      position: posicao || 'bottom', 
+      cssClass: 'toast-' + tipo
+    });
+    
+    toast.present();
   }
 }
