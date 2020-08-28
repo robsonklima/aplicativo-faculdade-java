@@ -8,6 +8,7 @@ import { EquipamentoContrato } from './equipamento-contrato';
 import { TipoIntervencao } from './tipo-intervencao';
 import { Rat } from './rat';
 import { Localizacao } from './localizacao';
+import { ChecklistPreventiva } from './checklist-preventiva';
 
 export class Chamado {
 	codOs: number;
@@ -56,4 +57,5 @@ export class Chamado {
 	appVersao: string;
 	versao: string;
 	simCard: string;
+	checklistPreventiva: ChecklistPreventiva;
 }

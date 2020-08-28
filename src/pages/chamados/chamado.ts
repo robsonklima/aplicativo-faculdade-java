@@ -148,8 +148,9 @@ export class ChamadoPage {
   public telaChecklistPreventiva(chamado: Chamado) {
     const modal = this.modalCtrl.create(ChecklistPreventivaPage, { chamado: this.chamado });
     modal.present();
-    modal.onDidDismiss(() => {
+    modal.onDidDismiss((chamado: Chamado) => {
       this.configurarSlide(this.slides.getActiveIndex());
+      this.chamado = chamado;
     });
   }
 

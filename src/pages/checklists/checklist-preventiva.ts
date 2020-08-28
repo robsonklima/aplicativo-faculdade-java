@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavParams, AlertController, ViewController, ToastController, Slides } from 'ionic-angular';
 import { Chamado } from '../../models/chamado';
 import { Config } from '../../models/config';
+import { NgForm } from '@angular/forms';
+import { ChamadoService } from '../../services/chamado';
+import { ChecklistPreventivaItem } from '../../models/checklist-preventiva-item';
 
 
 @Component({
@@ -12,25 +15,27 @@ export class ChecklistPreventivaPage {
   @ViewChild(Slides) slides: Slides;
   tituloSlide: string;
   chamado: Chamado;
+  itensNaoChecados: number;
 
   constructor(
     private navParams: NavParams,
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private chamadoService: ChamadoService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
     this.configurarSlide();
-    console.log(this.chamado);
+    this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
   }
 
   public fecharModalConfirmacao() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: 'Ao sair você perderá as informações inseridas?',
+      message: 'Ao sair você perderá todas as informações inseridas ou modificadas?',
       buttons: [
         {
           text: 'Cancelar',
@@ -39,7 +44,7 @@ export class ChecklistPreventivaPage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.viewCtrl.dismiss();
+            this.viewCtrl.dismiss(this.chamado);
           }
         }
       ]
@@ -52,8 +57,8 @@ export class ChecklistPreventivaPage {
     //if (!this.validarCamposObrigatorios()) return;
 
     const confirm = this.alertCtrl.create({
-      title: 'Finalizar Checklist e Salvar?',
-      message: 'Você deseja finalizar este checklist?',
+      title: 'Finalizar Checklist?',
+      message: 'Você deseja salvar e finalizar este checklist?',
       buttons: [
         {
           text: 'Não',
@@ -62,22 +67,73 @@ export class ChecklistPreventivaPage {
         {
           text: 'Sim',
           handler: () => {
-            //this.loadingFactory.exibir("Enviando dados... Por favor aguarde");
-
-            // this.auditoriaService.enviarAuditoriaApi(this.auditoria).subscribe(() => {
-            //   this.navCtrl.popToRoot().then(() => {
-            //     this.loadingFactory.encerrar();
-            //     this.exibirToast('Auditoria enviada com sucesso');
-            //   });
-            // }, err => {
-            //   this.loadingFactory.encerrar();
-            //   this.exibirToast('Erro ao enviar auditoria. Tente novamente', Config.TOAST.ERROR);
-            // });
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.viewCtrl.dismiss(this.chamado);
+            });
           }
         }
       ]
     });
     confirm.present();
+  }
+
+  public salvarInformacoesAmbiente(form: NgForm) {
+    this.chamado.checklistPreventiva.tensaoSemCarga = Number(form.value.tensaoSemCarga);
+    this.chamado.checklistPreventiva.tensaoComCarga = Number(form.value.tensaoComCarga);
+    this.chamado.checklistPreventiva.tensaoEntreTerraENeutro = Number(form.value.tensaoEntreTerraENeutro);
+    this.chamado.checklistPreventiva.temperatura = Number(form.value.temperatura);
+    this.chamado.checklistPreventiva.redeEstabilizada = Number(form.value.redeEstabilizada);
+    this.chamado.checklistPreventiva.possuiNoBreak = Number(form.value.possuiNoBreak);
+    this.chamado.checklistPreventiva.possuiArCondicionado = Number(form.value.possuiArCondicionado);
+    this.chamado.checklistPreventiva.justificativa = form.value.justificativa;
+
+    console.log(this.chamado);
+    this.chamadoService.atualizarChamado(this.chamado).then(() => {
+      this.configurarSlide();
+      this.slides.slideTo(1, 500);
+    });
+  }
+
+  public selecionarItem(item: ChecklistPreventivaItem, e: any) {
+    if (!e || item.obrigatorioObs) {
+      const prompt = this.alertCtrl.create({
+        title: 'Observação',
+        message: `${ item.descricao }`,
+        inputs: [
+          {
+            name: 'observacao',
+            placeholder: 'Observação'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: res => {}
+          },
+          {
+            text: 'Salvar',
+            handler: res => {
+              // Atualiza Obs
+              for (let i = 0; i < this.chamado.checklistPreventiva.itens.length; i++) {
+                if (this.chamado.checklistPreventiva.itens[i].descricao === item.descricao) {
+                  this.chamado.checklistPreventiva.itens[i].obs = res.observacao;
+                }
+              }
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+
+    // Atualiza checado
+    for (let i = 0; i < this.chamado.checklistPreventiva.itens.length; i++) {
+      if (this.chamado.checklistPreventiva.itens[i].descricao === item.descricao) {
+        this.chamado.checklistPreventiva.itens[i].checado = e;
+      }
+    }
+
+    this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
   }
 
   private configurarSlide() {

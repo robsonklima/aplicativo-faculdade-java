@@ -4,13 +4,13 @@ import { Foto } from "./foto";
 export class ChecklistPreventiva {
     codChecklistPreventiva: number;
     codOS: number;
-    TensaoSemCarga: number;
+    tensaoSemCarga: number;
     tensaoComCarga: number;
     tensaoEntreTerraENeutro: number;
+    temperatura: number;
     redeEstabilizada: number;
     possuiNoBreak: number;
     possuiArCondicionado: number;
-    temperatura: number;
     justificativa: string;
     indAtivo: number;
     itens: ChecklistPreventivaItem[] = [];
