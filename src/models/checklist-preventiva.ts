@@ -15,4 +15,6 @@ export class ChecklistPreventiva {
     indAtivo: number;
     itens: ChecklistPreventivaItem[] = [];
     fotos: Foto[] = [];
+    realizado: boolean;
+    codUsuarioCad: string;
 }

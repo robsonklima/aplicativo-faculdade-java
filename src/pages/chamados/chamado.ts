@@ -873,6 +873,12 @@ export class ChamadoPage {
   }
 
   private validarCamposObrigatorios(): boolean {
+    if (!this.chamado.checklistPreventiva.realizado && this.chamado.checklistPreventiva.itens.length > 0) {
+      this.exibirToast("Favor realizar o Checklist");
+
+      return;
+    }
+
     if (this.chamado.rats.length == 0) {
       this.exibirToast("favor inserir a RAT");
 

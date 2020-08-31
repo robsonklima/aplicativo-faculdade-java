@@ -10,6 +10,8 @@ import { Camera } from '@ionic-native/camera';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import moment from 'moment';
+import { DadosGlobaisService } from '../../services/dados-globais';
+import { DadosGlobais } from '../../models/dados-globais';
 
 
 @Component({
@@ -21,6 +23,7 @@ export class ChecklistPreventivaPage {
   tituloSlide: string;
   chamado: Chamado;
   itensNaoChecados: number;
+  dg: DadosGlobais;
 
   constructor(
     private navParams: NavParams,
@@ -31,18 +34,28 @@ export class ChecklistPreventivaPage {
     private alertCtrl: AlertController,
     private viewCtrl: ViewController,
     private toastCtrl: ToastController,
-    private chamadoService: ChamadoService
+    private chamadoService: ChamadoService,
+    private dadosGlobaisService: DadosGlobaisService
   ) {
     this.chamado = this.navParams.get('chamado');
   }
 
   ionViewWillEnter() {
+    this.carregarDadosGlobais();
     this.configurarSlide();
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
-    // if (!this.chamado.checklistPreventiva.tensaoComCarga) this.chamado.checklistPreventiva.tensaoComCarga = null;
-    // if (!this.chamado.checklistPreventiva.tensaoSemCarga) this.chamado.checklistPreventiva.tensaoSemCarga = null;
-    // if (!this.chamado.checklistPreventiva.tensaoEntreTerraENeutro) this.chamado.checklistPreventiva.tensaoEntreTerraENeutro = null;
-    // if (!this.chamado.checklistPreventiva.temperatura) this.chamado.checklistPreventiva.temperatura = null;
+    console.log(this.chamado)
+  }
+
+  private carregarDadosGlobais(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.dadosGlobaisService.buscarDadosGlobaisStorage().then((dados) => {
+        this.dg = dados;
+
+        resolve(true);
+      })
+      .catch((err) => { reject(false) });
+    });
   }
 
   public fecharModalConfirmacao() {
@@ -67,31 +80,13 @@ export class ChecklistPreventivaPage {
   }
 
   private validarCamposObrigatorios(): boolean {
+    if (this.platform.is('cordova') && !this.chamado.checklistPreventiva.fotos.length) {
+      this.exibirToast('Você esqueceu de incluir as fotos do checklist', Config.TOAST.ERROR);
+
+      return false;
+    }
+
     return true;
-  }
-
-  public salvarChecklist() {
-    if (!this.validarCamposObrigatorios()) return;
-
-    const confirm = this.alertCtrl.create({
-      title: 'Finalizar Checklist?',
-      message: 'Você deseja salvar e finalizar este checklist?',
-      buttons: [
-        {
-          text: 'Não',
-          handler: () => {}
-        },
-        {
-          text: 'Sim',
-          handler: () => {
-            this.chamadoService.atualizarChamado(this.chamado).then(() => {
-              this.viewCtrl.dismiss(this.chamado);
-            });
-          }
-        }
-      ]
-    });
-    confirm.present();
   }
 
   public salvarInformacoesAmbiente(form: NgForm) {
@@ -119,7 +114,10 @@ export class ChecklistPreventivaPage {
       }
 
       this.platform.ready().then(() => {
-        if (!this.platform.is('cordova')) return;
+        if (!this.platform.is('cordova')) {
+          this.exibirToast(Config.MSG.RECURSO_NATIVO, Config.TOAST.WARNING);
+          return;
+        }
   
         this.diagnostic.requestRuntimePermissions([
           this.diagnostic.permission.WRITE_EXTERNAL_STORAGE,
@@ -154,6 +152,28 @@ export class ChecklistPreventivaPage {
         }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
       }).catch(() => { this.exibirAlerta(Config.MSG.ERRO_AO_ACESSAR_CAMERA) });
     });    
+  }
+
+  public removerFoto(i: number) {
+    const confirmacao = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: `Deseja excluir a foto ${i+1}?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => { }
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.chamado.checklistPreventiva.fotos.splice(i, 1);
+            this.chamadoService.atualizarChamado(this.chamado);
+          }
+        }
+      ]
+    });
+
+    confirmacao.present();
   }
 
   public selecionarItem(item: ChecklistPreventivaItem, e: any) {
@@ -196,6 +216,33 @@ export class ChecklistPreventivaPage {
     }
 
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
+  }
+
+  public salvarChecklist() {
+    if (!this.validarCamposObrigatorios()) return;
+
+    const confirm = this.alertCtrl.create({
+      title: 'Finalizar Checklist?',
+      message: 'Você deseja salvar e finalizar este checklist?',
+      buttons: [
+        {
+          text: 'Não',
+          handler: () => {}
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.chamado.checklistPreventiva.realizado = true;
+            this.chamado.checklistPreventiva.codUsuarioCad = this.dg.usuario.codUsuario;
+
+            this.chamadoService.atualizarChamado(this.chamado).then(() => {
+              this.viewCtrl.dismiss(this.chamado);
+            });
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   private configurarSlide() {
