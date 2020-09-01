@@ -5,5 +5,6 @@ export class ChecklistPreventivaItem {
     checado: number;
     obs: string;
     obrigatorioObs: number;
+    codCheckListPreventivaLayoutItem: number;
     indAtivo: number;
 }

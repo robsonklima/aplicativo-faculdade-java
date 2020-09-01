@@ -181,6 +181,7 @@ export class ChecklistPreventivaPage {
       const prompt = this.alertCtrl.create({
         title: 'Observação',
         message: `${ item.descricao }`,
+        enableBackdropDismiss: false,
         inputs: [
           {
             name: 'observacao',
@@ -210,12 +211,14 @@ export class ChecklistPreventivaPage {
 
     // Atualiza checado
     for (let i = 0; i < this.chamado.checklistPreventiva.itens.length; i++) {
-      if (this.chamado.checklistPreventiva.itens[i].descricao === item.descricao) {
-        this.chamado.checklistPreventiva.itens[i].checado = e;
+      if (this.chamado.checklistPreventiva.itens[i].descricao === item.descricao && e) {
+        this.chamado.checklistPreventiva.itens[i].checado = 1;
       }
     }
 
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
+
+    console.log(this.chamado.checklistPreventiva.itens)
   }
 
   public salvarChecklist() {

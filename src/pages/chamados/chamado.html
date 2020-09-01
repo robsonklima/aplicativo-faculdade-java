@@ -487,7 +487,9 @@
           <button ion-button clear item-end 
             (click)="telaChecklistPreventiva(chamado)"
             [disabled]="!chamado?.checklistPreventiva?.itens.length">
-            <ion-icon name="add-circle" color="primary"></ion-icon>
+            <ion-icon *ngIf="!chamado?.checklistPreventiva?.realizado" name="add-circle" color="primary"></ion-icon>
+
+            <ion-icon *ngIf="chamado?.checklistPreventiva?.realizado" name="open" color="secondary"></ion-icon>
           </button>
         </ion-item>
       </ion-item-group>
