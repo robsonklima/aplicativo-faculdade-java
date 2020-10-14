@@ -203,8 +203,10 @@ export class ChamadosPage {
     return new Promise((resolve, reject) => {
       this.chamadoService.buscarChamadosStorage().then((chamados) => {
         this.chamados = chamados;
-        this.chamadosAbertos = chamados.filter((c) => { return (!c.dataHoraFechamento) });
+        console.log(this.chamados);
 
+        this.chamadosAbertos = chamados.filter((c) => { return (!c.dataHoraFechamento) });
+        
         this.atualizarBadge();
         resolve();
       }).catch();

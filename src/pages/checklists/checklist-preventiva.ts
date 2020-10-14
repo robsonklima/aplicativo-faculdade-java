@@ -184,7 +184,7 @@ export class ChecklistPreventivaPage {
         enableBackdropDismiss: false,
         inputs: [
           {
-            name: 'observacao',
+            name: 'obs',
             placeholder: 'Observação'
           },
         ],
@@ -196,16 +196,23 @@ export class ChecklistPreventivaPage {
           {
             text: 'Salvar',
             handler: res => {
+              if (!res.obs || res.obs.trim() == '') {
+                this.exibirToast('Favor preencher a observação', Config.TOAST.ERROR);
+                
+                return false
+              }
+
               // Atualiza Obs
               for (let i = 0; i < this.chamado.checklistPreventiva.itens.length; i++) {
                 if (this.chamado.checklistPreventiva.itens[i].descricao === item.descricao) {
-                  this.chamado.checklistPreventiva.itens[i].obs = res.observacao;
+                  this.chamado.checklistPreventiva.itens[i].obs = res.obs;
                 }
               }
             }
           }
         ]
       });
+
       prompt.present();
     }
 
@@ -217,8 +224,6 @@ export class ChecklistPreventivaPage {
     }
 
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
-
-    console.log(this.chamado.checklistPreventiva.itens)
   }
 
   public salvarChecklist() {
