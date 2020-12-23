@@ -46,7 +46,6 @@ export class AuditoriaPage {
     private auditoriaService: AuditoriaService
   ) {
     this.auditoria = this.navParams.get('auditoria');
-    console.log(this.auditoria)
   }
 
   ionViewWillEnter() {

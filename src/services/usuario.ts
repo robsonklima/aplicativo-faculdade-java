@@ -35,6 +35,7 @@ export class UsuarioService {
 
   public login(login: Login): Observable<Login> {
     return this.http.post(Config.API_URL + 'UsuarioLogin', login)
+      .timeout(10000)
       .map((res: Response) => {
         return res.json()
       })

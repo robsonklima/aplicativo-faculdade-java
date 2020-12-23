@@ -102,7 +102,7 @@ export class PontoPage {
       buttons: [
         {
           text: 'Cancelar',
-          handler: () => {}
+          handler: () => { }
         },
         {
           text: 'Confirmar',

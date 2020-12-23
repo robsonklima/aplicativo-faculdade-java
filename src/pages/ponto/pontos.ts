@@ -46,8 +46,7 @@ export class PontosPage {
   }
   
   public telaPonto(pontoData: PontoData) {
-    //this.navCtrl.push(PontoPage, { pontoData: pontoData });
-    this.exibirToast('Recurso temporariamente indisponivel. Utilize o SAT Web para corrigir o seu ponto.', Config.TOAST.INFO);
+    this.navCtrl.push(PontoPage, { pontoData: pontoData });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
@@ -68,9 +67,6 @@ export class PontosPage {
 
   private verificarStatusBotaoPonto() {
     this.pontosData.forEach(data => {
-      console.log(data.dataRegistro, moment().format('YYYY-MM-DD'));
-      
-
       if (data.dataRegistro ==  moment().format('YYYY-MM-DD')) {
         this.botaoPontoStatus = true;
       }      

@@ -44,7 +44,6 @@ export class ChecklistPreventivaPage {
     this.carregarDadosGlobais();
     this.configurarSlide();
     this.itensNaoChecados = this.chamado.checklistPreventiva.itens.filter((i) => { return (i.checado === 0 && i.obs === null) }).length;
-    console.log(this.chamado)
   }
 
   private carregarDadosGlobais(): Promise<boolean> {

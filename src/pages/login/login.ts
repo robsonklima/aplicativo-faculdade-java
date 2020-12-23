@@ -60,6 +60,8 @@ export class LoginPage implements OnInit {
     login.usuario = usuario;
     login.versaoAplicativo = this.versaoApp;
 
+    console.log(login)
+
     this.usuarioService.login(login).subscribe((login) => {
       if(login && !login.erro) {
         loading.dismiss().then(() => {
