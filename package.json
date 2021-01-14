@@ -67,7 +67,7 @@
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-inappbrowser": "^2.0.2",
-    "cordova-plugin-ionic-webview": "^1.2.1",
+    "cordova-plugin-ionic-webview": "^2.2.0",
     "cordova-plugin-market": "^1.2.0",
     "cordova-plugin-mauron85-background-geolocation": "^3.0.0-alpha.50",
     "cordova-plugin-nativeaudio": "^3.0.9",
