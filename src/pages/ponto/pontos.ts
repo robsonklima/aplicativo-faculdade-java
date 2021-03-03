@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, LoadingController, AlertController, ToastController, NavController } from 'ionic-angular';
+import { Platform, LoadingController, AlertController, ToastController, NavController, ModalController } from 'ionic-angular';
 import { PontoDataService } from '../../services/ponto-data';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import moment from 'moment';
@@ -8,7 +8,6 @@ import { PontoData } from '../../models/ponto-data';
 import { Config } from '../../models/config';
 import { Geolocation } from '@ionic-native/geolocation';
 import { PontoUsuario } from '../../models/ponto-usuario';
-import { PontoUsuarioService } from '../../services/ponto-usuario';
 import { PontoPage } from './ponto';
 
 
@@ -27,12 +26,12 @@ export class PontosPage {
     private navCtrl: NavController,
     private pontoDataService: PontoDataService,
     private dadosGlobaisService: DadosGlobaisService,
-    private pontoUsuarioService: PontoUsuarioService,
     private platform: Platform,
     private loadingCtrl: LoadingController,
     private geolocation: Geolocation,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -45,8 +44,16 @@ export class PontosPage {
     this.dataAtualFormatada = this.dataAtual.format('DD/MM/YYYY');
   }
   
-  public telaPonto(pontoData: PontoData) {
-    this.navCtrl.push(PontoPage, { pontoData: pontoData });
+  public telaPonto(pontoData: PontoData, index: number) {
+    const modal = this.modalCtrl.create(PontoPage, { pontoData: pontoData, index: index });
+    modal.present();
+    modal.onDidDismiss((pontoData: PontoData, index: string) => {
+      //console.log(pontoData, index)
+
+      this.pontosData.slice(Number(index), 1);
+      //this.pontosData[index] = pontoData;
+      this.pontoDataService.atualizarPontosDataStorage(this.pontosData);
+    });
   }
 
   private carregarDadosGlobais(): Promise<boolean> {
@@ -73,18 +80,17 @@ export class PontosPage {
     });
   }
 
-  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true): Promise<any> {  
-    return new Promise((resolve, reject) => { 
-      if (!navigator.onLine) {
-        if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
-        if (refresher) refresher.complete(); 
-        reject();
-      }
+  public carregarDatasEPontosUsuario(refresher, verbose: boolean=true): any {  
+    if (!navigator.onLine) {
+      if (verbose) this.exibirToast(Config.MSG.INTERNET_OFFLINE, Config.TOAST.ERROR);
+      if (refresher) refresher.complete(); 
+    }
 
-      const loader = this.loadingCtrl.create({ content: "Carregando...", enableBackdropDismiss: true });
-      if (verbose) loader.present();
-      
-      this.pontoDataService.buscarPontosDataPorUsuario(this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
+    const loader = this.loadingCtrl.create({ content: "Carregando Pontos...", enableBackdropDismiss: true });
+    if (verbose) loader.present();
+    
+    this.pontoDataService.buscarPontosDataStorage().then((pontosData: PontoData[]) => {
+      this.pontoDataService.enviarPontoDataApi(pontosData, this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
         this.pontosData = pontosData;
 
         this.pontosData.forEach((data, i) => {
@@ -95,15 +101,14 @@ export class PontosPage {
 
         if (verbose) loader.dismiss();
         if (refresher) refresher.complete(); 
-        
-        resolve();
+        this.verificarStatusBotaoPonto();
+        this.pontoDataService.atualizarPontosDataStorage(this.pontosData);
       }, e => {
         this.exibirToast('Não foi possível carregar os registros.', Config.TOAST.ERROR);
         if (verbose) loader.dismiss();
         if (refresher) refresher.complete();
-        reject();
       })
-    });
+    }).catch();
   }
 
   public registrarPonto() {
@@ -118,38 +123,23 @@ export class PontosPage {
         {
           text: 'Confirmar',
           handler: () => {
-            const loader = this.loadingCtrl.create({ content: "Carregando..." });
-            loader.present();
-
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
-                let pontosUsuario: PontoUsuario[] = [];
-
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
                 pontoUsuario.dataHoraRegistro = moment().format('YYYY-MM-DD HH:mm:ss');
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
                 pontoUsuario.indAtivo = 1;
-                pontosUsuario.push(pontoUsuario);
+                pontoUsuario.sincronizado = false;
 
-                this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe((pontoUsuario: PontoUsuario) => {
-                  this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
-
-                  this.pontosData[0].pontosUsuario.push(pontoUsuario);
-
-                  loader.dismiss();
-                }, er => {
-                  this.exibirToast(`Erro ao registrar o ponto.`, Config.TOAST.ERROR);
-                  loader.dismiss();
-                });
+                this.pontosData[0].pontosUsuario.push(pontoUsuario);
+                this.pontoDataService.atualizarPontosDataStorage(this.pontosData);
               }).catch((er) => {
                 this.exibirToast(`Favor ativar a localizacao.`, Config.TOAST.ERROR);
-                loader.dismiss();
               });
             }).catch((er) => {
               this.exibirToast(`Erro ao registrar o ponto.`, Config.TOAST.ERROR);
-              loader.dismiss();
             });
           }
         }

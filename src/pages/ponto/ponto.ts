@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { PontoData } from '../../models/ponto-data';
-import { NavParams, AlertController, ToastController, Platform, NavController, LoadingController } from 'ionic-angular';
+import { NavParams, AlertController, ToastController, Platform, NavController, ViewController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import moment from 'moment';
-import { PontoUsuarioService } from '../../services/ponto-usuario';
 import { Config } from '../../models/config';
 import { PontoUsuario } from '../../models/ponto-usuario';
 import { DadosGlobaisService } from '../../services/dados-globais';
 import { DadosGlobais } from '../../models/dados-globais';
 import { PontoDataService } from '../../services/ponto-data';
+import { PontosPage } from './pontos';
 
 
 @Component({
@@ -18,6 +17,7 @@ import { PontoDataService } from '../../services/ponto-data';
 export class PontoPage {
   dg: DadosGlobais;
   pontoData: PontoData;
+  index: string;
 
   constructor(
     private navParams: NavParams,
@@ -25,13 +25,13 @@ export class PontoPage {
     private geolocation: Geolocation,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController,
-    private navCtrl: NavController,
     private dadosGlobaisService: DadosGlobaisService,
-    private pontoUsuarioService: PontoUsuarioService,
-    private pontoDataService: PontoDataService
+    private navCtrl: NavController,
+    private pontoDataService: PontoDataService,
+    private viewCtrl: ViewController
   ) {
     this.pontoData = this.navParams.get('pontoData');
+    this.index = this.navParams.get('index');
   }
 
   ngOnInit() {
@@ -58,7 +58,7 @@ export class PontoPage {
     });
   }
 
-  public deletarPontoUsuario(pontoUsuario: PontoUsuario) {
+  public desativarPontoUsuario(index: string) {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
       message: `Deseja remover este registro de ponto?`,
@@ -70,59 +70,8 @@ export class PontoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            const loader = this.loadingCtrl.create({ content: "Aguarde..." });
-            loader.present();
-
-            pontoUsuario.indAtivo = 0;
-
-            this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe(() => {
-              this.exibirToast('Registro removido com sucesso!', Config.TOAST.SUCCESS);
-
-              this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.filter((p) => {
-                return (p.indAtivo);
-              });
-
-              loader.dismiss();
-            }, er => {
-              this.exibirToast(`Erro ao remover o registro`, Config.TOAST.ERROR);
-              loader.dismiss();
-            });
-          }
-        }
-      ]
-    });
-
-    confirmacao.present();
-  }
-
-  public salvarAlteracoes() {
-    const confirmacao = this.alertCtrl.create({
-      title: 'Confirmação',
-      message: `Deseja finalizar as alterações de ponto na data ${this.pontoData.dataRegistro}?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          handler: () => { }
-        },
-        {
-          text: 'Confirmar',
-          handler: () => {
-            const loader = this.loadingCtrl.create({ content: "Aguarde..." });
-            loader.present();
-
-            this.pontoData.pontoDataStatus.codPontoDataStatus = 3;
-            this.pontoData.pontoDataStatus.descricao = 'Aguardando Conferência';
-
-            this.pontoDataService.enviarPontoDataApi(this.pontoData).subscribe(() => {
-              this.navCtrl.pop().then(() => {
-                this.exibirToast('Registros atualizados com sucesso!', Config.TOAST.SUCCESS);
-              }).catch();
-
-              loader.dismiss();
-            }, er => {
-              this.exibirToast(`Erro ao atualizar os registros`, Config.TOAST.ERROR);
-              loader.dismiss();
-            });
+            //this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.filter(p => p.dataHoraRegistro != dataHoraRegistro);
+            this.pontoData.pontosUsuario[index].indAtivo = 0;
           }
         }
       ]
@@ -151,9 +100,6 @@ export class PontoPage {
           handler: data => {
             if (!data.ponto) return;
 
-            const loader = this.loadingCtrl.create({ content: "Aguarde..." });
-            loader.present();
-
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
@@ -163,24 +109,12 @@ export class PontoPage {
                 pontoUsuario.longitude = location.coords.longitude;
                 pontoUsuario.indAtivo = 1;
                 
-                this.pontoUsuarioService.enviarPontoUsuarioApi(pontoUsuario).subscribe((pontoUsuarioApi) => {
-                  this.exibirToast('Ponto registrado com sucesso!', Config.TOAST.SUCCESS);
-                  this.pontoData.pontosUsuario.push(pontoUsuarioApi);
-                  this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.sort(function(a, b) { 
-                    return (a.dataHoraRegistro > b.dataHoraRegistro) ? 1 : ((b.dataHoraRegistro > a.dataHoraRegistro) ? -1 : 0)
-                  }); 
-                  loader.dismiss();
-                }, er => {
-                  this.exibirToast(`Erro ao registrar o ponto`, Config.TOAST.ERROR);
-                  loader.dismiss();
-                });
+                this.pontoData.pontosUsuario.push(pontoUsuario);
               }).catch((er) => {
                 this.exibirToast(`Erro ao registrar o ponto`, Config.TOAST.ERROR);
-                loader.dismiss();
               });
             }).catch((er) => {
               this.exibirToast(`Erro ao registrar o ponto`, Config.TOAST.ERROR);
-              loader.dismiss();
             });
           }
         }
@@ -198,5 +132,11 @@ export class PontoPage {
     });
     
     toast.present();
+  }
+
+  public fecharModal() {
+    this.pontoData.pontoDataStatus.codPontoDataStatus = 3;
+    this.pontoData.pontoDataStatus.descricao = 'Aguardando Conferência';
+    this.viewCtrl.dismiss(this.pontoData, this.index);
   }
 }

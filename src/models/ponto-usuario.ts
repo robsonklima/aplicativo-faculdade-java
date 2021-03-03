@@ -10,4 +10,5 @@ export class PontoUsuario {
     longitude: number;
     indAtivo: number;
     correcaoHabilitada: number;
+    sincronizado: boolean;
 }

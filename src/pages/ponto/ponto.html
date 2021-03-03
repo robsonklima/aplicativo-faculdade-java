@@ -6,8 +6,8 @@
       <button 
         ion-button 
         icon-only 
-        (click)="salvarAlteracoes()">
-        <ion-icon name="custom-save"></ion-icon>
+        (click)="fecharModal()">
+        <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -17,9 +17,12 @@
   <ion-list>
     <ion-item *ngFor="let pontoUsuario of pontoData.pontosUsuario; let i=index">
       <ion-icon color="primary" name="md-clock" item-start></ion-icon>
-      {{ pontoUsuario.dataHoraRegistro | date: 'HH:mm' }}
+      <s *ngIf="!pontoUsuario.indAtivo"> {{ pontoUsuario.dataHoraRegistro | date: 'HH:mm' }} </s>
+      <span *ngIf="pontoUsuario.indAtivo"> {{ pontoUsuario.dataHoraRegistro | date: 'HH:mm' }} </span>
 
-      <button ion-button clear item-end icon-only color="danger" (click)="deletarPontoUsuario(pontoUsuario)"><ion-icon name="trash"></ion-icon></button>
+      <button ion-button clear item-end icon-only color="danger" (click)="desativarPontoUsuario(i)" *ngIf="pontoUsuario.indAtivo">
+        <ion-icon name="trash"></ion-icon>
+      </button>
     </ion-item>
   </ion-list>
 

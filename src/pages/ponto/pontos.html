@@ -17,8 +17,9 @@
       {{ pontoData.dataRegistro | date: 'dd/MM/yyyy' }}
 
       <p>
-        <span *ngFor="let ponto of pontoData.pontosUsuario; let i=index" class="marcacao">
-          {{ ponto.dataHoraRegistro | date: 'HH:mm' }}
+        <span *ngFor="let ponto of pontoData.pontosUsuario; let i=index" class="marcacao" [ngClass]="{ 'font-red': !ponto.sincronizado }">
+          <s *ngIf="!ponto.indAtivo">{{ ponto.dataHoraRegistro | date: 'HH:mm' }}</s>
+          <span *ngIf="ponto.indAtivo">{{ ponto.dataHoraRegistro | date: 'HH:mm' }}</span>
         </span>
 
         <span *ngIf="!pontoData.pontosUsuario.length">
@@ -26,7 +27,7 @@
         </span>
       </p>
 
-      <button ion-button outline item-end icon-start color="danger" (click)="telaPonto(pontoData)" *ngIf="pontoData.pontoDataStatus.codPontoDataStatus == 1">
+      <button ion-button outline item-end icon-start color="danger" (click)="telaPonto(pontoData, i)" *ngIf="pontoData.pontoDataStatus.codPontoDataStatus == 1">
         Editar
       </button>
     </ion-item >

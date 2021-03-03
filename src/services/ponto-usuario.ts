@@ -14,7 +14,7 @@ export class PontoUsuarioService {
     private http: Http
   ) {}
 
-  buscarPontosPorUsuario(codUsuario: string): Observable<PontoUsuario[]> {
+  buscarPontosPorUsuarioApi(codUsuario: string): Observable<PontoUsuario[]> {
     return this.http.get(Config.API_URL + 'PontoUsuario/' + codUsuario)
       .timeout(10000)
       .map((res: Response) => res.json())
