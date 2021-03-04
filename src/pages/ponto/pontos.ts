@@ -48,11 +48,8 @@ export class PontosPage {
     const modal = this.modalCtrl.create(PontoPage, { pontoData: pontoData, index: index });
     modal.present();
     modal.onDidDismiss((pontoData: PontoData, index: string) => {
-      //console.log(pontoData, index)
-
-      this.pontosData.slice(Number(index), 1);
       //this.pontosData[index] = pontoData;
-      this.pontoDataService.atualizarPontosDataStorage(this.pontosData);
+      //this.pontoDataService.atualizarPontosDataStorage(this.pontosData);
     });
   }
 
@@ -90,6 +87,8 @@ export class PontosPage {
     if (verbose) loader.present();
     
     this.pontoDataService.buscarPontosDataStorage().then((pontosData: PontoData[]) => {
+      this.pontosData = pontosData;
+
       this.pontoDataService.enviarPontoDataApi(pontosData, this.dg.usuario.codUsuario).subscribe((pontosData: PontoData[]) => {
         this.pontosData = pontosData;
 

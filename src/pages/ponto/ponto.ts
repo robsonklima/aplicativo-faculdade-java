@@ -26,12 +26,9 @@ export class PontoPage {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private dadosGlobaisService: DadosGlobaisService,
-    private navCtrl: NavController,
-    private pontoDataService: PontoDataService,
     private viewCtrl: ViewController
   ) {
     this.pontoData = this.navParams.get('pontoData');
-    this.index = this.navParams.get('index');
   }
 
   ngOnInit() {
@@ -70,7 +67,6 @@ export class PontoPage {
         {
           text: 'Confirmar',
           handler: () => {
-            //this.pontoData.pontosUsuario = this.pontoData.pontosUsuario.filter(p => p.dataHoraRegistro != dataHoraRegistro);
             this.pontoData.pontosUsuario[index].indAtivo = 0;
           }
         }
