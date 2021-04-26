@@ -60,9 +60,9 @@ export class LoginPage implements OnInit {
     login.usuario = usuario;
     login.versaoAplicativo = this.versaoApp;
 
-    console.log(login)
-
     this.usuarioService.login(login).subscribe((login) => {
+      console.log(login)
+
       if(login && !login.erro) {
         loading.dismiss().then(() => {
           this.usuario = login.usuario;
@@ -80,6 +80,7 @@ export class LoginPage implements OnInit {
     },
     err => {
       loading.dismiss().then(() => {
+        console.log(err)
         this.exibirAlerta(err);
       });
     });
