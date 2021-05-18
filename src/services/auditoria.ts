@@ -14,7 +14,7 @@ export class AuditoriaService {
   ) {}
 
   buscarAuditoriasPorUsuario(codUsuario: string): Observable<Auditoria[]> {
-    return this.http.get(Config.API_URL + 'Auditoria/' + codUsuario)
+    return this.http.get(Config.API_URL + 'Auditoria/' + codUsuario + '/')
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json()));
   }
