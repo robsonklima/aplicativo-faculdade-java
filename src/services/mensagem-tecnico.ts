@@ -15,7 +15,7 @@ export class MensagemTecnicoService {
   ) { }
 
   buscarMensagensTecnicoApi(codUsuario: string): Observable<MensagemTecnico[]> {
-    return this.http.get(Config.API_URL + 'MensagemTecnico/' + codUsuario)
+    return this.http.get(Config.API_URL + 'MensagemTecnico/' + codUsuario + '/')
       .map((res: Response) => {
         return res.json()
       }).catch((error: any) => {
