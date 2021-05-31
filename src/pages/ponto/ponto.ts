@@ -104,7 +104,7 @@ export class PontoPage {
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;
                 pontoUsuario.indAtivo = 1;
-                
+
                 this.pontoData.pontosUsuario.push(pontoUsuario);
               }).catch((er) => {
                 this.exibirToast(`Erro ao registrar o ponto`, Config.TOAST.ERROR);

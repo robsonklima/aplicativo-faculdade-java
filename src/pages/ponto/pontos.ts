@@ -113,7 +113,7 @@ export class PontosPage {
   public registrarPonto() {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',
-      message: `Deseja registrar seu ponto em ${moment().format('DD/MM/YYYY HH:mm')}?`,
+      message: `Deseja registrar seu ponto em ${this.pontosData[0].dataRegistro} ${moment().format('HH:mm:ss')}?`,
       buttons: [
         {
           text: 'Cancelar',
@@ -125,7 +125,7 @@ export class PontosPage {
             this.platform.ready().then(() => {
               this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
                 let pontoUsuario: PontoUsuario = new PontoUsuario();
-                pontoUsuario.dataHoraRegistro = moment().format('YYYY-MM-DD HH:mm:ss');
+                pontoUsuario.dataHoraRegistro = `${this.pontosData[0].dataRegistro} ${moment().format('HH:mm:ss')}`;
                 pontoUsuario.codUsuario = this.dg.usuario.codUsuario;
                 pontoUsuario.latitude = location.coords.latitude;
                 pontoUsuario.longitude = location.coords.longitude;

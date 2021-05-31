@@ -72,7 +72,7 @@ export class UsuarioService {
   }
 
   public verificarSenhaExpirada(): Observable<boolean> {
-    return this.http.get(Config.API_URL + 'SenhaExpiracao/' + this.usuario.codUsuario)
+    return this.http.get(Config.API_URL + 'SenhaExpiracao/' + this.usuario.codUsuario + '/')
       .map((res: Response) => {
         return res.json()
       })
@@ -82,7 +82,7 @@ export class UsuarioService {
   }
 
   public buscarRegistrosPonto(codUsuario: string): Observable<UsuarioPonto> {
-    return this.http.get(Config.API_URL + 'UsuarioPonto/' + codUsuario)
+    return this.http.get(Config.API_URL + 'UsuarioPonto/' + codUsuario + '/')
       .map((res: Response) => {
         return res.json()
       })
