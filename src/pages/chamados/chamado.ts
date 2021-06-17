@@ -1004,6 +1004,23 @@ export class ChamadoPage {
     return false;
   }
 
+  public verificarSeExigeDocumentosAdicionaisInstalacao(): boolean {
+    var i;
+
+
+    for (i = 0; i < this.equipamentosPOS.length; i++) {
+      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
+          return true;
+      }
+
+      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public removerRatDetalhe(ratDetalhe: any, i: number) {
     const confirmacao = this.alertCtrl.create({
       title: 'Confirmação',

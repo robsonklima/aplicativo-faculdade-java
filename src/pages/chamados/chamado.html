@@ -335,10 +335,6 @@
             *ngIf="verificarExistenciaFoto('RAT')">
             <ion-icon name="trash" color="danger"></ion-icon>
           </button>
-
-          <!-- <button ion-button clear item-end (click)="enviarFoto('RAT')" *ngIf="verificarExistenciaFoto('RAT')" [disabled]="verificarStatusFoto('RAT') == 'ENVIADA'">
-            <ion-icon name="md-cloud-upload" color="secondary"></ion-icon>
-          </button> -->
         </ion-item>
 
         <ion-item-divider color="light">{{ indexSlide }}.2 Fotos do Equipamento</ion-item-divider>
@@ -399,6 +395,28 @@
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
           </button>
         </ion-item>
+
+        <!-- -->
+
+        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
+          <ion-avatar item-start (click)="telaFoto('DOCUMENTO_CONTRATO')">
+            <img src="{{ carregarFoto('DOCUMENTO_CONTRATO') }}">
+          </ion-avatar>
+          <h2>Parte Interna</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('DOCUMENTO_CONTRATO')"
+            *ngIf="!verificarExistenciaFoto('DOCUMENTO_CONTRATO')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('DOCUMENTO_CONTRATO')"
+            *ngIf="verificarExistenciaFoto('DOCUMENTO_CONTRATO')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <!-- -->
 
         <ion-item *ngIf="verificarSeEquipamentoEPOS()">
           <ion-avatar item-start (click)="telaFoto('VERIFICACAOVERSAO')">

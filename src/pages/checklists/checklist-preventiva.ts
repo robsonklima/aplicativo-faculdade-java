@@ -257,13 +257,13 @@ export class ChecklistPreventivaPage {
 
     switch (i) {
       case 0:
-        this.tituloSlide = `Ambiente`;
+        this.tituloSlide = `Imagens`;
         this.slides.lockSwipeToPrev(true);
         this.slides.lockSwipeToNext(false);
       break;
 
       case 1:
-        this.tituloSlide = `Imagens`;
+        this.tituloSlide = `Ambiente`;
         this.slides.lockSwipeToPrev(false);
         this.slides.lockSwipeToNext(false);
       break;

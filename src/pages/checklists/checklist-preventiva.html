@@ -26,6 +26,33 @@
   <ion-content>
     <ion-slides pager (ionSlideDidChange)="configurarSlide()">
       <ion-slide>
+        <ion-list class="list-slide">
+          <ion-item *ngFor="let foto of chamado?.checklistPreventiva?.fotos; let i = index">
+            <ion-avatar item-start>
+              <img src="{{ foto.str }}">
+            </ion-avatar>
+            <h2>Foto {{ i+1 }}</h2>
+            <button ion-button clear item-end 
+              (click)="removerFoto(i)">
+              <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+            </button>
+          </ion-item>
+  
+          <ion-item *ngIf="!chamado?.checklistPreventiva?.fotos?.length">
+            <p text-center class="p-msg">Insira as fotos do Checklist</p>
+          </ion-item>
+        </ion-list>
+
+        <ion-fab right bottom>
+          <button 
+            ion-fab color="secondary" 
+            (click)="tirarFoto()">
+            <ion-icon name="camera"></ion-icon>
+          </button>
+        </ion-fab>
+      </ion-slide>
+      
+      <ion-slide>
         <form #formInfra="ngForm" (ngSubmit)="salvarInformacoesAmbiente(formInfra)" class="form">
           <ion-item col-12 class="first-item">
             <ion-label stacked>Tensão Sem Carga</ion-label>
@@ -132,33 +159,6 @@
             </button>
           </div>          
         </form>
-      </ion-slide>
-
-      <ion-slide>
-        <ion-list class="list-slide">
-          <ion-item *ngFor="let foto of chamado?.checklistPreventiva?.fotos; let i = index">
-            <ion-avatar item-start>
-              <img src="{{ foto.str }}">
-            </ion-avatar>
-            <h2>Foto {{ i+1 }}</h2>
-            <button ion-button clear item-end 
-              (click)="removerFoto(i)">
-              <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
-            </button>
-          </ion-item>
-  
-          <ion-item *ngIf="!chamado?.checklistPreventiva?.fotos?.length">
-            <p text-center class="p-msg">Insira as fotos do Checklist</p>
-          </ion-item>
-        </ion-list>
-
-        <ion-fab right bottom>
-          <button 
-            ion-fab color="secondary" 
-            (click)="tirarFoto()">
-            <ion-icon name="camera"></ion-icon>
-          </button>
-        </ion-fab>
       </ion-slide>
 
       <ion-slide>
