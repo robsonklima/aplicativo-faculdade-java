@@ -398,20 +398,74 @@
 
         <!-- -->
 
-        <ion-item *ngIf="!verificarSeEquipamentoEPOS()">
-          <ion-avatar item-start (click)="telaFoto('DOCUMENTO_CONTRATO')">
-            <img src="{{ carregarFoto('DOCUMENTO_CONTRATO') }}">
+        <ion-item *ngIf="verificarSeExigeDocumentosAdicionaisInstalacao()">
+          <ion-avatar item-start (click)="telaFoto('TERMO_ACEITE')">
+            <img src="{{ carregarFoto('TERMO_ACEITE') }}">
           </ion-avatar>
-          <h2>Parte Interna</h2>
+          <h2>Termo de Aceite</h2>
           <button ion-button clear item-end 
-            (click)="tirarFoto('DOCUMENTO_CONTRATO')"
-            *ngIf="!verificarExistenciaFoto('DOCUMENTO_CONTRATO')">
+            (click)="tirarFoto('TERMO_ACEITE')"
+            *ngIf="!verificarExistenciaFoto('TERMO_ACEITE')">
             <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
           </button>
 
           <button ion-button clear item-end 
-            (click)="removerFoto('DOCUMENTO_CONTRATO')"
-            *ngIf="verificarExistenciaFoto('DOCUMENTO_CONTRATO')">
+            (click)="removerFoto('TERMO_ACEITE')"
+            *ngIf="verificarExistenciaFoto('TERMO_ACEITE')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeExigeDocumentosAdicionaisInstalacao()">
+          <ion-avatar item-start (click)="telaFoto('TERMO_ENTREGA')">
+            <img src="{{ carregarFoto('TERMO_ENTREGA') }}">
+          </ion-avatar>
+          <h2>Termo de Entrega</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('TERMO_ENTREGA')"
+            *ngIf="!verificarExistenciaFoto('TERMO_ENTREGA')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('TERMO_ENTREGA')"
+            *ngIf="verificarExistenciaFoto('TERMO_ENTREGA')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeExigeDocumentosAdicionaisInstalacao()">
+          <ion-avatar item-start (click)="telaFoto('TERMO_RECOLHIMENTO')">
+            <img src="{{ carregarFoto('TERMO_RECOLHIMENTO') }}">
+          </ion-avatar>
+          <h2>Termo de Recolhimento</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('TERMO_RECOLHIMENTO')"
+            *ngIf="!verificarExistenciaFoto('TERMO_RECOLHIMENTO')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('TERMO_RECOLHIMENTO')"
+            *ngIf="verificarExistenciaFoto('TERMO_RECOLHIMENTO')">
+            <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="verificarSeExigeDocumentosAdicionaisInstalacao()">
+          <ion-avatar item-start (click)="telaFoto('NOTA_FISCAL')">
+            <img src="{{ carregarFoto('NOTA_FISCAL') }}">
+          </ion-avatar>
+          <h2>Nota Fiscal</h2>
+          <button ion-button clear item-end 
+            (click)="tirarFoto('NOTA_FISCAL')"
+            *ngIf="!verificarExistenciaFoto('NOTA_FISCAL')">
+            <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+          </button>
+
+          <button ion-button clear item-end 
+            (click)="removerFoto('NOTA_FISCAL')"
+            *ngIf="verificarExistenciaFoto('NOTA_FISCAL')">
             <ion-icon name="trash" color="danger" class="trash-icon"></ion-icon>
           </button>
         </ion-item>

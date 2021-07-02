@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation';
 import { LoadingController, NavController, PopoverController, Events, AlertController, Platform } from 'ionic-angular';
 
 import { Market } from '@ionic-native/market';
@@ -47,8 +48,7 @@ import { AuditoriaService } from '../../services/auditoria';
 import { MensagemTecnico } from '../../models/mensagem-tecnico';
 import { Auditoria } from '../../models/auditoria';
 import { PontosPage } from '../ponto/pontos';
-import { PontoDataService } from '../../services/ponto-data';
-import { PontoData } from '../../models/ponto-data';
+import { Localizacao } from '../../models/localizacao';
 
 
 @Component({
@@ -101,7 +101,7 @@ export class HomePage {
     private equipamentoCausaService: EquipamentoCausaService,
     private defeitoCausaService: DefeitoCausaService,
     private acaoCausaService: AcaoCausaService,
-    private pontoDataService: PontoDataService
+    private geolocation: Geolocation,
   ) {
     this.events.subscribe('sincronizacao:efetuada', () => {
       setTimeout(() => { this.carregarChamadosStorage() }, 2000);
@@ -113,6 +113,7 @@ export class HomePage {
       .then(() => this.carregarChamadosStorage().catch(() => {}))
       .then(() => this.carregarAuditoriasUsuario().catch(() => {}))
       .then(() => this.carregarMensagensTecnico().catch(() => {}))
+      .then(() => this.enviarLocalizacao())
       .catch(() => {});
 
     this.geolocationService.verificarSeGPSEstaAtivoEDirecionarParaConfiguracoes();
@@ -309,6 +310,20 @@ export class HomePage {
     });
 
     return false;
+  }
+
+  private enviarLocalizacao() {
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+        let loc = new Localizacao();
+        loc.latitude = location.coords.latitude;
+        loc.longitude = location.coords.longitude;
+        loc.codUsuario = this.dg.usuario.codUsuario;
+        loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        this.geolocationService.enviarLocalizacao(loc).subscribe(() => {}, e => {});
+      }).catch();
+    }).catch();
   }
 
   public atualizarBDLocal() {

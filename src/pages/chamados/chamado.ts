@@ -935,6 +935,10 @@ export class ChamadoPage {
 
         return;
       }
+
+      if (this.verificarSeExigeDocumentosAdicionaisInstalacao() && this.chamado.rats[0].fotos.length < 7) {
+        this.exibirToast("Este chamado deve conter no mínimo 7 fotos");
+      }
     }
 
     if (this.chamado.rats[0].laudos.length == 0 && this.verificarLaudoObrigatorio()) {
@@ -1005,16 +1009,15 @@ export class ChamadoPage {
   }
 
   public verificarSeExigeDocumentosAdicionaisInstalacao(): boolean {
-    var i;
-
-
-    for (i = 0; i < this.equipamentosPOS.length; i++) {
-      if (this.equipamentosPOS[i].codEquip === this.chamado.equipamentoContrato.equipamento.codEquip) {
+    if (this.chamado.codInstalacao !== undefined || this.chamado.codInstalacao !== 0) {
+      if (this.chamado.tipoIntervencao.codTipoIntervencao === Config.TIPO_INTERVENCAO.INSTALAÇÃO) {
+        if (this.chamado.cliente.codCliente === Config.CLIENTE.BANRISUL || 
+            this.chamado.cliente.codCliente === Config.CLIENTE.BB ||
+            this.chamado.cliente.codCliente ===  Config.CLIENTE.BANESTES ||
+            this.chamado.cliente.codCliente ===  Config.CLIENTE.BANCO_DA_AMAZONIA ||
+            this.chamado.cliente.codCliente ===  Config.CLIENTE.CEF) {
           return true;
-      }
-
-      if (this.equipamentosPOS[i].codEquip === this.chamado.codEquip) {
-        return true;
+        }
       }
     }
 

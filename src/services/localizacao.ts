@@ -14,7 +14,7 @@ export class LocalizacaoService {
   ) { }
 
   buscarLocalizacoesApi(codUsuario: string): Observable<Localizacao[]> {
-    return this.http.get(Config.API_URL + 'LocalizacaoTecnico/' + codUsuario)
+    return this.http.get(Config.API_URL + 'LocalizacaoTecnico/' + codUsuario + '/')
       .timeout(15000)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json())

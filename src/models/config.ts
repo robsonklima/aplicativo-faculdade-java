@@ -5,7 +5,7 @@ export class Config {
   public static API_URL = 'https://sat.perto.com.br/prjSATWebAPI/api/';
 
   public static NOME_APP = "App Técnicos";
-  public static VERSAO_APP = "0.0.105";
+  public static VERSAO_APP = "0.0.106";
   public static QTD_MAX_FOTOS_POR_ATENDIMENTO = 3;
   public static GOOGLE_KEY = 'AIzaSyCdX8k9LPBt6c3gNKOMCWlgyYmrV5AMkf8';
   public static GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=perto.sat.apptecnicos';
@@ -27,8 +27,8 @@ export class Config {
     AGUARDANDO_CONTATO_CLIENTE: 14, AGUARDANDO_DECLARACÃO: 15, CANCELADO_COM_ATENDIMENTO: 16
    };
   public static EQUIPAMENTO = { TPC_4110_290_01_969: 362, TPC_4110: 90 };
-  public static INT_SINC_BD_LOCAL_DIAS = 1;
-  public static INT_SINC_CHAMADOS_MILISEG = 360000;
+  public static INT_SINC_BD_LOCAL_DIAS = 2;
+  public static INT_SINC_CHAMADOS_MILISEG = 60 * 1000; //300000;
   public static INT_MIN_SINC_CHAMADOS_SEG = 10;
   public static CERCA_ELETRONICA = [
     { filial: 'FPR', distancia: 2.00 }, { filial: 'FRS', distancia: 2.55 },
@@ -77,12 +77,12 @@ export class Config {
     stopOnTerminate: true,
     startForeground: true,
     interval: 10 * 60000,
-    fastestInterval: 10 * 60000,
-    activitiesInterval: 10 * 60000,
+    fastestInterval: 5 * 60000,
+    activitiesInterval: 5 * 60000,
     notificationsEnabled: true,
     notificationTitle: 'App Técnicos - Meus Chamados',
-    notificationText: 'Sincronizando Chamados da sua Filial',
-    maxLocations: 10
+    notificationText: 'Sincronizando Chamados',
+    maxLocations: 100
   };
   public static CHAMADO = {TRANSFERIDO: 8, FECHADO: 3 };
   public static ACAO = {PENDENCIA_PECA: { CODACAO: 19 }};
@@ -94,7 +94,8 @@ export class Config {
   public static CLIENTE = {
     BB: 1, RIO_CARD: 256, BRINKS: 347, VLT_CARIOCA: 444, BVA_BRINKS: 479, 
     METRO_RIO: 538, CEF: 58, BNB: 253, PROTEGE: 490, BANRISUL: 2, BRB: 197,
-    SICREDI: 88, SAQUE_PAGUE: 434, PERTO_PARKING: 532
+    SICREDI: 88, SAQUE_PAGUE: 434, PERTO_PARKING: 532, BANESTES: 331,
+    BANCO_DA_AMAZONIA: 109
   };
   public static LOG = {
     TIPOS: { SUCCESS: 'SUCCESS', ERROR: 'ERROR', WARNING: 'WARNING' } 

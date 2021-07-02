@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LoadingController, NavController, AlertController, Events, ToastController, Platform } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, AlertController, Events, ToastController, Platform } from 'ionic-angular';
 
 import { Badge } from '@ionic-native/badge';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
@@ -19,6 +19,7 @@ import { ChamadoFechadoPage } from './chamado-fechado';
 import { LoadingFactory } from '../../factories/loading-factory';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GeolocationService } from '../../services/geo-location';
+import { Localizacao } from '../../models/localizacao';
 
 
 @Component({
@@ -41,7 +42,6 @@ export class ChamadosPage {
     private launchNavigator: LaunchNavigator,
     private badge: Badge,
     private events: Events,
-    private loadingCtrl: LoadingController,
     private geolocation: Geolocation,
     private chamadoService: ChamadoService,
     private dadosGlobaisService: DadosGlobaisService,
@@ -54,6 +54,8 @@ export class ChamadosPage {
     this.carregarDadosGlobais().then(() => {
       this.carregarChamadosStorage().then(() => {
         this.carregarChamadosFechadosApi();
+
+        this.enviarLocalizacao();
       }).catch();
     });
    
@@ -92,7 +94,7 @@ export class ChamadosPage {
       if (refresher) refresher.complete();
     }).catch(() => {
       setTimeout(() => { if (refresher) refresher.complete() }, 2000);
-    });
+    });    
   }
 
   public limparChamadosDispositivo() {
@@ -218,6 +220,20 @@ export class ChamadosPage {
       });
     },
     err => {});
+  }
+
+  private enviarLocalizacao() {
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition(Config.POS_CONFIG).then((location) => {
+        let loc = new Localizacao();
+        loc.latitude = location.coords.latitude;
+        loc.longitude = location.coords.longitude;
+        loc.codUsuario = this.dg.usuario.codUsuario;
+        loc.dataHoraCad = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        this.geolocationService.enviarLocalizacao(loc).subscribe(() => {}, e => {});
+      }).catch();
+    }).catch();
   }
 
   private atualizarBadge() {

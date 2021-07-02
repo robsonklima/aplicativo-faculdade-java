@@ -96,9 +96,7 @@ export class MyApp {
                 buttons: [{
                     text: 'Ok',
                     role: 'cancel',
-                    handler: () => {
-                      
-                    }
+                    handler: () => {}
                 }]
             });
 
@@ -136,7 +134,7 @@ export class MyApp {
 
             if (loc.codUsuario){
               this.geolocation.atualizarMinhaLocalizacao(loc).then(() => {
-                this.geolocation.enviarLocalizacao(loc);
+                this.geolocation.enviarLocalizacao(loc).subscribe(() => {}, error => {});
                 
                 this.chamadoService.sincronizarChamados(false, this.dadosGlobais.usuario.codTecnico).catch();
               }).catch();

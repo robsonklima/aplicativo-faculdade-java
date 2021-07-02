@@ -58,4 +58,5 @@ export class Chamado {
 	versao: string;
 	simCard: string;
 	checklistPreventiva: ChecklistPreventiva;
+	codInstalacao: number;
 }
