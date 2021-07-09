@@ -50,7 +50,7 @@
     "@ionic/storage": "^2.2.0",
     "android-versions": "^1.5.0",
     "angular2-signaturepad": "^2.9.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "cordova-android": "7.0.0",
     "cordova-browser": "^4.1.0",
     "cordova-plugin-actionsheet": "^2.3.3",
